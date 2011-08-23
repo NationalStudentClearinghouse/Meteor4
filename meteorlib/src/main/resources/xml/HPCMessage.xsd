@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.meteornetwork.org/schemas/hpc">
+
+<xsd:annotation>
+   <xsd:documentation xml:lang="en">
+      First Draft High Performance Channel schema.
+      Dated 09/14/2001.
+   </xsd:documentation>
+</xsd:annotation> 
+
+<xsd:element name="Envelope" type="HPCEnvelopeType"/>
+
+<xsd:complexType name="HPCEnvelopeType">
+   <xsd:sequence>
+      <xsd:element name="Message" type="HPCMessageType"/>
+      <xsd:element name="Sender" type="HPCSenderType"/>
+      <xsd:element name="Recipient" type="HPCRecipientType"/>
+      <xsd:element name="Transaction" type="HPCTransactionType"/>
+      <xsd:element name="Package" type="HPCPackageType"/>
+   </xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="HPCMessageType">
+   <xsd:attribute name="ID" type="xsd:string" use="required"/>
+   <xsd:attribute name="Timestamp" type="xsd:string" use="required"/>
+</xsd:complexType>
+
+<xsd:complexType name="HPCSenderType">
+   <xsd:attribute name="ID" type="xsd:string" use="required"/>
+   <xsd:attribute name="ContactPhoneNumber" type="PhoneNum" use="required"/>
+   <xsd:attribute name="ContactEmail" type="xsd:string" use="required"/>
+   <xsd:attribute name="System" type="xsd:string" use="required"/>
+</xsd:complexType>
+
+<xsd:complexType name="HPCRecipientType">
+   <xsd:attribute name="ID" type="xsd:string" use="required"/>
+</xsd:complexType>
+
+<xsd:complexType name="HPCTransactionType">
+   <xsd:attribute name="Type" type="xsd:string"/>
+   <xsd:attribute name="Mode" type="HPCMode"/>
+</xsd:complexType>
+
+<xsd:complexType name="HPCPackageType">
+   <xsd:sequence>
+      <xsd:element name="Special" type="xsd:string"/>
+      <xsd:element name="Content" type="HPCContentType"/>
+   </xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="HPCContentType">
+   <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+         <xsd:attribute name="Type" type="xsd:string" use="required"/>
+         <xsd:attribute name="Encoding" type="HPCEncodingType" use="required"/>
+         <xsd:attribute name="Compression" type="HPCCompressionType" use="required"/>
+      </xsd:extension>
+   </xsd:simpleContent>
+</xsd:complexType>
+
+<xsd:simpleType name="PhoneNum">
+   <xsd:restriction base="xsd:string">
+      <xsd:pattern value="(\d{3})\d{3}-\d{4}"/>
+   </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="HPCType">
+   <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Send"/>
+      <xsd:enumeration value="Resp"/>
+      <xsd:enumeration value="Term"/>
+      <xsd:enumeration value="Err"/>
+   </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="HPCMode">
+   <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="sync"/>
+      <xsd:enumeration value="async"/>
+   </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="HPCEncodingType">
+   <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="none"/>
+      <xsd:enumeration value="base64"/>
+   </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="HPCCompressionType">
+   <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="none"/>
+      <xsd:enumeration value="zlib"/>
+   </xsd:restriction>
+</xsd:simpleType>
+</xsd:schema>
+

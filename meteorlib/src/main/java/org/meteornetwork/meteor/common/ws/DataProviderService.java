@@ -8,8 +8,13 @@ import javax.jws.WebService;
 @WebService
 public interface DataProviderService {
 
+	/**
+	 * Query data on borrower based on the borrower's SSN
+	 * 
+	 * @param requestXML
+	 * @return
+	 */
 	@WebMethod(operationName = "QueryDataForBorrower")
-	@WebResult(name = "QueryResults")
+	@WebResult(name = "QueryDataForBorrowerResponse")
 	String queryDataForBorrower(@WebParam(name = "requestXML") String requestXML);
-
 }

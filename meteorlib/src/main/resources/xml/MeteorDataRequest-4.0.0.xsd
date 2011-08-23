@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.meteornetwork.org/schemas/MeteorDataRequest-4.0.0">
+
+	<xsd:element name="MeteorDataRequest">
+		<xsd:complexType>
+			<xsd:all>
+				<xsd:element name="AccessProvider">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element name="MeteorInstitutionIdentifier" type="xsd:string"/>
+							<xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="UserHandle" type="xsd:string"/>
+							<xsd:element name="IssueInstant" type="xsd:string"/>
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="SSN" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+	</xsd:element> 
+</xsd:schema>

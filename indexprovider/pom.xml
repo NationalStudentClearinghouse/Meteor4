@@ -14,8 +14,12 @@
 	
 	<properties>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+		
 		<cxf.version>2.4.1</cxf.version>
+		
+		<commons-logging.version>1.1.1</commons-logging.version>
 		<log4j.version>1.2.16</log4j.version>
+		
 		<junit.version>3.8.1</junit.version>
 	</properties>
 	
@@ -83,8 +87,14 @@
 		</dependency>
 		
 		<!-- 
-			Log4j
+			Logging
 		 -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons-logging.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>

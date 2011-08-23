@@ -11,11 +11,18 @@
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 	
  	<jaxws:endpoint 
-		id="dataProviderService"
+		id="queryDataForBorrower"
 		implementorClass="org.meteornetwork.meteor.provider.data.ws.DataProviderServiceImpl"
 		implementor="#dataProviderServiceImpl"
-		endpointName="queryDataForBorrower"
+		endpointName="QueryDataForBorrower"
 		bindingUri="http://www.w3.org/2003/05/soap/bindings/HTTP/"
-		address="/DataProviderService" /> 
+		address="/DataProviderService" />
+	
+	<jaxws:endpoint 
+		id="submitHPC"
+		implementorClass="org.meteornetwork.meteor.provider.data.ws.DataProviderHPCServiceImpl"
+		implementor="#dataProviderHPCServiceImpl"
+		endpointName="SubmitHPC"
+		address="/DataProviderHPCService" /> 
 	
 </beans>
