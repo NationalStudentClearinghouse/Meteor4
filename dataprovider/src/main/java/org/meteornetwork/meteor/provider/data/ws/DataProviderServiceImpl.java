@@ -5,22 +5,41 @@ import javax.jws.WebService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.ws.DataProviderService;
+import org.meteornetwork.meteor.provider.data.adapter.Version40AdapterImpl;
 import org.meteornetwork.meteor.provider.data.manager.DataProviderManager;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component("dataProviderServiceImpl")
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.DataProviderService", serviceName = "DataProviderService")
-public class DataProviderServiceImpl implements DataProviderService {
+public class DataProviderServiceImpl implements DataProviderService, ApplicationContextAware {
 
 	private static final Log LOG = LogFactory.getLog(DataProviderServiceImpl.class);
 
+	private ApplicationContext applicationContext;
 	private DataProviderManager dataManager;
 
 	@Override
-	public String queryDataForBorrower(String requestXML) {
-		LOG.debug("DP received requestXML: " + requestXML);
+	public String queryDataForBorrower(String requestXml) {
+		LOG.debug("DP received request: " + requestXml);
+
+		Version40AdapterImpl adapter = (Version40AdapterImpl) applicationContext.getBean(Version40AdapterImpl.class);
+		adapter.setRequestXml(requestXml);
+		dataManager.queryDataForBorrower(adapter);
+
 		return "DP response to requestXML.";
+	}
+
+	public ApplicationContext getApplicationContext() {
+		return applicationContext;
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 
 	public DataProviderManager getDataManager() {
@@ -31,5 +50,4 @@ public class DataProviderServiceImpl implements DataProviderService {
 	public void setDataManager(DataProviderManager dataManager) {
 		this.dataManager = dataManager;
 	}
-
 }

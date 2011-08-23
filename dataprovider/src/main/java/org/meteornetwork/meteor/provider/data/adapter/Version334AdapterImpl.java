@@ -7,6 +7,7 @@ import javax.xml.transform.TransformerException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.common.AccessProvider;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
@@ -73,7 +74,7 @@ public class Version334AdapterImpl implements TranslationAdapter {
 			return null;
 		}
 
-		request.setAccessProvider(meteorDataRequest.getAccessProvider());
+		request.setAccessProvider(new AccessProvider(meteorDataRequest.getAccessProvider()));
 		request.setSsn(meteorDataRequest.getSSN());
 		return request;
 	}

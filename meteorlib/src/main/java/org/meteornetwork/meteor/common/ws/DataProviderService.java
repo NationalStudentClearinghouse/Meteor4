@@ -16,5 +16,5 @@ public interface DataProviderService {
 	 */
 	@WebMethod(operationName = "QueryDataForBorrower")
 	@WebResult(name = "QueryDataForBorrowerResponse")
-	String queryDataForBorrower(@WebParam(name = "requestXML") String requestXML);
+	String queryDataForBorrower(@WebParam(name = "RequestXml") String requestXml);
 }
