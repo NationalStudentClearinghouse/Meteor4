@@ -20,12 +20,4 @@ public interface TranslationAdapter {
 	 * @param response
 	 */
 	void setResponse(ResponseWrapper response);
-
-	/**
-	 * If an exception was thrown during processing, this method returns that
-	 * exception
-	 * 
-	 * @return exception thrown during processing
-	 */
-	Exception getProcessingException();
 }

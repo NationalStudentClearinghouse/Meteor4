@@ -11,5 +11,10 @@
  
  	<import resource="classpath:applicationContext-meteorlib.xml" />
  	
+ 	<!-- TODO: remove this bean -->
+ 	<bean id="DataResponseSample" class="org.springframework.core.io.ClassPathResource">
+		<constructor-arg value="dataResponseSample.xml"/>
+	</bean>
+	
 	<context:component-scan base-package="org.meteornetwork.meteor"/>
 </beans> 

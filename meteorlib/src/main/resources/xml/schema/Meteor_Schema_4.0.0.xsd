@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   targetNamespace="http://schemas.pescxml.org"
+   xmlns="http://schemas.pescxml.org"
+   elementFormDefault="unqualified">
+	<xsd:element name="MeteorRsMsg" type="MeteorRsMsgType"/>
+
+	<xsd:complexType name="MeteorRsMsgType">
+		<xsd:sequence>
+			<xsd:element name="MeteorDataProviderInfo" type="MeteorDataProviderInfoType" maxOccurs="unbounded"/>
+			<xsd:element name="MeteorDataAggregates" type="MeteorDataAggregatesType" minOccurs="0"/>
+	<!-- ******************************************************************************* -->
+			<xsd:element name="MeteorIndexProviderData" type="OrgType" minOccurs="0" maxOccurs="unbounded"/>
+	<!-- *   IndexProviderData is for Access Provider Software use only                * -->
+	<!-- *   Data Providers do not need to populate this element                       * -->
+	<!-- ******************************************************************************* -->
+		</xsd:sequence>
+		<xsd:attribute name="PESCXMLVersion" use="required" fixed="4.0.0" type="xsd:string"/>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="MeteorDataAggregatesType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">                        </xsd:documentation>
+			<xsd:documentation xml:lang="en">These fields are derived</xsd:documentation>
+			<xsd:documentation xml:lang="en">in the Access Provider  </xsd:documentation>
+			<xsd:documentation xml:lang="en">Software                </xsd:documentation>
+			<xsd:documentation xml:lang="en">                        </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TotalAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="FFELSubAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="FFELUnSubAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="DLSubAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="DLUnSubAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="FFELConsolAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="DLConsolAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="ConsolAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="PerkinsAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="TotalGuarAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="TotalRepaidPrincipalAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="TotalCapitalizedIntAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="MeteorDataProviderInfoType">
+		<xsd:sequence>
+			<xsd:element name="MeteorDataProviderDetailInfo" type="MeteorDataProviderDetailInfoType"/>
+			<xsd:element name="MeteorDataProviderAwardDetails" type="MeteorDataProviderAwardDetailsType" minOccurs="0"/>
+			<xsd:element name="MeteorDataProviderMsg" type="MeteorDataProviderMsgType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="MeteorDataProviderDetailInfoType">
+		<xsd:sequence>
+			<xsd:element name="DataProviderType" type="DataProviderTypeType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="DataProviderData" type="OrgType"/>
+			<xsd:element name="DataProviderAggregateTotal" type="DataProviderAggregateType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="MeteorDataProviderAwardDetailsType">
+		<xsd:sequence>
+			<xsd:element name="Award" type="AwardDataType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="MeteorDataProviderMsgType">
+		<xsd:sequence>
+			<xsd:element name="RsMsg" type="RsMsgType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="RsMsgLevel" type="RsMsgLevelType" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<!-- ***** Aggregates ************************************************************** -->
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="AddressInfoType">
+		<xsd:sequence>
+			<xsd:element name="AddrValidInd" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="AddrValidDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="AddressType" type="AddressTypeType" minOccurs="0"/>
+			<xsd:element name="Addr" type="AddrType" minOccurs="0" maxOccurs="3"/>
+			<xsd:element name="City" type="CityType" minOccurs="0"/>
+			<xsd:element name="StateProv" type="StateProvType" minOccurs="0"/>
+			<xsd:element name="PostalCd" type="PostalCdType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->	
+	<xsd:complexType name="AwardDataType">
+		<xsd:sequence>
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">APSUniqueAwardID is used</xsd:documentation>
+			<xsd:documentation xml:lang="en">excluseivly by the      </xsd:documentation>
+			<xsd:documentation xml:lang="en">Access Provider Software</xsd:documentation>
+		</xsd:annotation>
+			<xsd:element name="APSUniqueAwardID" type="APSUniqueIDType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="DataProviderType" type="DataProviderTypeType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="AwardType" type="AwardTypeType" minOccurs="0"/>
+			<xsd:element name="AwardAmt" type="PosElevenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="AwardBeginDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="AwardEndDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="GradeLevelInd" type="GradeLevelIndType" minOccurs="0"/>
+			<xsd:element name="LoanStat" type="LoanStatType" minOccurs="0"/>
+			<xsd:element name="LoanStatDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="MPNInd" type="MPNIndType" minOccurs="0"/>
+			<xsd:element name="Esign" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="CommonlineError" type="CommonlineErrorType" minOccurs="0"/>
+			<xsd:element name="GuarDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="Disbursement" type="DisbursementType" minOccurs="0" maxOccurs="99"/>
+			<xsd:element name="Student" type="StudentType" minOccurs="0"/>
+			<xsd:element name="Borrower" type="BorrowerType" minOccurs="0"/>
+			<xsd:element name="Reference" type="PersonType" minOccurs="0" maxOccurs="2"/>
+			<xsd:element name="DisbursingAgent" type="OrgType" minOccurs="0"/>
+			<xsd:element name="Lender" type="OrgType" minOccurs="0"/>
+			<xsd:element name="Servicer" type="OrgType" minOccurs="0"/>
+			<xsd:element name="ConsolLender" type="OrgType" minOccurs="0"/>
+			<xsd:element name="School" type="OrgType" minOccurs="0"/>
+			<xsd:element name="Guarantor" type="OrgType" minOccurs="0"/>
+			<xsd:element name="AwardId" type="AwardIdType" minOccurs="0"/>
+			<xsd:element name="LoanTransfer" type="LoanTransferType" minOccurs="0"/>
+			<xsd:element name="Repayment" type="RepaymentType" minOccurs="0"/>
+			<xsd:element name="Default" type="DefaultType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="GrossLoanAmount" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="BorrowerType">
+		<xsd:complexContent>
+			<xsd:extension base="PersonType">
+				<xsd:sequence>
+					<xsd:element name="DriversLicense" type="DriversLicenseType" minOccurs="0"/>
+					<xsd:element name="DriversLicenseState" type="StateProvType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="CollectionCostsType">
+		<xsd:sequence>
+			<xsd:element name="CollectionCostsAmount" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="CollectionCostsDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+		<xsd:complexType name="ContactType">
+		<xsd:sequence>
+			<xsd:element name="Phone" type="PhoneType" minOccurs="0" maxOccurs="4"/>
+			<xsd:element name="AddressInfo" type="AddressInfoType" minOccurs="0"/>
+			<xsd:element name="Email" type="EmailType" minOccurs="0"/>
+			<xsd:element name="EmailValidInd" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="EmailValidDt" type="xsd:date" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="DataProviderAggregateType">
+		<xsd:sequence>
+			<xsd:element name="SvcrTotalAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="DefaultType">
+		<xsd:sequence>
+			<xsd:element name="Def" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="SatisPmtArr" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="DefAvertRq" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="DefAvertRqDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="DefAvertRqCure" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="DefAvertRqCureDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="ClaimFil" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="ClaimFilDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="ClaimPd" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="ClaimPdDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="EligibilityReinstatementIndicator" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="EligibilityReinstatementDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="DefermentForbearanceType">
+		<xsd:sequence>
+			<xsd:element name="DefermentForbearanceName" type="DefermentForbearanceNameType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="DefermentForbearanceBeginDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>		
+			<xsd:element name="DefermentForbearanceEndDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="DisbursementType">
+		<xsd:sequence>
+			<xsd:element name="DisbSeqNum" type="PosTwoDigitAmtType" minOccurs="0"/>
+			<xsd:element name="SchedDisbDt" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="ActualDisbDt" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="DisbNetAmt" type="PosElevenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="DisbStatCd" type="DisbStatCdType" minOccurs="0"/>
+			<xsd:element name="DisbStatDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="DisbHold" type="DisbHoldType" minOccurs="0"/>
+			<xsd:element name="CancellationAmount" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="CancellationDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="LateFeesType">
+		<xsd:sequence>
+			<xsd:element name="LateFeesAmount" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="LateFeesDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="LoanTransferType">
+   		<xsd:sequence>
+      			<xsd:element name="TransferTypeCd" type="TransferTypeCdType" minOccurs="1" maxOccurs="1"/>
+      			<xsd:element name="EntityID" type="EntityIDType" minOccurs="0" maxOccurs="1"/>
+      			<xsd:element name="TransferDt" type="xsd:date" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="OrgType">
+		<xsd:sequence>
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">APSUniqueOrgID is used  </xsd:documentation>
+			<xsd:documentation xml:lang="en">excluseivly by the      </xsd:documentation>
+			<xsd:documentation xml:lang="en">Access Provider Software</xsd:documentation>
+		</xsd:annotation>
+			<xsd:element name="APSUniqueOrgID" type="APSUniqueIDType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="EntityName" type="EntityNameType" minOccurs="0"/>
+			<xsd:element name="EntityID" type="EntityIDType" minOccurs="0"/>
+			<xsd:element name="EntityURL" type="URLType" minOccurs="0"/>
+			<xsd:element name="Contacts" type="ContactType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="OtherFeesType">
+		<xsd:sequence>
+			<xsd:element name="OtherFeesAmount" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="OtherFeesDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="PaymentType">
+   		<xsd:sequence>
+      			<xsd:element name="PaymentAmt" type="PosElevenDigitTwoDecimalType" minOccurs="1" maxOccurs="1"/>
+      			<xsd:element name="PaymentDt" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="PersonType">
+		<xsd:sequence>
+			<xsd:element name="LastName" type="LastNameType" minOccurs="0"/>
+			<xsd:element name="FirstName" type="FirstNameType" minOccurs="0"/>
+			<xsd:element name="MiddleInitial" type="MiddleInitialType" minOccurs="0"/>
+			<xsd:element name="SSNum" type="SSNumType" minOccurs="0"/>
+			<xsd:element name="Contacts" type="ContactType"/>
+			<xsd:element name="DtOfBirth" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="Employer" type="OrgType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+		<xsd:complexType name="PhoneType">
+		<xsd:sequence>
+			<xsd:element name="PhoneNumType" type="PhoneNumTypeType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="PhoneNum" type="PhoneNumType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="PhoneValidInd" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="PhoneValidDt" type="xsd:date" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="RepaymentType">
+		<xsd:sequence>
+			<xsd:element name="NextPmtAmt" type="PosElevenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="NextDueDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="AcctBal" type="PosNegElevenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="AcctBalDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="PmtPlan" type="PmtPlanType" minOccurs="0"/>
+			<xsd:element name="LastPmt" type="PaymentType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="PmtBeginDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="CurrentMonthlyPayment" type="PosElevenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="CurrIntRate" type="PosSevenDigitThreeDecimalType" minOccurs="0"/>
+			<xsd:element name="RepaidPrincipalAmt" type="PosElevenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="CapitalizedIntAmt" type="PosElevenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="TotalPreviousPayments" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="AccruedInterest" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="LateFees" type="LateFeesType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="CollectionCosts" type="CollectionCostsType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="ServicingFees" type="ServicingFeesType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="OtherFees" type="OtherFeesType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="DefermentForbearance" type="DefermentForbearanceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="ForbearanceTimeUsed" type="ForbearanceTimeUsedType" minOccurs="0"/>
+			<xsd:element name="DefermentTimeUsed" type="DefermentTimeUsedType" minOccurs="0"/>
+			<xsd:element name="RepaymentTermRemaining" type="RepaymentTermRemainingType" minOccurs="0"/>
+			<xsd:element name="DaysPastDue" type="DaysPastDueType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="ServicingFeesType">
+		<xsd:sequence>
+			<xsd:element name="ServicingFeesAmount" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="ServicingFeesDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="StudentType">
+		<xsd:complexContent>
+			<xsd:extension base="PersonType">
+				<xsd:sequence>
+					<xsd:element name="GradDt" type="xsd:date" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+
+	<!-- ******************************************************************************* -->
+	<!-- ******************************************************************************* -->
+	<!-- ******************************************************************************* -->
+	<!-- *********** Simple Types ****************************************************** -->
+	<!-- ******************************************************************************* -->
+	<!-- ******************************************************************************* -->
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="AddrType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="40"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="AddressTypeType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">"P" = Permanent</xsd:documentation>
+			<xsd:documentation xml:lang="en">"T" = Temporary</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="APSUniqueIDType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">This simpleType is used </xsd:documentation>
+			<xsd:documentation xml:lang="en">excluseivly by the      </xsd:documentation>
+			<xsd:documentation xml:lang="en">Access Provider Software</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="5"/>
+			<xsd:fractionDigits value="0"/>
+			<xsd:minInclusive value="00000"/>
+			<xsd:maxInclusive value="99999"/>
+		</xsd:restriction>
+	</xsd:simpleType>	
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="AwardIdType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">For FFELP, the CommonLine Unique Identifier</xsd:documentation>
+			<xsd:documentation xml:lang="en">plus the CommonLine Loan Sequence Number   </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="19"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="AwardTypeType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">See the Department of Education's "Technical</xsd:documentation>
+			<xsd:documentation xml:lang="en">Reference for Common Record Transmitters    </xsd:documentation>
+			<xsd:documentation xml:lang="en">to Common Origination and Disbursement,"    </xsd:documentation>
+			<xsd:documentation xml:lang="en">Appendix C, for a list of values.           </xsd:documentation>
+			<xsd:documentation xml:lang="en">In addition to those values, the following  </xsd:documentation>
+			<xsd:documentation xml:lang="en">may be returned:                            </xsd:documentation>
+			<xsd:documentation xml:lang="en">        "HEAL"                              </xsd:documentation>
+			<xsd:documentation xml:lang="en">        "DLConsl"                           </xsd:documentation>
+			<xsd:documentation xml:lang="en">        "FFELConsl"                         </xsd:documentation>
+			<xsd:documentation xml:lang="en">        "SLS"                               </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="CityType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="24"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="CommonlineErrorType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">See the CommonLine v5 Error Codes Addendum</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType	name="DataProviderTypeType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">"SBS" = School Based Software    </xsd:documentation>
+			<xsd:documentation xml:lang="en">"LO"  = Lender Originator        </xsd:documentation>
+			<xsd:documentation xml:lang="en">"LRS" = Lender Repayment Servicer</xsd:documentation>
+			<xsd:documentation xml:lang="en">"G"   = Guaranty Agency          </xsd:documentation>
+			<xsd:documentation xml:lang="en">"DA"  = Disbursing Agent         </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="DaysPastDueType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="DefermentForbearanceNameType">
+		<xsd:restriction base="xsd:string">
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="DefermentTimeUsedType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="DisbHoldType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">"H" = Held   </xsd:documentation>
+			<xsd:documentation xml:lang="en">"R" = Release</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="DisbStatCdType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">"A" = Approved but Not Disbursed</xsd:documentation>
+			<xsd:documentation xml:lang="en">"C" = Fully Cancelled           </xsd:documentation>
+			<xsd:documentation xml:lang="en">"D" = Disbursed or Re-Issued    </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="DriversLicenseType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="20"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="EmailType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="256"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="EntityNameType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="96"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="EntityIDType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Office of Postsecondary Education Identification Number</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="FirstNameType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="12"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="ForbearanceTimeUsedType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="GradeLevelIndType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">See the Grade Level Code values as defined</xsd:documentation>
+			<xsd:documentation xml:lang="en">in the CommonLine v5 Response @1 record.  </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="LastNameType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="35"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="LoanStatType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Data providers will return NSLDS values if    </xsd:documentation>
+			<xsd:documentation xml:lang="en">they can.  If they cannot return data from the</xsd:documentation>
+			<xsd:documentation xml:lang="en">full set of NSLDS values, they should return  </xsd:documentation>
+			<xsd:documentation xml:lang="en">one of the values defined in Issue B-061      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="MiddleInitialType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="MPNIndType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">"Y" = Service Provider has or can </xsd:documentation>
+			<xsd:documentation xml:lang="en">      confirm that an MPN exists  </xsd:documentation>
+			<xsd:documentation xml:lang="en">"N" = Service Provider does not   </xsd:documentation>
+			<xsd:documentation xml:lang="en">      have an MPN                 </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PmtPlanType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Standard        </xsd:documentation>
+			<xsd:documentation xml:lang="en">Graduated       </xsd:documentation>
+			<xsd:documentation xml:lang="en">Income-Sensitive</xsd:documentation>
+			<xsd:documentation xml:lang="en">Extended        </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PhoneNumType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="17"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PhoneNumTypeType">	
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">For Individual Persons:</xsd:documentation>
+			<xsd:documentation xml:lang="en">  "H" = Home           </xsd:documentation>
+			<xsd:documentation xml:lang="en">  "W" = Work           </xsd:documentation>
+			<xsd:documentation xml:lang="en">  "T" = Temporary      </xsd:documentation>
+			<xsd:documentation xml:lang="en">  "M" = Mobile         </xsd:documentation>
+			<xsd:documentation xml:lang="en">  "O" = Other          </xsd:documentation>
+			<xsd:documentation xml:lang="en">For Organizations:     </xsd:documentation>
+			<xsd:documentation xml:lang="en">  "P" = Primary        </xsd:documentation>
+			<xsd:documentation xml:lang="en">  "S" = Secondary      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PosTwoDigitAmtType">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="2"/>
+			<xsd:fractionDigits value="0"/>
+			<xsd:minInclusive value="00"/>
+			<xsd:maxInclusive value="99"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PosSevenDigitThreeDecimalType">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="7"/>
+			<xsd:fractionDigits value="3"/>
+			<xsd:minInclusive value="0000.000"/>
+			<xsd:maxInclusive value="9999.999"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PosNineDigitAmtType">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="9"/>
+			<xsd:fractionDigits value="0"/>
+			<xsd:minInclusive value="000000000"/>
+			<xsd:maxInclusive value="999999999"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PosElevenDigitTwoDecimalType">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="11"/>
+			<xsd:fractionDigits value="2"/>
+			<xsd:minInclusive value="000000000.00"/>
+			<xsd:maxInclusive value="999999999.99"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PosNegElevenDigitTwoDecimalType">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="11"/>
+			<xsd:fractionDigits value="2"/>
+			<xsd:minInclusive value="-999999999.99"/>
+			<xsd:maxInclusive value="999999999.99"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PosTwelveDigitTwoDecimalType">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="12"/>
+			<xsd:fractionDigits value="2"/>
+			<xsd:minInclusive value="0000000000.00"/>
+			<xsd:maxInclusive value="9999999999.99"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PosFifteenDigitTwoDecimalType">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="15"/>
+			<xsd:fractionDigits value="2"/>
+			<xsd:minInclusive value="0000000000000.00"/>
+			<xsd:maxInclusive value="9999999999999.99"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="PostalCdType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="RepaymentTermRemainingType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="RsMsgType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Response Message Text</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="150"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="RsMsgLevelType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">"E" = Error      </xsd:documentation>
+			<xsd:documentation xml:lang="en">"W" = Warning    </xsd:documentation>
+			<xsd:documentation xml:lang="en">"I" = Information</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="SSNumType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Social Security Number</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="9"/>
+			<xsd:maxLength value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="StateProvType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">See Appendix B in the CommonLine version 5</xsd:documentation>
+			<xsd:documentation xml:lang="en">App Send, Response, Disbursement Info,    </xsd:documentation>
+			<xsd:documentation xml:lang="en">or Change Send file descriptions          </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="TransferTypeCdType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">"L" = Lender   </xsd:documentation>
+			<xsd:documentation xml:lang="en">"G" = Guarantor</xsd:documentation>
+			<xsd:documentation xml:lang="en">"S" = Servicer </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:simpleType name="URLType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="1024"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+</xsd:schema>

@@ -1,6 +1,7 @@
 package org.meteornetwork.meteor.provider.data.adapter;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,13 +12,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class Version40AdapterImpl implements TranslationAdapter {
+public class VersionCurrentAdapterImpl implements TranslationAdapter {
 
-	private static final Log LOG = LogFactory.getLog(Version40AdapterImpl.class);
-
-	private Exception processingException;
+	private static final Log LOG = LogFactory.getLog(VersionCurrentAdapterImpl.class);
 
 	private String requestXml;
+	private String responseXml;
 
 	@Override
 	public RequestWrapper getRequest() {
@@ -27,10 +27,9 @@ public class Version40AdapterImpl implements TranslationAdapter {
 		} catch (Exception e) {
 			LOG.error("Could not parse meteor data request: " + e.getMessage());
 			LOG.debug("Could not parse meteor data request", e);
-			processingException = e;
 			return null;
 		}
-		
+
 		RequestWrapper request = new RequestWrapper();
 		request.setAccessProvider(new AccessProvider(meteorDataRequest.getAccessProvider()));
 		request.setSsn(meteorDataRequest.getSSN());
@@ -39,12 +38,21 @@ public class Version40AdapterImpl implements TranslationAdapter {
 
 	@Override
 	public void setResponse(ResponseWrapper response) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public Exception getProcessingException() {
-		return processingException;
+		if (response == null) {
+			responseXml = null;
+			return;
+		}
+		
+		StringWriter marshalledResponse = new StringWriter();
+		try {
+			response.getResponse().marshal(marshalledResponse);
+		} catch (Exception e) {
+			LOG.error("Could not marshal meteor response: " + e.getMessage());
+			LOG.debug("Could not marshal meteor response", e);
+			return;
+		}
+		
+		responseXml = marshalledResponse.toString();
 	}
 
 	public String getRequestXml() {
@@ -57,6 +65,17 @@ public class Version40AdapterImpl implements TranslationAdapter {
 	 */
 	public void setRequestXml(String requestXml) {
 		this.requestXml = requestXml;
+	}
+
+	/**
+	 * @return meteor response as xml string
+	 */
+	public String getResponseXml() {
+		return responseXml;
+	}
+
+	public void setResponseXml(String responseXml) {
+		this.responseXml = responseXml;
 	}
 
 }

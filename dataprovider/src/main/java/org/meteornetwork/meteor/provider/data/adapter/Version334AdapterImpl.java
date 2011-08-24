@@ -1,6 +1,7 @@
 package org.meteornetwork.meteor.provider.data.adapter;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerException;
@@ -28,12 +29,11 @@ public class Version334AdapterImpl implements TranslationAdapter {
 
 	private static final Log LOG = LogFactory.getLog(Version334AdapterImpl.class);
 
-	private Exception processingException;
-
 	private String rawHPCMessage;
 	private String responseHPCMessage;
 
 	private Templates requestTransformerTemplate;
+	private Templates responseTransformerTemplate;
 
 	private HPCManager hpcManager;
 	private XSLTransformManager xslTransformManager;
@@ -42,24 +42,22 @@ public class Version334AdapterImpl implements TranslationAdapter {
 	public RequestWrapper getRequest() {
 		String contentXml;
 		try {
-			contentXml = hpcManager.retrieveContent(hpcManager.parseHPCEnvelope(rawHPCMessage));
-			LOG.debug("HPC content XML:\n" + contentXml);
+			contentXml = hpcManager.retrieveContent(rawHPCMessage);
+			LOG.debug("Request XML from HPC:\n" + contentXml);
 		} catch (Exception e) {
 			// TODO: how does HPC log bad requests? Exceptions at this stage?
 			LOG.error("Could not handle HPC request: " + e.getMessage());
 			LOG.debug("Could not handle HPC request", e);
-			processingException = e;
 			return null;
 		}
 
 		String transformedContentXml;
 		try {
 			transformedContentXml = xslTransformManager.transformXML(contentXml, requestTransformerTemplate);
-			LOG.debug("Transformed content XML:\n" + transformedContentXml);
+			LOG.debug("Transformed request XML:\n" + transformedContentXml);
 		} catch (TransformerException e) {
-			LOG.error("Could not transform HPC content: " + e.getMessage());
-			LOG.debug("Could not transform HPC content", e);
-			processingException = e;
+			LOG.error("Could not transform request XML: " + e.getMessage());
+			LOG.debug("Could not transform request XML", e);
 			return null;
 		}
 
@@ -70,7 +68,6 @@ public class Version334AdapterImpl implements TranslationAdapter {
 		} catch (Exception e) {
 			LOG.error("Could not parse meteor data request: " + e.getMessage());
 			LOG.debug("Could not parse meteor data request", e);
-			processingException = e;
 			return null;
 		}
 
@@ -81,7 +78,38 @@ public class Version334AdapterImpl implements TranslationAdapter {
 
 	@Override
 	public void setResponse(ResponseWrapper response) {
-		// TODO set meteor data response
+		if (response == null) {
+			responseHPCMessage = null;
+			return;
+		}
+		
+		StringWriter marshalledResponse = new StringWriter();
+		try {
+			response.getResponse().marshal(marshalledResponse);
+			LOG.debug("Marshalled response XML:\n" + marshalledResponse.toString());
+		} catch (Exception e) {
+			LOG.error("Could not marshal meteor response: " + e.getMessage());
+			LOG.debug("Could not marshal meteor response", e);
+			return;
+		}
+
+		String transformedResponseXml;
+		try {
+			transformedResponseXml = xslTransformManager.transformXML(marshalledResponse.toString(), responseTransformerTemplate);
+			LOG.debug("Transformed response XML:\n" + transformedResponseXml);
+		} catch (TransformerException e) {
+			LOG.error("Could not transform response XML: " + e.getMessage());
+			LOG.debug("Could not transform response XML", e);
+			return;
+		}
+
+		try {
+			responseHPCMessage = hpcManager.generateHPCResponse(transformedResponseXml);
+		} catch (Exception e) {
+			LOG.error("Could not generate HPC response: " + e.getMessage());
+			LOG.debug("Could not generate HPC response", e);
+			return;
+		}
 	}
 
 	public String getRawHPCMessage() {
@@ -118,9 +146,14 @@ public class Version334AdapterImpl implements TranslationAdapter {
 		this.requestTransformerTemplate = requestTransformerTemplate;
 	}
 
-	@Override
-	public Exception getProcessingException() {
-		return processingException;
+	public Templates getResponseTransformerTemplate() {
+		return responseTransformerTemplate;
+	}
+
+	@Autowired
+	@Qualifier("AP334toDP400ResponseTemplate")
+	public void setResponseTransformerTemplate(Templates responseTransformerTemplate) {
+		this.responseTransformerTemplate = responseTransformerTemplate;
 	}
 
 	public HPCManager getHpcManager() {

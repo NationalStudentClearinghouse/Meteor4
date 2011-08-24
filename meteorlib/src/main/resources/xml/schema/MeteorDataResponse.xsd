@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.meteornetwork.org/schemas/MeteorDataResponse">
+	
+	<xsd:import namespace="http://schemas.pescxml.org" schemaLocation="../schema/Meteor_Schema_4.0.0.xsd" />
+	
+</xsd:schema>

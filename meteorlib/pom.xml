@@ -44,9 +44,8 @@
 				</dependencies>
 				
 				<configuration>
-					<schemaDirectory>${basedir}/src/main/resources/xml</schemaDirectory>
-					<packaging>org.meteornetwork.meteor.common.xml</packaging>
-					<properties>${basedir}/src/main/resources/xml/castorbuilder.properties</properties>
+					<bindingfile>${basedir}/src/main/resources/xml/binding.xml</bindingfile>
+					<schemaDirectory>${basedir}/src/main/resources/xml/schema</schemaDirectory>
 				</configuration>
 				<executions>
 					<execution>

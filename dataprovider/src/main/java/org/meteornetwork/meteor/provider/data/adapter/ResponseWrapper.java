@@ -1,16 +1,17 @@
 package org.meteornetwork.meteor.provider.data.adapter;
 
+import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
+
 public class ResponseWrapper {
 
-	// TODO replace with meteor response xml binding objects
-	private String myData;
+	private MeteorRsMsg response;
 
-	public String getMyData() {
-		return myData;
+	public MeteorRsMsg getResponse() {
+		return response;
 	}
 
-	public void setMyData(String myData) {
-		this.myData = myData;
+	public void setResponse(MeteorRsMsg response) {
+		this.response = response;
 	}
 
 }

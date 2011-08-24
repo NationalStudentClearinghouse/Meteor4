@@ -5,7 +5,7 @@ import javax.jws.WebService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.ws.DataProviderService;
-import org.meteornetwork.meteor.provider.data.adapter.Version40AdapterImpl;
+import org.meteornetwork.meteor.provider.data.adapter.VersionCurrentAdapterImpl;
 import org.meteornetwork.meteor.provider.data.manager.DataProviderManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +26,11 @@ public class DataProviderServiceImpl implements DataProviderService, Application
 	public String queryDataForBorrower(String requestXml) {
 		LOG.debug("DP received request: " + requestXml);
 
-		Version40AdapterImpl adapter = (Version40AdapterImpl) applicationContext.getBean(Version40AdapterImpl.class);
+		VersionCurrentAdapterImpl adapter = (VersionCurrentAdapterImpl) applicationContext.getBean(VersionCurrentAdapterImpl.class);
 		adapter.setRequestXml(requestXml);
 		dataManager.queryDataForBorrower(adapter);
 
+		// TODO replace with response content
 		return "DP response to requestXML.";
 	}
 

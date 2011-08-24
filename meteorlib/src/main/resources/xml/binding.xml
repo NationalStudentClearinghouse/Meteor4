@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<binding>
+	<package>
+		<name>org.meteornetwork.meteor.common.xml.datarequest</name>
+		<schemaLocation>MeteorDataRequest.xsd</schemaLocation>
+	</package>
+	<package>
+		<name>org.meteornetwork.meteor.common.xml.dataresponse</name>
+		<schemaLocation>MeteorDataResponse.xsd</schemaLocation>
+	</package>
+	<package>
+		<name>org.meteornetwork.meteor.common.xml.dataresponse</name>
+		<schemaLocation>Meteor_Schema_4.0.0.xsd</schemaLocation>
+	</package>
+	<package>
+		<name>org.meteornetwork.meteor.common.xml.indexrequest</name>
+		<schemaLocation>MeteorIndexRequest.xsd</schemaLocation>
+	</package>
+	<package>
+		<name>org.meteornetwork.meteor.common.xml.indexresponse</name>
+		<schemaLocation>MeteorIndexResponse.xsd</schemaLocation>
+	</package>
+	<package>
+		<name>org.meteornetwork.meteor.common.xml.hpc</name>
+		<schemaLocation>HPCMessage.xsd</schemaLocation>
+	</package>
+</binding>

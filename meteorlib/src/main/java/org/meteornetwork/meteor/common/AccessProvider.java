@@ -10,11 +10,18 @@ public class AccessProvider {
 	public AccessProvider() {
 	}
 
-	public AccessProvider(org.meteornetwork.meteor.common.xml.AccessProvider accessProvider) {
-		meteorInstitutionIdentifier = accessProvider.getMeteorInstitutionIdentifier();
-		name = accessProvider.getName();
-		userHandle = accessProvider.getUserHandle();
-		issueInstant = accessProvider.getIssueInstant();
+	public AccessProvider(org.meteornetwork.meteor.common.xml.datarequest.AccessProvider accessProvider) {
+		this.meteorInstitutionIdentifier = accessProvider.getMeteorInstitutionIdentifier();
+		this.name = accessProvider.getName();
+		this.userHandle = accessProvider.getUserHandle();
+		this.issueInstant = accessProvider.getIssueInstant();
+	}
+	
+	public AccessProvider(org.meteornetwork.meteor.common.xml.indexrequest.AccessProvider accessProvider) {
+		this.meteorInstitutionIdentifier = accessProvider.getMeteorInstitutionIdentifier();
+		this.name = accessProvider.getName();
+		this.userHandle = accessProvider.getUserHandle();
+		this.issueInstant = accessProvider.getIssueInstant();
 	}
 
 	public String getMeteorInstitutionIdentifier() {
