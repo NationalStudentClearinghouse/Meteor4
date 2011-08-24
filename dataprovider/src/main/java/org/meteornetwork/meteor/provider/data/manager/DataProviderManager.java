@@ -42,12 +42,14 @@ public class DataProviderManager {
 		// TODO: initialize data server abstraction and call it
 		LOG.debug("Request received for data on SSN: " + request.getSsn());
 
-		// TODO: set response on adapter
+		// TODO: set response on adapter and remove test response
 		MeteorRsMsg meteorRsMsg = null;
 		try {
 			 meteorRsMsg = MeteorRsMsg.unmarshal(new InputStreamReader(dataResponseSample.getInputStream()));
 		} catch (Exception e) {
 			LOG.error(e);
+			adapter.setResponse(null);
+			return;
 		}
 		
 		ResponseWrapper response = new ResponseWrapper();

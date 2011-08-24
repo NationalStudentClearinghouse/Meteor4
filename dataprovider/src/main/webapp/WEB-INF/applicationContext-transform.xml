@@ -59,4 +59,31 @@
 			</bean>
 		</constructor-arg>
 	</bean>
+	
+	<!-- Request Template-version mapping -->
+	<bean id="requestTemplateVersionMapper" class="org.meteornetwork.meteor.common.util.TemplateVersionMapper">
+		<property name="templateVersionPairs">
+			<list>
+				<bean class="org.meteornetwork.meteor.common.util.TemplateVersionPair">
+					<property name="versionFrom" value="3.x.x"/>
+					<property name="versionTo" value="4.x.x"/>
+					<property name="template"><ref bean="AP334toDP400RequestTemplate"/></property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Response template-version mapping -->
+	<bean id="responseTemplateVersionMapper" class="org.meteornetwork.meteor.common.util.TemplateVersionMapper">
+		<property name="templateVersionPairs">
+			<list>
+				<bean class="org.meteornetwork.meteor.common.util.TemplateVersionPair">
+					<property name="versionFrom" value="4.x.x"/>
+					<property name="versionTo" value="3.x.x"/>
+					<property name="template"><ref bean="AP334toDP400ResponseTemplate"/></property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
 </beans> 

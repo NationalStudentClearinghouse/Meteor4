@@ -11,6 +11,7 @@
                         <PhoneNumType>P</PhoneNumType>
                         <PhoneNum>501-497-0921</PhoneNum>
                         <PhoneValidInd>true</PhoneValidInd>
+                        <PhoneValidDt>2011-08-08</PhoneValidDt>
                     </Phone>
                     <AddressInfo>
                         <AddrValidInd>true</AddrValidInd>
@@ -92,6 +93,7 @@
                             <Phone>
                                 <PhoneNumType>P</PhoneNumType>
                                 <PhoneNum>501-456-6294</PhoneNum>
+                                <PhoneValidDt>1980-02-04</PhoneValidDt>
                             </Phone>
                             <AddressInfo>
                                 <AddrValidInd>true</AddrValidInd>
@@ -321,6 +323,8 @@
                             <PostalCd>75932</PostalCd>
                         </AddressInfo>
                         <Email>guarantees@lga.org</Email>
+                        <EmailValidInd>false</EmailValidInd>
+                        <EmailValidDt>1999-12-31</EmailValidDt>
                     </Contacts>
                 </Guarantor>
                 <AwardId>7085690000A000303</AwardId>
@@ -335,9 +339,14 @@
                         <PaymentDt>2002-02-13</PaymentDt>
                     </LastPmt>
                     <PmtBeginDt>1989-11-20</PmtBeginDt>
+                    <CurrentMonthlyPayment>99.98</CurrentMonthlyPayment>
                     <CurrIntRate>8.00</CurrIntRate>
                     <RepaidPrincipalAmt>3654.02</RepaidPrincipalAmt>
                     <CapitalizedIntAmt>2745.91</CapitalizedIntAmt>
+                    <ForbearanceTimeUsed>12</ForbearanceTimeUsed>
+                    <DefermentTimeUsed>333</DefermentTimeUsed>
+                    <RepaymentTermRemaining>12</RepaymentTermRemaining>
+                    <DaysPastDue>133</DaysPastDue>
                 </Repayment>
                 <Default>
                     <Def>true</Def>

@@ -4,7 +4,7 @@ import javax.jws.WebService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.meteornetwork.meteor.provider.data.adapter.Version334AdapterImpl;
+import org.meteornetwork.meteor.provider.data.adapter.HPCAdapterImpl;
 import org.meteornetwork.meteor.provider.data.manager.DataProviderManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class DataProviderHPCServiceImpl implements DataProviderHPCService, Appli
 	public String submitHPC(String rawHPCMessage) {
 		LOG.debug("DP received HPC request: " + rawHPCMessage);
 
-		Version334AdapterImpl adapter = (Version334AdapterImpl) applicationContext.getBean(Version334AdapterImpl.class);
+		HPCAdapterImpl adapter = (HPCAdapterImpl) applicationContext.getBean(HPCAdapterImpl.class);
 		adapter.setRawHPCMessage(rawHPCMessage.trim());
 		dataManager.queryDataForBorrower(adapter);
 

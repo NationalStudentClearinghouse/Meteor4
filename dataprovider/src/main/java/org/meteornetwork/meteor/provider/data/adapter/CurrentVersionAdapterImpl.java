@@ -6,15 +6,16 @@ import java.io.StringWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.AccessProvider;
+import org.meteornetwork.meteor.common.util.LoggingUtil;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class VersionCurrentAdapterImpl implements TranslationAdapter {
+public class CurrentVersionAdapterImpl implements TranslationAdapter {
 
-	private static final Log LOG = LogFactory.getLog(VersionCurrentAdapterImpl.class);
+	private static final Log LOG = LogFactory.getLog(CurrentVersionAdapterImpl.class);
 
 	private String requestXml;
 	private String responseXml;
@@ -25,8 +26,7 @@ public class VersionCurrentAdapterImpl implements TranslationAdapter {
 		try {
 			meteorDataRequest = MeteorDataRequest.unmarshal(new StringReader(requestXml));
 		} catch (Exception e) {
-			LOG.error("Could not parse meteor data request: " + e.getMessage());
-			LOG.debug("Could not parse meteor data request", e);
+			LoggingUtil.logError("Could not parse meteor data request", e, LOG);
 			return null;
 		}
 
@@ -47,8 +47,7 @@ public class VersionCurrentAdapterImpl implements TranslationAdapter {
 		try {
 			response.getResponse().marshal(marshalledResponse);
 		} catch (Exception e) {
-			LOG.error("Could not marshal meteor response: " + e.getMessage());
-			LOG.debug("Could not marshal meteor response", e);
+			LoggingUtil.logError("Could not marshal meteor response", e, LOG);
 			return;
 		}
 		

@@ -3,13 +3,12 @@ package org.meteornetwork.meteor.provider.data.adapter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import javax.xml.transform.Templates;
-import javax.xml.transform.TransformerException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.AccessProvider;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
+import org.meteornetwork.meteor.common.util.LoggingUtil;
+import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +24,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("prototype")
-public class Version334AdapterImpl implements TranslationAdapter {
+public class HPCAdapterImpl implements TranslationAdapter {
 
-	private static final Log LOG = LogFactory.getLog(Version334AdapterImpl.class);
+	private static final Log LOG = LogFactory.getLog(HPCAdapterImpl.class);
 
 	private String rawHPCMessage;
 	private String responseHPCMessage;
 
-	private Templates requestTransformerTemplate;
-	private Templates responseTransformerTemplate;
+	private TemplateVersionMapper requestTemplateVersionMapper;
+	private TemplateVersionMapper responseTemplateVersionMapper;
 
 	private HPCManager hpcManager;
 	private XSLTransformManager xslTransformManager;
@@ -45,19 +44,17 @@ public class Version334AdapterImpl implements TranslationAdapter {
 			contentXml = hpcManager.retrieveContent(rawHPCMessage);
 			LOG.debug("Request XML from HPC:\n" + contentXml);
 		} catch (Exception e) {
-			// TODO: how does HPC log bad requests? Exceptions at this stage?
-			LOG.error("Could not handle HPC request: " + e.getMessage());
-			LOG.debug("Could not handle HPC request", e);
+			LoggingUtil.logError("Could not handle HPC request", e, LOG);
 			return null;
 		}
 
 		String transformedContentXml;
 		try {
-			transformedContentXml = xslTransformManager.transformXML(contentXml, requestTransformerTemplate);
+			// TODO use actual versions
+			transformedContentXml = xslTransformManager.transformXML(contentXml, requestTemplateVersionMapper.getTemplateForVersions("3.3.4", "4.0.0"));
 			LOG.debug("Transformed request XML:\n" + transformedContentXml);
-		} catch (TransformerException e) {
-			LOG.error("Could not transform request XML: " + e.getMessage());
-			LOG.debug("Could not transform request XML", e);
+		} catch (Exception e) {
+			LoggingUtil.logError("Could not transform request XML", e, LOG);
 			return null;
 		}
 
@@ -66,8 +63,7 @@ public class Version334AdapterImpl implements TranslationAdapter {
 		try {
 			meteorDataRequest = MeteorDataRequest.unmarshal(new StringReader(transformedContentXml));
 		} catch (Exception e) {
-			LOG.error("Could not parse meteor data request: " + e.getMessage());
-			LOG.debug("Could not parse meteor data request", e);
+			LoggingUtil.logError("Could not parse meteor data request", e, LOG);
 			return null;
 		}
 
@@ -82,32 +78,33 @@ public class Version334AdapterImpl implements TranslationAdapter {
 			responseHPCMessage = null;
 			return;
 		}
-		
-		StringWriter marshalledResponse = new StringWriter();
+
+		String marshalledResponse;
 		try {
-			response.getResponse().marshal(marshalledResponse);
-			LOG.debug("Marshalled response XML:\n" + marshalledResponse.toString());
+			StringWriter marshalledResponseWriter = new StringWriter();
+			response.getResponse().marshal(marshalledResponseWriter);
+			marshalledResponse = marshalledResponseWriter.toString();
+			LOG.debug("Marshalled response XML:\n" + marshalledResponse);
 		} catch (Exception e) {
-			LOG.error("Could not marshal meteor response: " + e.getMessage());
-			LOG.debug("Could not marshal meteor response", e);
+			LoggingUtil.logError("Could not marshal meteor response", e, LOG);
 			return;
 		}
 
 		String transformedResponseXml;
 		try {
-			transformedResponseXml = xslTransformManager.transformXML(marshalledResponse.toString(), responseTransformerTemplate);
+			// TODO use actual versions
+			transformedResponseXml = xslTransformManager.transformXML(marshalledResponse, responseTemplateVersionMapper.getTemplateForVersions("4.0.0", "3.3.4"));
 			LOG.debug("Transformed response XML:\n" + transformedResponseXml);
-		} catch (TransformerException e) {
+		} catch (Exception e) {
 			LOG.error("Could not transform response XML: " + e.getMessage());
-			LOG.debug("Could not transform response XML", e);
+			LoggingUtil.logError("Could not transform response XML", e, LOG);
 			return;
 		}
 
 		try {
 			responseHPCMessage = hpcManager.generateHPCResponse(transformedResponseXml);
 		} catch (Exception e) {
-			LOG.error("Could not generate HPC response: " + e.getMessage());
-			LOG.debug("Could not generate HPC response", e);
+			LoggingUtil.logError("Could not generate HPC response", e, LOG);
 			return;
 		}
 	}
@@ -136,26 +133,6 @@ public class Version334AdapterImpl implements TranslationAdapter {
 		this.responseHPCMessage = responseHPCMessage;
 	}
 
-	public Templates getRequestTransformerTemplate() {
-		return requestTransformerTemplate;
-	}
-
-	@Autowired
-	@Qualifier("AP334toDP400RequestTemplate")
-	public void setRequestTransformerTemplate(Templates requestTransformerTemplate) {
-		this.requestTransformerTemplate = requestTransformerTemplate;
-	}
-
-	public Templates getResponseTransformerTemplate() {
-		return responseTransformerTemplate;
-	}
-
-	@Autowired
-	@Qualifier("AP334toDP400ResponseTemplate")
-	public void setResponseTransformerTemplate(Templates responseTransformerTemplate) {
-		this.responseTransformerTemplate = responseTransformerTemplate;
-	}
-
 	public HPCManager getHpcManager() {
 		return hpcManager;
 	}
@@ -172,6 +149,26 @@ public class Version334AdapterImpl implements TranslationAdapter {
 	@Autowired
 	public void setXslTransformManager(XSLTransformManager xslTransformManager) {
 		this.xslTransformManager = xslTransformManager;
+	}
+
+	public TemplateVersionMapper getRequestTemplateVersionMapper() {
+		return requestTemplateVersionMapper;
+	}
+
+	@Autowired
+	@Qualifier("requestTemplateVersionMapper")
+	public void setRequestTemplateVersionMapper(TemplateVersionMapper requestTemplateVersionMapper) {
+		this.requestTemplateVersionMapper = requestTemplateVersionMapper;
+	}
+
+	public TemplateVersionMapper getResponseTemplateVersionMapper() {
+		return responseTemplateVersionMapper;
+	}
+
+	@Autowired
+	@Qualifier("responseTemplateVersionMapper")
+	public void setResponseTemplateVersionMapper(TemplateVersionMapper responseTemplateVersionMapper) {
+		this.responseTemplateVersionMapper = responseTemplateVersionMapper;
 	}
 
 }
