@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MeteorIndexResponse>
+	<DataProviders>
+	    <DataProvider>
+	        <EntityName>My Data Provider</EntityName>
+	        <EntityID>dp</EntityID>
+	        <EntityURL>http://localhost:8080/dataprovider/services/DataProviderService</EntityURL>
+	    </DataProvider>
+	</DataProviders>
+</MeteorIndexResponse>

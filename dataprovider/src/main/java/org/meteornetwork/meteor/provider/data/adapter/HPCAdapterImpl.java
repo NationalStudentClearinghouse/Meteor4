@@ -5,7 +5,6 @@ import java.io.StringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.meteornetwork.meteor.common.AccessProvider;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.util.LoggingUtil;
 import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
@@ -67,7 +66,7 @@ public class HPCAdapterImpl implements TranslationAdapter {
 			return null;
 		}
 
-		request.setAccessProvider(new AccessProvider(meteorDataRequest.getAccessProvider()));
+		request.setAccessProvider(meteorDataRequest.getAccessProvider());
 		request.setSsn(meteorDataRequest.getSSN());
 		return request;
 	}

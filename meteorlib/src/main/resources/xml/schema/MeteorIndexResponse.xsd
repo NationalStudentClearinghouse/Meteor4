@@ -1,5 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	targetNamespace="http://www.meteornetwork.org/schemas/MeteorIndexResponse-4.0.0">
+	targetNamespace="http://www.meteornetwork.org/schemas/MeteorIndexResponse"
+	xmlns="http://www.meteornetwork.org/schemas/MeteorIndexResponse"
+	elementFormDefault="unqualified">
+
+	<!-- ******************************************************************************* -->
+	<!-- ************************* Document Structure ********************************** -->
+	<!-- ******************************************************************************* -->
+	<xsd:element name="MeteorIndexResponse">
+	   <xsd:complexType>
+	      <xsd:sequence>
+			<xsd:element name="IndexProviderData" type="OrgType" minOccurs="0" maxOccurs="1"/>
+	         <xsd:element name="DataProviders" minOccurs="1" maxOccurs="1">
+	            <xsd:complexType>
+	               <xsd:sequence>
+	                  <xsd:element name="DataProvider" type="OrgType" minOccurs="0" maxOccurs="unbounded"/>
+	               </xsd:sequence>
+	            </xsd:complexType>
+	         </xsd:element>
+	         <xsd:element name="IndexProviderMessages" minOccurs="0" maxOccurs="1">
+	            <xsd:complexType>
+	               <xsd:sequence>
+	                  <xsd:element name="Message" type="IndexProviderMessageType" minOccurs="0" maxOccurs="unbounded" />
+	               </xsd:sequence>
+	            </xsd:complexType>
+	         </xsd:element>   
+	      </xsd:sequence>
+	   </xsd:complexType>
+	</xsd:element> 
 	
+	<!-- ******************************************************************************* -->
+	<!-- ************************* Complex Types *************************************** -->
+	<!-- ******************************************************************************* -->
+	
+	<xsd:complexType name="OrgType">
+		<xsd:sequence>
+			<xsd:element name="EntityName" type="EntityNameType" minOccurs="0"/>
+			<xsd:element name="EntityID" type="EntityIDType" minOccurs="0"/>
+			<xsd:element name="EntityURL" type="URLType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- ******************************************************************************* -->
+	
+	<xsd:complexType name="IndexProviderMessageType">
+	   <xsd:sequence>
+	      <xsd:element name="RsMsg" type="RsMsgType" minOccurs="1" maxOccurs="1"/>
+	      <xsd:element name="RsMsgLevel" type="RsMsgLevelType" minOccurs="1" maxOccurs="1"/>
+	   </xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- ******************************************************************************* -->
+	<!-- ************************* Simple Types **************************************** -->
+	<!-- ******************************************************************************* -->
+	
+	<xsd:simpleType name="LastNameType">
+	   <xsd:restriction base="xsd:string">
+	      <xsd:minLength value="0"/>
+	      <xsd:maxLength value="35"/>
+	   </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- ******************************************************************************* -->
+	
+	<xsd:simpleType name="FirstNameType">
+	   <xsd:restriction base="xsd:string">
+	      <xsd:minLength value="0"/>
+	      <xsd:maxLength value="12"/>
+	   </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- ******************************************************************************* -->
+	
+	<xsd:simpleType name="MiddleInitialType">
+	   <xsd:restriction base="xsd:string">
+	      <xsd:minLength value="0"/>
+	      <xsd:maxLength value="1"/>
+	   </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- ******************************************************************************* -->
+	
+	<xsd:simpleType name="EntityIDType">
+	   <xsd:annotation>
+	      <xsd:documentation xml:lang="en">Office of Postsecondary Education Identification Number</xsd:documentation>
+	   </xsd:annotation>
+	   <xsd:restriction base="xsd:string">
+	      <xsd:minLength value="0"/>
+	      <xsd:maxLength value="10"/>
+	   </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- ******************************************************************************* -->
+	
+	<xsd:simpleType name="EntityNameType">
+	   <xsd:restriction base="xsd:string">
+	      <xsd:minLength value="0"/>
+	      <xsd:maxLength value="96"/>
+	   </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- ******************************************************************************* -->
+	
+	<xsd:simpleType name="URLType">
+	   <xsd:restriction base="xsd:string">
+	      <xsd:minLength value="0"/>
+	      <xsd:maxLength value="1024"/>
+	   </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- ******************************************************************************* -->
+	
+	<xsd:simpleType name="RsMsgType">
+	   <xsd:annotation>
+	      <xsd:documentation xml:lang="en">Response Message Text</xsd:documentation>
+	   </xsd:annotation>
+	   <xsd:restriction base="xsd:string">
+	      <xsd:minLength value="1"/>
+	      <xsd:maxLength value="150"/>
+	   </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- ******************************************************************************* -->
+	
+	<xsd:simpleType name="RsMsgLevelType">
+	   <xsd:annotation>
+	      <xsd:documentation xml:lang="en">"E" = Error      </xsd:documentation>
+	      <xsd:documentation xml:lang="en">"W" = Warning    </xsd:documentation>
+	      <xsd:documentation xml:lang="en">"I" = Information</xsd:documentation>
+	   </xsd:annotation>
+	   <xsd:restriction base="xsd:string">
+	      <xsd:minLength value="1"/>
+	      <xsd:maxLength value="1"/>
+	   </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- ******************************************************************************* -->
+	
+	<xsd:simpleType name="SSNumType">
+	   <xsd:annotation>
+	      <xsd:documentation xml:lang="en">Social Security Number</xsd:documentation>
+	   </xsd:annotation>
+	   <xsd:restriction base="xsd:string">
+	      <xsd:minLength value="9"/>
+	      <xsd:maxLength value="9"/>
+	   </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- ******************************************************************************* -->
 </xsd:schema>

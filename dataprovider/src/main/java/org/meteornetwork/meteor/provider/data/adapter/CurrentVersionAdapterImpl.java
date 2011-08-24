@@ -5,7 +5,6 @@ import java.io.StringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.meteornetwork.meteor.common.AccessProvider;
 import org.meteornetwork.meteor.common.util.LoggingUtil;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.springframework.context.annotation.Scope;
@@ -31,7 +30,7 @@ public class CurrentVersionAdapterImpl implements TranslationAdapter {
 		}
 
 		RequestWrapper request = new RequestWrapper();
-		request.setAccessProvider(new AccessProvider(meteorDataRequest.getAccessProvider()));
+		request.setAccessProvider(meteorDataRequest.getAccessProvider());
 		request.setSsn(meteorDataRequest.getSSN());
 		return request;
 	}

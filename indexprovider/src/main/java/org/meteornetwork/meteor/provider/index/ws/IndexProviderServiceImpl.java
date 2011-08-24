@@ -1,10 +1,18 @@
 package org.meteornetwork.meteor.provider.index.ws;
 
+import java.io.StringReader;
+import java.io.StringWriter;
+
 import javax.jws.WebService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.common.util.LoggingUtil;
 import org.meteornetwork.meteor.common.ws.IndexProviderService;
+import org.meteornetwork.meteor.common.xml.indexrequest.MeteorIndexRequest;
+import org.meteornetwork.meteor.common.xml.indexresponse.MeteorIndexResponse;
+import org.meteornetwork.meteor.provider.index.manager.IndexProviderManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("indexProviderServiceImpl")
@@ -13,9 +21,38 @@ public class IndexProviderServiceImpl implements IndexProviderService {
 
 	private static final Log LOG = LogFactory.getLog(IndexProviderServiceImpl.class);
 
+	private IndexProviderManager manager;
 	@Override
 	public String findDataProvidersForBorrower(String requestXML) {
 		LOG.debug("IP received requestXML: " + requestXML);
-		return "IP response to requestXML.";
+		
+		MeteorIndexRequest indexRequest;
+		try {
+			indexRequest = MeteorIndexRequest.unmarshal(new StringReader(requestXML));
+		} catch (Exception e) {
+			LoggingUtil.logError("Could not unmarshal index request", e, LOG);
+			// TODO implement error handling across web services
+			return null;
+		}
+		
+		MeteorIndexResponse response = manager.findDataProvidersForBorrower(indexRequest.getAccessProvider(), indexRequest.getSSN());
+		
+		StringWriter marshalledResponseWriter = new StringWriter();
+		try {
+			response.marshal(marshalledResponseWriter);
+		} catch (Exception e) {
+			LoggingUtil.logError("Could not marshal index response", e, LOG);
+			return null;
+		}
+		
+		return marshalledResponseWriter.toString();
+	}
+	public IndexProviderManager getManager() {
+		return manager;
+	}
+	
+	@Autowired
+	public void setManager(IndexProviderManager manager) {
+		this.manager = manager;
 	}
 }

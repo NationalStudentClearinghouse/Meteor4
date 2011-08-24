@@ -1,6 +1,6 @@
 package org.meteornetwork.meteor.provider.data.adapter;
 
-import org.meteornetwork.meteor.common.AccessProvider;
+import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
 
 public class RequestWrapper {
 

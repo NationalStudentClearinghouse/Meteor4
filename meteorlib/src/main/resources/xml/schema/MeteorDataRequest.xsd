@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	targetNamespace="http://www.meteornetwork.org/schemas/MeteorDataRequest-4.0.0">
+	targetNamespace="http://www.meteornetwork.org/schemas/MeteorDataRequest">
 
 	<xsd:element name="MeteorDataRequest">
 		<xsd:complexType>
