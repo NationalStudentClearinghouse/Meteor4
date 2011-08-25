@@ -50,4 +50,5 @@ public class DataProviderServiceImpl implements DataProviderService, Application
 	public void setDataManager(DataProviderManager dataManager) {
 		this.dataManager = dataManager;
 	}
+
 }

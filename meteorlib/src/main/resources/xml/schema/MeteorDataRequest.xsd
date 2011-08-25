@@ -17,6 +17,7 @@
 				</xsd:element>
 				<xsd:element name="SSN" type="xsd:string"/>
 			</xsd:all>
+			<xsd:attribute name="meteorVersion" type="xsd:string" use="required"/>
 		</xsd:complexType>
 	</xsd:element> 
 </xsd:schema>

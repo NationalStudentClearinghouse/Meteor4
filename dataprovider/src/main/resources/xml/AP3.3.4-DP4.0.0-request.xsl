@@ -9,6 +9,7 @@
 		
 	<xsl:template match="MeteorDataRequest">
 		<xsl:copy>
+			<xsl:attribute name="meteorVersion">3.3.4</xsl:attribute>
 			<xsl:apply-templates />
 		</xsl:copy>
 	</xsl:template>

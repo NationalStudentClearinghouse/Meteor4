@@ -2,6 +2,7 @@ package org.meteornetwork.meteor.provider.data.adapter;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,18 +24,21 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("prototype")
-public class HPCAdapterImpl implements TranslationAdapter {
+public class HPCAdapterImpl implements VersionAdapter {
 
 	private static final Log LOG = LogFactory.getLog(HPCAdapterImpl.class);
 
 	private String rawHPCMessage;
 	private String responseHPCMessage;
+	private transient String meteorVersion;
 
 	private TemplateVersionMapper requestTemplateVersionMapper;
 	private TemplateVersionMapper responseTemplateVersionMapper;
 
 	private HPCManager hpcManager;
 	private XSLTransformManager xslTransformManager;
+
+	private Properties meteorProps;
 
 	@Override
 	public RequestWrapper getRequest() {
@@ -49,8 +53,9 @@ public class HPCAdapterImpl implements TranslationAdapter {
 
 		String transformedContentXml;
 		try {
-			// TODO use actual versions
-			transformedContentXml = xslTransformManager.transformXML(contentXml, requestTemplateVersionMapper.getTemplateForVersions("3.3.4", "4.0.0"));
+			meteorVersion = xslTransformManager.getMeteorVersion(contentXml);
+			LOG.debug("Transforming request XML from meteor version " + meteorVersion + " to " + meteorProps.getProperty("meteor.version"));
+			transformedContentXml = xslTransformManager.transformXML(contentXml, requestTemplateVersionMapper.getTemplateForVersions(meteorVersion, meteorProps.getProperty("meteor.version")));
 			LOG.debug("Transformed request XML:\n" + transformedContentXml);
 		} catch (Exception e) {
 			LoggingUtil.logError("Could not transform request XML", e, LOG);
@@ -91,8 +96,8 @@ public class HPCAdapterImpl implements TranslationAdapter {
 
 		String transformedResponseXml;
 		try {
-			// TODO use actual versions
-			transformedResponseXml = xslTransformManager.transformXML(marshalledResponse, responseTemplateVersionMapper.getTemplateForVersions("4.0.0", "3.3.4"));
+			LOG.debug("Transforming response XML from meteor version " + meteorProps.getProperty("meteor.version") + " to " + meteorVersion);
+			transformedResponseXml = xslTransformManager.transformXML(marshalledResponse, responseTemplateVersionMapper.getTemplateForVersions(meteorProps.getProperty("meteor.version"), meteorVersion));
 			LOG.debug("Transformed response XML:\n" + transformedResponseXml);
 		} catch (Exception e) {
 			LOG.error("Could not transform response XML: " + e.getMessage());
@@ -168,6 +173,16 @@ public class HPCAdapterImpl implements TranslationAdapter {
 	@Qualifier("responseTemplateVersionMapper")
 	public void setResponseTemplateVersionMapper(TemplateVersionMapper responseTemplateVersionMapper) {
 		this.responseTemplateVersionMapper = responseTemplateVersionMapper;
+	}
+
+	public Properties getMeteorProps() {
+		return meteorProps;
+	}
+
+	@Autowired
+	@Qualifier("MeteorProperties")
+	public void setMeteorProps(Properties meteorProps) {
+		this.meteorProps = meteorProps;
 	}
 
 }

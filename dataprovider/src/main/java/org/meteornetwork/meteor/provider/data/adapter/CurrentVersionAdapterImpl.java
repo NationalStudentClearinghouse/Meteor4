@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class CurrentVersionAdapterImpl implements TranslationAdapter {
+public class CurrentVersionAdapterImpl implements VersionAdapter {
 
 	private static final Log LOG = LogFactory.getLog(CurrentVersionAdapterImpl.class);
 
