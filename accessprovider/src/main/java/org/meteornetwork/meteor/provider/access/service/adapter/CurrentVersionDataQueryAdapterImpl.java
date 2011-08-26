@@ -26,7 +26,6 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 	private AccessProvider accessProvider;
 	private String ssn;
 
-	private Properties authenticationProperties;
 	private Properties meteorProperties;
 
 	private ApplicationContext applicationContext;
@@ -83,16 +82,6 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 	@Override
 	public void setAccessProvider(AccessProvider accessProvider) {
 		this.accessProvider = accessProvider;
-	}
-
-	public Properties getAuthenticationProperties() {
-		return authenticationProperties;
-	}
-
-	@Autowired
-	@Qualifier("AuthenticationProperties")
-	public void setAuthenticationProperties(Properties authenticationProperties) {
-		this.authenticationProperties = authenticationProperties;
 	}
 
 	public Properties getMeteorProperties() {
