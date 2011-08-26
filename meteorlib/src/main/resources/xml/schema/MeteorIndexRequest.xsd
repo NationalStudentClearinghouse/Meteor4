@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	targetNamespace="http://www.meteornetwork.org/schemas/MeteorIndexRequest">
+	targetNamespace="http://www.meteornetwork.org/schemas/MeteorIndexRequest"
+	xmlns="http://www.meteornetwork.org/schemas/MeteorIndexRequest"
+    elementFormDefault="qualified">
 	
 	<xsd:element name="MeteorIndexRequest">
 		<xsd:complexType>
@@ -11,7 +13,7 @@
 							<xsd:element name="MeteorInstitutionIdentifier" type="xsd:string"/>
 							<xsd:element name="Name" type="xsd:string" minOccurs="0"/>
 							<xsd:element name="UserHandle" type="xsd:string"/>
-							<xsd:element name="IssueInstant" type="xsd:string"/>
+							<xsd:element name="IssueInstant" type="xsd:dateTime"/>
 						</xsd:all>
 					</xsd:complexType>
 				</xsd:element>

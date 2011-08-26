@@ -45,6 +45,7 @@
 				
 				<configuration>
 					<bindingfile>${basedir}/src/main/resources/xml/binding.xml</bindingfile>
+					<properties>${basedir}/src/main/resources/xml/castorbuilder.properties</properties>
 					<schemaDirectory>${basedir}/src/main/resources/xml/schema</schemaDirectory>
 				</configuration>
 				<executions>

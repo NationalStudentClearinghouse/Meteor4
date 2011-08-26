@@ -9,16 +9,23 @@
 		http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
-    xmlns:util="http://www.springframework.org/schema/util"> 
-
- 	<import resource="classpath:applicationContext-meteorlib.xml" />
- 	
- 	<!-- properties -->
- 	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
- 	<util:properties id="AccessProviderProperties" location="WEB-INF/classes/accessprovider.properties"/>
- 	
- 	<!-- meteor common properties -->
- 	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>
- 	
-	<context:component-scan base-package="org.meteornetwork.meteor"/>
+    xmlns:util="http://www.springframework.org/schema/util">
+ 
+	<!-- 
+		map of meteor versions to DataQueryAdapter implementations 
+	-->
+	<util:map id="dataQueryAdapterVersionMap"
+		key-type="java.lang.String"
+		value-type="java.lang.String">
+		
+		<entry key="4.x.x" value="currentVersionDataQueryAdapterImpl"/>
+	</util:map>
+	
+	<!-- 
+		Initializes Xalan templates objects to perform XSLT transforms 
+	-->
+	<bean id="transformerFactory" 
+		class="javax.xml.transform.TransformerFactory"
+		factory-method="newInstance" />
+	
 </beans> 

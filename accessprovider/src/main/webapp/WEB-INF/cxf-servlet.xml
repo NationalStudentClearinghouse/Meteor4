@@ -22,5 +22,9 @@
 	<bean id="dataClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.DataProviderService"/>
 	</bean>
+	
+	<bean id="indexClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
+		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.IndexProviderService"/>
+	</bean>
 		
 </beans>
