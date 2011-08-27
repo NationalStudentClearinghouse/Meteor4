@@ -7,7 +7,6 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
-import org.meteornetwork.meteor.common.util.LoggingUtil;
 import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
@@ -24,9 +23,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("prototype")
-public class HPCAdapterImpl implements VersionAdapter {
+public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 
-	private static final Log LOG = LogFactory.getLog(HPCAdapterImpl.class);
+	private static final Log LOG = LogFactory.getLog(HPCDataQueryAdapterImpl.class);
 
 	private String rawHPCMessage;
 	private String responseHPCMessage;
@@ -47,7 +46,7 @@ public class HPCAdapterImpl implements VersionAdapter {
 			contentXml = hpcManager.retrieveContent(rawHPCMessage);
 			LOG.debug("Request XML from HPC:\n" + contentXml);
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not handle HPC request", e, LOG);
+			LOG.error("Could not handle HPC request", e);
 			return null;
 		}
 
@@ -58,7 +57,7 @@ public class HPCAdapterImpl implements VersionAdapter {
 			transformedContentXml = xslTransformManager.transformXML(contentXml, requestTemplateVersionMapper.getTemplateForVersions(meteorVersion, meteorProps.getProperty("meteor.version")));
 			LOG.debug("Transformed request XML:\n" + transformedContentXml);
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not transform request XML", e, LOG);
+			LOG.error("Could not transform request XML", e);
 			return null;
 		}
 
@@ -67,7 +66,7 @@ public class HPCAdapterImpl implements VersionAdapter {
 		try {
 			meteorDataRequest = MeteorDataRequest.unmarshal(new StringReader(transformedContentXml));
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not parse meteor data request", e, LOG);
+			LOG.error("Could not parse meteor data request", e);
 			return null;
 		}
 
@@ -90,7 +89,7 @@ public class HPCAdapterImpl implements VersionAdapter {
 			marshalledResponse = marshalledResponseWriter.toString();
 			LOG.debug("Marshalled response XML:\n" + marshalledResponse);
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not marshal meteor response", e, LOG);
+			LOG.error("Could not marshal meteor response", e);
 			return;
 		}
 
@@ -101,14 +100,14 @@ public class HPCAdapterImpl implements VersionAdapter {
 			LOG.debug("Transformed response XML:\n" + transformedResponseXml);
 		} catch (Exception e) {
 			LOG.error("Could not transform response XML: " + e.getMessage());
-			LoggingUtil.logError("Could not transform response XML", e, LOG);
+			LOG.error("Could not transform response XML", e);
 			return;
 		}
 
 		try {
 			responseHPCMessage = hpcManager.generateHPCResponse(transformedResponseXml);
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not generate HPC response", e, LOG);
+			LOG.error("Could not generate HPC response", e);
 			return;
 		}
 	}

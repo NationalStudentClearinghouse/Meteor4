@@ -2,7 +2,6 @@ package org.meteornetwork.meteor.provider.access.service.adapter;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Properties;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.meteornetwork.meteor.common.ws.DataProviderService;
@@ -11,8 +10,6 @@ import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
 import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
@@ -25,8 +22,7 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 	private DataProvider dataProvider;
 	private AccessProvider accessProvider;
 	private String ssn;
-
-	private Properties meteorProperties;
+	private String meteorVersion;
 
 	private ApplicationContext applicationContext;
 
@@ -49,7 +45,7 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 	private MeteorDataRequest createRequest() {
 		MeteorDataRequest request = new MeteorDataRequest();
 		request.setAccessProvider(accessProvider);
-		request.setMeteorVersion(meteorProperties.getProperty("meteor.version"));
+		request.setMeteorVersion(meteorVersion);
 		request.setSSN(ssn);
 		return request;
 	}
@@ -74,6 +70,17 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 		this.ssn = ssn;
 	}
 
+
+	@Override
+	public String getMeteorVersion() {
+		return meteorVersion;
+	}
+
+	@Override
+	public void setMeteorVersion(String meteorVersion) {
+		this.meteorVersion = meteorVersion;
+	}
+	
 	@Override
 	public AccessProvider getAccessProvider() {
 		return accessProvider;
@@ -84,19 +91,10 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 		this.accessProvider = accessProvider;
 	}
 
-	public Properties getMeteorProperties() {
-		return meteorProperties;
-	}
-
-	@Autowired
-	@Qualifier("MeteorProperties")
-	public void setMeteorProperties(Properties meteorProperties) {
-		this.meteorProperties = meteorProperties;
-	}
-
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
+
 
 }

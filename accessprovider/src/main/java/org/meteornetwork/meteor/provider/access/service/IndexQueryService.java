@@ -10,7 +10,6 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.meteornetwork.meteor.common.util.LoggingUtil;
 import org.meteornetwork.meteor.common.ws.IndexProviderService;
 import org.meteornetwork.meteor.common.xml.indexrequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.indexrequest.MeteorIndexRequest;
@@ -94,7 +93,7 @@ public class IndexQueryService implements ApplicationContextAware {
 		try {
 			request.marshal(marshalledRequest);
 		} catch (Exception e) {
-			LoggingUtil.logError("Cannot marshal index provider request", e, LOG);
+			LOG.error("Cannot marshal index provider request", e);
 			return null;
 		}
 
@@ -111,7 +110,7 @@ public class IndexQueryService implements ApplicationContextAware {
 		try {
 			return MeteorIndexResponse.unmarshal(new StringReader(response));
 		} catch (Exception e) {
-			LoggingUtil.logError("Cannot unmarshal index provider response", e, LOG);
+			LOG.error("Cannot unmarshal index provider response", e);
 			return null;
 		}
 	}

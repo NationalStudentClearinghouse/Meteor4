@@ -38,6 +38,7 @@ public class DataQueryService implements ApplicationContextAware {
 	private Map<String, String> dataQueryAdapterVersionMap;
 	private Properties accessProviderProperties;
 	private Properties authenticationProperties;
+	private Properties meteorProperties;
 
 	private ApplicationContext applicationContext;
 
@@ -74,6 +75,7 @@ public class DataQueryService implements ApplicationContextAware {
 				adapter.setDataProvider(dataProvider);
 				adapter.setAccessProvider(accessProvider);
 				adapter.setSsn(ssn);
+				adapter.setMeteorVersion(meteorProperties.getProperty("meteor.version"));
 
 				futures.put(dataProvider, threadPool.submit(adapter));
 			}
@@ -147,6 +149,16 @@ public class DataQueryService implements ApplicationContextAware {
 	@Qualifier("AuthenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
+	}
+
+	public Properties getMeteorProperties() {
+		return meteorProperties;
+	}
+
+	@Autowired
+	@Qualifier("MeteorProperties")
+	public void setMeteorProperties(Properties meteorProperties) {
+		this.meteorProperties = meteorProperties;
 	}
 
 	@Override

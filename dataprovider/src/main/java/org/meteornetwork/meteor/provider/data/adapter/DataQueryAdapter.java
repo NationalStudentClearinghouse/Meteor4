@@ -1,13 +1,14 @@
 package org.meteornetwork.meteor.provider.data.adapter;
 
 /**
- * Interface for the data provider translation layer. Implementors translate from a different
- * version of meteor into this version's request and response wrappers.
+ * Interface for the data provider translation layer when querying for borrower
+ * data. Implementors translate from a different version of meteor into this
+ * version's request and response wrappers.
  * 
  * @author jlazos
  * 
  */
-public interface VersionAdapter {
+public interface DataQueryAdapter {
 
 	/**
 	 * @return RequestWrapper object or null on error

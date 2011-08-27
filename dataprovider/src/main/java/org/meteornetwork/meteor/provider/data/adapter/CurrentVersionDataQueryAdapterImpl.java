@@ -5,16 +5,15 @@ import java.io.StringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.meteornetwork.meteor.common.util.LoggingUtil;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class CurrentVersionAdapterImpl implements VersionAdapter {
+public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter {
 
-	private static final Log LOG = LogFactory.getLog(CurrentVersionAdapterImpl.class);
+	private static final Log LOG = LogFactory.getLog(CurrentVersionDataQueryAdapterImpl.class);
 
 	private String requestXml;
 	private String responseXml;
@@ -25,7 +24,7 @@ public class CurrentVersionAdapterImpl implements VersionAdapter {
 		try {
 			meteorDataRequest = MeteorDataRequest.unmarshal(new StringReader(requestXml));
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not parse meteor data request", e, LOG);
+			LOG.error("Could not parse meteor data request", e);
 			return null;
 		}
 
@@ -46,7 +45,7 @@ public class CurrentVersionAdapterImpl implements VersionAdapter {
 		try {
 			response.getResponse().marshal(marshalledResponse);
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not marshal meteor response", e, LOG);
+			LOG.error("Could not marshal meteor response", e);
 			return;
 		}
 		

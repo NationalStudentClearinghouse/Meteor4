@@ -7,7 +7,6 @@ import javax.jws.WebService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.meteornetwork.meteor.common.util.LoggingUtil;
 import org.meteornetwork.meteor.common.ws.IndexProviderService;
 import org.meteornetwork.meteor.common.xml.indexrequest.MeteorIndexRequest;
 import org.meteornetwork.meteor.common.xml.indexresponse.MeteorIndexResponse;
@@ -30,7 +29,7 @@ public class IndexProviderServiceImpl implements IndexProviderService {
 		try {
 			indexRequest = MeteorIndexRequest.unmarshal(new StringReader(requestXML));
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not unmarshal index request", e, LOG);
+			LOG.error("Could not unmarshal index request", e);
 			// TODO implement error handling across web services
 			return null;
 		}
@@ -41,7 +40,7 @@ public class IndexProviderServiceImpl implements IndexProviderService {
 		try {
 			response.marshal(marshalledResponseWriter);
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not marshal index response", e, LOG);
+			LOG.error("Could not marshal index response", e);
 			return null;
 		}
 		

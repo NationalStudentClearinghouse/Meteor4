@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.meteornetwork.meteor.common.util.LoggingUtil;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
 import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
 import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
@@ -48,7 +47,7 @@ public class AccessProviderManager {
 		try {
 			responseData.marshal(marshalledResponse);
 		} catch (Exception e) {
-			LoggingUtil.logError("Could not marshal response data", e, LOG);
+			LOG.error("Could not marshal response data", e);
 			return null;
 		}
 

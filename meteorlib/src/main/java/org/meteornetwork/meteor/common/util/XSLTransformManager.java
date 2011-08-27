@@ -38,7 +38,7 @@ public class XSLTransformManager {
 			String version = expression.evaluate(new InputSource(new ByteArrayInputStream(source.getBytes())));
 			return version == null || "".equals(version) ? METEOR_DEFAULT_VERSION : version;
 		} catch (XPathExpressionException e) {
-			LoggingUtil.logError("Could not evaluate XPath expression", e, LOG);
+			LOG.error("Could not evaluate XPath expression", e);
 			return null;
 		}
 	}

@@ -7,7 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
 import org.meteornetwork.meteor.provider.data.adapter.RequestWrapper;
 import org.meteornetwork.meteor.provider.data.adapter.ResponseWrapper;
-import org.meteornetwork.meteor.provider.data.adapter.VersionAdapter;
+import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
@@ -33,7 +33,7 @@ public class DataProviderManager {
 	 *            - translation layer object. This method gets request data and
 	 *            sets response data using this adapter
 	 */
-	public void queryDataForBorrower(VersionAdapter adapter) {
+	public void queryDataForBorrower(DataQueryAdapter adapter) {
 		RequestWrapper request = adapter.getRequest();
 		if (request == null) {
 			return;
