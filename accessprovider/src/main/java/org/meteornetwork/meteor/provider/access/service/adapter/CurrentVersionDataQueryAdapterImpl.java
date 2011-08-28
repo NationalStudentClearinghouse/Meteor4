@@ -3,6 +3,8 @@ package org.meteornetwork.meteor.provider.access.service.adapter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.meteornetwork.meteor.common.ws.DataProviderService;
 import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, ApplicationContextAware {
 
+	private static final Log LOG = LogFactory.getLog(CurrentVersionDataQueryAdapterImpl.class);
+	
 	private DataProvider dataProvider;
 	private AccessProvider accessProvider;
 	private String ssn;
@@ -28,6 +32,8 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 
 	@Override
 	public MeteorRsMsg call() throws Exception {
+		LOG.debug("Calling data provider (ID: " + dataProvider.getEntityID() + ", Version: " + dataProvider.getMeteorVersion());
+		
 		MeteorDataRequest request = createRequest();
 		StringWriter marshalledRequest = new StringWriter();
 		request.marshal(marshalledRequest);

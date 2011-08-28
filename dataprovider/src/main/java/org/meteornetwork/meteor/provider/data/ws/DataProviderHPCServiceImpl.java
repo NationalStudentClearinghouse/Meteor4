@@ -4,6 +4,7 @@ import javax.jws.WebService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.common.ws.DataProviderHPCService;
 import org.meteornetwork.meteor.provider.data.adapter.HPCDataQueryAdapterImpl;
 import org.meteornetwork.meteor.provider.data.manager.DataProviderManager;
 import org.springframework.beans.BeansException;
@@ -13,7 +14,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component("dataProviderHPCServiceImpl")
-@WebService(endpointInterface = "org.meteornetwork.meteor.provider.data.ws.DataProviderHPCService", serviceName = "DataProviderHPCService")
+@WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.DataProviderHPCService", serviceName = "DataProviderHPCService")
 public class DataProviderHPCServiceImpl implements DataProviderHPCService, ApplicationContextAware {
 
 	private static final Log LOG = LogFactory.getLog(DataProviderHPCServiceImpl.class);

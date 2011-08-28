@@ -7,5 +7,11 @@
 	        <EntityURL>http://localhost:8080/dataprovider/services/DataProviderService</EntityURL>
 	        <MeteorVersion>4.0.0</MeteorVersion>
 	    </DataProvider>
+	    <DataProvider>
+	        <EntityName>My Data Provider</EntityName>
+	        <EntityID>dp</EntityID>
+	        <EntityURL>http://localhost:8080/dataprovider/services/DataProviderHPCService</EntityURL>
+	        <MeteorVersion>3.3.4</MeteorVersion>
+	    </DataProvider>
 	</DataProviders>
 </MeteorIndexResponse>

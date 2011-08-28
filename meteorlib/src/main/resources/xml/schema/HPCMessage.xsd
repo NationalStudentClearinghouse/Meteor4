@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://www.meteornetwork.org/schemas/hpc">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
 <xsd:annotation>
    <xsd:documentation xml:lang="en">
@@ -27,10 +26,10 @@
 </xsd:complexType>
 
 <xsd:complexType name="HPCSenderType">
-   <xsd:attribute name="ID" type="xsd:string" use="required"/>
-   <xsd:attribute name="ContactPhoneNumber" type="PhoneNum" use="required"/>
-   <xsd:attribute name="ContactEmail" type="xsd:string" use="required"/>
-   <xsd:attribute name="System" type="xsd:string" use="required"/>
+   <xsd:attribute name="ID" type="xsd:string" default="john"/>
+   <xsd:attribute name="ContactPhoneNumber" type="xsd:string" default="(555)555-1212"/>
+   <xsd:attribute name="ContactEmail" type="xsd:string" default="sender@someemailserver.123"/>
+   <xsd:attribute name="System" type="xsd:string" default="HPC Compatibility Implementation for Meteor 4.0"/>
 </xsd:complexType>
 
 <xsd:complexType name="HPCRecipientType">
@@ -44,7 +43,7 @@
 
 <xsd:complexType name="HPCPackageType">
    <xsd:sequence>
-      <xsd:element name="Special" type="xsd:string"/>
+      <xsd:element name="Special" type="xsd:string" default=""/>
       <xsd:element name="Content" type="HPCContentType"/>
    </xsd:sequence>
 </xsd:complexType>
@@ -59,11 +58,11 @@
    </xsd:simpleContent>
 </xsd:complexType>
 
-<xsd:simpleType name="PhoneNum">
+<!-- xsd:simpleType name="PhoneNum">
    <xsd:restriction base="xsd:string">
       <xsd:pattern value="(\d{3})\d{3}-\d{4}"/>
    </xsd:restriction>
-</xsd:simpleType>
+</xsd:simpleType-->
 
 <xsd:simpleType name="HPCType">
    <xsd:restriction base="xsd:string">

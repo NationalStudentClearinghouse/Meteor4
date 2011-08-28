@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Envelope>
+	<Message ID="17cf6b6-131959c20ce-da3498cffbd5be04dde4f1382116ad34" Timestamp="Thu Aug 04 12:24:22 EDT 2011"/>
+	<Sender ContactEmail="(555)555-1212" ContactPhoneNumber="sender@someemailserver.123" ID="john" System="EEAT-Java HPCMessage Version 1.1"/>
+	<Recipient ID="DP.LRS"/>
+	<Transaction Type="METEORDATA"/>
+	<Package>
+		<Special/>
+		<Content Compression="zlib" Encoding="base64" Type="METEORDATA"><![CDATA[eJztWFtz2joQfj+/wuM+dowtc0lhMDMuTgcSAoRL0j6qtmxEbMmR5JDw6ytj7NiEk0kPnTnnTMIL7Gr17e6n9XpF9woJRJkDBZyh+wRx0evanCMmMCXzGLnYx4j1uhxGYadYUB6jkPBOqrTUlRBxR9c3m02NQo65RmNEapQFukujCAuBENc5chOGxZPuUZfrHoO+0DgXrsbdFYqgBnNozTyrPXJPVQpnQ8dSQR2YjbOm0QKNdl1VhpwnaEi4gERYqmkAoBlfNKOxAK2O2eiY4LMhP3s7ZqlEOgnjXUzRLl9VuYJrym4Q49KDxJcKTEoKQ81zTsQKEYFduGNEQIEiKStV/RtiqW6QtK+oV5D3HGDud578XCNX7KUxjNDQS7enx6GkoqXCWFXme14dGkFMjmXa6+pHIHJt1U01xhF1YSixFWc8tz2PIc4tNZSrPBSamdI7LdSgbdZA60sNGIb8BoXX44jHVwty82iEYPhnItDhwr/DTR6NUvzKXE1YAAneZnXgLJ5ipFZNeAxddNx9FfkGhgnqzfuDyWSUM1RdO9S+UPxPOawWwpRRV1bV0DmNSPC+OCzX4UcVnv4kn8bfZHo+dN4XfUv5wh5A4oUnlp4P4fsiboQeUHgaZ/X3xdiMnlpk32z7D1HWp8TDu6l4TMVX5FOGXpsDpdGETJjti3QyLdmZRtkud1ugF3Hkc3Gv6/HOHAcEioSh/Uju8cpAvqnvmDAlom60dWnjcRx8Unt/5ZuRNyQ+zeQ+JJTgdETbloZUxQ4DKs90FR2DXsxSdKDPzvuahNdc0JAzvNQYddBMs/hb3OcYdgm8xdlhHh6HGl9BsPdzgJU5mCEfMURcpCxnQ0vdp75gkHB5VBE/kH8vAETkkyvvO57Gc9/7WArA38J/lc1Pt3JbX96pZO3xI270I3k5OJB3un/CbYnXMkgZNntgruzvRnx9sZ7YZ5ejH/b31d3geh1uULNxbpW2Z8ZZlMWZ7OXDQiwOMts0+xaMN33O4rtB43YrYv2KfW7ag6cwuL9kxpRu4x/4wh62Z2DcDL62sQOC5VlgWdWiKAdQKGWCx667tpsOoHIOfcBeKme35PSWh0WyGw+eOxeMu/pr692hs7ORX93yxbX3skeYu2dfmpbNus/v1ezVWJJl9AeRzufjHpD1AuRNTA7AqfjRJz76xH+gTzhhIoyo1fQpwPfLKF6MgH9Pw8nTrPGH+oTTGs1vcGRgcL0yp8ll/a7/cLmRzahOib/xRbJ8FOtVw3O4nbjr7S2e0ovx5q194uU/Zb8AdmTRDg==]]></Content>
+	</Package>
+</Envelope>

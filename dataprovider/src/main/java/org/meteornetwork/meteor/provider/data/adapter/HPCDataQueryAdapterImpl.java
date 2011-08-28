@@ -7,6 +7,7 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
+import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
 import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
@@ -29,7 +30,9 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 
 	private String rawHPCMessage;
 	private String responseHPCMessage;
+
 	private transient String meteorVersion;
+	private transient String requesterId;
 
 	private TemplateVersionMapper requestTemplateVersionMapper;
 	private TemplateVersionMapper responseTemplateVersionMapper;
@@ -43,7 +46,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	public RequestWrapper getRequest() {
 		String contentXml;
 		try {
-			contentXml = hpcManager.retrieveContent(rawHPCMessage);
+			contentXml = hpcManager.retrieveHPCContent(rawHPCMessage);
 			LOG.debug("Request XML from HPC:\n" + contentXml);
 		} catch (Exception e) {
 			LOG.error("Could not handle HPC request", e);
@@ -70,6 +73,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 			return null;
 		}
 
+		requesterId = meteorDataRequest.getAccessProvider().getMeteorInstitutionIdentifier();
 		request.setAccessProvider(meteorDataRequest.getAccessProvider());
 		request.setSsn(meteorDataRequest.getSSN());
 		return request;
@@ -99,13 +103,15 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 			transformedResponseXml = xslTransformManager.transformXML(marshalledResponse, responseTemplateVersionMapper.getTemplateForVersions(meteorProps.getProperty("meteor.version"), meteorVersion));
 			LOG.debug("Transformed response XML:\n" + transformedResponseXml);
 		} catch (Exception e) {
-			LOG.error("Could not transform response XML: " + e.getMessage());
 			LOG.error("Could not transform response XML", e);
 			return;
 		}
 
+		HPCMessageParams messageParams = new HPCMessageParams();
+		messageParams.setRecipientId(requesterId);
+
 		try {
-			responseHPCMessage = hpcManager.generateHPCResponse(transformedResponseXml);
+			responseHPCMessage = hpcManager.generateHPCMessage(transformedResponseXml, messageParams);
 		} catch (Exception e) {
 			LOG.error("Could not generate HPC response", e);
 			return;

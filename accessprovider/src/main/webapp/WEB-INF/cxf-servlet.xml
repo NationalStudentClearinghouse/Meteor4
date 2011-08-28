@@ -23,6 +23,10 @@
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.DataProviderService"/>
 	</bean>
 	
+	<bean id="hpcDataClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
+		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.DataProviderHPCService"/>
+	</bean>
+	
 	<bean id="indexClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.IndexProviderService"/>
 	</bean>

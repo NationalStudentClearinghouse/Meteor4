@@ -1,4 +1,4 @@
-package org.meteornetwork.meteor.provider.data.ws;
+package org.meteornetwork.meteor.common.ws;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

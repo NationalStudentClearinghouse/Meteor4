@@ -13,12 +13,17 @@ import org.apache.cxf.common.util.Base64Utility;
 import org.apache.cxf.helpers.IOUtils;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
+import org.meteornetwork.meteor.common.xml.hpc.Content;
 import org.meteornetwork.meteor.common.xml.hpc.Envelope;
+import org.meteornetwork.meteor.common.xml.hpc.Message;
+import org.meteornetwork.meteor.common.xml.hpc.Recipient;
+import org.meteornetwork.meteor.common.xml.hpc.Sender;
+import org.meteornetwork.meteor.common.xml.hpc.Transaction;
 import org.meteornetwork.meteor.common.xml.hpc.types.HPCCompressionType;
 import org.meteornetwork.meteor.common.xml.hpc.types.HPCEncodingType;
 
 /**
- * Provides support for legacy HPC communication protocol
+ * Provides compatibility support for legacy HPC communication protocol
  * 
  * @author jlazos
  */
@@ -39,9 +44,13 @@ public class HPCManager {
 	 * @throws ValidationException
 	 * @throws MarshalException
 	 */
-	public String retrieveContent(String rawHPCMessage) throws Base64Exception, IOException, MarshalException, ValidationException {
+	public String retrieveHPCContent(String rawHPCMessage) throws Base64Exception, IOException, MarshalException, ValidationException {
 		Envelope hpcEnvelope = Envelope.unmarshal(new StringReader(rawHPCMessage));
-		return decompress(decode(hpcEnvelope.getPackage().getContent().getContent()));
+
+		Content hpcContent = hpcEnvelope.getPackage().getContent();
+
+		byte[] contentBytes = HPCEncodingType.BASE64.equals(hpcContent.getEncoding()) ? decode(hpcContent.getContent()) : hpcContent.getContent().getBytes();
+		return HPCCompressionType.ZLIB.equals(hpcContent.getCompression()) ? decompress(contentBytes) : new String(contentBytes);
 	}
 
 	/**
@@ -53,15 +62,29 @@ public class HPCManager {
 	 * @throws MarshalException
 	 * @throws ValidationException
 	 */
-	public String generateHPCResponse(String meteorResponse) throws IOException, MarshalException, ValidationException {
+	public String generateHPCMessage(String content, HPCMessageParams messageParams) throws IOException, MarshalException, ValidationException {
 		Envelope hpcEnvelope = new Envelope();
+
+		hpcEnvelope.setMessage(new Message());
+		hpcEnvelope.getMessage().setID(messageParams.getMessageId().toString());
+		hpcEnvelope.getMessage().setTimestamp(messageParams.getTimestamp());
+
+		hpcEnvelope.setSender(new Sender());
+		hpcEnvelope.setRecipient(new Recipient());
+		hpcEnvelope.getRecipient().setID(messageParams.getRecipientId());
+
+		hpcEnvelope.setTransaction(new Transaction());
+		hpcEnvelope.getTransaction().setType(messageParams.getTransactionType());
+		hpcEnvelope.getTransaction().setMode(messageParams.getTransactionMode());
 
 		hpcEnvelope.setPackage(new org.meteornetwork.meteor.common.xml.hpc.Package());
 		hpcEnvelope.getPackage().setContent(new org.meteornetwork.meteor.common.xml.hpc.Content());
-		hpcEnvelope.getPackage().getContent().setCompression(HPCCompressionType.ZLIB);
-		hpcEnvelope.getPackage().getContent().setEncoding(HPCEncodingType.BASE64);
-
-		hpcEnvelope.getPackage().getContent().setContent(encode(compress(meteorResponse)));
+		hpcEnvelope.getPackage().getContent().setCompression(messageParams.getCompression());
+		hpcEnvelope.getPackage().getContent().setEncoding(messageParams.getEncoding());
+		hpcEnvelope.getPackage().getContent().setType(messageParams.getTransactionType());
+		
+		byte[] contentBytes = HPCCompressionType.ZLIB.equals(messageParams.getCompression()) ? compress(content) : content.getBytes();
+		hpcEnvelope.getPackage().getContent().setContent(HPCEncodingType.BASE64.equals(messageParams.getEncoding()) ? encode(contentBytes) : new String(contentBytes));
 
 		StringWriter hpcResponseWriter = new StringWriter();
 		hpcEnvelope.marshal(hpcResponseWriter);
