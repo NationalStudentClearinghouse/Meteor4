@@ -7,26 +7,20 @@ import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.ws.DataProviderHPCService;
 import org.meteornetwork.meteor.provider.data.adapter.HPCDataQueryAdapterImpl;
 import org.meteornetwork.meteor.provider.data.manager.DataProviderManager;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
-@Component("dataProviderHPCServiceImpl")
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.DataProviderHPCService", serviceName = "DataProviderHPCService")
-public class DataProviderHPCServiceImpl implements DataProviderHPCService, ApplicationContextAware {
+public class DataProviderHPCServiceImpl implements DataProviderHPCService {
 
 	private static final Log LOG = LogFactory.getLog(DataProviderHPCServiceImpl.class);
 
-	private ApplicationContext applicationContext;
 	private DataProviderManager dataManager;
+	private HPCDataQueryAdapterImpl adapter;
 
 	@Override
 	public String submitHPC(String rawHPCMessage) {
 		LOG.debug("DP received HPC request: " + rawHPCMessage);
 
-		HPCDataQueryAdapterImpl adapter = (HPCDataQueryAdapterImpl) applicationContext.getBean(HPCDataQueryAdapterImpl.class);
 		adapter.setRawHPCMessage(rawHPCMessage.trim());
 		dataManager.queryDataForBorrower(adapter);
 
@@ -42,13 +36,13 @@ public class DataProviderHPCServiceImpl implements DataProviderHPCService, Appli
 		this.dataManager = dataManager;
 	}
 
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
+	public HPCDataQueryAdapterImpl getAdapter() {
+		return adapter;
 	}
-	
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
+
+	@Autowired
+	public void setAdapter(HPCDataQueryAdapterImpl adapter) {
+		this.adapter = adapter;
 	}
 	
 }

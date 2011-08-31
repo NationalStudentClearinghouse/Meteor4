@@ -7,9 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
 import org.meteornetwork.meteor.provider.access.manager.AccessProviderManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component("accessProviderServiceImpl")
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.AccessProviderService", serviceName = "AccessProviderService")
 public class AccessProviderServiceImpl implements AccessProviderService {
 

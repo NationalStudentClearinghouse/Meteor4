@@ -1,7 +1,5 @@
 package org.meteornetwork.meteor.common.hpc;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,11 +29,6 @@ public class HPCManagerTest {
 		File hpcRequestFile = new File(this.getClass().getResource(fileName).getFile());
 		InputStream hpcRequestStream = new FileInputStream(hpcRequestFile);
 		return IOUtils.toString(hpcRequestStream, IOUtils.UTF8_CHARSET.displayName());
-	}
-
-	@Test
-	public void testGenerateHPCMessage() {
-		fail("Not yet implemented");
 	}
 
 }

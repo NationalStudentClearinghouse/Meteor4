@@ -41,7 +41,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	private XSLTransformManager xslTransformManager;
 
 	private Properties meteorProps;
-
+	
 	@Override
 	public RequestWrapper getRequest() {
 		String contentXml;

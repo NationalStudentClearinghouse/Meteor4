@@ -7,39 +7,24 @@ import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.ws.DataProviderService;
 import org.meteornetwork.meteor.provider.data.adapter.CurrentVersionDataQueryAdapterImpl;
 import org.meteornetwork.meteor.provider.data.manager.DataProviderManager;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
-@Component("dataProviderServiceImpl")
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.DataProviderService", serviceName = "DataProviderService")
-public class DataProviderServiceImpl implements DataProviderService, ApplicationContextAware {
+public class DataProviderServiceImpl implements DataProviderService {
 
 	private static final Log LOG = LogFactory.getLog(DataProviderServiceImpl.class);
 
-	private ApplicationContext applicationContext;
 	private DataProviderManager dataManager;
+	private CurrentVersionDataQueryAdapterImpl adapter;
 
 	@Override
 	public String queryDataForBorrower(String requestXml) {
 		LOG.debug("DP received request: " + requestXml);
 
-		CurrentVersionDataQueryAdapterImpl adapter = (CurrentVersionDataQueryAdapterImpl) applicationContext.getBean(CurrentVersionDataQueryAdapterImpl.class);
 		adapter.setRequestXml(requestXml);
 		dataManager.queryDataForBorrower(adapter);
 
 		return adapter.getResponseXml();
-	}
-
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
 	}
 
 	public DataProviderManager getDataManager() {
@@ -49,6 +34,15 @@ public class DataProviderServiceImpl implements DataProviderService, Application
 	@Autowired
 	public void setDataManager(DataProviderManager dataManager) {
 		this.dataManager = dataManager;
+	}
+
+	public CurrentVersionDataQueryAdapterImpl getAdapter() {
+		return adapter;
+	}
+
+	@Autowired
+	public void setAdapter(CurrentVersionDataQueryAdapterImpl adapter) {
+		this.adapter = adapter;
 	}
 
 }

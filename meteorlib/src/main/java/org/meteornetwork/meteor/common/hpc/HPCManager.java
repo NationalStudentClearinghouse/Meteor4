@@ -21,14 +21,14 @@ import org.meteornetwork.meteor.common.xml.hpc.Sender;
 import org.meteornetwork.meteor.common.xml.hpc.Transaction;
 import org.meteornetwork.meteor.common.xml.hpc.types.HPCCompressionType;
 import org.meteornetwork.meteor.common.xml.hpc.types.HPCEncodingType;
+import org.springframework.stereotype.Service;
 
 /**
  * Provides compatibility support for legacy HPC communication protocol
  * 
  * @author jlazos
  */
-// TODO: fully support HPC (e.g. abstract encoding and decoding based on
-// specified encoding/compression type)
+@Service
 public class HPCManager {
 
 	/**

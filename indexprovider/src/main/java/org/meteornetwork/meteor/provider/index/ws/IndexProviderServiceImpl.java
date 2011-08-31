@@ -12,9 +12,7 @@ import org.meteornetwork.meteor.common.xml.indexrequest.MeteorIndexRequest;
 import org.meteornetwork.meteor.common.xml.indexresponse.MeteorIndexResponse;
 import org.meteornetwork.meteor.provider.index.manager.IndexProviderManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component("indexProviderServiceImpl")
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.IndexProviderService", serviceName = "IndexProviderService")
 public class IndexProviderServiceImpl implements IndexProviderService {
 

@@ -15,8 +15,10 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 
+@Service
 public class XSLTransformManager {
 
 	private static final Log LOG = LogFactory.getLog(XSLTransformManager.class);
