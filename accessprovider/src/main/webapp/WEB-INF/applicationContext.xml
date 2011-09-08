@@ -11,9 +11,18 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
     xmlns:util="http://www.springframework.org/schema/util"> 
  	
+ 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	    <property name="locations">
+	        <value>classpath:directory.properties</value>
+	    </property>
+	</bean>
+	
+ 	<import resource="classpath:applicationContext-meteorlib.xml"/>
+ 	
  	<!-- properties -->
  	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
  	<util:properties id="AccessProviderProperties" location="WEB-INF/classes/accessprovider.properties"/>
+ 	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
  	
  	<!-- meteor common properties -->
  	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>

@@ -14,7 +14,7 @@ import org.meteornetwork.meteor.common.xml.indexresponse.Message;
 public class ResponseDataWrapper {
 
 	private static final Log LOG = LogFactory.getLog(ResponseDataWrapper.class);
-	
+
 	private MeteorRsMsg responseData;
 
 	public ResponseDataWrapper(MeteorRsMsg responseData) {
@@ -28,8 +28,10 @@ public class ResponseDataWrapper {
 	}
 
 	public void addAllDataProviderInfo(Iterable<MeteorRsMsg> dataProviderResponses) {
-		for (MeteorRsMsg response : dataProviderResponses) {
-			addDataProviderInfo(response);
+		if (dataProviderResponses != null) {
+			for (MeteorRsMsg response : dataProviderResponses) {
+				addDataProviderInfo(response);
+			}
 		}
 	}
 

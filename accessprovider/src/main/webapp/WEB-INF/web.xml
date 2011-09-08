@@ -11,18 +11,26 @@
 			WEB-INF/cxf-servlet.xml
 		</param-value> 
 	</context-param> 
- 
+	
+	<filter>
+		<filter-name>RequestContextFilter</filter-name>
+		<filter-class>org.springframework.web.filter.RequestContextFilter</filter-class>
+		<init-param>
+			<param-name>threadContextInheritable</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>RequestContextFilter</filter-name>
+		<url-pattern>/services/*</url-pattern>
+	</filter-mapping>
+	
 	<listener> 
 		<listener-class> 
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class> 
 	</listener> 
-
- 	<listener>
-		<listener-class>
-			org.springframework.web.context.request.RequestContextListener
-		</listener-class>
-	</listener>
 	
 	<servlet> 
 		<servlet-name>CXFServlet</servlet-name> 

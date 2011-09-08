@@ -19,14 +19,61 @@
 	<bean id="dataProviderHPCServiceImpl" autowire="byType" class="org.meteornetwork.meteor.provider.data.ws.DataProviderHPCServiceImpl" scope="request">
 		<aop:scoped-proxy/>
 	</bean>
-	
+ 	
+ 	<bean id="MeteorSAMLTokenProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSAMLTokenProcessor"/>
+ 	
+ 	<bean id="MeteorSignatureProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSignatureProcessor"/>
+ 	
  	<jaxws:endpoint 
 		id="queryDataForBorrower"
 		implementorClass="org.meteornetwork.meteor.provider.data.ws.DataProviderServiceImpl"
 		implementor="#dataProviderServiceImpl"
 		endpointName="QueryDataForBorrower"
 		bindingUri="http://www.w3.org/2003/05/soap/bindings/HTTP/"
-		address="/DataProviderService" />
+		address="/DataProviderService">
+		
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="SAMLTokenSigned Signature"/>
+						<entry key="signaturePropFile" value="wss4j.properties" />
+						<entry key="wss4j.processor.map">
+							<map key-type="javax.xml.namespace.QName">
+								<entry>
+									<key>
+										<bean class="javax.xml.namespace.QName">
+											<constructor-arg value="urn:oasis:names:tc:SAML:2.0:assertion"/>
+											<constructor-arg value="Assertion"/>
+										</bean>
+									</key>
+									<ref bean="MeteorSAMLTokenProcessor"/>
+								</entry>
+								<entry>
+									<key>
+										<bean class="javax.xml.namespace.QName">
+											<constructor-arg value="urn:oasis:names:tc:SAML:1.0:assertion"/>
+											<constructor-arg value="Assertion"/>
+										</bean>
+									</key>
+									<ref bean="MeteorSAMLTokenProcessor"/>
+								</entry>
+								<entry>
+									<key>
+										<bean class="javax.xml.namespace.QName">
+											<constructor-arg value="http://www.w3.org/2000/09/xmldsig#"/>
+											<constructor-arg value="Signature"/>
+										</bean>
+									</key>
+									<ref bean="MeteorSignatureProcessor"/>
+								</entry>
+							</map>
+						</entry>
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
 	
 	<jaxws:endpoint 
 		id="submitHPC"

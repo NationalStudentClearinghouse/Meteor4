@@ -34,11 +34,11 @@ public class AccessProviderManager {
 
 		Set<DataProvider> dataProviders = indexQueryService.getDataProviders(ssn, responseData);
 		List<MeteorRsMsg> dataProviderResponses = dataQueryService.getData(dataProviders, ssn);
-		
+
 		// TODO: perform business logic on dataProviderResponses
-		
+
 		responseData.addAllDataProviderInfo(dataProviderResponses);
-		
+
 		return marshalResponseData(responseData.getResponseData());
 	}
 
@@ -71,4 +71,5 @@ public class AccessProviderManager {
 	public void setDataQueryService(DataQueryService dataQueryService) {
 		this.dataQueryService = dataQueryService;
 	}
+
 }

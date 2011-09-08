@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Envelope>
+   <Message ID="1a8402c-131ba59d5ea-da3498cffbd5be04dde4f1382116ad34" Timestamp="Thu Aug 11 15:37:54 EDT 2011"/>
+   <Sender ContactEmail="(555)555-1212"
+      ContactPhoneNumber="sender@someemailserver.123" ID="john" System="EEAT-Java HPCMessage Version 1.1"/>
+   <Recipient ID="IP33LTI"/>
+   <Transaction/>
+   <Package>
+      <Special/>
+      <Content Compression="zlib" Encoding="base64" Type="METEORINDEXRESP"><![CDATA[eJzV1E9rgzAUAPCvkmN3qGFzpyEetm5FSKtoB7uNYB9tWJqU5Nlt336JVqhDS8u87CL583x5v4gvWgCCNolaw1cOdq+VhTiqp5nRB7EGM+PI4+hZocDvJd9BvOQotOKSFFitQSF5ksCNUJutrixE9CT0+Foyi5MsDNkqaXfdynHvNWfxFnH/QKnUXEldctQm0GbTxvqIiPbU5J/tiu1OOwXPsvAumJMpWYFF4sNIG+cW5xU3XLkzyeRtwciLkGBvBhRNprOIXX2hLqwZKMBPbT68h54WOG1SUbMvja4QTFfbtZyXsdQp+m0MlB+kRmyE4lcYWToekqWjKPNi6AsWYA6ihMtxeTGiLi/G4BWPnpetkgFiudVaXgp0ycYDumR/BLr/nmCtykgYhME9mUgUzdmB9M1ECgVBqXdnVL57vN8Os6xvIP1Zu6i6grFEDce5/omI/uqZtK///wBtSyL/]]></Content>
+   </Package>
+</Envelope>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=" 
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"> 
+ 	
+	<bean id="ldapContextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="url" value="${directory.ldap.providerurl}" />
+		<property name="base" value="${directory.ldap.basedn}" />
+		<property name="userDn" value="${directory.ldap.authentication.principal}"/>
+		<property name="password" value="${directory.ldap.authentication.credentials}"/>
+	</bean>
+	
+	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="ldapContextSource" />
+	</bean>
+   
+	<bean id="ldapFailoverContextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="url" value="${directory.ldap.failover.providerurl}" />
+		<property name="base" value="${directory.ldap.basedn}" />
+		<property name="userDn" value="${directory.ldap.authentication.principal}"/>
+		<property name="password" value="${directory.ldap.authentication.credentials}"/>
+	</bean>
+	
+	<bean id="ldapFailoverTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="ldapFailoverContextSource" />
+	</bean>
+	
+</beans> 

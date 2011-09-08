@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MeteorIndexResponse>
 	<DataProviders>
+		<!-- DataProvider>
+			<EntityName>Mock Data Provider</EntityName>
+			<EntityID>dp</EntityID>
+			<EntityURL>http://localhost:8088/mockdataprovider</EntityURL>
+			<MeteorVersion>4.0.0</MeteorVersion>
+		</DataProvider-->
 	    <DataProvider>
 	        <EntityName>My Data Provider</EntityName>
 	        <EntityID>dp</EntityID>

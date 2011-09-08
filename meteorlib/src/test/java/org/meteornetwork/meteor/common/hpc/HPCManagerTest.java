@@ -23,6 +23,12 @@ public class HPCManagerTest {
 	public void testRetrieveHPCContent() throws IOException, MarshalException, ValidationException, Base64Exception {
 		String rawHPCMessage = getTestXml("hpcRequest1.xml");
 		System.out.println(hpcManager.retrieveHPCContent(rawHPCMessage));
+		
+		System.out.println();
+		System.out.println();
+		
+		rawHPCMessage = getTestXml("hpcRequest2.xml");
+		System.out.println(hpcManager.retrieveHPCContent(rawHPCMessage));
 	}
 
 	private String getTestXml(String fileName) throws IOException {

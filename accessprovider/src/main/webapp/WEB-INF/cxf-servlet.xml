@@ -16,17 +16,43 @@
 		<aop:scoped-proxy/>
 	</bean>
  	
+ 	<bean id="samlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.provider.access.ws.security.SamlCreationCallbackHandler">
+		<lookup-method name="getRequestInfo" bean="requestInfo"/>
+	</bean>
+	
  	<jaxws:endpoint 
 		id="accessProviderService"
 		implementorClass="org.meteornetwork.meteor.provider.access.ws.AccessProviderServiceImpl"
 		implementor="#accessProviderServiceImpl"
 		endpointName="findDataForBorrower"
 		bindingUri="http://www.w3.org/2003/05/soap/bindings/HTTP/"
-		address="/AccessProviderService"/>
+		address="/AccessProviderService" />
 	
 	<!-- client proxies -->
 	<bean id="dataClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.DataProviderService"/>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+					<constructor-arg>
+						<map>
+							<entry key="action" value="SAMLTokenSigned"/>
+							<entry key="samlCallbackRef" value-ref="samlCreationCallbackHandler" />
+							<entry key="samlPropFile" value="authentication.properties" />
+							<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+						</map>
+					</constructor-arg>
+				</bean>
+				<!-- bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+					<constructor-arg>
+						<map>
+							<entry key="action" value="Signature"/>
+							<entry key="signaturePropFile" value="authentication.properties" />
+						</map>
+					</constructor-arg>
+				</bean-->
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="hpcDataClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">

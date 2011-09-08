@@ -54,6 +54,10 @@ public class DataQueryService implements ApplicationContextAware {
 	public List<MeteorRsMsg> getData(Set<DataProvider> dataProviders, String ssn) {
 		List<MeteorRsMsg> responseDataList = new ArrayList<MeteorRsMsg>();
 
+		if (dataProviders.size() == 0) {
+			return null;
+		}
+		
 		ExecutorService threadPool = Executors.newFixedThreadPool(dataProviders.size());
 		Map<DataProvider, Future<MeteorRsMsg>> futures = new HashMap<DataProvider, Future<MeteorRsMsg>>();
 
