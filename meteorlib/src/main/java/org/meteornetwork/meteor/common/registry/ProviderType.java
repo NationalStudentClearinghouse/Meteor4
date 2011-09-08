@@ -17,4 +17,14 @@ public enum ProviderType {
 	public String getType() {
 		return type;
 	}
+	
+	public static ProviderType valueOfType(String type) {
+		for (ProviderType value : ProviderType.values()) {
+			if (type.equals(value.getType())) {
+				return value;
+			}
+		}
+		
+		return null;
+	}
 }

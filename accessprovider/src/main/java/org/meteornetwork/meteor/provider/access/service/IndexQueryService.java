@@ -46,7 +46,7 @@ public class IndexQueryService implements ApplicationContextAware {
 		// TODO: get index providers from registry. edit this method to call
 		// all index providers with the same version as this access provider and
 		// aggregate their results
-		String addresses[] = new String[] { "http://localhost:8080/indexprovider/services/IndexProviderService" };
+		String addresses[] = new String[] { "http://localhost:8380/indexprovider/services/IndexProviderService" };
 
 		Set<DataProvider> dataProviders = new HashSet<DataProvider>();
 		for (String address : addresses) {

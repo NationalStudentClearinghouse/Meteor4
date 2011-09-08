@@ -20,6 +20,7 @@ import org.apache.ws.security.saml.ext.bean.SubjectBean;
 import org.apache.ws.security.saml.ext.bean.SubjectLocalityBean;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.meteornetwork.meteor.common.registry.ProviderType;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.opensaml.common.SAMLVersion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,12 +78,16 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 		subjectLocality.setIpAddress(InetAddress.getLocalHost().getHostAddress());
 		subjectLocality.setDnsAddress(InetAddress.getLocalHost().getHostName());
 
+		callback.setAuthenticationStatementData(Collections.singletonList(authenticationStatement));
+		
 		/*
 		 * Attributes
 		 */
 		AttributeStatementBean attributeStatement = new AttributeStatementBean();
 		attributeStatement.setSamlAttributes(new ArrayList<AttributeBean>());
 
+		attributeStatement.getSamlAttributes().add(createAttributeBean("ProviderType", ProviderType.ACCESS.getType()));
+		
 		if (requestInfo.getOrganizationID() != null) {
 			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationID", requestInfo.getOrganizationID()));
 		}
@@ -99,6 +104,8 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 		attributeStatement.getSamlAttributes().add(createAttributeBean("Level", requestInfo.getLevel().toString()));
 		attributeStatement.getSamlAttributes().add(createAttributeBean("UserHandle", requestInfo.getUserHandle()));
 		attributeStatement.getSamlAttributes().add(createAttributeBean("Role", requestInfo.getRole().getName()));
+	
+		callback.setAttributeStatementData(Collections.singletonList(attributeStatement));
 	}
 
 	private AttributeBean createAttributeBean(String simpleName, String value) {
