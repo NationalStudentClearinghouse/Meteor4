@@ -39,18 +39,11 @@
 							<entry key="action" value="SAMLTokenSigned"/>
 							<entry key="samlCallbackRef" value-ref="samlCreationCallbackHandler" />
 							<entry key="samlPropFile" value="authentication.properties" />
+							<entry key="signaturePropFile" value="authentication.properties" />
 							<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
 						</map>
 					</constructor-arg>
 				</bean>
-				<!-- bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
-					<constructor-arg>
-						<map>
-							<entry key="action" value="Signature"/>
-							<entry key="signaturePropFile" value="authentication.properties" />
-						</map>
-					</constructor-arg>
-				</bean-->
 			</list>
 		</property>
 	</bean>

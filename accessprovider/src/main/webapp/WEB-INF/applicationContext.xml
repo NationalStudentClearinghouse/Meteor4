@@ -13,7 +13,10 @@
  	
  	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	    <property name="locations">
-	        <value>classpath:directory.properties</value>
+	    	<list>
+	    		<value>classpath:directory.properties</value>
+	    		<value>classpath:authentication.properties</value>
+	    	</list>
 	    </property>
 	</bean>
 	

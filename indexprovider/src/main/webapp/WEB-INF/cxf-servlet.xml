@@ -16,6 +16,10 @@
 		<aop:scoped-proxy/>
 	</bean>
 	
+	<bean id="MeteorSAMLTokenProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSAMLTokenProcessor"/>
+ 	
+ 	<bean id="MeteorSignatureProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSignatureProcessor"/>
+ 	
  	<jaxws:endpoint 
 		id="indexProviderService"
 		implementorClass="org.meteornetwork.meteor.provider.index.ws.IndexProviderServiceImpl"

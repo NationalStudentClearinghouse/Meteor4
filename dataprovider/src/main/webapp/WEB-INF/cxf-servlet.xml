@@ -52,15 +52,6 @@
 								<entry>
 									<key>
 										<bean class="javax.xml.namespace.QName">
-											<constructor-arg value="urn:oasis:names:tc:SAML:1.0:assertion"/>
-											<constructor-arg value="Assertion"/>
-										</bean>
-									</key>
-									<ref bean="MeteorSAMLTokenProcessor"/>
-								</entry>
-								<entry>
-									<key>
-										<bean class="javax.xml.namespace.QName">
 											<constructor-arg value="http://www.w3.org/2000/09/xmldsig#"/>
 											<constructor-arg value="Signature"/>
 										</bean>
