@@ -54,6 +54,21 @@
 	
 	<bean id="indexClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.IndexProviderService"/>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+					<constructor-arg>
+						<map>
+							<entry key="action" value="SAMLTokenSigned"/>
+							<entry key="samlCallbackRef" value-ref="samlCreationCallbackHandler" />
+							<entry key="samlPropFile" value="authentication.properties" />
+							<entry key="signaturePropFile" value="authentication.properties" />
+							<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+						</map>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
 	</bean>
 		
 </beans>
