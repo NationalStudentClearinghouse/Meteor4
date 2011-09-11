@@ -73,6 +73,12 @@
 		<appender-ref ref="STDOUT"/>
 	</logger>
 	
+	<logger name="org.apache.xml.security.signature">
+		<level value="debug"/>
+		
+		<appender-ref ref="STDOUT"/>
+	</logger>
+	
 	<root>
 		<priority value="debug"/>
 	</root>

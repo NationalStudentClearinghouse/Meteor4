@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
+import org.meteornetwork.meteor.common.hpc.HPCSecurityValidationManager;
 import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
@@ -38,10 +39,11 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	private TemplateVersionMapper responseTemplateVersionMapper;
 
 	private HPCManager hpcManager;
+	private HPCSecurityValidationManager hpcSecurityManager;
 	private XSLTransformManager xslTransformManager;
 
 	private Properties meteorProps;
-	
+
 	@Override
 	public RequestWrapper getRequest() {
 		String contentXml;
@@ -53,6 +55,15 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 			return null;
 		}
 
+		// TODO HPC security validation
+		/*
+		try {
+			hpcSecurityManager.validateRequest(contentXml);
+		} catch (MeteorSecurityException e1) {
+			LOG.error("Could not validate HPC request", e1);
+			return null;
+		}*/
+		
 		String transformedContentXml;
 		try {
 			meteorVersion = xslTransformManager.getMeteorVersion(contentXml);
@@ -149,6 +160,15 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	@Autowired
 	public void setHpcManager(HPCManager hpcManager) {
 		this.hpcManager = hpcManager;
+	}
+
+	public HPCSecurityValidationManager getHpcSecurityManager() {
+		return hpcSecurityManager;
+	}
+
+	@Autowired
+	public void setHpcSecurityManager(HPCSecurityValidationManager hpcSecurityManager) {
+		this.hpcSecurityManager = hpcSecurityManager;
 	}
 
 	public XSLTransformManager getXslTransformManager() {

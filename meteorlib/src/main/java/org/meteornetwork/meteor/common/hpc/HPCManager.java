@@ -82,7 +82,7 @@ public class HPCManager {
 		hpcEnvelope.getPackage().getContent().setCompression(messageParams.getCompression());
 		hpcEnvelope.getPackage().getContent().setEncoding(messageParams.getEncoding());
 		hpcEnvelope.getPackage().getContent().setType(messageParams.getTransactionType());
-		
+
 		byte[] contentBytes = HPCCompressionType.ZLIB.equals(messageParams.getCompression()) ? compress(content) : content.getBytes();
 		hpcEnvelope.getPackage().getContent().setContent(HPCEncodingType.BASE64.equals(messageParams.getEncoding()) ? encode(contentBytes) : new String(contentBytes));
 
