@@ -54,7 +54,7 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 		 * Subject
 		 */
 		SubjectBean subject = new SubjectBean();
-		subject.setSubjectName(requestInfo.getMeteorInstitutionIdentifier());
+		subject.setSubjectName(authenticationProperties.getProperty("authentication.identifier"));
 		subject.setSubjectNameQualifier(METEORNETWORK_ORG);
 		callback.setSubject(subject);
 
@@ -84,7 +84,6 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 		 * Attributes
 		 */
 		AttributeStatementBean attributeStatement = new AttributeStatementBean();
-		attributeStatement.setSamlAttributes(new ArrayList<AttributeBean>());
 
 		attributeStatement.getSamlAttributes().add(createAttributeBean("ProviderType", ProviderType.ACCESS.getType()));
 		

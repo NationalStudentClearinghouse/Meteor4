@@ -26,7 +26,7 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 		LOG.debug("AP received requestXML: " + requestXML);
 
 		// TODO delete
-		requestInfo.setMeteorInstitutionIdentifier("AP33LTI");
+		requestInfo.setMeteorInstitutionIdentifier("LTI_AP33");
 		requestInfo.setLevel(3);
 		requestInfo.setRole(Role.FAA);
 		requestInfo.setUserHandle("faa");

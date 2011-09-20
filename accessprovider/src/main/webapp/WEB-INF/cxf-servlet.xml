@@ -31,6 +31,7 @@
 	<!-- client proxies -->
 	<bean id="dataClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.DataProviderService"/>
+		<property name="bindingId" value="http://www.w3.org/2003/05/soap/bindings/HTTP/"/>
 		<property name="outInterceptors">
 			<list>
 				<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
@@ -50,6 +51,11 @@
 	
 	<bean id="hpcDataClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.DataProviderHPCService"/>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.meteornetwork.meteor.provider.access.ws.RPCEncodingInterceptor"/>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="indexClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">

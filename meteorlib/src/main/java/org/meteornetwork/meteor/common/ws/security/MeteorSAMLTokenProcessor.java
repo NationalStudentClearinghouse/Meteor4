@@ -56,7 +56,7 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 		try {
 			crypto.addCertificate(registryManager.getCertificate(institutionID, providerType));
 		} catch (RegistryException e) {
-			throw new WSSecurityException("Could not get X509 certificate from Meteor registry for institution " + "AP33LTI", e);
+			throw new WSSecurityException("Could not get X509 certificate from Meteor registry for institution " + institutionID, e);
 		}
 	}
 

@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MeteorIndexResponse>
 	<DataProviders>
-		<DataProvider>
+		<!-- DataProvider>
 			<EntityName>Mock Data Provider</EntityName>
 			<EntityID>dp</EntityID>
 			<EntityURL>http://localhost:8088/mockdataprovider</EntityURL>
 			<MeteorVersion>4.0.0</MeteorVersion>
+		</DataProvider-->
+		<!-- DataProvider>
+			<EntityName>Mock HPC Data Provider</EntityName>
+			<EntityID>dp_hpc_moc</EntityID>
+			<EntityURL>http://localhost:8088/mockdataprovider</EntityURL>
+			<MeteorVersion>3.3.4</MeteorVersion>
+		</DataProvider-->
+		<DataProvider>
+			<EntityName>LTI 3.3.4 Test Data Provider</EntityName>
+			<EntityID>LTI_DP33</EntityID>
+			<EntityURL>http://localhost:8880/DataProvider-3.3.4-cvs/rpcrouter</EntityURL>
+			<MeteorVersion>3.3.4</MeteorVersion>
 		</DataProvider>
-	    <DataProvider>
+	    <!-- DataProvider>
 	        <EntityName>My Data Provider</EntityName>
-	        <EntityID>dp</EntityID>
+	        <EntityID>DP_40</EntityID>
 	        <EntityURL>http://localhost:8280/dataprovider/services/DataProviderService</EntityURL>
 	        <MeteorVersion>4.0.0</MeteorVersion>
-	    </DataProvider>
-	    <DataProvider>
+	    </DataProvider-->
+	    <!-- DataProvider>
 	        <EntityName>My Data Provider</EntityName>
-	        <EntityID>dp</EntityID>
+	        <EntityID>DP_40_HPC</EntityID>
 	        <EntityURL>http://localhost:8280/dataprovider/services/DataProviderHPCService</EntityURL>
 	        <MeteorVersion>3.3.4</MeteorVersion>
-	    </DataProvider>
+	    </DataProvider-->
 	</DataProviders>
 </MeteorIndexResponse>

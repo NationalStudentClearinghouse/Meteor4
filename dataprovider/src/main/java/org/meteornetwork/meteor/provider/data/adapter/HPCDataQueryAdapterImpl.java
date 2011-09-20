@@ -8,7 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
-import org.meteornetwork.meteor.common.hpc.HPCSecurityValidationManager;
+import org.meteornetwork.meteor.common.hpc.HPCSecurityManager;
 import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
@@ -39,7 +39,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	private TemplateVersionMapper responseTemplateVersionMapper;
 
 	private HPCManager hpcManager;
-	private HPCSecurityValidationManager hpcSecurityManager;
+	private HPCSecurityManager hpcSecurityManager;
 	private XSLTransformManager xslTransformManager;
 
 	private Properties meteorProps;
@@ -162,12 +162,12 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 		this.hpcManager = hpcManager;
 	}
 
-	public HPCSecurityValidationManager getHpcSecurityManager() {
+	public HPCSecurityManager getHpcSecurityManager() {
 		return hpcSecurityManager;
 	}
 
 	@Autowired
-	public void setHpcSecurityManager(HPCSecurityValidationManager hpcSecurityManager) {
+	public void setHpcSecurityManager(HPCSecurityManager hpcSecurityManager) {
 		this.hpcSecurityManager = hpcSecurityManager;
 	}
 

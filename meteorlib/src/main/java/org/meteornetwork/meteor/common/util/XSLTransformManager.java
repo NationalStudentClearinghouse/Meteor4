@@ -2,6 +2,7 @@ package org.meteornetwork.meteor.common.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -54,8 +55,9 @@ public class XSLTransformManager {
 	 *            template to use for transformation
 	 * @return transform results as XML string
 	 * @throws TransformerException
+	 * @throws IOException 
 	 */
-	public String transformXML(String source, Templates xslTemplate) throws TransformerException {
+	public String transformXML(String source, Templates xslTemplate) throws TransformerException, IOException {
 		Transformer transformer = xslTemplate.newTransformer();
 
 		StreamSource streamSource = new StreamSource(new ByteArrayInputStream(source.getBytes()));
@@ -64,6 +66,9 @@ public class XSLTransformManager {
 		StreamResult streamResult = new StreamResult(outStream);
 
 		transformer.transform(streamSource, streamResult);
-		return outStream.toString();
+		String result = outStream.toString();
+		
+		outStream.close();
+		return result;
 	}
 }
