@@ -96,7 +96,10 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 		String unwrappedHpc = hpcManager.retrieveHPCContent(responseXml);
 		LOG.debug("(Query data provider ID " + dataProvider.getEntityID() + ") Data provider response: " + unwrappedHpc);
 
-		MeteorRsMsg response = MeteorRsMsg.unmarshal(new StringReader(xslTransformManager.transformXML(unwrappedHpc, responseTemplateVersionMapper.getTemplateForVersions(dataProvider.getMeteorVersion(), meteorVersion))));
+		String transformedResponse = xslTransformManager.transformXML(unwrappedHpc, responseTemplateVersionMapper.getTemplateForVersions(dataProvider.getMeteorVersion(), meteorVersion));
+		LOG.debug("(Query data provider ID " + dataProvider.getEntityID() + ") Data provider response translated to Meteor 4.0: " + transformedResponse);
+		
+		MeteorRsMsg response = MeteorRsMsg.unmarshal(new StringReader(transformedResponse));
 		return response;
 	}
 

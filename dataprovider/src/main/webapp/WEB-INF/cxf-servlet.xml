@@ -23,7 +23,7 @@
  	<bean id="MeteorSAMLTokenProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSAMLTokenProcessor"/>
  	
  	<bean id="MeteorSignatureProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSignatureProcessor"/>
- 	
+ 		
  	<jaxws:endpoint 
 		id="queryDataForBorrower"
 		implementorClass="org.meteornetwork.meteor.provider.data.ws.DataProviderServiceImpl"
@@ -71,6 +71,6 @@
 		implementorClass="org.meteornetwork.meteor.provider.data.ws.DataProviderHPCServiceImpl"
 		implementor="#dataProviderHPCServiceImpl"
 		endpointName="SubmitHPC"
-		address="/DataProviderHPCService" /> 
+		address="/DataProviderService" /> 
 	
 </beans>
