@@ -1,15 +1,9 @@
-package org.meteornetwork.meteor.provider.access.ws;
+package org.meteornetwork.meteor.common.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.interceptor.Fault;
@@ -19,23 +13,18 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.xml.security.utils.XMLUtils;
-import org.apache.xpath.XPathAPI;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 /**
- * Converts HPC soap request to rpc encoding by hand. RPC Encoding is deprecated
- * and not supported by JAX-WS, or any web services framework that implememts
- * the WS-I basic profile
+ * Concrete implementations of this class can manipulate raw outgoing CXF
+ * messages by implementing transformMessage() and placing them in an endpoint's
+ * interceptor stack
  * 
  * @author jlazos
  * 
  */
-public class RPCEncodingInterceptor extends AbstractPhaseInterceptor<Message> {
-
-	public RPCEncodingInterceptor() {
+public abstract class AbstractXMLTransformInterceptor extends AbstractPhaseInterceptor<Message> {
+	public AbstractXMLTransformInterceptor() {
 		super(Phase.PRE_STREAM);
 		addBefore(StaxOutInterceptor.class.getName());
 	}
@@ -46,16 +35,16 @@ public class RPCEncodingInterceptor extends AbstractPhaseInterceptor<Message> {
 		CachedStream cachedStream = new CachedStream();
 		message.setContent(OutputStream.class, cachedStream);
 
-		message.getInterceptorChain().add(new RPCEncodingEndingInterceptor(outputStream, cachedStream));
+		message.getInterceptorChain().add(new XMLTransformEndingInterceptor(outputStream, cachedStream));
 	}
 
-	public class RPCEncodingEndingInterceptor extends AbstractPhaseInterceptor<Message> {
+	public class XMLTransformEndingInterceptor extends AbstractPhaseInterceptor<Message> {
 
 		private OutputStream originalOutStream;
 		private CachedOutputStream cachedStream;
 
-		public RPCEncodingEndingInterceptor(OutputStream originalOutStream, CachedOutputStream cachedStream) {
-			super(RPCEncodingEndingInterceptor.class.getName(), Phase.PRE_STREAM_ENDING);
+		public XMLTransformEndingInterceptor(OutputStream originalOutStream, CachedOutputStream cachedStream) {
+			super(XMLTransformEndingInterceptor.class.getName(), Phase.PRE_STREAM_ENDING);
 			this.originalOutStream = originalOutStream;
 			this.cachedStream = cachedStream;
 		}
@@ -70,7 +59,7 @@ public class RPCEncodingInterceptor extends AbstractPhaseInterceptor<Message> {
 				String soapMessage = IOUtils.toString(inputStream);
 				inputStream.close();
 
-				String transformedMessage = convertToRPCEncoding(soapMessage);
+				String transformedMessage = transformMessage(soapMessage);
 				originalOutStream.write(transformedMessage.getBytes(IOUtils.UTF8_CHARSET));
 
 				cachedStream.close();
@@ -84,23 +73,9 @@ public class RPCEncodingInterceptor extends AbstractPhaseInterceptor<Message> {
 
 	}
 
-	private String convertToRPCEncoding(String soapMessage) throws ParserConfigurationException, SAXException, IOException, TransformerException {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true);
-		DocumentBuilder docBuilder = factory.newDocumentBuilder();
+	protected abstract String transformMessage(String soapMessage) throws Exception;
 
-		Document doc = docBuilder.parse(new ByteArrayInputStream(soapMessage.getBytes(IOUtils.UTF8_CHARSET)));
-		Element root = doc.getDocumentElement();
-		root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-
-		Element rawHPCMessage = (Element) XPathAPI.selectSingleNode(root, "//rawHPCMessage");
-		rawHPCMessage.setAttribute("xsi:type", "xsd:string");
-
-		return domToString(doc);
-	}
-
-	private static String domToString(Node dom) throws IOException {
+	protected String domToString(Node dom) throws IOException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		XMLUtils.outputDOM(dom, outputStream);
 		String xml = outputStream.toString();

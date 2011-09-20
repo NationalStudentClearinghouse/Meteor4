@@ -71,6 +71,11 @@
 		implementorClass="org.meteornetwork.meteor.provider.data.ws.DataProviderHPCServiceImpl"
 		implementor="#dataProviderHPCServiceImpl"
 		endpointName="SubmitHPC"
-		address="/DataProviderService" /> 
+		address="/DataProviderService">
+		
+		<jaxws:outInterceptors>
+			<bean class="org.meteornetwork.meteor.common.hpc.HPCResponseRPCEncodingInterceptor"/>
+		</jaxws:outInterceptors>
+	</jaxws:endpoint> 
 	
 </beans>

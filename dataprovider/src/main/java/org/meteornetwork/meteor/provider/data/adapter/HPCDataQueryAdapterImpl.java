@@ -11,6 +11,7 @@ import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
 import org.meteornetwork.meteor.common.hpc.HPCSecurityManager;
 import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
+import org.meteornetwork.meteor.common.util.exception.MeteorSecurityException;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,14 +56,13 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 			return null;
 		}
 
-		// TODO HPC security validation
-		/*
+		// TODO: get assertion info
 		try {
 			hpcSecurityManager.validateRequest(contentXml);
 		} catch (MeteorSecurityException e1) {
 			LOG.error("Could not validate HPC request", e1);
 			return null;
-		}*/
+		}
 		
 		String transformedContentXml;
 		try {

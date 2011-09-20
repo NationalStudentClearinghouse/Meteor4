@@ -9,9 +9,14 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.DSAPrivateKey;
 import java.security.interfaces.RSAPrivateKey;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,8 +73,10 @@ public class HPCSecurityManager {
 	private static final String NCHELP_METEOR = "nchelp.org/meteor";
 	private static final String NCHELP = "http://nchelp.org";
 
+	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+
 	private RegistryManager registryManager;
-	
+
 	/**
 	 * Creates a SAML 1 assertion and inserts it into the request XML (for HPC)
 	 * 
@@ -279,23 +286,28 @@ public class HPCSecurityManager {
 			Document requestDom = docBuilder.parse(new ByteArrayInputStream(requestXml.getBytes(IOUtils.UTF8_CHARSET)));
 
 			Element sigNSContext = XMLUtils.createDSctx(requestDom, "ds", Constants.SignatureSpecNS);
+			Element samlNSContext = XMLUtils.createDSctx(requestDom, "saml", SAML_10_NS);
 
-			verifyAssertionSignature(requestDom, sigNSContext);
+			verifyAssertionSignature(requestDom, sigNSContext, samlNSContext);
 			verifyBodySignature(requestDom, sigNSContext);
+			verifyAssertionExpiry(requestDom, samlNSContext);
 		} catch (Exception e) {
 			throw new MeteorSecurityException("Cannot validate HPC request", e);
 		}
+
 	}
 
-	private void verifyAssertionSignature(Document requestDom, Element sigNSContext) throws TransformerException, RegistryException, MeteorSecurityException, XMLSignatureException, XMLSecurityException {
-		Element signature = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier/ds:Signature", sigNSContext);
+	private void verifyAssertionSignature(Document requestDom, Element sigNSContext, Element samlNSContext) throws TransformerException, RegistryException, MeteorSecurityException, XMLSignatureException, XMLSecurityException, ParserConfigurationException {
+		DocumentBuilder docBuilder = createDocumentBuilder();
+		Document assertionDoc = docBuilder.newDocument();
+		assertionDoc.appendChild(assertionDoc.importNode(XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier"), true));
+
+		Element signature = (Element) XPathAPI.selectSingleNode(assertionDoc, "AssertionSpecifier/ds:Signature", sigNSContext);
 		if (signature == null) {
 			throw new MeteorSecurityException("SAML assertion missing digital signature");
 		}
 
-		Element samlNSContext = XMLUtils.createDSctx(requestDom, "saml", SAML_10_NS);
-
-		Attr institutionAttr = (Attr) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier/saml:Assertion/saml:AuthenticationStatement/saml:Subject/saml:NameIdentifier/@Name", samlNSContext);
+		Attr institutionAttr = (Attr) XPathAPI.selectSingleNode(assertionDoc, "AssertionSpecifier/saml:Assertion/saml:AuthenticationStatement/saml:Subject/saml:NameIdentifier/@Name", samlNSContext);
 		if (institutionAttr == null) {
 			throw new MeteorSecurityException("SAML assertion missing institution name from subject");
 		}
@@ -327,6 +339,24 @@ public class HPCSecurityManager {
 
 		if (!signature.checkSignatureValue(cert)) {
 			throw new MeteorSecurityException("Invalid signature on incoming HPC request");
+		}
+	}
+
+	private void verifyAssertionExpiry(Document requestDom, Element samlNSContext) throws TransformerException, ParseException, MeteorSecurityException {
+		Element condition = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier/saml:Assertion/saml:Condition", samlNSContext);
+
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+		String notBeforeStr = condition.getAttribute("NotBefore");
+		String notAfterStr = condition.getAttribute("NotOnOrAfter");
+		Date notBefore = dateFormatter.parse(notBeforeStr);
+		Date notOnOrAfter = dateFormatter.parse(notAfterStr);
+
+		Date currentTime = Calendar.getInstance().getTime();
+		if (currentTime.before(notBefore)) {
+			throw new MeteorSecurityException("Current time " + dateFormatter.format(currentTime) + " is before Assertion Condition@NotBefore " + notBeforeStr);
+		}
+		if (!currentTime.before(notOnOrAfter)) {
+			throw new MeteorSecurityException("Current time " + dateFormatter.format(currentTime) + " is equal to or after Assertion Condition@NotOnOrAfter " + notAfterStr);
 		}
 	}
 

@@ -53,7 +53,7 @@
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.DataProviderHPCService"/>
 		<property name="outInterceptors">
 			<list>
-				<bean class="org.meteornetwork.meteor.provider.access.ws.RPCEncodingInterceptor"/>
+				<bean class="org.meteornetwork.meteor.common.hpc.HPCRequestRPCEncodingInterceptor"/>
 			</list>
 		</property>
 	</bean>
