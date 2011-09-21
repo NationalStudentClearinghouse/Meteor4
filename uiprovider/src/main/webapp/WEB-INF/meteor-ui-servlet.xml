@@ -5,7 +5,6 @@
 	xsi:schemaLocation=" 
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"> 
-
 	 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
 		<property name="basename" value="views"/>
@@ -13,7 +12,7 @@
 	
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
 	
-	<bean name="/summary.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController">
+	<bean name="/meteor/summary.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="rawXml"/>
 	</bean>
 </beans> 
