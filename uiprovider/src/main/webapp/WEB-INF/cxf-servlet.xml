@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation=" 
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd"> 
+	
+	<import resource="classpath:META-INF/cxf/cxf.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+ 	
+ 	<!-- bean id="samlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.provider.access.ws.security.SamlCreationCallbackHandler">
+		<lookup-method name="getRequestInfo" bean="requestInfo"/>
+	</bean-->
+	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	    <property name="locations">
+	    	<list>
+	    		<value>classpath:uiprovider.properties</value>
+	    	</list>
+	    </property>
+	</bean>
+	
+	<jaxws:client id="accessProviderClient"
+		serviceClass="org.meteornetwork.meteor.common.ws.AccessProviderService"
+		address="${accessprovider.url}" />
+		
+</beans>
