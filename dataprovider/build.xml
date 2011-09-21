@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="tomcat-deploy" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	
+	<property file="build.properties"/>
+	
+	<target name="tomcat-deploy" depends="maven-clean-package, tomcat-clean">
+		<copy file="target/${war.name}.war" todir="${deploy.dir}" overwrite="true"/>
+	</target>
+	
+	<target name="tomcat-clean">
+		<delete dir="${deploy.dir}/${war.name}" verbose="true"/>
+	</target>
+
+	<target name="maven-clean-package">
+		<artifact:mvn mavenHome="${maven.home}">
+			<arg value="clean"/>
+			<arg value="package"/>
+		</artifact:mvn>
+	</target>
+	
+</project>
