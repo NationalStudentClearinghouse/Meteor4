@@ -1,4 +1,4 @@
-package org.meteornetwork.meteor.common.security;
+package org.meteornetwork.meteor.saml;
 
 /**
  * Defines meteor roles
@@ -20,5 +20,15 @@ public enum Role {
 
 	public String getName() {
 		return name;
+	}
+	
+	public static Role valueOfName(String name) {
+		for (Role value : Role.values()) {
+			if (name.equals(value.getName())) {
+				return value;
+			}
+		}
+		
+		return null;
 	}
 }

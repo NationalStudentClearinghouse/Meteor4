@@ -1,6 +1,5 @@
 package org.meteornetwork.meteor.common.util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,8 +11,6 @@ import org.apache.cxf.io.CachedOutputStream;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.apache.xml.security.utils.XMLUtils;
-import org.w3c.dom.Node;
 
 /**
  * Concrete implementations of this class can manipulate raw outgoing CXF
@@ -74,14 +71,6 @@ public abstract class AbstractXMLTransformInterceptor extends AbstractPhaseInter
 	}
 
 	protected abstract String transformMessage(String soapMessage) throws Exception;
-
-	protected String domToString(Node dom) throws IOException {
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		XMLUtils.outputDOM(dom, outputStream);
-		String xml = outputStream.toString();
-		outputStream.close();
-		return xml;
-	}
 
 	private class CachedStream extends CachedOutputStream {
 		public CachedStream() {

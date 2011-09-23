@@ -7,9 +7,12 @@ import org.apache.ws.security.handler.RequestData;
 import org.apache.ws.security.processor.SAMLTokenProcessor;
 import org.apache.ws.security.validate.Credential;
 import org.apache.ws.security.validate.Validator;
-import org.meteornetwork.meteor.common.registry.ProviderType;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
+import org.meteornetwork.meteor.common.security.RequestInfo;
+import org.meteornetwork.meteor.saml.ProviderType;
+import org.meteornetwork.meteor.saml.SecurityTokenImpl;
+import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -38,7 +41,14 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 		MeteorCertificateStore crypto = (MeteorCertificateStore) data.getSigCrypto();
 		addCertificateToCrypto(token, crypto);
 
-		return super.handleSAMLToken(token, data, validator, docInfo);
+		Credential credential = super.handleSAMLToken(token, data, validator, docInfo);
+		try {
+			getRequestInfo().setSecurityToken(SecurityTokenImpl.fromXML(token));
+		} catch (SecurityTokenException e) {
+			throw new WSSecurityException("Could not parse Meteor assertion", e);
+		}
+		
+		return credential;
 	}
 
 	/**
@@ -98,6 +108,11 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 		return defaultProviderType;
 	}
 
+	protected RequestInfo getRequestInfo() {
+		// method injection implemented by Spring
+		return null;
+	}
+	
 	public RegistryManager getRegistryManager() {
 		return registryManager;
 	}

@@ -42,11 +42,12 @@ import org.apache.xml.security.utils.XMLUtils;
 import org.apache.xpath.XPathAPI;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.meteornetwork.meteor.common.registry.ProviderType;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.exception.MeteorSecurityException;
+import org.meteornetwork.meteor.saml.ProviderType;
+import org.meteornetwork.meteor.saml.SecurityToken;
 import org.opensaml.common.SAMLVersion;
 import org.opensaml.saml1.core.Assertion;
 import org.opensaml.xml.XMLObject;
@@ -133,22 +134,23 @@ public class HPCSecurityManager {
 		 */
 		List<AttributeStatementBean> attributeStatementBeans = new ArrayList<AttributeStatementBean>();
 
-		if (requestInfo.getOrganizationID() != null) {
-			attributeStatementBeans.add(createAttributeStatement("OrganizationID", requestInfo.getOrganizationID(), subjectBean));
+		SecurityToken token = requestInfo.getSecurityToken();
+		if (token.getOrganizationId() != null) {
+			attributeStatementBeans.add(createAttributeStatement("OrganizationID", token.getOrganizationId(), subjectBean));
 		}
 
-		if (requestInfo.getOrganizationIDType() != null) {
-			attributeStatementBeans.add(createAttributeStatement("OrganizationIDType", requestInfo.getOrganizationIDType(), subjectBean));
+		if (token.getOrganizationIdType() != null) {
+			attributeStatementBeans.add(createAttributeStatement("OrganizationIDType", token.getOrganizationIdType(), subjectBean));
 		}
 
-		if (requestInfo.getOrganizationType() != null) {
-			attributeStatementBeans.add(createAttributeStatement("OrganizationType", requestInfo.getOrganizationType(), subjectBean));
+		if (token.getOrganizationType() != null) {
+			attributeStatementBeans.add(createAttributeStatement("OrganizationType", token.getOrganizationType(), subjectBean));
 		}
 
 		attributeStatementBeans.add(createAttributeStatement("AuthenticationProcessID", authenticationProcessId, subjectBean));
-		attributeStatementBeans.add(createAttributeStatement("Level", requestInfo.getLevel().toString(), subjectBean));
-		attributeStatementBeans.add(createAttributeStatement("UserHandle", requestInfo.getUserHandle(), subjectBean));
-		attributeStatementBeans.add(createAttributeStatement("Role", requestInfo.getRole().getName(), subjectBean));
+		attributeStatementBeans.add(createAttributeStatement("Level", token.getLevel().toString(), subjectBean));
+		attributeStatementBeans.add(createAttributeStatement("UserHandle", token.getUserHandle(), subjectBean));
+		attributeStatementBeans.add(createAttributeStatement("Role", token.getRole().getName(), subjectBean));
 
 		assertion.getAttributeStatements().addAll(SAML1ComponentBuilder.createSamlv1AttributeStatement(attributeStatementBeans));
 

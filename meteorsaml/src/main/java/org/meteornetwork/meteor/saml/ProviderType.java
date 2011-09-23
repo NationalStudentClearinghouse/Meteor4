@@ -1,4 +1,4 @@
-package org.meteornetwork.meteor.common.registry;
+package org.meteornetwork.meteor.saml;
 
 public enum ProviderType {
 	ACCESS("AccessProvider"),

@@ -19,8 +19,9 @@ import org.apache.ws.security.saml.ext.bean.SubjectBean;
 import org.apache.ws.security.saml.ext.bean.SubjectLocalityBean;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.meteornetwork.meteor.common.registry.ProviderType;
 import org.meteornetwork.meteor.common.security.RequestInfo;
+import org.meteornetwork.meteor.saml.ProviderType;
+import org.meteornetwork.meteor.saml.SecurityToken;
 import org.opensaml.common.SAMLVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -76,7 +77,8 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 		SubjectLocalityBean subjectLocality = new SubjectLocalityBean();
 		subjectLocality.setIpAddress(InetAddress.getLocalHost().getHostAddress());
 		subjectLocality.setDnsAddress(InetAddress.getLocalHost().getHostName());
-
+		authenticationStatement.setSubjectLocality(subjectLocality);
+		
 		callback.setAuthenticationStatementData(Collections.singletonList(authenticationStatement));
 		
 		/*
@@ -86,22 +88,23 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 
 		attributeStatement.getSamlAttributes().add(createAttributeBean("ProviderType", ProviderType.ACCESS.getType()));
 		
-		if (requestInfo.getOrganizationID() != null) {
-			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationID", requestInfo.getOrganizationID()));
+		SecurityToken token = requestInfo.getSecurityToken();
+		if (token.getOrganizationId() != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationID", token.getOrganizationId()));
 		}
 
-		if (requestInfo.getOrganizationIDType() != null) {
-			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationIDType", requestInfo.getOrganizationIDType()));
+		if (token.getOrganizationIdType() != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationIDType", token.getOrganizationIdType()));
 		}
 
-		if (requestInfo.getOrganizationType() != null) {
-			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationType", requestInfo.getOrganizationType()));
+		if (token.getOrganizationType() != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationType", token.getOrganizationType()));
 		}
 
 		attributeStatement.getSamlAttributes().add(createAttributeBean("AuthenticationProcessID", authenticationProperties.getProperty("authentication.process.identifier")));
-		attributeStatement.getSamlAttributes().add(createAttributeBean("Level", requestInfo.getLevel().toString()));
-		attributeStatement.getSamlAttributes().add(createAttributeBean("UserHandle", requestInfo.getUserHandle()));
-		attributeStatement.getSamlAttributes().add(createAttributeBean("Role", requestInfo.getRole().getName()));
+		attributeStatement.getSamlAttributes().add(createAttributeBean("Level", token.getLevel().toString()));
+		attributeStatement.getSamlAttributes().add(createAttributeBean("UserHandle", token.getUserHandle()));
+		attributeStatement.getSamlAttributes().add(createAttributeBean("Role", token.getRole().getName()));
 	
 		callback.setAttributeStatementData(Collections.singletonList(attributeStatement));
 	}

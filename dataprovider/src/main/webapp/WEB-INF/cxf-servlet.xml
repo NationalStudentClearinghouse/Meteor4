@@ -20,7 +20,9 @@
 		<aop:scoped-proxy/>
 	</bean>
  	
- 	<bean id="MeteorSAMLTokenProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSAMLTokenProcessor"/>
+ 	<bean id="MeteorSAMLTokenProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSAMLTokenProcessor">
+		<lookup-method name="getRequestInfo" bean="requestInfo"/>
+ 	</bean>
  	
  	<bean id="MeteorSignatureProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSignatureProcessor"/>
  		
