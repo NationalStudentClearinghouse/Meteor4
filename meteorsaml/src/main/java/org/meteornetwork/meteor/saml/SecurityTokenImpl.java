@@ -78,7 +78,7 @@ public class SecurityTokenImpl implements SecurityToken {
 		}
 	}
 
-	public static SecurityToken fromXML(Element domToken) throws SecurityTokenException {
+	public static SecurityToken fromXML(Element tokenElem) throws SecurityTokenException {
 		SecurityToken token = new SecurityTokenImpl();
 
 		DatatypeFactory datatypeFactory;
@@ -89,17 +89,17 @@ public class SecurityTokenImpl implements SecurityToken {
 		}
 
 		try {
-			Node node = XPathAPI.selectSingleNode(domToken, "Assertion/Issuer");
+			Node node = XPathAPI.selectSingleNode(tokenElem, "Issuer");
 			if (node != null) {
 				token.setIssuer(node.getFirstChild().getNodeValue());
 			}
 
-			node = XPathAPI.selectSingleNode(domToken, "Assertion/Subject/NameID");
+			node = XPathAPI.selectSingleNode(tokenElem, "Subject/NameID");
 			if (node != null) {
 				token.setSubjectName(node.getFirstChild().getNodeValue());
 			}
 
-			node = XPathAPI.selectSingleNode(domToken, "Assertion/AuthnStatement/SubjectLocality");
+			node = XPathAPI.selectSingleNode(tokenElem, "AuthnStatement/SubjectLocality");
 			if (node != null) {
 				Attr attr = (Attr) node.getAttributes().getNamedItem("Address");
 				if (attr != null) {
@@ -112,7 +112,7 @@ public class SecurityTokenImpl implements SecurityToken {
 				}
 			}
 
-			node = XPathAPI.selectSingleNode(domToken, "Assertion/Conditions");
+			node = XPathAPI.selectSingleNode(tokenElem, "Conditions");
 			if (node != null) {
 				Attr attr = (Attr) node.getAttributes().getNamedItem("NotBefore");
 				if (attr != null) {
@@ -125,7 +125,7 @@ public class SecurityTokenImpl implements SecurityToken {
 				}
 			}
 
-			NodeList attributeNodes = XPathAPI.selectNodeList(domToken, "Assertion/AttributeStatement/Attribute");
+			NodeList attributeNodes = XPathAPI.selectNodeList(tokenElem, "AttributeStatement/Attribute");
 			for (int i = 0; i < attributeNodes.getLength(); ++i) {
 				node = attributeNodes.item(i);
 				Attr friendlyName = (Attr) node.getAttributes().getNamedItem("FriendlyName");
