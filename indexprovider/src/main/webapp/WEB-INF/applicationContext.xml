@@ -13,7 +13,10 @@
 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	    <property name="locations">
-	        <value>classpath:directory.properties</value>
+	    	<list>
+	        	<value>classpath:directory.properties</value>
+	        	<value>classpath:indexprovider.properties</value>
+	        </list>
 	    </property>
 	</bean>
 	
@@ -21,9 +24,11 @@
 	
 	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
 	
-	<!-- TODO: remove this bean -->
- 	<bean id="IndexResponseSample" class="org.springframework.core.io.ClassPathResource">
-		<constructor-arg value="indexResponseSample.xml"/>
+	<!-- Index Server Abstraction -->
+	<bean id="IndexServerAbstractionImpl" class="${default.index.server}"/>
+	
+	<bean id="IndexProviderManager" class="org.meteornetwork.meteor.provider.index.manager.IndexProviderManager" autowire="byType">
+		<lookup-method name="getRequestInfo" bean="requestInfo"/>
 	</bean>
 	
 	<context:component-scan base-package="org.meteornetwork.meteor"/>

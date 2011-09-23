@@ -140,8 +140,9 @@
 	      <xsd:documentation xml:lang="en">"I" = Information</xsd:documentation>
 	   </xsd:annotation>
 	   <xsd:restriction base="xsd:string">
-	      <xsd:minLength value="1"/>
-	      <xsd:maxLength value="1"/>
+	      <xsd:enumeration value="E"/>
+	      <xsd:enumeration value="W"/>
+	      <xsd:enumeration value="I"/>
 	   </xsd:restriction>
 	</xsd:simpleType>
 	
