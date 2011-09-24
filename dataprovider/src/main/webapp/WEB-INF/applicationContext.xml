@@ -13,7 +13,10 @@
 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	    <property name="locations">
-	        <value>classpath:directory.properties</value>
+	        <list>
+	        	<value>classpath:directory.properties</value>
+	        	<value>classpath:dataprovider.properties</value>
+	        </list>
 	    </property>
 	</bean>
 	
@@ -22,10 +25,13 @@
  	<!-- meteor common properties -->
  	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>
  	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
+ 	<util:properties id="DataProviderProperties" location="WEB-INF/classes/dataprovider.properties"/>
  	
- 	<!-- TODO: remove this bean -->
- 	<bean id="DataResponseSample" class="org.springframework.core.io.ClassPathResource">
-		<constructor-arg value="dataResponseSample.xml"/>
+ 	<!-- Data Server Abstraction -->
+	<bean id="DataServerAbstractionImpl" class="${default.data.server}"/>
+	
+	<bean id="DataProviderManager" class="org.meteornetwork.meteor.provider.data.manager.DataProviderManager" autowire="byType">
+		<lookup-method name="getRequestInfo" bean="requestInfo"/>
 	</bean>
 	
 	<context:component-scan base-package="org.meteornetwork.meteor"/>
