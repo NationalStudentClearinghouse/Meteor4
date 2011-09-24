@@ -1,5 +1,7 @@
 package org.meteornetwork.meteor.provider.index.manager;
 
+import java.util.Properties;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.security.RequestInfo;
@@ -17,7 +19,8 @@ public class IndexProviderManager {
 	private static final Log LOG = LogFactory.getLog(IndexProviderManager.class);
 
 	private IndexServerAbstraction indexServer;
-
+	private Properties indexProviderProperties;
+	
 	public MeteorIndexResponse findDataProvidersForBorrower(AccessProvider accessProvider, String ssn) {
 
 		LOG.debug("Received request from AP " + accessProvider.getMeteorInstitutionIdentifier() + " for SSN " + ssn);
@@ -26,7 +29,12 @@ public class IndexProviderManager {
 		context.setAccessProvider(accessProvider);
 		context.setSecurityToken(getRequestInfo().getSecurityToken());
 		MeteorIndexResponseWrapper response = indexServer.getDataProviders(context, ssn);
-
+		
+		String indexProviderId = indexProviderProperties.getProperty("IndexProvider.ID");
+		String indexProviderName = indexProviderProperties.getProperty("IndexProvider.Name");
+		String indexProviderUrl = indexProviderProperties.getProperty("IndexProvider.URL");
+		response.setIndexProviderData(indexProviderId, indexProviderName, indexProviderUrl);
+		
 		return response.getResponse();
 	}
 
@@ -43,6 +51,16 @@ public class IndexProviderManager {
 	@Qualifier("IndexServerAbstractionImpl")
 	public void setIndexServer(IndexServerAbstraction indexServer) {
 		this.indexServer = indexServer;
+	}
+
+	public Properties getIndexProviderProperties() {
+		return indexProviderProperties;
+	}
+
+	@Autowired
+	@Qualifier("IndexProviderProperties")
+	public void setIndexProviderProperties(Properties indexProviderProperties) {
+		this.indexProviderProperties = indexProviderProperties;
 	}
 
 }

@@ -23,6 +23,7 @@
 	<import resource="classpath:applicationContext-meteorlib.xml"/>
 	
 	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
+	<util:properties id="IndexProviderProperties" location="WEB-INF/classes/indexprovider.properties"/>
 	
 	<!-- Index Server Abstraction -->
 	<bean id="IndexServerAbstractionImpl" class="${default.index.server}"/>

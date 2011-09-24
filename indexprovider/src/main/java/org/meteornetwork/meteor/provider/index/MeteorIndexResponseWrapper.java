@@ -2,6 +2,7 @@ package org.meteornetwork.meteor.provider.index;
 
 import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
 import org.meteornetwork.meteor.common.xml.indexresponse.DataProviders;
+import org.meteornetwork.meteor.common.xml.indexresponse.IndexProviderData;
 import org.meteornetwork.meteor.common.xml.indexresponse.IndexProviderMessages;
 import org.meteornetwork.meteor.common.xml.indexresponse.Message;
 import org.meteornetwork.meteor.common.xml.indexresponse.MeteorIndexResponse;
@@ -11,6 +12,14 @@ public class MeteorIndexResponseWrapper {
 
 	private final MeteorIndexResponse response = new MeteorIndexResponse();
 
+	public void setIndexProviderData(String id, String name, String url) {
+		IndexProviderData data = new IndexProviderData();
+		data.setEntityID(id);
+		data.setEntityName(name);
+		data.setEntityURL(url);
+		response.setIndexProviderData(data);
+	}
+	
 	public void addMessage(String messageText, RsMsgLevelType level) {
 		Message message = new Message();
 		message.setRsMsg(messageText);
