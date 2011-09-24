@@ -13,9 +13,7 @@ import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderMsg;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
 import org.meteornetwork.meteor.common.xml.dataresponse.Phone;
-import org.meteornetwork.meteor.common.xml.dataresponse.types.DataProviderTypeType;
-import org.meteornetwork.meteor.common.xml.dataresponse.types.PhoneNumTypeType;
-import org.meteornetwork.meteor.common.xml.dataresponse.types.RsMsgLevelType;
+import org.meteornetwork.meteor.common.xml.dataresponse.types.DataProviderTypeEnum;
 
 public class MeteorDataResponseWrapper {
 
@@ -61,7 +59,7 @@ public class MeteorDataResponseWrapper {
 		}
 
 		if (mdpdi.getDataProviderType() == null) {
-			mdpdi.setDataProviderType(DataProviderTypeType.G);
+			mdpdi.setDataProviderType(DataProviderTypeEnum.G.name());
 		}
 
 		DataProviderData dpd = mdpdi.getDataProviderData();
@@ -92,7 +90,7 @@ public class MeteorDataResponseWrapper {
 	 * @param level
 	 *            the severity level of the message
 	 */
-	public void addMessage(String messageText, RsMsgLevelType level) {
+	public void addMessage(String messageText, String level) {
 		MeteorDataProviderMsg message = new MeteorDataProviderMsg();
 		message.setRsMsg(messageText);
 		message.setRsMsgLevel(level);
@@ -111,10 +109,10 @@ public class MeteorDataResponseWrapper {
 		private String name;
 		private String id;
 		private String url;
-		private DataProviderTypeType type;
+		private String type;
 
 		private String phone;
-		private PhoneNumTypeType phoneType;
+		private String phoneType;
 		private String email;
 		private String addr1;
 		private String addr2;
@@ -229,11 +227,11 @@ public class MeteorDataResponseWrapper {
 			this.url = url;
 		}
 
-		public DataProviderTypeType getType() {
+		public String getType() {
 			return type;
 		}
 
-		public void setType(DataProviderTypeType type) {
+		public void setType(String type) {
 			this.type = type;
 		}
 
@@ -245,11 +243,11 @@ public class MeteorDataResponseWrapper {
 			this.phone = phone;
 		}
 
-		public PhoneNumTypeType getPhoneType() {
+		public String getPhoneType() {
 			return phoneType;
 		}
 
-		public void setPhoneType(PhoneNumTypeType phoneType) {
+		public void setPhoneType(String phoneType) {
 			this.phoneType = phoneType;
 		}
 

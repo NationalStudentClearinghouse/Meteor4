@@ -316,6 +316,9 @@
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
 	<xsd:simpleType name="AddressTypeType">
+		<xsd:union memberTypes="AddressTypeEnum xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="AddressTypeEnum">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">"P" = Permanent</xsd:documentation>
 			<xsd:documentation xml:lang="en">"T" = Temporary</xsd:documentation>
@@ -387,7 +390,10 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
-	<xsd:simpleType	name="DataProviderTypeType">
+	<xsd:simpleType name="DataProviderTypeType">
+		<xsd:union memberTypes="DataProviderTypeEnum xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType	name="DataProviderTypeEnum">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">"S"   = School                          </xsd:documentation>
 			<xsd:documentation xml:lang="en">"LO"  = Loan Originator               </xsd:documentation>
@@ -437,6 +443,9 @@
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
 	<xsd:simpleType name="DisbHoldType">
+		<xsd:union memberTypes="DisbHoldEnum xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="DisbHoldEnum">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">"H" = Held   </xsd:documentation>
 			<xsd:documentation xml:lang="en">"R" = Release</xsd:documentation>
@@ -448,6 +457,9 @@
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
 	<xsd:simpleType name="DisbStatCdType">
+		<xsd:union memberTypes="DisbStatCdEnum xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="DisbStatCdEnum">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">"A" = Approved but Not Disbursed</xsd:documentation>
 			<xsd:documentation xml:lang="en">"C" = Fully Cancelled           </xsd:documentation>
@@ -537,6 +549,9 @@
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
 	<xsd:simpleType name="MPNIndType">
+		<xsd:union memberTypes="MPNIndEnum xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="MPNIndEnum">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">"Y" = Service Provider has or can </xsd:documentation>
 			<xsd:documentation xml:lang="en">      confirm that an MPN exists  </xsd:documentation>
@@ -569,7 +584,10 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
-	<xsd:simpleType name="PhoneNumTypeType">	
+	<xsd:simpleType name="PhoneNumTypeType">
+		<xsd:union memberTypes="PhoneNumTypeEnum xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="PhoneNumTypeEnum">	
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">For Individual Persons:</xsd:documentation>
 			<xsd:documentation xml:lang="en">  "H" = Home           </xsd:documentation>
@@ -680,6 +698,9 @@
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
 	<xsd:simpleType name="RsMsgLevelType">
+		<xsd:union memberTypes="RsMsgLevelEnum xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="RsMsgLevelEnum">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">"E" = Error      </xsd:documentation>
 			<xsd:documentation xml:lang="en">"W" = Warning    </xsd:documentation>
@@ -715,6 +736,9 @@
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
 	<xsd:simpleType name="TransferTypeCdType">
+		<xsd:union memberTypes="TransferTypeCdEnum xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="TransferTypeCdEnum">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">"L" = Lender   </xsd:documentation>
 			<xsd:documentation xml:lang="en">"G" = Guarantor</xsd:documentation>
