@@ -48,6 +48,7 @@
 			<xsd:element name="MeteorDataProviderDetailInfo" type="MeteorDataProviderDetailInfoType"/>
 			<xsd:element name="MeteorDataProviderAwardDetails" type="MeteorDataProviderAwardDetailsType" minOccurs="0"/>
 			<xsd:element name="MeteorDataProviderMsg" type="MeteorDataProviderMsgType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="LoanLocatorActivationIndicator" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
@@ -105,7 +106,7 @@
 			<xsd:element name="MPNInd" type="MPNIndType" minOccurs="0"/>
 			<xsd:element name="Esign" type="xsd:boolean" minOccurs="0"/>
 			<xsd:element name="CommonlineError" type="CommonlineErrorType" minOccurs="0"/>
-			<xsd:element name="GuarDt" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="LoanDt" type="xsd:date" minOccurs="0"/>
 			<xsd:element name="Disbursement" type="DisbursementType" minOccurs="0" maxOccurs="99"/>
 			<xsd:element name="Student" type="StudentType" minOccurs="0"/>
 			<xsd:element name="Borrower" type="BorrowerType" minOccurs="0"/>
@@ -172,14 +173,6 @@
 			<xsd:element name="ClaimPdDt" type="xsd:date" minOccurs="0"/>
 			<xsd:element name="EligibilityReinstatementIndicator" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="EligibilityReinstatementDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
-		</xsd:sequence>
-	</xsd:complexType>
-	<!-- ******************************************************************************* -->
-	<xsd:complexType name="DefermentForbearanceType">
-		<xsd:sequence>
-			<xsd:element name="DefermentForbearanceName" type="DefermentForbearanceNameType" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="DefermentForbearanceBeginDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>		
-			<xsd:element name="DefermentForbearanceEndDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
@@ -281,11 +274,12 @@
 			<xsd:element name="CollectionCosts" type="CollectionCostsType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="ServicingFees" type="ServicingFeesType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="OtherFees" type="OtherFeesType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="DefermentForbearance" type="DefermentForbearanceType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="ForbearanceTimeUsed" type="ForbearanceTimeUsedType" minOccurs="0"/>
-			<xsd:element name="DefermentTimeUsed" type="DefermentTimeUsedType" minOccurs="0"/>
+			<xsd:element name="Deferment" type="DefermentForbearanceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Forbearance" type="DefermentForbearanceType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="RepaymentTermRemaining" type="RepaymentTermRemainingType" minOccurs="0"/>
 			<xsd:element name="DaysPastDue" type="DaysPastDueType" minOccurs="0"/>
+			<xsd:element name="OnlinePaymentProcessURL" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="OnlineDeferForbProcessURL" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
@@ -327,8 +321,8 @@
 			<xsd:documentation xml:lang="en">"T" = Temporary</xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="0"/>
-			<xsd:maxLength value="1"/>
+			<xsd:enumeration value="P"/>
+			<xsd:enumeration value="T"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
@@ -353,7 +347,7 @@
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:minLength value="0"/>
-			<xsd:maxLength value="19"/>
+			<xsd:maxLength value="21"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
@@ -395,15 +389,22 @@
 	<!-- ******************************************************************************* -->
 	<xsd:simpleType	name="DataProviderTypeType">
 		<xsd:annotation>
-			<xsd:documentation xml:lang="en">"SBS" = School Based Software    </xsd:documentation>
-			<xsd:documentation xml:lang="en">"LO"  = Lender Originator        </xsd:documentation>
-			<xsd:documentation xml:lang="en">"LRS" = Lender Repayment Servicer</xsd:documentation>
-			<xsd:documentation xml:lang="en">"G"   = Guaranty Agency          </xsd:documentation>
-			<xsd:documentation xml:lang="en">"DA"  = Disbursing Agent         </xsd:documentation>
+			<xsd:documentation xml:lang="en">"S"   = School                          </xsd:documentation>
+			<xsd:documentation xml:lang="en">"LO"  = Loan Originator               </xsd:documentation>
+			<xsd:documentation xml:lang="en">"LRS" = Loan Repayment Servicer       </xsd:documentation>
+			<xsd:documentation xml:lang="en">"G"   = Guaranty Agency                 </xsd:documentation>
+			<xsd:documentation xml:lang="en">"DA"  = Disbursing Agent                </xsd:documentation>
+			<xsd:documentation xml:lang="en">"GSP" = Grant &#38; Scholarship Provider    </xsd:documentation>
+			<xsd:documentation xml:lang="en">"FAT" = Financial Aid History Transcript</xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="1"/>
-			<xsd:maxLength value="3"/>
+			<xsd:enumeration value="S"/>
+			<xsd:enumeration value="LO"/>
+			<xsd:enumeration value="LRS"/>
+			<xsd:enumeration value="G"/>
+			<xsd:enumeration value="DA"/>
+			<xsd:enumeration value="GSP"/>
+			<xsd:enumeration value="FAT"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
@@ -414,17 +415,26 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
-	<xsd:simpleType name="DefermentForbearanceNameType">
-		<xsd:restriction base="xsd:string">
-		</xsd:restriction>
-	</xsd:simpleType>
-	<!-- ******************************************************************************* -->
-	<xsd:simpleType name="DefermentTimeUsedType">
-		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="0"/>
-			<xsd:maxLength value="3"/>
-		</xsd:restriction>
-	</xsd:simpleType>
+	<xsd:complexType name="DefermentForbearanceType">
+		<xsd:sequence>
+			<xsd:element name="TypeCode">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="0"/>
+						<xsd:maxLength value="20"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="TimeUsed">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="0"/>
+						<xsd:maxLength value="3"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
 	<!-- ******************************************************************************* -->
 	<xsd:simpleType name="DisbHoldType">
 		<xsd:annotation>
@@ -432,8 +442,8 @@
 			<xsd:documentation xml:lang="en">"R" = Release</xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="0"/>
-			<xsd:maxLength value="1"/>
+			<xsd:enumeration value="H"/>
+			<xsd:enumeration value="R"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
@@ -444,8 +454,9 @@
 			<xsd:documentation xml:lang="en">"D" = Disbursed or Re-Issued    </xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="0"/>
-			<xsd:maxLength value="1"/>
+			<xsd:enumeration value="A"/>
+			<xsd:enumeration value="C"/>
+			<xsd:enumeration value="D"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
@@ -484,13 +495,6 @@
 		<xsd:restriction base="xsd:string">
 			<xsd:minLength value="0"/>
 			<xsd:maxLength value="12"/>
-		</xsd:restriction>
-	</xsd:simpleType>
-	<!-- ******************************************************************************* -->
-	<xsd:simpleType name="ForbearanceTimeUsedType">
-		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="0"/>
-			<xsd:maxLength value="3"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
@@ -540,8 +544,8 @@
 			<xsd:documentation xml:lang="en">      have an MPN                 </xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="0"/>
-			<xsd:maxLength value="1"/>
+			<xsd:enumeration value="Y"/>
+			<xsd:enumeration value="N"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
@@ -578,8 +582,13 @@
 			<xsd:documentation xml:lang="en">  "S" = Secondary      </xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="1"/>
-			<xsd:maxLength value="1"/>
+			<xsd:enumeration value="H"/>
+			<xsd:enumeration value="W"/>
+			<xsd:enumeration value="T"/>
+			<xsd:enumeration value="M"/>
+			<xsd:enumeration value="O"/>
+			<xsd:enumeration value="P"/>
+			<xsd:enumeration value="S"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
@@ -677,8 +686,9 @@
 			<xsd:documentation xml:lang="en">"I" = Information</xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="1"/>
-			<xsd:maxLength value="1"/>
+			<xsd:enumeration value="E"/>
+			<xsd:enumeration value="W"/>
+			<xsd:enumeration value="I"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
@@ -711,8 +721,9 @@
 			<xsd:documentation xml:lang="en">"S" = Servicer </xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="0"/>
-			<xsd:maxLength value="1"/>
+			<xsd:enumeration value="L"/>
+			<xsd:enumeration value="G"/>
+			<xsd:enumeration value="S"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
