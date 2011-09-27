@@ -2,6 +2,10 @@
 <xsl:stylesheet version="1.0" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	
+	<xsl:output
+		method="xml"
+		encoding="UTF-8" />
+		
 	<xsl:template match="//@PESCXMLVersion">
 		<xsl:attribute name="PESCXMLVersion">4.0.0</xsl:attribute>
 	</xsl:template>
@@ -29,11 +33,8 @@
 		<LoanDt><xsl:if test=". != '0000-00-00'"><xsl:value-of select="."/></xsl:if></LoanDt>
 	</xsl:template>
 	
-	<xsl:template match="//DefermentForbearance">
-		<!-- TODO: translate into Meteor 4.0 Deferment/Forbearance tags -->
-		<xsl:copy>
-			<xsl:apply-templates />
-		</xsl:copy>
+	<xsl:template match="//DataProviderType[. = 'SBS']">
+		<xsl:copy>S</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="@* | node()">

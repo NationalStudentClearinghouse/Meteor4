@@ -274,8 +274,9 @@
 			<xsd:element name="CollectionCosts" type="CollectionCostsType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="ServicingFees" type="ServicingFeesType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="OtherFees" type="OtherFeesType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="Deferment" type="DefermentForbearanceType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="Forbearance" type="DefermentForbearanceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="DefermentForbearance" type="DefermentForbearanceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Deferment" type="DefermentForbearanceTimeUsedType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Forbearance" type="DefermentForbearanceTimeUsedType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="RepaymentTermRemaining" type="RepaymentTermRemainingType" minOccurs="0"/>
 			<xsd:element name="DaysPastDue" type="DaysPastDueType" minOccurs="0"/>
 			<xsd:element name="OnlinePaymentProcessURL" type="xsd:string" minOccurs="0" maxOccurs="1"/>
@@ -422,6 +423,18 @@
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
 	<xsd:complexType name="DefermentForbearanceType">
+		<xsd:sequence>
+			<xsd:element name="DefermentForbearanceName" type="DefermentForbearanceNameType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="DefermentForbearanceBeginDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>		
+			<xsd:element name="DefermentForbearanceEndDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="DefermentForbearanceNameType">
+		<xsd:restriction base="xsd:string">
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="DefermentForbearanceTimeUsedType">
 		<xsd:sequence>
 			<xsd:element name="TypeCode">
 				<xsd:simpleType>

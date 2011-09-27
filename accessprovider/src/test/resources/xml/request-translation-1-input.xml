@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<MeteorDataRequest meteorVersion="3.3.4">
+   <AccessProvider>
+      <MeteorInstitutionIdentifier>LTI_AP40</MeteorInstitutionIdentifier>
+      <UserHandle>User</UserHandle>
+      <IssueInstant>2011-09-20T14:34:02-04:00</IssueInstant>
+   </AccessProvider>
+   <SSN>110101010</SSN>
+</MeteorDataRequest>

@@ -5,22 +5,23 @@
 	<xsl:output
 		method="xml"
 		encoding="UTF-8" />
+		
+	<xsl:template match="//@PESCXMLVersion">
+		<xsl:attribute name="PESCXMLVersion">3.0.0</xsl:attribute>
+	</xsl:template>
 	
-	<xsl:template match="//Repayment/RepaymentTermRemaining | //Repayment/CurrentMonthlyPayment | //Repayment/DaysPastDue | //Phone/PhoneValidInd | //Phone/PhoneValidDt | //Contacts/EmailValidInd | //Contacts/EmailValidDt"/>
+	<xsl:template match="//Repayment/RepaymentTermRemaining | //Repayment/CurrentMonthlyPayment | //Repayment/DaysPastDue | //Phone/PhoneValidInd | //Phone/PhoneValidDt | //Contacts/EmailValidInd | //Contacts/EmailValidDt | //Repayment/Deferment | //Repayment/Forbearance | //Repayment/OnlinePaymentProcessURL | //Repayment/OnlineDeferForbProcessURL | //MeteorDataProviderInfo/LoanLocatorActivationIndicator"/>
 
 	<xsl:template match="//Award/LoanDt">
 		<xsl:element name="GuarDt"><xsl:value-of select="."/></xsl:element>
 	</xsl:template>
 	
-	<xsl:template match="//Award/AwardId">
-		<xsl:copy><xsl:value-of select="substring(.,1,19)"/></xsl:copy>
+	<xsl:template match="//Award/AwardId[string-length(.) > 19]">
+		<xsl:copy><xsl:value-of select="substring(.,string-length(.) - 19 + 1)"/></xsl:copy>
 	</xsl:template>
 	
-	<xsl:template match="//Repayment/Deferment | //Repayment/Forbearance">
-		<xsl:element name="DefermentForbearance">
-			<xsl:element name="DefermentForbearanceName"><xsl:value-of select="TypeCode"/></xsl:element>
-			<!-- TODO: calculate Deferment/Forbearance BeginDate and Deferment/Forbearance EndDate? -->
-		</xsl:element>
+	<xsl:template match="//DataProviderType[. = 'S']">
+		<xsl:copy>SBS</xsl:copy>
 	</xsl:template>
 	
     <xsl:template match="@* | node()">
