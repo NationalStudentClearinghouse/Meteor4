@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>org.meteornetwork.meteor</groupId>
+	<artifactId>samplelogin</artifactId>
+	<packaging>war</packaging>
+	<version>4.0.0</version>
+
+	<name>Sample Login for Meteor</name>
+	<url>http://www.meteornetwork.org</url>
+	
+	<properties>
+		<meteor.version>4.0.0</meteor.version>
+		
+		<cxf.version>2.4.2</cxf.version>
+	</properties>
+
+	<dependencies>
+		<!-- Meteor SAML Library -->
+		<dependency>
+			<groupId>org.meteornetwork.meteor</groupId>
+			<artifactId>meteorsaml</artifactId>
+			<version>${meteor.version}</version>
+		</dependency>
+		
+		<!-- Meteor Common Library -->
+		<dependency>
+			<groupId>org.meteornetwork.meteor</groupId>
+			<artifactId>meteorlib</artifactId>
+			<version>${meteor.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.cxf</groupId>
+		    <artifactId>cxf-common-utilities</artifactId>
+		    <version>${cxf.version}</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<finalName>samplelogin</finalName>
+	</build>
+</project>

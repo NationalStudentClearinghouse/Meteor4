@@ -11,18 +11,6 @@
 	
 	<import resource="classpath:META-INF/cxf/cxf.xml"/>
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
- 	
- 	<!-- bean id="samlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.provider.access.ws.security.SamlCreationCallbackHandler">
-		<lookup-method name="getRequestInfo" bean="requestInfo"/>
-	</bean-->
-	
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-	    <property name="locations">
-	    	<list>
-	    		<value>classpath:uiprovider.properties</value>
-	    	</list>
-	    </property>
-	</bean>
 	
 	<jaxws:client id="accessProviderClient"
 		serviceClass="org.meteornetwork.meteor.common.ws.AccessProviderService"

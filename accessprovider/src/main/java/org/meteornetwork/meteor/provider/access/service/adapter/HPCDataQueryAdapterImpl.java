@@ -24,7 +24,7 @@ import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
 import org.meteornetwork.meteor.common.hpc.HPCSecurityManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
-import org.meteornetwork.meteor.common.util.KeystoreManager;
+import org.meteornetwork.meteor.common.util.DigitalSignatureManager;
 import org.meteornetwork.meteor.common.util.PrivateKeyParams;
 import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
@@ -60,7 +60,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 
 	private HPCManager hpcManager;
 	private HPCSecurityManager hpcSecurityManager;
-	private KeystoreManager keystoreManager;
+	private DigitalSignatureManager keystoreManager;
 
 	private XSLTransformManager xslTransformManager;
 	private Templates saml1ToMeteorSAMLTemplate;
@@ -246,12 +246,12 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 		this.requestInfo = requestInfo;
 	}
 
-	public KeystoreManager getKeystoreManager() {
+	public DigitalSignatureManager getKeystoreManager() {
 		return keystoreManager;
 	}
 
 	@Autowired
-	public void setKeystoreManager(KeystoreManager keystoreManager) {
+	public void setKeystoreManager(DigitalSignatureManager keystoreManager) {
 		this.keystoreManager = keystoreManager;
 	}
 

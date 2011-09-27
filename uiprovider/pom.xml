@@ -19,6 +19,7 @@
 	
 		<wss4j.version>1.6.2</wss4j.version>
 		
+		<cglib.version>2.2.2</cglib.version>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 		<javax.servlet-api.version>2.5</javax.servlet-api.version>
 		<cxf.version>2.4.2</cxf.version>
@@ -36,6 +37,13 @@
 			<groupId>org.meteornetwork.meteor</groupId>
 			<artifactId>meteorlib</artifactId>
 			<version>${meteor.version}</version>
+		</dependency>
+		
+		<!-- code generation library ( for spring method injection ) -->
+		<dependency>
+		    <groupId>cglib</groupId>
+		    <artifactId>cglib</artifactId>
+		    <version>${cglib.version}</version>
 		</dependency>
 		
 		<!-- 

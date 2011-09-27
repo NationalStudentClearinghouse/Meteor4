@@ -49,6 +49,7 @@ public class SecurityTokenImpl implements SecurityToken {
 
 	protected static final SAMLVersion SAML_VERSION = SAMLVersion.VERSION_20;
 
+	private String assertionId;
 	private String issuer;
 	private String subjectName;
 	private String subjectLocalityIpAddress;
@@ -66,8 +67,19 @@ public class SecurityTokenImpl implements SecurityToken {
 	private Integer level;
 	private String userHandle;
 	private Role role;
+	private String ssn;
+	private String lender;
 
-	public static SecurityToken fromXML(String xml) throws SecurityTokenException {
+	/**
+	 * Creates a SecurityTokenImpl given valid SAML 2.0 assertion xml.
+	 * 
+	 * @param xml
+	 *            valid SAML 2.0 assertion with meteor attributes
+	 * @return token representing the assertion xml
+	 * @throws SecurityTokenException
+	 *             wraps any exception that occurs while processing
+	 */
+	public static SecurityTokenImpl fromXML(String xml) throws SecurityTokenException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
 		try {
@@ -78,8 +90,17 @@ public class SecurityTokenImpl implements SecurityToken {
 		}
 	}
 
-	public static SecurityToken fromXML(Element tokenElem) throws SecurityTokenException {
-		SecurityToken token = new SecurityTokenImpl();
+	/**
+	 * Creates a SecurityTokenImpl given valid SAML 2.0 assertion xml.
+	 * 
+	 * @param tokenElem
+	 *            valid SAML 2.0 assertion with meteor attributes
+	 * @return token representing the assertion xml
+	 * @throws SecurityTokenException
+	 *             wraps any exception that occurs while processing
+	 */
+	public static SecurityTokenImpl fromXML(Element tokenElem) throws SecurityTokenException {
+		SecurityTokenImpl token = new SecurityTokenImpl();
 
 		DatatypeFactory datatypeFactory;
 		try {
@@ -125,53 +146,63 @@ public class SecurityTokenImpl implements SecurityToken {
 				}
 			}
 
-			NodeList attributeNodes = XPathAPI.selectNodeList(tokenElem, "AttributeStatement/Attribute");
+			NodeList attributeNodes = XPathAPI.selectNodeList(tokenElem, "AttributeStatement/Attribute/AttributeValue");
 			for (int i = 0; i < attributeNodes.getLength(); ++i) {
 				node = attributeNodes.item(i);
-				Attr friendlyName = (Attr) node.getAttributes().getNamedItem("FriendlyName");
+				Attr friendlyName = (Attr) node.getParentNode().getAttributes().getNamedItem("FriendlyName");
 
 				if (friendlyName == null) {
 					continue;
 				}
 
 				String friendlyNameStr = friendlyName.getValue();
-				if (friendlyNameStr.equals("ProviderType")) {
-					token.setProviderType(ProviderType.valueOfType(node.getFirstChild().getFirstChild().getNodeValue()));
+				if (friendlyNameStr.equalsIgnoreCase("ProviderType")) {
+					token.setProviderType(ProviderType.valueOfType(node.getFirstChild().getNodeValue()));
 					continue;
 				}
 
-				if (friendlyNameStr.equals("OrganizationID")) {
-					token.setOrganizationId(node.getFirstChild().getFirstChild().getNodeValue());
+				if (friendlyNameStr.equalsIgnoreCase("OrganizationID")) {
+					token.setOrganizationId(node.getFirstChild().getNodeValue());
 					continue;
 				}
 
-				if (friendlyNameStr.equals("OrganizationIDType")) {
-					token.setOrganizationIdType(node.getFirstChild().getFirstChild().getNodeValue());
+				if (friendlyNameStr.equalsIgnoreCase("OrganizationIDType")) {
+					token.setOrganizationIdType(node.getFirstChild().getNodeValue());
 					continue;
 				}
 
-				if (friendlyNameStr.equals("OrganizationType")) {
-					token.setOrganizationType(node.getFirstChild().getFirstChild().getNodeValue());
+				if (friendlyNameStr.equalsIgnoreCase("OrganizationType")) {
+					token.setOrganizationType(node.getFirstChild().getNodeValue());
 					continue;
 				}
 
-				if (friendlyNameStr.equals("AuthenticationProcessID")) {
-					token.setAuthenticationProcessId(node.getFirstChild().getFirstChild().getNodeValue());
+				if (friendlyNameStr.equalsIgnoreCase("AuthenticationProcessID")) {
+					token.setAuthenticationProcessId(node.getFirstChild().getNodeValue());
 					continue;
 				}
 
-				if (friendlyNameStr.equals("Level")) {
-					token.setLevel(Integer.valueOf(node.getFirstChild().getFirstChild().getNodeValue()));
+				if (friendlyNameStr.equalsIgnoreCase("Level")) {
+					token.setLevel(Integer.valueOf(node.getFirstChild().getNodeValue()));
 					continue;
 				}
 
-				if (friendlyNameStr.equals("UserHandle")) {
-					token.setUserHandle(node.getFirstChild().getFirstChild().getNodeValue());
+				if (friendlyNameStr.equalsIgnoreCase("UserHandle")) {
+					token.setUserHandle(node.getFirstChild().getNodeValue());
 					continue;
 				}
 
-				if (friendlyNameStr.equals("Role")) {
-					token.setRole(Role.valueOfName(node.getFirstChild().getFirstChild().getNodeValue()));
+				if (friendlyNameStr.equalsIgnoreCase("Role")) {
+					token.setRole(Role.valueOfName(node.getFirstChild().getNodeValue()));
+					continue;
+				}
+
+				if (friendlyNameStr.equalsIgnoreCase("SSN")) {
+					token.setSsn(node.getFirstChild().getNodeValue());
+					continue;
+				}
+
+				if (friendlyNameStr.equalsIgnoreCase("LENDER")) {
+					token.setLender(node.getFirstChild().getNodeValue());
 					continue;
 				}
 			}
@@ -262,7 +293,9 @@ public class SecurityTokenImpl implements SecurityToken {
 	protected AttributeStatementBean createAttributeStatementBean() {
 		AttributeStatementBean attributeStatement = new AttributeStatementBean();
 
-		attributeStatement.getSamlAttributes().add(createAttributeBean("ProviderType", providerType.getType()));
+		if (providerType != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("ProviderType", providerType.getType()));
+		}
 
 		if (organizationId != null) {
 			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationID", organizationId));
@@ -276,6 +309,14 @@ public class SecurityTokenImpl implements SecurityToken {
 			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationType", organizationType));
 		}
 
+		if (ssn != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("SSN", ssn));
+		}
+
+		if (lender != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("LENDER", lender));
+		}
+		
 		attributeStatement.getSamlAttributes().add(createAttributeBean("AuthenticationProcessID", authenticationProcessId));
 		attributeStatement.getSamlAttributes().add(createAttributeBean("Level", Integer.toString(level)));
 		attributeStatement.getSamlAttributes().add(createAttributeBean("UserHandle", userHandle));
@@ -295,6 +336,14 @@ public class SecurityTokenImpl implements SecurityToken {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		return factory.newDocumentBuilder();
+	}
+
+	public String getAssertionId() {
+		return assertionId;
+	}
+
+	public void setAssertionId(String assertionId) {
+		this.assertionId = assertionId;
 	}
 
 	public String getIssuer() {
@@ -333,17 +382,14 @@ public class SecurityTokenImpl implements SecurityToken {
 		return conditionsNotBefore;
 	}
 
-	@Override
 	public void setConditionsNotBefore(DateTime dateTime) {
 		this.conditionsNotBefore = dateTime;
 	}
 
-	@Override
 	public DateTime getConditionsNotOnOrAfter() {
 		return conditionsNotOnOrAfter;
 	}
 
-	@Override
 	public void setConditionsNotOnOrAfter(DateTime dateTime) {
 		this.conditionsNotOnOrAfter = dateTime;
 	}
@@ -410,6 +456,101 @@ public class SecurityTokenImpl implements SecurityToken {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public String getSsn() {
+		return ssn;
+	}
+
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
+	}
+
+	public String getLender() {
+		return lender;
+	}
+
+	public void setLender(String lender) {
+		this.lender = lender;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((assertionId == null) ? 0 : assertionId.hashCode());
+		result = prime * result + ((authenticationProcessId == null) ? 0 : authenticationProcessId.hashCode());
+		result = prime * result + ((lender == null) ? 0 : lender.hashCode());
+		result = prime * result + ((level == null) ? 0 : level.hashCode());
+		result = prime * result + ((organizationId == null) ? 0 : organizationId.hashCode());
+		result = prime * result + ((organizationIdType == null) ? 0 : organizationIdType.hashCode());
+		result = prime * result + ((organizationType == null) ? 0 : organizationType.hashCode());
+		result = prime * result + ((providerType == null) ? 0 : providerType.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((ssn == null) ? 0 : ssn.hashCode());
+		result = prime * result + ((userHandle == null) ? 0 : userHandle.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SecurityTokenImpl other = (SecurityTokenImpl) obj;
+		if (assertionId == null) {
+			if (other.assertionId != null)
+				return false;
+		} else if (!assertionId.equals(other.assertionId))
+			return false;
+		if (authenticationProcessId == null) {
+			if (other.authenticationProcessId != null)
+				return false;
+		} else if (!authenticationProcessId.equals(other.authenticationProcessId))
+			return false;
+		if (lender == null) {
+			if (other.lender != null)
+				return false;
+		} else if (!lender.equals(other.lender))
+			return false;
+		if (level == null) {
+			if (other.level != null)
+				return false;
+		} else if (!level.equals(other.level))
+			return false;
+		if (organizationId == null) {
+			if (other.organizationId != null)
+				return false;
+		} else if (!organizationId.equals(other.organizationId))
+			return false;
+		if (organizationIdType == null) {
+			if (other.organizationIdType != null)
+				return false;
+		} else if (!organizationIdType.equals(other.organizationIdType))
+			return false;
+		if (organizationType == null) {
+			if (other.organizationType != null)
+				return false;
+		} else if (!organizationType.equals(other.organizationType))
+			return false;
+		if (providerType != other.providerType)
+			return false;
+		if (role != other.role)
+			return false;
+		if (ssn == null) {
+			if (other.ssn != null)
+				return false;
+		} else if (!ssn.equals(other.ssn))
+			return false;
+		if (userHandle == null) {
+			if (other.userHandle != null)
+				return false;
+		} else if (!userHandle.equals(other.userHandle))
+			return false;
+		return true;
 	}
 
 }

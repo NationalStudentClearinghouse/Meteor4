@@ -1,14 +1,11 @@
 package org.meteornetwork.meteor.common.hpc;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-import java.security.interfaces.DSAPrivateKey;
-import java.security.interfaces.RSAPrivateKey;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +33,6 @@ import org.apache.ws.security.saml.ext.builder.SAML1ComponentBuilder;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
-import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.XMLUtils;
 import org.apache.xpath.XPathAPI;
@@ -45,9 +41,11 @@ import org.joda.time.DateTimeZone;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
+import org.meteornetwork.meteor.common.util.DigitalSignatureManager;
 import org.meteornetwork.meteor.common.util.exception.MeteorSecurityException;
 import org.meteornetwork.meteor.saml.ProviderType;
 import org.meteornetwork.meteor.saml.SecurityToken;
+import org.meteornetwork.meteor.saml.util.DOMUtils;
 import org.opensaml.common.SAMLVersion;
 import org.opensaml.saml1.core.Assertion;
 import org.opensaml.xml.XMLObject;
@@ -57,7 +55,6 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
@@ -77,6 +74,7 @@ public class HPCSecurityManager {
 	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 	private RegistryManager registryManager;
+	private DigitalSignatureManager digitalSignatureManager;
 
 	/**
 	 * Creates a SAML 1 assertion and inserts it into the request XML (for HPC)
@@ -99,7 +97,7 @@ public class HPCSecurityManager {
 		try {
 			XMLObject assertion = createSamlXMLObject(meteorInstitutionIdentifier, authenticationProcessId, requestInfo);
 
-			return domToString(OpenSAMLUtil.toDom(assertion, null));
+			return DOMUtils.domToString(OpenSAMLUtil.toDom(assertion, null));
 		} catch (Exception e) {
 			throw new MeteorSecurityException("Could not create SAML assertion", e);
 		}
@@ -205,7 +203,7 @@ public class HPCSecurityManager {
 		Document assertion = docBuilder.parse(new ByteArrayInputStream(xml.getBytes(IOUtils.UTF8_CHARSET)));
 		assertionSpecifier.appendChild(doc.importNode(assertion.getDocumentElement(), true));
 
-		return sign(doc, privateKey, cert);
+		return digitalSignatureManager.sign(doc, privateKey, cert);
 	}
 
 	/**
@@ -235,45 +233,10 @@ public class HPCSecurityManager {
 		Document assertionSpecifier = docBuilder.parse(new ByteArrayInputStream(xmlAssertionSpecifier.getBytes(IOUtils.UTF8_CHARSET)));
 		doc.getDocumentElement().appendChild(doc.importNode(assertionSpecifier.getDocumentElement(), true));
 
-		return sign(doc, privateKey, cert);
+		return digitalSignatureManager.sign(doc, privateKey, cert);
 	}
 
-	private String sign(Document doc, PrivateKey privateKey, X509Certificate cert) throws MeteorSecurityException, IOException {
-		String baseURI = "";
-		XMLSignature dsig = null;
-
-		String algorithm = null;
-		if (privateKey instanceof RSAPrivateKey) {
-			algorithm = XMLSignature.ALGO_ID_SIGNATURE_RSA;
-		} else if (privateKey instanceof DSAPrivateKey) {
-			algorithm = XMLSignature.ALGO_ID_SIGNATURE_DSA;
-		} else {
-			throw new MeteorSecurityException("Private Key implements an unknown algorithm. The only supported algorithms are RSA and DSA.");
-		}
-
-		Transforms transforms = new Transforms(doc);
-		try {
-			dsig = new XMLSignature(doc, baseURI, algorithm);
-
-			Element elem = doc.getDocumentElement();
-			elem.appendChild(dsig.getElement());
-
-			transforms.addTransform(Transforms.TRANSFORM_ENVELOPED_SIGNATURE);
-			transforms.addTransform(Transforms.TRANSFORM_C14N_WITH_COMMENTS);
-			dsig.addDocument("", transforms, Constants.ALGO_ID_DIGEST_SHA1);
-
-			if (cert != null) {
-				dsig.addKeyInfo(cert);
-				dsig.addKeyInfo(cert.getPublicKey());
-			}
-
-			dsig.sign(privateKey);
-		} catch (Exception e) {
-			throw new MeteorSecurityException("Could not sign xml", e);
-		}
-
-		return domToString(doc);
-	}
+	
 
 	/**
 	 * Validates the SAML assertion and signatures on an incoming HPC request
@@ -368,14 +331,6 @@ public class HPCSecurityManager {
 		return factory.newDocumentBuilder();
 	}
 
-	private String domToString(Node dom) throws IOException {
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		XMLUtils.outputDOM(dom, outputStream);
-		String xml = outputStream.toString();
-		outputStream.close();
-		return xml;
-	}
-
 	public RegistryManager getRegistryManager() {
 		return registryManager;
 	}
@@ -383,6 +338,15 @@ public class HPCSecurityManager {
 	@Autowired
 	public void setRegistryManager(RegistryManager registryManager) {
 		this.registryManager = registryManager;
+	}
+
+	public DigitalSignatureManager getDigitalSignatureManager() {
+		return digitalSignatureManager;
+	}
+
+	@Autowired
+	public void setDigitalSignatureManager(DigitalSignatureManager digitalSignatureManager) {
+		this.digitalSignatureManager = digitalSignatureManager;
 	}
 
 }
