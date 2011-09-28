@@ -47,7 +47,7 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 		} catch (SecurityTokenException e) {
 			throw new WSSecurityException("Could not parse Meteor assertion", e);
 		}
-		
+
 		return credential;
 	}
 
@@ -87,22 +87,20 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 	}
 
 	private ProviderType getProviderType(Element token) {
-		NodeList elements = token.getElementsByTagNameNS(WSConstants.SAML2_NS, "Attribute");
+		NodeList elements = token.getElementsByTagNameNS(WSConstants.SAML2_NS, "AttributeValue");
 		if (elements == null) {
 			return defaultProviderType;
 		}
 
 		for (int i = 0; i < elements.getLength(); ++i) {
 			Node node = elements.item(i);
-			if (node.getParentNode() != null && node.getParentNode().getNamespaceURI().equals(WSConstants.SAML2_NS) && node.getParentNode().getLocalName().equals("AttributeStatement")) {
-				NamedNodeMap attributes = node.getAttributes();
-				Node friendlyNameAttr = attributes.getNamedItem("FriendlyName");
-				if (friendlyNameAttr == null || !friendlyNameAttr.getNodeValue().equals("ProviderType")) {
-					continue;
-				}
-
-				return ProviderType.valueOfType(node.getFirstChild().getFirstChild().getNodeValue());
+			NamedNodeMap attributes = node.getParentNode().getAttributes();
+			Node friendlyNameAttr = attributes.getNamedItem("FriendlyName");
+			if (friendlyNameAttr == null || !friendlyNameAttr.getNodeValue().equals("ProviderType")) {
+				continue;
 			}
+
+			return ProviderType.valueOfType(node.getFirstChild().getNodeValue());
 		}
 
 		return defaultProviderType;
@@ -112,7 +110,7 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 		// method injection implemented by Spring
 		return null;
 	}
-	
+
 	public RegistryManager getRegistryManager() {
 		return registryManager;
 	}

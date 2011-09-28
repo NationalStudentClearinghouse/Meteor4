@@ -18,6 +18,9 @@ public class SampleTokenProvider implements TokenProvider {
 	@Override
 	public SecurityToken getSecurityToken(HttpServletRequest request) throws SecurityTokenException {
 		String tokenString = request.getParameter("SecurityToken");
+		
+		// TODO validate signature
+		
 		SecurityToken token;
 		try {
 			token = SecurityTokenImpl.fromXML(new String(Base64Utility.decode(tokenString), IOUtils.UTF8_CHARSET));

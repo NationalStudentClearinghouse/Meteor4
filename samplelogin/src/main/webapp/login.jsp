@@ -168,8 +168,7 @@
 
 <form name="gotometeor" action="<%=accessProviderURL%>" method="POST" target="_blank">
 
-	<input type="hidden" name="Level" value="dump"/>
-	<input type="hidden" name="Ssn" value="<%=borrowerSsn%>"/>
+	<input type="hidden" name="ssn" value="<%=borrowerSsn%>"/>
 	<input type="hidden" name="SecurityToken" value="<%=Base64Utility.encode(signedAssertion.getBytes())%>"/>
 	
 	<center>

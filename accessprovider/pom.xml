@@ -138,7 +138,7 @@
 		</dependency>
 	
 		<!-- 
-			JUnit
+			Testing
 		 -->
 		<dependency>
 			<groupId>junit</groupId>

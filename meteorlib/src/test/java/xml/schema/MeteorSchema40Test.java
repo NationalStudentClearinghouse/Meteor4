@@ -24,7 +24,7 @@ public class MeteorSchema40Test {
 
 	@Test
 	public void testNewSchemaElementsAll() throws IOException, IndexOutOfBoundsException, ParseException {
-		String testXml = TestUtils.getTestFile(this.getClass(), "meteor-schema-40-new-elements.xml");
+		String testXml = TestUtils.getFileString(this.getClass(), "meteor-schema-40-new-elements.xml");
 
 		MeteorRsMsg response = null;
 		try {

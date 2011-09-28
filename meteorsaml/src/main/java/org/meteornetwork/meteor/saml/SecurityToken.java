@@ -5,7 +5,7 @@ import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 import org.w3c.dom.Document;
 
 /**
- * Creates or parses a SAML 2.09 assertion. The getter/setter methods of this
+ * Creates or parses a SAML 2.0 assertion. The getter/setter methods of this
  * class are used to access parts of the assertion.
  * 
  * When using an implementation of this interface to create a SAML 2.0
