@@ -23,9 +23,11 @@
 						<StateProv>WA</StateProv>
 						<PostalCd>98109</PostalCd>            
 					</AddressInfo>
-					<Email>doitallforyou@lfy.com</Email>
-					<EmailValidInd>true</EmailValidInd>
-					<EmailValidDt>2063-04-05</EmailValidDt>
+					<Email>
+						<EmailAddress>doitallforyou@lfy.com</EmailAddress>
+						<EmailValidInd>true</EmailValidInd>
+						<EmailValidDt>2063-04-05</EmailValidDt>
+					</Email>
 				</Contacts>
 			</DataProviderData>
 			<DataProviderAggregateTotal>
@@ -81,7 +83,9 @@
 							<StateProv>IA</StateProv>
 							<PostalCd>87645-8432</PostalCd>
 						</AddressInfo>
-						<Email>Polly_Puffin@beoing.com</Email>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+						</Email>
 					</Contacts>
 					<DtOfBirth>1964-12-01</DtOfBirth>
 					<Employer>
@@ -103,7 +107,9 @@
 								<StateProv>IL</StateProv>
 								<PostalCd>22345-9102</PostalCd>
 							</AddressInfo>
-							<Email>customerassistance@boeingair.com</Email>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
 						</Contacts>
 					</Employer>
 					<GradDt>2000-05-20</GradDt>
@@ -127,7 +133,9 @@
 							<StateProv>IA</StateProv>
 							<PostalCd>87645-8432</PostalCd>
 						</AddressInfo>
-						<Email>Polly_Puffin@beoing.com</Email>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+						</Email>
 					</Contacts>
 					<DtOfBirth>1964-12-01</DtOfBirth>
 					<Employer>
@@ -149,7 +157,9 @@
 								<StateProv>IL</StateProv>
 								<PostalCd>22345-9102</PostalCd>
 							</AddressInfo>
-							<Email>customerassistance@boeingair.com</Email>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
 						</Contacts>
 					</Employer>
 					<DriversLicense>4354328654</DriversLicense>
@@ -174,7 +184,6 @@
 							<StateProv>IA</StateProv>
 							<PostalCd>43567</PostalCd>
 						</AddressInfo>
-						<Email/>
 					</Contacts>
 					<DtOfBirth>1947-08-13</DtOfBirth>
 					<Employer>
@@ -196,7 +205,9 @@
 								<StateProv>IA</StateProv>
 								<PostalCd>43567</PostalCd>
 							</AddressInfo>
-							<Email>oats@bigfeed.com</Email>
+							<Email>
+								<EmailAddress>oats@bigfeed.com</EmailAddress>
+							</Email>
 						</Contacts>
 					</Employer>
 				</Reference>
@@ -219,7 +230,9 @@
 							<StateProv>AL</StateProv>
 							<PostalCd>56432</PostalCd>
 						</AddressInfo>
-						<Email>help@btda.com</Email>
+						<Email>
+							<EmailAddress>help@btda.com</EmailAddress>
+						</Email>
 					</Contacts>
 				</DisbursingAgent>
 				<Lender>
@@ -241,7 +254,9 @@
 							<StateProv>VA</StateProv>
 							<PostalCd>13453</PostalCd>
 						</AddressInfo>
-						<Email>assisance@lfy.com</Email>
+						<Email>
+							<EmailAddress>assisance@lfy.com</EmailAddress>
+						</Email>
 					</Contacts>
 				</Lender>
 				<Servicer>
@@ -263,7 +278,9 @@
 							<StateProv>UT</StateProv>
 							<PostalCd>84054</PostalCd>
 						</AddressInfo>
-						<Email>whatdoyouneed@sfy.com</Email>
+						<Email>
+							<EmailAddress>whatdoyouneed@sfy.com</EmailAddress>
+						</Email>
 					</Contacts>
 				</Servicer>
 				<ConsolLender>
@@ -285,7 +302,9 @@
 							<StateProv>CA</StateProv>
 							<PostalCd>98145</PostalCd>
 						</AddressInfo>
-						<Email>helpforyou@cfy.com</Email>
+						<Email>
+							<EmailAddress>helpforyou@cfy.com</EmailAddress>
+						</Email>
 					</Contacts>
 				</ConsolLender>
 				<School>
@@ -307,7 +326,9 @@
 							<StateProv>FL</StateProv>
 							<PostalCd>32807</PostalCd>
 						</AddressInfo>
-						<Email>lotofknowledge@lfy.edu</Email>
+						<Email>
+							<EmailAddress>lotofknowledge@lfy.edu</EmailAddress>
+						</Email>
 					</Contacts>
 				</School>
 				<Guarantor>
@@ -329,7 +350,9 @@
 							<StateProv>OK</StateProv>
 							<PostalCd>75932</PostalCd>
 						</AddressInfo>
-						<Email>allforpolly@lga.org</Email>
+						<Email>
+							<EmailAddress>allforpolly@lga.org</EmailAddress>
+						</Email>
 					</Contacts>
 				</Guarantor>
 				<AwardId>0000111122K334455ABCD</AwardId>

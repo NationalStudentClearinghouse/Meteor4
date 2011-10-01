@@ -100,7 +100,7 @@ public class SchemaTranslationTest {
 			if (diff.isRecoverable()) {
 				continue;
 			}
-			System.out.println("\t" + diff.getDescription() + " ... expected: " + diff.getControlNodeDetail().getValue() + ", actual: " + diff.getTestNodeDetail().getValue());
+			System.out.println("\t" + diff.getDescription() + " ... expected: " + diff.getControlNodeDetail().getValue() + " (" + diff.getControlNodeDetail().getXpathLocation() + "), actual: " + diff.getTestNodeDetail().getValue());
 		}
 	}
 }

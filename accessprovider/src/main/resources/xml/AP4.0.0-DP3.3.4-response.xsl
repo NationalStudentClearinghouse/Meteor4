@@ -16,7 +16,6 @@
 	<xsl:template match="//AddressInfo/AddrValidDt[. = '0000-00-00']"><xsl:copy /></xsl:template>
 	<xsl:template match="//Award/AwardBeginDt[. = '0000-00-00'] | //Award/AwardEndDt[. = '0000-00-00'] | //Award/LoanStatDt[. = '0000-00-00']"><xsl:copy /></xsl:template>
 	<xsl:template match="//CollectionCosts/CollectionCostsDate[. = '0000-00-00']"><xsl:copy /></xsl:template>
-	<xsl:template match="//Contacts/EmailValidDt[. = '0000-00-00']"><xsl:copy /></xsl:template>
 	<xsl:template match="//Default/DefAvertRqDt[. = '0000-00-00'] | //Default/DefAvertRqCureDt[. = '0000-00-00'] | //Default/ClaimFilDt[. = '0000-00-00'] | //Default/ClaimPdDt[. = '0000-00-00'] | //Default/EligibilityReinstatementDate[. = '0000-00-00']"><xsl:copy /></xsl:template>
 	<xsl:template match="//DefermentForbearance/DefermentForbearanceBeginDate[. = '0000-00-00'] | //DefermentForbearance/DefermentForbearanceEndDate[. = '0000-00-00']"><xsl:copy /></xsl:template>
 	<xsl:template match="//Disbursement/SchedDisbDt[. = '0000-00-00'] | //Disbursement/ActualDisbDt[. = '0000-00-00'] | //Disbursement/DisbStatDt[. = '0000-00-00'] | //Disbursement/CancellationDate[. = '0000-00-00']"><xsl:copy /></xsl:template>
@@ -31,6 +30,10 @@
 	 
 	<xsl:template match="//Award/GuarDt">
 		<LoanDt><xsl:if test=". != '0000-00-00'"><xsl:value-of select="."/></xsl:if></LoanDt>
+	</xsl:template>
+	
+	<xsl:template match="//Contacts/Email">
+		<xsl:copy><EmailAddress><xsl:value-of select="."/></EmailAddress></xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="//DataProviderType[. = 'SBS']">

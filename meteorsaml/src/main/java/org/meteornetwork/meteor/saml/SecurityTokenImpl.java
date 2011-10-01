@@ -59,16 +59,7 @@ public class SecurityTokenImpl implements SecurityToken {
 	private DateTime conditionsNotBefore;
 	private DateTime conditionsNotOnOrAfter;
 
-	private ProviderType providerType;
-	private String organizationId;
-	private String organizationIdType;
-	private String organizationType;
-	private String authenticationProcessId;
-	private Integer level;
-	private String userHandle;
-	private Role role;
-	private String ssn;
-	private String lender;
+	private TokenAttributes meteorAttributes = new TokenAttributes();
 
 	/**
 	 * Creates a SecurityTokenImpl given valid SAML 2.0 assertion xml.
@@ -293,34 +284,34 @@ public class SecurityTokenImpl implements SecurityToken {
 	protected AttributeStatementBean createAttributeStatementBean() {
 		AttributeStatementBean attributeStatement = new AttributeStatementBean();
 
-		if (providerType != null) {
-			attributeStatement.getSamlAttributes().add(createAttributeBean("ProviderType", providerType.getType()));
+		if (meteorAttributes.getProviderType() != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("ProviderType", meteorAttributes.getProviderType().getType()));
 		}
 
-		if (organizationId != null) {
-			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationID", organizationId));
+		if (meteorAttributes.getOrganizationId() != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationID", meteorAttributes.getOrganizationId()));
 		}
 
-		if (organizationIdType != null) {
-			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationIDType", organizationIdType));
+		if (meteorAttributes.getOrganizationIdType() != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationIDType", meteorAttributes.getOrganizationIdType()));
 		}
 
-		if (organizationType != null) {
-			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationType", organizationType));
+		if (meteorAttributes.getOrganizationType() != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("OrganizationType", meteorAttributes.getOrganizationType()));
 		}
 
-		if (ssn != null) {
-			attributeStatement.getSamlAttributes().add(createAttributeBean("SSN", ssn));
+		if (meteorAttributes.getSsn() != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("SSN", meteorAttributes.getSsn()));
 		}
 
-		if (lender != null) {
-			attributeStatement.getSamlAttributes().add(createAttributeBean("LENDER", lender));
+		if (meteorAttributes.getLender() != null) {
+			attributeStatement.getSamlAttributes().add(createAttributeBean("LENDER", meteorAttributes.getLender()));
 		}
-		
-		attributeStatement.getSamlAttributes().add(createAttributeBean("AuthenticationProcessID", authenticationProcessId));
-		attributeStatement.getSamlAttributes().add(createAttributeBean("Level", Integer.toString(level)));
-		attributeStatement.getSamlAttributes().add(createAttributeBean("UserHandle", userHandle));
-		attributeStatement.getSamlAttributes().add(createAttributeBean("Role", role.getName()));
+
+		attributeStatement.getSamlAttributes().add(createAttributeBean("AuthenticationProcessID", meteorAttributes.getAuthenticationProcessId()));
+		attributeStatement.getSamlAttributes().add(createAttributeBean("Level", Integer.toString(meteorAttributes.getLevel())));
+		attributeStatement.getSamlAttributes().add(createAttributeBean("UserHandle", meteorAttributes.getUserHandle()));
+		attributeStatement.getSamlAttributes().add(createAttributeBean("Role", meteorAttributes.getRole().getName()));
 
 		return attributeStatement;
 	}
@@ -395,83 +386,88 @@ public class SecurityTokenImpl implements SecurityToken {
 	}
 
 	public ProviderType getProviderType() {
-		return providerType;
+		return meteorAttributes.getProviderType();
 	}
 
 	public void setProviderType(ProviderType providerType) {
-		this.providerType = providerType;
+		meteorAttributes.setProviderType(providerType);
 	}
 
 	public String getOrganizationId() {
-		return organizationId;
+		return meteorAttributes.getOrganizationId();
 	}
 
 	public void setOrganizationId(String organizationId) {
-		this.organizationId = organizationId;
+		meteorAttributes.setOrganizationId(organizationId);
 	}
 
 	public String getOrganizationIdType() {
-		return organizationIdType;
+		return meteorAttributes.getOrganizationIdType();
 	}
 
 	public void setOrganizationIdType(String organizationIdType) {
-		this.organizationIdType = organizationIdType;
+		meteorAttributes.setOrganizationIdType(organizationIdType);
 	}
 
 	public String getOrganizationType() {
-		return organizationType;
+		return meteorAttributes.getOrganizationType();
 	}
 
 	public void setOrganizationType(String organizationType) {
-		this.organizationType = organizationType;
+		meteorAttributes.setOrganizationType(organizationType);
 	}
 
 	public String getAuthenticationProcessId() {
-		return authenticationProcessId;
+		return meteorAttributes.getAuthenticationProcessId();
 	}
 
 	public void setAuthenticationProcessId(String authenticationProcessId) {
-		this.authenticationProcessId = authenticationProcessId;
+		meteorAttributes.setAuthenticationProcessId(authenticationProcessId);
 	}
 
 	public Integer getLevel() {
-		return level;
+		return meteorAttributes.getLevel();
 	}
 
 	public void setLevel(Integer level) {
-		this.level = level;
+		meteorAttributes.setLevel(level);
 	}
 
 	public String getUserHandle() {
-		return userHandle;
+		return meteorAttributes.getUserHandle();
 	}
 
 	public void setUserHandle(String userHandle) {
-		this.userHandle = userHandle;
+		meteorAttributes.setUserHandle(userHandle);
 	}
 
 	public Role getRole() {
-		return role;
+		return meteorAttributes.getRole();
 	}
 
 	public void setRole(Role role) {
-		this.role = role;
+		meteorAttributes.setRole(role);
 	}
 
 	public String getSsn() {
-		return ssn;
+		return meteorAttributes.getSsn();
 	}
 
 	public void setSsn(String ssn) {
-		this.ssn = ssn;
+		meteorAttributes.setSsn(ssn);
 	}
 
 	public String getLender() {
-		return lender;
+		return meteorAttributes.getLender();
 	}
 
 	public void setLender(String lender) {
-		this.lender = lender;
+		meteorAttributes.setLender(lender);
+	}
+
+	@Override
+	public TokenAttributes getMeteorAttributes() {
+		return meteorAttributes;
 	}
 
 	@Override
@@ -479,16 +475,7 @@ public class SecurityTokenImpl implements SecurityToken {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((assertionId == null) ? 0 : assertionId.hashCode());
-		result = prime * result + ((authenticationProcessId == null) ? 0 : authenticationProcessId.hashCode());
-		result = prime * result + ((lender == null) ? 0 : lender.hashCode());
-		result = prime * result + ((level == null) ? 0 : level.hashCode());
-		result = prime * result + ((organizationId == null) ? 0 : organizationId.hashCode());
-		result = prime * result + ((organizationIdType == null) ? 0 : organizationIdType.hashCode());
-		result = prime * result + ((organizationType == null) ? 0 : organizationType.hashCode());
-		result = prime * result + ((providerType == null) ? 0 : providerType.hashCode());
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((ssn == null) ? 0 : ssn.hashCode());
-		result = prime * result + ((userHandle == null) ? 0 : userHandle.hashCode());
+		result = prime * result + ((meteorAttributes == null) ? 0 : meteorAttributes.hashCode());
 		return result;
 	}
 
@@ -506,51 +493,17 @@ public class SecurityTokenImpl implements SecurityToken {
 				return false;
 		} else if (!assertionId.equals(other.assertionId))
 			return false;
-		if (authenticationProcessId == null) {
-			if (other.authenticationProcessId != null)
+		if (meteorAttributes == null) {
+			if (other.meteorAttributes != null)
 				return false;
-		} else if (!authenticationProcessId.equals(other.authenticationProcessId))
-			return false;
-		if (lender == null) {
-			if (other.lender != null)
-				return false;
-		} else if (!lender.equals(other.lender))
-			return false;
-		if (level == null) {
-			if (other.level != null)
-				return false;
-		} else if (!level.equals(other.level))
-			return false;
-		if (organizationId == null) {
-			if (other.organizationId != null)
-				return false;
-		} else if (!organizationId.equals(other.organizationId))
-			return false;
-		if (organizationIdType == null) {
-			if (other.organizationIdType != null)
-				return false;
-		} else if (!organizationIdType.equals(other.organizationIdType))
-			return false;
-		if (organizationType == null) {
-			if (other.organizationType != null)
-				return false;
-		} else if (!organizationType.equals(other.organizationType))
-			return false;
-		if (providerType != other.providerType)
-			return false;
-		if (role != other.role)
-			return false;
-		if (ssn == null) {
-			if (other.ssn != null)
-				return false;
-		} else if (!ssn.equals(other.ssn))
-			return false;
-		if (userHandle == null) {
-			if (other.userHandle != null)
-				return false;
-		} else if (!userHandle.equals(other.userHandle))
+		} else if (!meteorAttributes.equals(other.meteorAttributes))
 			return false;
 		return true;
+	}
+
+	@Override
+	public void setMeteorAttributes(TokenAttributes attributes) {
+		this.meteorAttributes = attributes;
 	}
 
 }

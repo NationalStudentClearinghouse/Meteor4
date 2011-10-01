@@ -8,6 +8,7 @@ import org.meteornetwork.meteor.common.xml.dataresponse.AddressInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.Contacts;
 import org.meteornetwork.meteor.common.xml.dataresponse.DataProviderAggregateTotal;
 import org.meteornetwork.meteor.common.xml.dataresponse.DataProviderData;
+import org.meteornetwork.meteor.common.xml.dataresponse.Email;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderDetailInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderMsg;
@@ -167,7 +168,9 @@ public class MeteorDataResponseWrapper {
 			}
 
 			if (email != null) {
-				contacts.setEmail(email);
+				Email emailAddr = new Email();
+				emailAddr.setEmailAddress(email);
+				contacts.setEmail(emailAddr);
 			}
 
 			if (addr1 != null || addr2 != null || addr3 != null || city != null || stateProvince != null || postalCode != null) {

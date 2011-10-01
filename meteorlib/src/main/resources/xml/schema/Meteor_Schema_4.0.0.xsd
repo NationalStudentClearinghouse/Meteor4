@@ -148,8 +148,6 @@
 			<xsd:element name="Phone" type="PhoneType" minOccurs="0" maxOccurs="4"/>
 			<xsd:element name="AddressInfo" type="AddressInfoType" minOccurs="0"/>
 			<xsd:element name="Email" type="EmailType" minOccurs="0"/>
-			<xsd:element name="EmailValidInd" type="xsd:boolean" minOccurs="0"/>
-			<xsd:element name="EmailValidDt" type="xsd:date" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
@@ -187,6 +185,21 @@
 			<xsd:element name="DisbHold" type="DisbHoldType" minOccurs="0"/>
 			<xsd:element name="CancellationAmount" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="CancellationDate" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ******************************************************************************* -->
+	<xsd:complexType name="EmailType">
+		<xsd:sequence>
+			<xsd:element name="EmailAddress" minOccurs="1" maxOccurs="1">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="0"/>
+						<xsd:maxLength value="256"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="EmailValidInd" type="xsd:boolean" minOccurs="0"/>
+			<xsd:element name="EmailValidDt" type="xsd:date" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
@@ -246,7 +259,7 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
-		<xsd:complexType name="PhoneType">
+	<xsd:complexType name="PhoneType">
 		<xsd:sequence>
 			<xsd:element name="PhoneNumType" type="PhoneNumTypeType" minOccurs="1" maxOccurs="1"/>
 			<xsd:element name="PhoneNum" type="PhoneNumType" minOccurs="1" maxOccurs="1"/>
@@ -489,13 +502,6 @@
 		<xsd:restriction base="xsd:string">
 			<xsd:minLength value="0"/>
 			<xsd:maxLength value="20"/>
-		</xsd:restriction>
-	</xsd:simpleType>
-	<!-- ******************************************************************************* -->
-	<xsd:simpleType name="EmailType">
-		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="0"/>
-			<xsd:maxLength value="256"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->

@@ -35,9 +35,9 @@ public class SchemaTranslationTest {
 
 		Transform transform = new Transform(source, xslFile);
 		String expected = getXmlFromFile("schema-translation-3-expected.xml");
-		
+
 		Diff xmlDiff = new Diff(expected, transform);
-		
+
 		if (!xmlDiff.identical()) {
 			printDifferences("testResponseTranslation()", xmlDiff);
 		}
@@ -51,15 +51,15 @@ public class SchemaTranslationTest {
 
 		Transform transform = new Transform(source, xslFile);
 		String expected = getXmlFromFile("request-translation-1-expected.xml");
-		
+
 		Diff xmlDiff = new Diff(expected, transform);
-		
+
 		if (!xmlDiff.identical()) {
 			printDifferences("testResponseTranslation()", xmlDiff);
 		}
 		Assert.assertTrue(xmlDiff.identical());
 	}
-	
+
 	private File getFile(String fileName) throws IOException, TransformerConfigurationException {
 		return new File(this.getClass().getResource(fileName).getFile());
 	}
@@ -85,7 +85,7 @@ public class SchemaTranslationTest {
 			if (diff.isRecoverable()) {
 				continue;
 			}
-			System.out.println("\t" + diff.getDescription() + " ... expected: " + diff.getControlNodeDetail().getValue() + ", actual: " + diff.getTestNodeDetail().getValue());
+			System.out.println("\t" + diff.getDescription() + " ... expected: " + diff.getControlNodeDetail().getValue() + " (" + diff.getControlNodeDetail().getXpathLocation() + "), actual: " + diff.getTestNodeDetail().getValue());
 		}
 	}
 }

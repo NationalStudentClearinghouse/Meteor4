@@ -187,4 +187,17 @@ public interface SecurityToken {
 	 */
 	void setLender(String lender);
 
+	/**
+	 * Get all meteor-specific attributes in one bean
+	 * 
+	 * @return
+	 */
+	TokenAttributes getMeteorAttributes();
+
+	/**
+	 * Set all meteor-specific attributes with one bean
+	 * 
+	 * @param attributes
+	 */
+	void setMeteorAttributes(TokenAttributes attributes);
 }

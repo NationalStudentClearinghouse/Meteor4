@@ -48,8 +48,8 @@ public class MeteorSchema40Test {
 		Contacts contacts = response.getMeteorDataProviderInfo(0).getMeteorDataProviderDetailInfo().getDataProviderData().getContacts();
 		Assert.assertTrue(contacts.getPhone(0).getPhoneValidInd());
 		Assert.assertEquals(TestUtils.parseDate("2063-04-05 -0000", "yyyy-MM-dd Z"), TestUtils.zeroTime(contacts.getPhone(0).getPhoneValidDt().toDate()));
-		Assert.assertTrue(contacts.getEmailValidInd());
-		Assert.assertEquals(TestUtils.parseDate("2063-04-05 -0000", "yyyy-MM-dd Z"), TestUtils.zeroTime(contacts.getEmailValidDt().toDate()));
+		Assert.assertTrue(contacts.getEmail().getEmailValidInd());
+		Assert.assertEquals(TestUtils.parseDate("2063-04-05 -0000", "yyyy-MM-dd Z"), TestUtils.zeroTime(contacts.getEmail().getEmailValidDt().toDate()));
 		
 		Assert.assertEquals(2, award.getRepayment().getDefermentCount());
 		Deferment deferment = award.getRepayment().getDeferment(0);

@@ -1,5 +1,7 @@
 package org.meteornetwork.meteor.provider.access.ws;
 
+import java.util.Properties;
+
 import javax.jws.WebService;
 
 import org.apache.commons.logging.Log;
@@ -8,9 +10,10 @@ import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
 import org.meteornetwork.meteor.provider.access.manager.AccessProviderManager;
-import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
+import org.meteornetwork.meteor.saml.TokenAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.AccessProviderService", serviceName = "AccessProviderService")
 public class AccessProviderServiceImpl implements AccessProviderService {
@@ -19,26 +22,22 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 
 	private AccessProviderManager accessProviderManager;
 
+	private Properties authenticationProperties;
+
 	private RequestInfo requestInfo;
 	private RegistryManager registryManager;
 
 	@Override
-	public String findDataForBorrower(String requestXML) {
-		LOG.debug("AP received requestXML: " + requestXML);
+	public String findDataForBorrower(String ssn, TokenAttributes meteorAttributes) {
+		// TODO refactor the way saml attributes are passed -- can we now pass
+		// around a signed assertion using a custom CXF interceptor?
+		LOG.debug("AP received request for ssn: " + ssn);
 
-		// TODO delete
-		requestInfo.setMeteorInstitutionIdentifier("LTI_AP33");
+		requestInfo.setMeteorInstitutionIdentifier(authenticationProperties.getProperty("authentication.identifier"));
 		requestInfo.setSecurityToken(new SecurityTokenImpl());
-		requestInfo.getSecurityToken().setLevel(3);
-		requestInfo.getSecurityToken().setRole(Role.FAA);
-		requestInfo.getSecurityToken().setUserHandle("faa");
-		requestInfo.getSecurityToken().setOrganizationId("12324");
-		requestInfo.getSecurityToken().setOrganizationIdType("OPEID");
-		requestInfo.getSecurityToken().setOrganizationType("SCHOOL");
-		// end delete
+		requestInfo.getSecurityToken().setMeteorAttributes(meteorAttributes);
 
-		// TODO: parse ssn from request xml
-		return accessProviderManager.queryMeteor(requestXML);
+		return accessProviderManager.queryMeteor(ssn);
 	}
 
 	public AccessProviderManager getAccessProviderManager() {
@@ -66,6 +65,16 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 	@Autowired
 	public void setRegistryManager(RegistryManager registryManager) {
 		this.registryManager = registryManager;
+	}
+
+	public Properties getAuthenticationProperties() {
+		return authenticationProperties;
+	}
+
+	@Autowired
+	@Qualifier("AuthenticationProperties")
+	public void setAuthenticationProperties(Properties authenticationProperties) {
+		this.authenticationProperties = authenticationProperties;
 	}
 
 }

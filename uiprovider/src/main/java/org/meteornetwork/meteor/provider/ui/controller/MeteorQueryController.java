@@ -58,8 +58,7 @@ public class MeteorQueryController extends ParameterizableViewController {
 		}
 		
 		if (queryMeteor) {
-			// TODO pass token attributes to access provider
-			session.setResponseXml(accessProviderService.findDataForBorrower(ssn));
+			session.setResponseXml(accessProviderService.findDataForBorrower(ssn, token.getMeteorAttributes()));
 		}
 		
 		modelView.addObject("meteorData", createStreamSource(session.getResponseXml()));

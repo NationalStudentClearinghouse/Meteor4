@@ -24,6 +24,10 @@
 		<xsl:copy>SBS</xsl:copy>
 	</xsl:template>
 	
+	<xsl:template match="//Contacts/Email">
+		<xsl:copy><xsl:value-of select="EmailAddress"/></xsl:copy>
+	</xsl:template>
+	
     <xsl:template match="@* | node()">
         <xsl:copy>
             <xsl:apply-templates select="@* | node()"/>
