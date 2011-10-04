@@ -1,0 +1,19 @@
+<Award>
+	<APSUniqueAwardID>4</APSUniqueAwardID>
+	<DataProviderType>LRS</DataProviderType>
+	<AwardType>FFELPLUS</AwardType>
+	<LoanDt>1988-08-08</LoanDt>
+	<Student>
+		<SSNum>123456789</SSNum>
+		<Contacts />
+	</Student>
+	<Borrower>
+		<SSNum>334567890</SSNum>
+		<Contacts />
+	</Borrower>
+	<Servicer>
+		<EntityID>44345</EntityID>
+		<Contacts />
+	</Servicer>
+	<AwardId>77777777777777777</AwardId>
+</Award>

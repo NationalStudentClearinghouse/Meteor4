@@ -1,0 +1,22 @@
+<Award>
+	<APSUniqueAwardID>6</APSUniqueAwardID>
+	<DataProviderType>S</DataProviderType>
+	<AwardType>FFELPLUS</AwardType>
+	<Disbursement>
+		<DisbSeqNum>01</DisbSeqNum>
+		<SchedDisbDt>1982-11-02</SchedDisbDt>
+	</Disbursement>
+	<Student>
+		<SSNum>999999999</SSNum>
+		<Contacts />
+	</Student>
+	<Borrower>
+		<SSNum>987654321</SSNum>
+		<Contacts />
+	</Borrower>
+	<School>
+		<EntityID>12334</EntityID>
+		<Contacts />
+	</School>
+	<AwardId>77777777777777777</AwardId>
+</Award>

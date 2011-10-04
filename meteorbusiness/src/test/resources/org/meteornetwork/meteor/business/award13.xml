@@ -1,0 +1,13 @@
+<Award>
+	<APSUniqueAwardID>13</APSUniqueAwardID>
+	<DataProviderType>S</DataProviderType>
+	<AwardType>FFELConsl</AwardType>
+	<Disbursement>
+		<DisbSeqNum>01</DisbSeqNum>
+		<ActualDisbDt>1979-04-02</ActualDisbDt>
+	</Disbursement>
+	<School>
+		<EntityID>99887</EntityID>
+		<Contacts />
+	</School>
+</Award>

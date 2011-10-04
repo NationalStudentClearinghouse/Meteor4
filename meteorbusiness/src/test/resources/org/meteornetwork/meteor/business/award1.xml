@@ -1,0 +1,27 @@
+<Award>
+	<APSUniqueAwardID>1</APSUniqueAwardID>
+	<DataProviderType>S</DataProviderType>
+	<AwardType>FFELConsl</AwardType>
+	<LoanDt>1979-05-06</LoanDt>
+	<Disbursement>
+		<DisbSeqNum>01</DisbSeqNum>
+		<ActualDisbDt>1979-04-08</ActualDisbDt>
+	</Disbursement>
+	<Disbursement>
+		<DisbSeqNum>02</DisbSeqNum>
+		<ActualDisbDt>1955-11-05</ActualDisbDt>
+	</Disbursement>
+	<Student>
+		<SSNum>123456789</SSNum>
+		<Contacts />
+	</Student>
+	<Borrower>
+		<SSNum>444444444</SSNum>
+		<Contacts />
+	</Borrower>
+	<School>
+		<EntityID>12334</EntityID>
+		<Contacts />
+	</School>
+	<AwardId>7741167A339121567</AwardId>
+</Award>

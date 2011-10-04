@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.meteornetwork.meteor</groupId>
+	<artifactId>meteorbusiness</artifactId>
+	<version>4.0.0</version>
+	<packaging>jar</packaging>
+
+	<name>Meteor Business Logic</name>
+	<url>http://www.meteornetwork.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<meteor.version>4.0.0</meteor.version>
+		<junit.version>4.8.2</junit.version>
+	</properties>
+
+	<dependencies>
+		<!-- Meteor Common Library -->
+		<dependency>
+			<groupId>org.meteornetwork.meteor</groupId>
+			<artifactId>meteorlib</artifactId>
+			<version>${meteor.version}</version>
+		</dependency>
+		
+		<!--
+			JUnit
+		 -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

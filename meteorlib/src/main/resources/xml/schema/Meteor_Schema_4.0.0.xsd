@@ -349,9 +349,7 @@
 			<xsd:documentation xml:lang="en">excluseivly by the      </xsd:documentation>
 			<xsd:documentation xml:lang="en">Access Provider Software</xsd:documentation>
 		</xsd:annotation>
-		<xsd:restriction base="xsd:decimal">
-			<xsd:totalDigits value="5"/>
-			<xsd:fractionDigits value="0"/>
+		<xsd:restriction base="xsd:int">
 			<xsd:minInclusive value="00000"/>
 			<xsd:maxInclusive value="99999"/>
 		</xsd:restriction>
@@ -630,9 +628,7 @@
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->
 	<xsd:simpleType name="PosTwoDigitAmtType">
-		<xsd:restriction base="xsd:decimal">
-			<xsd:totalDigits value="2"/>
-			<xsd:fractionDigits value="0"/>
+		<xsd:restriction base="xsd:int">
 			<xsd:minInclusive value="00"/>
 			<xsd:maxInclusive value="99"/>
 		</xsd:restriction>
