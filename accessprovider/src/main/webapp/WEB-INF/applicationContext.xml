@@ -30,5 +30,8 @@
  	<!-- meteor common properties -->
  	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>
  	
+ 	<!-- Registry Manager -->
+ 	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/>
+ 	
 	<context:component-scan base-package="org.meteornetwork.meteor"/>
 </beans> 

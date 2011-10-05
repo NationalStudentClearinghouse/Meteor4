@@ -4,12 +4,17 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.meteornetwork.meteor.common.registry.RegistryException;
+import org.meteornetwork.meteor.common.registry.RegistryManager;
+import org.meteornetwork.meteor.common.registry.data.IndexProvider;
+import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.common.ws.IndexProviderService;
 import org.meteornetwork.meteor.common.xml.indexrequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.indexrequest.MeteorIndexRequest;
@@ -30,7 +35,10 @@ public class IndexQueryService implements ApplicationContextAware {
 	private static final Log LOG = LogFactory.getLog(IndexQueryService.class);
 
 	private Properties authenticationProperties;
+	private Properties meteorProperties;
 	private ApplicationContext applicationContext;
+
+	private RegistryManager registryManager;
 
 	/**
 	 * Gets a list of data providers that have data for the provided SSN
@@ -41,16 +49,16 @@ public class IndexQueryService implements ApplicationContextAware {
 	 *            the response data object to write any index provider messages
 	 *            to
 	 * @return data provider information returned from calls to index providers
+	 * @throws RegistryException
 	 */
-	public Set<DataProvider> getDataProviders(String ssn, ResponseDataWrapper responseData) {
-		// TODO: get index providers from registry. edit this method to call
-		// all index providers with the same version as this access provider and
-		// aggregate their results
-		String addresses[] = new String[] { "http://localhost:8380/indexprovider/services/IndexProviderService" };
+	public Set<DataProvider> getDataProviders(String ssn, ResponseDataWrapper responseData) throws RegistryException {
+		// TODO: update query status on session "Calling Index Providers"
+
+		List<IndexProvider> indexProviders = registryManager.getIndexProviders(new Version(meteorProperties.getProperty("meteor.version")));
 
 		Set<DataProvider> dataProviders = new HashSet<DataProvider>();
-		for (String address : addresses) {
-			MeteorIndexResponse response = callIndexProvider(createRequest(ssn), address);
+		for (IndexProvider ip : indexProviders) {
+			MeteorIndexResponse response = callIndexProvider(createRequest(ssn), ip.getUrl());
 
 			if (response == null) {
 				continue;
@@ -125,8 +133,28 @@ public class IndexQueryService implements ApplicationContextAware {
 		this.authenticationProperties = authenticationProperties;
 	}
 
+	public Properties getMeteorProperties() {
+		return meteorProperties;
+	}
+
+	@Autowired
+	@Qualifier("MeteorProperties")
+	public void setMeteorProperties(Properties meteorProperties) {
+		this.meteorProperties = meteorProperties;
+	}
+
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
+
+	public RegistryManager getRegistryManager() {
+		return registryManager;
+	}
+
+	@Autowired
+	public void setRegistryManager(RegistryManager registryManager) {
+		this.registryManager = registryManager;
+	}
+
 }

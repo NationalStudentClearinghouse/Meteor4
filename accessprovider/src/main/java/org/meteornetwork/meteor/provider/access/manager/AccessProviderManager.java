@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
 import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
 import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
@@ -32,7 +33,15 @@ public class AccessProviderManager {
 	public String queryMeteor(String ssn) {
 		ResponseDataWrapper responseData = new ResponseDataWrapper(new MeteorRsMsg());
 
-		Set<DataProvider> dataProviders = indexQueryService.getDataProviders(ssn, responseData);
+		Set<DataProvider> dataProviders = null;
+		try {
+			dataProviders = indexQueryService.getDataProviders(ssn, responseData);
+		} catch (RegistryException e) {
+			// TODO handle this exception
+			LOG.error("Could not get data providers", e);
+			return null;
+		}
+
 		List<MeteorRsMsg> dataProviderResponses = dataQueryService.getData(dataProviders, ssn);
 
 		// TODO: authentication bump process
