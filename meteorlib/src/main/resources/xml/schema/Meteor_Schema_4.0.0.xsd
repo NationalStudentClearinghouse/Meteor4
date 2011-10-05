@@ -117,6 +117,8 @@
 			<xsd:element name="ConsolLender" type="OrgType" minOccurs="0"/>
 			<xsd:element name="School" type="OrgType" minOccurs="0"/>
 			<xsd:element name="Guarantor" type="OrgType" minOccurs="0"/>
+			<xsd:element name="GrantScholarshipProvider" type="OrgType" minOccurs="0"/>
+			<xsd:element name="FinAidTranscript" type="OrgType" minOccurs="0"/>
 			<xsd:element name="AwardId" type="AwardIdType" minOccurs="0"/>
 			<xsd:element name="LoanTransfer" type="LoanTransferType" minOccurs="0"/>
 			<xsd:element name="Repayment" type="RepaymentType" minOccurs="0"/>

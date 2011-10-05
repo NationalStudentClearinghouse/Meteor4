@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.exolab.castor.types.Date;
 import org.meteornetwork.meteor.common.xml.dataresponse.Award;
 import org.meteornetwork.meteor.common.xml.dataresponse.Disbursement;
+import org.meteornetwork.meteor.common.xml.dataresponse.OrgType;
 import org.meteornetwork.meteor.common.xml.dataresponse.types.DataProviderTypeEnum;
 
 public class DuplicateChecker {
@@ -22,22 +23,19 @@ public class DuplicateChecker {
 	}
 
 	/*
-	 * Step 1 - Consolidation Categorization
+	 * Step 1 -- Consolidation Categorization
 	 * 
-	 * If both AwardTypes are in the Consolidation category (FFELConsl,
-	 * FFELPConsolidation, FFELPConsolidationSubsidized,
-	 * FFELPConsolidationUnsubsidized, FFELPConsolidationHEAL,
-	 * FFELPConsolidationOther, DLConsl, DLConsolidation,
-	 * DLConsolidationSubsidized, DLConsolidationUnsubsidized, or
-	 * DLConsolidationOther), proceed to Step 4 – Award Type Matching.
+	 * If both AwardTypes are in the Consolidation category proceed to Step 4 –
+	 * Award Type Matching, otherwise proceed to Step 2.
 	 * 
-	 * If not, proceed to Step 2.
+	 * Consolidation Categories: FFELConsl FFELCSub FFELCUsub FFELCHeal
+	 * FFELCOthr DLConsl DLCSub DLCUsub DLCHeal DLCOthr
 	 */
 	private boolean step1() {
 		LoanTypeEnum existingAwardType = LoanTypeEnum.getNameIgnoreCase(existingAward.getAwardType());
 		LoanTypeEnum newAwardType = LoanTypeEnum.getNameIgnoreCase(newAward.getAwardType());
 
-		if (existingAwardType != null && newAwardType != null && existingAwardType.isConsolidation() && newAwardType.isConsolidation()) {
+		if (existingAwardType != null && newAwardType != null && LoanTypeEnum.isConsolidation(existingAwardType) && LoanTypeEnum.isConsolidation(newAwardType)) {
 			return step4();
 		}
 
@@ -76,23 +74,29 @@ public class DuplicateChecker {
 	private boolean step3() {
 		assert existingAward.getDataProviderType() != null && existingAward.getDataProviderType().equalsIgnoreCase(newAward.getDataProviderType()) : "Data Provider Types are not equal";
 
-		String existingAwardEntityId = getDataProviderEntityId(existingAward);
-		String newAwardEntityId = getDataProviderEntityId(newAward);
+		OrgType existingAwardOrg = getDataProviderOrgType(existingAward);
+		OrgType newAwardOrg = getDataProviderOrgType(newAward);
+		
+		String existingAwardEntityId = existingAwardOrg == null ? null : existingAwardOrg.getEntityID();
+		String newAwardEntityId = newAwardOrg == null ? null : newAwardOrg.getEntityID();
 
 		return existingAwardEntityId != null && existingAwardEntityId.equals(newAwardEntityId) ? false : step4();
 	}
 
-	private String getDataProviderEntityId(Award award) {
-		// TODO add other elements?...
+	private OrgType getDataProviderOrgType(Award award) {
 		switch (DataProviderTypeEnum.valueOf(award.getDataProviderType())) {
 		case G:
-			return award.getGuarantor() == null ? null : award.getGuarantor().getEntityID();
+			return award.getGuarantor();
 		case LRS:
-			return award.getServicer() == null ? null : award.getServicer().getEntityID();
+			return award.getServicer();
 		case LO:
-			return award.getLender() == null ? null : award.getLender().getEntityID();
+			return award.getLender();
 		case S:
-			return award.getSchool() == null ? null : award.getSchool().getEntityID();
+			return award.getSchool();
+		case GSP:
+			return award.getGrantScholarshipProvider();
+		case FAT:
+			return award.getFinAidTranscript();
 		default:
 			return null;
 		}
@@ -101,20 +105,14 @@ public class DuplicateChecker {
 	/*
 	 * Step 4 - Award Type Matching
 	 * 
-	 * If “AwardType” does not match, and both are not FFELConsl,
-	 * FFELPConsolidation, FFELPConsolidationSubsidized,
-	 * FFELPConsolidationUnsubsidized, FFELPConsolidationHEAL,
-	 * FFELPConsolidationOther, DLConsl, DLConsolidationSubsidized,
-	 * DLConsolidationUnsubsidized, or DLConsolidationOther then these are not
-	 * duplicates, and the logic continues by comparing the next Award with the
-	 * Duplicate Award Logic.
+	 * If “AwardType” does not match, and both are not FFELConsl FFELCSub
+	 * FFELCUsub FFELCHeal FFELCOthr DLConsl DLCSub DLCUsub DLCHeal DLCOthr then
+	 * these are not duplicates, and the logic continues by comparing the next
+	 * Award with the Duplicate Award Logic.
 	 * 
-	 * If “AwardType” does not match but both are FFELConsl, FFELPConsolidation,
-	 * FFELPConsolidationSubsidized, FFELPConsolidationUnsubsidized,
-	 * FFELPConsolidationHEAL, FFELPConsolidationOther, DLConsl,
-	 * DLConsolidation, DLConsolidationSubsidized, DLConsolidationUnsubsidized,
-	 * or DLConsolidationOther, then proceed to Step 5 – Disbursement Date
-	 * Check.
+	 * If “AwardType” does not match but both are FFELConsl FFELCSub FFELCUsub
+	 * FFELCHeal FFELCOthr DLConsl DLCSub DLCUsub DLCHeal DLCOthr then proceed
+	 * to Step 5 – Disbursement Date Check.
 	 * 
 	 * If “AwardType” does match, then proceed to Step 6 - Award ID Matching.
 	 */
@@ -122,11 +120,43 @@ public class DuplicateChecker {
 		LoanTypeEnum existingAwardType = LoanTypeEnum.getNameIgnoreCase(existingAward.getAwardType());
 		LoanTypeEnum newAwardType = LoanTypeEnum.getNameIgnoreCase(newAward.getAwardType());
 
+		/*
+		 * If <AwardType> equals any of the following values, then move the
+		 * award directly to the Award Summary screen as Best Source
+		 */
+		if (awardTypeAlwaysBestSource(existingAwardType) && awardTypeAlwaysBestSource(newAwardType)) {
+			return false;
+		}
+
 		if (existingAwardType != null && existingAwardType.equals(newAwardType)) {
 			return step6();
 		}
 
-		return existingAwardType != null && newAwardType != null && existingAwardType.isConsolidation() && newAwardType.isConsolidation() ? step5() : false;
+		return existingAwardType != null && newAwardType != null && LoanTypeEnum.isConsolidation(existingAwardType) && LoanTypeEnum.isConsolidation(newAwardType) ? step5() : false;
+	}
+
+	/*
+	 * If <AwardType> equals any of the following values, then move the award
+	 * directly to the Award Summary screen as Best Source
+	 */
+	private boolean awardTypeAlwaysBestSource(LoanTypeEnum type) {
+		if (type != null) {
+			switch (type) {
+			case FWSP:
+			case SEOG:
+			case PERKINS:
+			case CWC:
+			case PELL:
+			case OTHER:
+			case STATEGRNT:
+			case STATESCHL:
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		return false;
 	}
 
 	/*
@@ -159,7 +189,7 @@ public class DuplicateChecker {
 
 		return actualDisbDt;
 	}
-	
+
 	/*
 	 * Step 6 – Award ID Matching
 	 * 
@@ -176,7 +206,7 @@ public class DuplicateChecker {
 	 * comparing the next Award with the Duplicate Award Logic.
 	 * 
 	 * If “AwardId” is not present for one or both Awards, then proceed to Step
-	 * 7 – Guaranty Date Matching.
+	 * 7 – Loan Date Matching.
 	 */
 	private boolean step6() {
 		if (existingAward.getAwardId() == null || newAward.getAwardId() == null) {
@@ -187,7 +217,7 @@ public class DuplicateChecker {
 	}
 
 	/*
-	 * Step 7 – Guarantee/LoanDate Matching
+	 * Step 7 –LoanDate Matching
 	 * 
 	 * When one or more of the "AwardId’s" are missing / blank, compare the
 	 * “LoanDate”for a match.
@@ -199,7 +229,7 @@ public class DuplicateChecker {
 	 * not duplicates and the process continues by comparing the next Award with
 	 * the Duplicate Award Logic.
 	 * 
-	 * If one or more “LoanDate”s are missing / blank, then proceed to Step 9 –
+	 * If one or more “LoanDate”s are missing / blank, then proceed to Step 10 –
 	 * Actual First Disbursement Date Matching.
 	 */
 	private boolean step7() {
@@ -341,22 +371,7 @@ public class DuplicateChecker {
 		LoanTypeEnum existingAwardType = LoanTypeEnum.getNameIgnoreCase(existingAward.getAwardType());
 		LoanTypeEnum newAwardType = LoanTypeEnum.getNameIgnoreCase(newAward.getAwardType());
 
-		return isPlusAward(existingAwardType) || isPlusAward(newAwardType) ? step13() : true;
-	}
-
-	private boolean isPlusAward(LoanTypeEnum awardType) {
-		if (awardType == null) {
-			return false;
-		}
-
-		switch (awardType) {
-		// TODO what other awards are PLUS awards?
-		case FFELPLUS:
-		case DLPLUS:
-			return true;
-		default:
-			return false;
-		}
+		return LoanTypeEnum.isPlus(existingAwardType) || LoanTypeEnum.isPlus(newAwardType) ? step13() : true;
 	}
 
 	/*

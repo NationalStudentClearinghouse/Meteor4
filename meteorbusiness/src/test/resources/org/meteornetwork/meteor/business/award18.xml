@@ -1,0 +1,14 @@
+<Award>
+	<APSUniqueAwardID>18</APSUniqueAwardID>
+	<DataProviderType>S</DataProviderType>
+	<AwardType>FFELCSub</AwardType>
+	<Disbursement>
+		<DisbSeqNum>01</DisbSeqNum>
+		<ActualDisbDt>1979-04-08</ActualDisbDt>
+		<DisbStatCd>A</DisbStatCd>
+	</Disbursement>
+	<School>
+		<EntityID>12334</EntityID>
+		<Contacts />
+	</School>
+</Award>

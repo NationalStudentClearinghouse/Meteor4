@@ -1,0 +1,14 @@
+<Award>
+	<APSUniqueAwardID>19</APSUniqueAwardID>
+	<DataProviderType>LRS</DataProviderType>
+	<AwardType>DLSUB</AwardType>
+	<Disbursement>
+		<DisbSeqNum>01</DisbSeqNum>
+		<DisbStatCd>D</DisbStatCd>
+	</Disbursement>
+	<Servicer>
+		<EntityID>34543</EntityID>
+		<Contacts />
+	</Servicer>
+	<AwardId>77777777777777777</AwardId>
+</Award>

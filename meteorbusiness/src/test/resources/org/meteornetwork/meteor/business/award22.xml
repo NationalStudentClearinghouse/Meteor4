@@ -1,0 +1,13 @@
+<Award>
+	<APSUniqueAwardID>22</APSUniqueAwardID>
+	<DataProviderType>G</DataProviderType>
+	<AwardType>DLSUB</AwardType>
+	<Guarantor>
+		<EntityID>77898</EntityID>
+		<Contacts />
+	</Guarantor>
+	<AwardId>77777777777777777</AwardId>
+	<Default>
+		<ClaimPdDt>2010-10-10</ClaimPdDt>
+	</Default>
+</Award>

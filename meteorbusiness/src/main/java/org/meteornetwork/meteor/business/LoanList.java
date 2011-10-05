@@ -72,17 +72,8 @@ public class LoanList {
 
 	private void addWithBestSourceLogic(LinkedList<Award> duplicateList, Award award) {
 
-		/*
-		 * If “AwardType” does not equal either “FFELSub”, “FFELUnsub”,
-		 * “FFELGraduatePLUS”, “FFELPLUS”, “FFELConsol”, “FFELPConsolidation”,
-		 * “FFELPConsolidationSubsidized”, “FFELPConsolidationUnsubsidized”,
-		 * “FFELPConsolidationHEAL”, FFELPConsolidationOther”, “SLS”,
-		 * “AltAward”, or “HEAL”***ADD IN ALL DL AWARD TYPES HERE
-		 * DLGraduatePLUS***, then move the Award directly to the Award Summary
-		 * Screen as Best Source
-		 */
 		if (LoanTypeEnum.getNameIgnoreCase(award.getAwardType()) == null || duplicateList.isEmpty()) {
-			duplicateList.addFirst(award);
+			duplicateList.addLast(award);
 			return;
 		}
 
@@ -95,34 +86,35 @@ public class LoanList {
 		/*
 		 * Pre-guarantee
 		 * 
-		 * Best source order is LO, S, G, LRS
+		 * Best source order is LO, S, G, LRS, FAT
 		 */
 		if (loanDt == null && DisbursementStatusEnum.UNDISBURSED.equals(disbursementStatus)) {
-			addWithBestSource(duplicateList, bestAward, award, DataProviderTypeEnum.LO, DataProviderTypeEnum.S, DataProviderTypeEnum.G, DataProviderTypeEnum.LRS);
+			addWithBestSource(duplicateList, bestAward, award, DataProviderTypeEnum.LO, DataProviderTypeEnum.S, DataProviderTypeEnum.G, DataProviderTypeEnum.LRS, DataProviderTypeEnum.FAT);
 			return;
 		}
 
 		/*
 		 * Pre-default
 		 * 
-		 * If fully disbursed, best source order is LRS, G, LO, S
+		 * If fully disbursed, best source order is LRS, G, LO, S, FAT
 		 * 
-		 * If not fully disbursed, best source order is LO, LRS, G, S
+		 * If not fully disbursed, best source order is LO, LRS, G, S, FAT
 		 */
 		if (claimPdDt == null) {
 			if (DisbursementStatusEnum.FULLY_DISBURSED.equals(disbursementStatus)) {
-				addWithBestSource(duplicateList, bestAward, award, DataProviderTypeEnum.LRS, DataProviderTypeEnum.G, DataProviderTypeEnum.LO, DataProviderTypeEnum.S);
+				addWithBestSource(duplicateList, bestAward, award, DataProviderTypeEnum.LRS, DataProviderTypeEnum.G, DataProviderTypeEnum.LO, DataProviderTypeEnum.S, DataProviderTypeEnum.FAT);
 			} else {
-				addWithBestSource(duplicateList, bestAward, award, DataProviderTypeEnum.LO, DataProviderTypeEnum.LRS, DataProviderTypeEnum.G, DataProviderTypeEnum.S);
+				addWithBestSource(duplicateList, bestAward, award, DataProviderTypeEnum.LO, DataProviderTypeEnum.LRS, DataProviderTypeEnum.G, DataProviderTypeEnum.S, DataProviderTypeEnum.FAT);
 			}
+			return;
 		}
 
 		/*
 		 * Default
 		 * 
-		 * Best source order is G, LRS, LO
+		 * Best source order is G, LRS, LO, FAT, S
 		 */
-		addWithBestSource(duplicateList, bestAward, award, DataProviderTypeEnum.G, DataProviderTypeEnum.LRS, DataProviderTypeEnum.LO);
+		addWithBestSource(duplicateList, bestAward, award, DataProviderTypeEnum.G, DataProviderTypeEnum.LRS, DataProviderTypeEnum.LO, DataProviderTypeEnum.FAT, DataProviderTypeEnum.S);
 	}
 
 	private Date getLoanDate(Award bestAward, Award award) {
@@ -207,15 +199,17 @@ public class LoanList {
 	}
 
 	private void addWithBestSource(LinkedList<Award> duplicateList, Award bestAward, Award award, DataProviderTypeEnum... dataProviderTypes) {
+		DataProviderTypeEnum awardDpType = award.getDataProviderType() == null ? null : DataProviderTypeEnum.fromValue(award.getDataProviderType());
+		DataProviderTypeEnum bestAwardDpType = bestAward.getDataProviderType() == null ? null : DataProviderTypeEnum.fromValue(bestAward.getDataProviderType());
 
 		boolean isBestSource = false;
 		for (DataProviderTypeEnum dataProviderType : dataProviderTypes) {
-			if (dataProviderType.equals(award.getDataProviderType())) {
+			if (dataProviderType.equals(awardDpType)) {
 				isBestSource = true;
 				break;
 			}
 
-			if (dataProviderType.equals(bestAward.getDataProviderType())) {
+			if (dataProviderType.equals(bestAwardDpType)) {
 				break;
 			}
 		}
@@ -233,9 +227,54 @@ public class LoanList {
 	public List<Award> getBestSource() {
 		List<Award> bestSourceAwards = new ArrayList<Award>();
 		for (List<Award> duplicateGroup : duplicateGroups) {
-			bestSourceAwards.add(duplicateGroup.get(0));
+			Award bestSource = duplicateGroup.get(0);
+			LoanTypeEnum awardType = LoanTypeEnum.getNameIgnoreCase(bestSource.getAwardType());
+
+			/*
+			 * If award type is consolidation, get other consolidation loans
+			 * from same data provider
+			 */
+			if (awardType != null && LoanTypeEnum.isConsolidation(awardType)) {
+				bestSourceAwards.addAll(getConsolidationLoansWithSameDataProvider(bestSource, duplicateGroup));
+			} else {
+				bestSourceAwards.add(bestSource);
+			}
 		}
 		return bestSourceAwards;
+	}
+
+	/*
+	 * The best source rules are used to select a single loan to be displayed on
+	 * the Award Summary amongst the duplicate loans when comparing award types
+	 * with the exception of Consolidation award types. For Consolidation award
+	 * types, because Data Providers may respond with a single “rolled-up”
+	 * Consolidation Award type (FFELCONSOL) loan or multiple individual loan
+	 * groups (e.g. FFELCONSOLSUB,
+	 * FFELCONSOLUNSUB,FFELCONSOLHEAL,FFELCONSOLOTHER) in a single response, the
+	 * best source rules should select all loans from the best source data
+	 * provider. E.g., Data Provider ONE responds with a single FFELCONSOL loan,
+	 * and DATA Provider TWO responds with 2 loans (FFELCONSOLSUB and
+	 * FFELCONSOLUNSUB); all three having been identified as duplicates because
+	 * they have the same disbursement date; either the single loan from Data
+	 * Provider ONE, or, both loans from Data Provider TWO will be displayed as
+	 * determined by the best source logic.
+	 */
+	private List<Award> getConsolidationLoansWithSameDataProvider(Award bestSource, List<Award> duplicateGroup) {
+		List<Award> consolidationLoans = new ArrayList<Award>();
+		consolidationLoans.add(bestSource);
+
+		for (Award award : duplicateGroup) {
+			if (award.equals(bestSource)) {
+				continue;
+			}
+
+			LoanTypeEnum awardType = LoanTypeEnum.getNameIgnoreCase(award.getAwardType());
+			if (awardType != null && LoanTypeEnum.isConsolidation(awardType) && award.getDataProviderType() != null && award.getDataProviderType().equals(bestSource.getDataProviderType())) {
+				consolidationLoans.add(award);
+			}
+		}
+
+		return consolidationLoans;
 	}
 
 	/**

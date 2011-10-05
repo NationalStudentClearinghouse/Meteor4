@@ -1,0 +1,15 @@
+<Award>
+	<APSUniqueAwardID>17</APSUniqueAwardID>
+	<DataProviderType>G</DataProviderType>
+	<AwardType>FFELCSub</AwardType>
+	<LoanDt>1955-05-05</LoanDt>
+	<Disbursement>
+		<DisbSeqNum>01</DisbSeqNum>
+		<ActualDisbDt>1979-04-08</ActualDisbDt>
+		<DisbStatCd>A</DisbStatCd>
+	</Disbursement>
+	<Guarantor>
+		<EntityID>78987</EntityID>
+		<Contacts />
+	</Guarantor>
+</Award>

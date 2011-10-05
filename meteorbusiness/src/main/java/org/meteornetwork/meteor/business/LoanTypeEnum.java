@@ -2,54 +2,55 @@ package org.meteornetwork.meteor.business;
 
 public enum LoanTypeEnum {
 
-	// TODO: update this enum with correct loan types
-	FFELCONSL("FFELConsl", "FFEL Consolidation", true),
-	FFELCSUB("FFELCSub", "FFEL Consolidation Stafford Subsidized", true),
-	FFELCUSUB("FFELCUsub", "FFEL Consolidation Stafford Unsubsidized", true),
-	FFELCHEAL("FFELCHEAL", "FFEL Consolidation HEAL", true),
-	FFELCOTHR("FFELCOthr", "FFEL Consolidation Other", true),
+	// TODO which is correct for Graduate Plus loans: FFELPGB or FFELGB? DLGB or
+	// DLGBN?
+	FFELCONSL("FFELConsl"),
+	FFELCSUB("FFELCSub"),
+	FFELCUSUB("FFELCUsub"),
+	FFELCHEAL("FFELCHeal"),
+	FFELCOTHR("FFELCOthr"),
 
-	FFELPLUS("FFELPLUS", "FFELP PLUS"),
-	FFELSUB("FFELSub", "FFELP Subsidized"),
-	FFELUNSUB("FFELUnSub", "FFELP UnSubsidized"),
-	FFELPGB("FFELPGB", "FFELPGB"),
+	FFELPLUS("FFELPLUS"),
+	FFELSUB("FFELSub"),
+	FFELUNSUB("FFELUnSub"),
+	FFELPGB("FFELPGB"),
+	FFELGB("FFELGB"),
 
-	SLS("SLS", "SLS"),
-	ALTLOAN("AltLoan", "Alternative Loan"),
-	HEAL("HEAL", "HEAL"),
+	SLS("SLS"),
+	ALTLOAN("AltLoan"),
+	HEAL("HEAL"),
 
-	DLCONSL("DLConsl", "DL Consolidation", true),
-	DLCONSOLIDATION("DLConsolidation", "DL Consolidation", true),
-	DLCSUB("DLConsolidationSubsidized", "DL Consolidation Subsidized", true),
-	DLCUSUB("DLConsolidationUnsubsidized", "DL Consolidation Unsubsidized", true),
-	DLCOTHR("DLConsolidationOther", "DL Consolidation Other", true),
-	
-	DLPLUS("DLPLUS", "DLPLUS");
+	DLCONSL("DLConsl"),
+	DLCSUB("DLCSub"),
+	DLCUSUB("DLCUsub"),
+	DLCHEAL("DLCHeal"),
+	DLCOTHR("DLCOthr"),
+
+	DLSUB("DLSub"),
+	DLUNSUB("DLUnsub"),
+	DLPLUS("DLPLUS"),
+	DLGB("DLGB"),
+	DLGBN("DLGBN"),
+
+	FWSP("FWSP"),
+	SEOG("SEOG"),
+	PERKINS("Perkins"),
+	CWC("CWC"),
+	PELL("Pell"),
+	OTHER("Other"),
+	STATEGRNT("StateGrnt"),
+	STATESCHL("StateSchl"),
+
+	;
 
 	private String name;
-	private String longName;
-	private boolean isConsolidation;
 
-	private LoanTypeEnum(String name, String longName) {
-		this(name, longName, false);
-	}
-
-	private LoanTypeEnum(String name, String longName, boolean isConsolidation) {
+	private LoanTypeEnum(String name) {
 		this.name = name;
-		this.longName = longName;
-		this.isConsolidation = isConsolidation;
 	}
 
 	public String getName() {
 		return name;
-	}
-
-	public String getLongName() {
-		return longName;
-	}
-
-	public boolean isConsolidation() {
-		return isConsolidation;
 	}
 
 	public static LoanTypeEnum getNameIgnoreCase(String name) {
@@ -60,5 +61,45 @@ public enum LoanTypeEnum {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns true if loan type is a consolidation loan
+	 * 
+	 * @param type
+	 * @return true if loan type is a consolidation loan
+	 */
+	public static boolean isConsolidation(LoanTypeEnum type) {
+		switch (type) {
+		case FFELCONSL:
+		case FFELCSUB:
+		case FFELCUSUB:
+		case FFELCHEAL:
+		case FFELCOTHR:
+		case DLCONSL:
+		case DLCSUB:
+		case DLCUSUB:
+		case DLCHEAL:
+		case DLCOTHR:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	/**
+	 * Returns true if loan type is a plus loan
+	 * 
+	 * @param type
+	 * @return true if loan type is a plus loan
+	 */
+	public static boolean isPlus(LoanTypeEnum type) {
+		switch (type) {
+		case FFELPLUS:
+		case DLPLUS:
+			return true;
+		default:
+			return false;
+		}
 	}
 }

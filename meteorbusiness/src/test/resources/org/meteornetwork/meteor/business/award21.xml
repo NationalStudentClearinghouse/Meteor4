@@ -1,0 +1,13 @@
+<Award>
+	<APSUniqueAwardID>21</APSUniqueAwardID>
+	<DataProviderType>LO</DataProviderType>
+	<AwardType>DLSUB</AwardType>
+	<Disbursement>
+		<DisbStatCd>A</DisbStatCd>
+	</Disbursement>
+	<Lender>
+		<EntityID>12245</EntityID>
+		<Contacts />
+	</Lender>
+	<AwardId>77777777777777777</AwardId>
+</Award>
