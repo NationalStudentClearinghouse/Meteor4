@@ -63,8 +63,8 @@ public class MeteorSchema40Test {
 		forbearance = award.getRepayment().getForbearance(1);
 		Assert.assertEquals("99", forbearance.getTimeUsed());
 		
-		Assert.assertEquals("http://not-a-real-domain-false1.com", award.getRepayment().getOnlinePaymentProcessURL());
-		Assert.assertEquals("http://not-a-real-domain-false2.com", award.getRepayment().getOnlineDeferForbProcessURL());
+		Assert.assertEquals("http://not-a-real-domain-false1.com", award.getOnlinePaymentProcessURL());
+		Assert.assertEquals("http://not-a-real-domain-false2.com", award.getOnlineDeferForbProcessURL());
 		Assert.assertTrue(response.getMeteorDataProviderInfo(0).getLoanLocatorActivationIndicator());
 	}
 

@@ -5,12 +5,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.ModelAndView;
 
-public class MeteorQueryController extends AbstractMeteorController {
+/**
+ * Adds APSUniqueAwardID to rendering parameters
+ * 
+ * @author jlazos
+ * 
+ */
+public class AwardDetailController extends AbstractMeteorController {
 
 	@Override
 	protected void handleMeteorRequest(ModelAndView modelAndView, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception {
-		// do nothing. AbstractMeteorController's request handling is
-		// sufficient.
+		modelAndView.addObject("apsuniqueawardid", httpRequest.getParameter("apsUniqAwardId"));
 	}
 
 }

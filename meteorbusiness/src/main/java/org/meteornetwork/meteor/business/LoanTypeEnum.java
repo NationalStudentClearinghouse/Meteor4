@@ -2,8 +2,6 @@ package org.meteornetwork.meteor.business;
 
 public enum LoanTypeEnum {
 
-	// TODO which is correct for Graduate Plus loans: FFELPGB or FFELGB? DLGB or
-	// DLGBN?
 	FFELCONSL("FFELConsl"),
 	FFELCSUB("FFELCSub"),
 	FFELCUSUB("FFELCUsub"),
@@ -13,7 +11,6 @@ public enum LoanTypeEnum {
 	FFELPLUS("FFELPLUS"),
 	FFELSUB("FFELSub"),
 	FFELUNSUB("FFELUnSub"),
-	FFELPGB("FFELPGB"),
 	FFELGB("FFELGB"),
 
 	SLS("SLS"),
@@ -30,7 +27,6 @@ public enum LoanTypeEnum {
 	DLUNSUB("DLUnsub"),
 	DLPLUS("DLPLUS"),
 	DLGB("DLGB"),
-	DLGBN("DLGBN"),
 
 	FWSP("FWSP"),
 	SEOG("SEOG"),
@@ -39,9 +35,7 @@ public enum LoanTypeEnum {
 	PELL("Pell"),
 	OTHER("Other"),
 	STATEGRNT("StateGrnt"),
-	STATESCHL("StateSchl"),
-
-	;
+	STATESCHL("StateSchl");
 
 	private String name;
 

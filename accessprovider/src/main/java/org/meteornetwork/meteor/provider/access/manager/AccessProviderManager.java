@@ -46,6 +46,7 @@ public class AccessProviderManager {
 
 		// TODO: authentication bump process
 		// TODO: perform business logic on dataProviderResponses
+		// TODO: add grand total calculations to business logic
 
 		responseData.addAllDataProviderInfo(dataProviderResponses);
 

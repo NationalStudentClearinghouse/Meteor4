@@ -389,10 +389,10 @@
 					</Forbearance>
 					<RepaymentTermRemaining>123</RepaymentTermRemaining>
 					<DaysPastDue>999</DaysPastDue>
-					<OnlinePaymentProcessURL>http://not-a-real-domain-false1.com</OnlinePaymentProcessURL>
-					<OnlineDeferForbProcessURL>http://not-a-real-domain-false2.com</OnlineDeferForbProcessURL>
 				</Repayment>
 				<GrossLoanAmount>4000.00</GrossLoanAmount>
+				<OnlinePaymentProcessURL>http://not-a-real-domain-false1.com</OnlinePaymentProcessURL>
+				<OnlineDeferForbProcessURL>http://not-a-real-domain-false2.com</OnlineDeferForbProcessURL>
 			</Award>
 		</MeteorDataProviderAwardDetails>
 		<MeteorDataProviderMsg>

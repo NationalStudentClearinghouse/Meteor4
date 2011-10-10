@@ -10,6 +10,7 @@ package org.meteornetwork.meteor.provider.data;
  * 
  * @since Meteor 1.0
  */
+//TODO build HPCDataProvider implementation
 public interface DataServerAbstraction {
 
 	/**

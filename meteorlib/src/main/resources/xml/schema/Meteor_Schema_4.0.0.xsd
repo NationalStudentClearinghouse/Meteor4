@@ -73,8 +73,6 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
-	<!-- ***** Aggregates ************************************************************** -->
-	<!-- ******************************************************************************* -->
 	<xsd:complexType name="AddressInfoType">
 		<xsd:sequence>
 			<xsd:element name="AddrValidInd" type="xsd:boolean" minOccurs="0"/>
@@ -124,6 +122,8 @@
 			<xsd:element name="Repayment" type="RepaymentType" minOccurs="0"/>
 			<xsd:element name="Default" type="DefaultType" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="GrossLoanAmount" type="PosTwelveDigitTwoDecimalType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="OnlinePaymentProcessURL" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="OnlineDeferForbProcessURL" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
@@ -155,8 +155,28 @@
 	<!-- ******************************************************************************* -->
 	<xsd:complexType name="DataProviderAggregateType">
 		<xsd:sequence>
+			<xsd:annotation>
+				<xsd:documentation xml:lang="en">These fields are derived in the Access Provider Software.</xsd:documentation>
+			</xsd:annotation>
 			<xsd:element name="SvcrTotalAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="OriginalBalanceGrandTotal" type="TotalByBorrowerSSNType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="OutstandingBalanceGrandTotal" type="TotalByBorrowerSSNType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="OtherFeesOutstandingGrandTotal" type="TotalByBorrowerSSNType" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TotalByBorrowerSSNType">
+		<xsd:simpleContent>
+			<xsd:extension base="PosFifteenDigitTwoDecimalType">
+				<xsd:attribute name="borrowerSsn">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:minLength value="9"/>
+							<xsd:maxLength value="9"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
 	<xsd:complexType name="DefaultType">
@@ -294,8 +314,6 @@
 			<xsd:element name="Forbearance" type="DefermentForbearanceTimeUsedType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="RepaymentTermRemaining" type="RepaymentTermRemainingType" minOccurs="0"/>
 			<xsd:element name="DaysPastDue" type="DaysPastDueType" minOccurs="0"/>
-			<xsd:element name="OnlinePaymentProcessURL" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="OnlineDeferForbProcessURL" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
@@ -316,7 +334,31 @@
 		</xsd:complexContent>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
-
+	<xsd:complexType name="SSNumType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Social Security Number. Data providers do not need to mask the SSN themselves. The Access Provider software masks the SSN and populates the "unmasked" attribute.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="SSNumSimpleType">
+				<xsd:attribute name="unmasked">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:minLength value="9"/>
+							<xsd:maxLength value="9"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="SSNumSimpleType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="9"/>
+			<xsd:maxLength value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	
 	<!-- ******************************************************************************* -->
 	<!-- ******************************************************************************* -->
 	<!-- ******************************************************************************* -->
@@ -727,16 +769,6 @@
 			<xsd:enumeration value="E"/>
 			<xsd:enumeration value="W"/>
 			<xsd:enumeration value="I"/>
-		</xsd:restriction>
-	</xsd:simpleType>
-	<!-- ******************************************************************************* -->
-	<xsd:simpleType name="SSNumType">
-		<xsd:annotation>
-			<xsd:documentation xml:lang="en">Social Security Number</xsd:documentation>
-		</xsd:annotation>
-		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="9"/>
-			<xsd:maxLength value="9"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- ******************************************************************************* -->

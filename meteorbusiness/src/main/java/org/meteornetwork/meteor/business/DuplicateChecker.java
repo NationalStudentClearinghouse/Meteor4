@@ -389,8 +389,8 @@ public class DuplicateChecker {
 	 * comparing the next Award with the Duplicate Award Logic.
 	 */
 	private boolean step13() {
-		String existingSSNum = existingAward.getStudent() == null ? null : existingAward.getStudent().getSSNum();
-		String newSSNum = newAward.getStudent() == null ? null : newAward.getStudent().getSSNum();
+		String existingSSNum = existingAward.getStudent() == null ? null : existingAward.getStudent().getSSNum().getContent();
+		String newSSNum = newAward.getStudent() == null ? null : newAward.getStudent().getSSNum().getContent();
 
 		return existingSSNum != null && existingSSNum.equals(newSSNum) && step14();
 	}
@@ -411,8 +411,8 @@ public class DuplicateChecker {
 	 * comparing the next Award with the Duplicate Award Logic.
 	 */
 	private boolean step14() {
-		String existingSSNum = existingAward.getBorrower() == null ? null : existingAward.getBorrower().getSSNum();
-		String newSSNum = newAward.getBorrower() == null ? null : newAward.getBorrower().getSSNum();
+		String existingSSNum = existingAward.getBorrower() == null ? null : existingAward.getBorrower().getSSNum().getContent();
+		String newSSNum = newAward.getBorrower() == null ? null : newAward.getBorrower().getSSNum().getContent();
 
 		return existingSSNum != null && existingSSNum.equals(newSSNum);
 	}

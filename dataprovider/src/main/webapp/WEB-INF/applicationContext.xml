@@ -34,5 +34,8 @@
 		<lookup-method name="getRequestInfo" bean="requestInfo"/>
 	</bean>
 	
+	<!-- Registry Manager -->
+ 	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/>
+	
 	<context:component-scan base-package="org.meteornetwork.meteor"/>
 </beans> 

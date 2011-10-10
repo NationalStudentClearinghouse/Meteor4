@@ -25,16 +25,410 @@
 						<StateProv>WA</StateProv>
 						<PostalCd>98108</PostalCd>
 					</AddressInfo>
-					<Email>doitforyou@lfy.com</Email>
+					<Email>
+						<EmailAddress>doitforyou@lfy.com</EmailAddress>
+					</Email>
 				</Contacts>
 			</DataProviderData>
 			<DataProviderAggregateTotal>
-				
+				<OriginalBalanceGrandTotal borrowerSsn="110101010">12345.67</OriginalBalanceGrandTotal>
+				<OutstandingBalanceGrandTotal borrowerSsn="110101010">54321.12</OutstandingBalanceGrandTotal>
+				<OtherFeesOutstandingGrandTotal borrowerSsn="110101010">77777</OtherFeesOutstandingGrandTotal>
 			</DataProviderAggregateTotal>
 		</MeteorDataProviderDetailInfo>
 		<MeteorDataProviderAwardDetails>
 			<Award>
+				<APSUniqueAwardID>1</APSUniqueAwardID>
+				<DataProviderType>S</DataProviderType>
+				<AwardType>FFELCSub</AwardType>
+				<AwardAmt>4000.00</AwardAmt>
+				<AwardBeginDt>1988-08-20</AwardBeginDt>
+				<AwardEndDt>1989-05-21</AwardEndDt>
+				<GradeLevelInd>4</GradeLevelInd>
+				<LoanStat>RP</LoanStat>
+				<LoanStatDt>1990-11-19</LoanStatDt>
+				<MPNInd/>
+				<CommonlineError/>
+				<Disbursement>
+					<DisbSeqNum>1</DisbSeqNum>
+					<SchedDisbDt>1988-08-20</SchedDisbDt>
+					<ActualDisbDt>1988-08-21</ActualDisbDt>
+					<DisbNetAmt>1920.00</DisbNetAmt>
+					<DisbStatCd>A</DisbStatCd>
+					<DisbStatDt>1988-08-22</DisbStatDt>
+					<DisbHold/>
 				
+				</Disbursement>
+				<Disbursement>
+					<DisbSeqNum>2</DisbSeqNum>
+					<SchedDisbDt>1988-12-22</SchedDisbDt>
+					<DisbNetAmt>1920.00</DisbNetAmt>
+					<DisbStatCd>A</DisbStatCd>
+					<DisbStatDt>1988-07-07</DisbStatDt>
+					<DisbHold/>
+					
+				</Disbursement>
+				<Student>
+					<LastName>Puffin</LastName>
+					<FirstName>Polly</FirstName>
+					<MiddleInitial>H</MiddleInitial>
+					<SSNum unmasked="110101010">*****1010</SSNum>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-456-8765</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>432 IOU Lane</Addr>
+							<City>YouBet</City>
+							<StateProv>IA</StateProv>
+							<PostalCd>87645-8432</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+						</Email>
+					</Contacts>
+					<DtOfBirth>1964-12-01</DtOfBirth>
+					<Employer>
+						
+						<EntityName>Boeing Airfreight</EntityName>
+						<EntityID/>
+						<EntityURL>www.boeing-air.com</EntityURL>
+						<Contacts>
+							<Phone>
+								<PhoneNumType>P</PhoneNumType>
+								<PhoneNum>501-456-6294</PhoneNum>
+							</Phone>
+							<AddressInfo>
+								<AddrValidInd>1</AddrValidInd>
+								<AddrValidDt>1999-10-13</AddrValidDt>
+								<AddressType>P</AddressType>
+								<Addr>9807 Boeing Drive</Addr>
+								<City>Chicago</City>
+								<StateProv>IL</StateProv>
+								<PostalCd>22345-9102</PostalCd>
+							</AddressInfo>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
+						</Contacts>
+					</Employer>
+					<GradDt>2000-05-20</GradDt>
+				</Student>
+				<Borrower>
+					<LastName>Puffin</LastName>
+					<FirstName>Polly</FirstName>
+					<MiddleInitial>H</MiddleInitial>
+					<SSNum unmasked="110101010">*****1010</SSNum>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-456-8765</PhoneNum>
+							<PhoneValidInd>false</PhoneValidInd>
+							<PhoneValidDt>2011-01-01</PhoneValidDt>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>432 IOU Lane</Addr>
+							<City>YouBet</City>
+							<StateProv>IA</StateProv>
+							<PostalCd>87645-8432</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+							<EmailValidInd>true</EmailValidInd>
+						</Email>
+					</Contacts>
+					<DtOfBirth>1964-12-01</DtOfBirth>
+					<Employer>
+						
+						<EntityName>Boeing Airfreight</EntityName>
+						<EntityID/>
+						<EntityURL>www.boeing-air.com</EntityURL>
+						<Contacts>
+							<Phone>
+								<PhoneNumType>P</PhoneNumType>
+								<PhoneNum>501-456-6294</PhoneNum>
+							</Phone>
+							<AddressInfo>
+								<AddrValidInd>1</AddrValidInd>
+								<AddrValidDt>1999-10-13</AddrValidDt>
+								<AddressType>P</AddressType>
+								<Addr>9807 Boeing Drive</Addr>
+								<City>Chicago</City>
+								<StateProv>IL</StateProv>
+								<PostalCd>22345-9102</PostalCd>
+							</AddressInfo>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
+						</Contacts>
+					</Employer>
+					<DriversLicense>4354328654</DriversLicense>
+					<DriversLicenseState>IL</DriversLicenseState>
+				</Borrower>
+				<Reference>
+					<LastName>SwissCheese</LastName>
+					<FirstName>Uncle Bob</FirstName>
+					<MiddleInitial>T</MiddleInitial>
+					<SSNum unmasked="546459182">*****9182</SSNum>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>405-209-8753</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1990-05-30</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>5468 HWY 90</Addr>
+							<City>Iowa City Hills</City>
+							<StateProv>IA</StateProv>
+							<PostalCd>43567</PostalCd>
+						</AddressInfo>
+					</Contacts>
+					<DtOfBirth>1947-08-13</DtOfBirth>
+					<Employer>
+
+						<EntityName>Big Feed Store</EntityName>
+						<EntityID/>
+						<EntityURL/>
+						<Contacts>
+							<Phone>
+								<PhoneNumType>P</PhoneNumType>
+								<PhoneNum>501-546-8796</PhoneNum>
+							</Phone>
+							<AddressInfo>
+								<AddrValidInd>1</AddrValidInd>
+								<AddrValidDt>1990-05-30</AddrValidDt>
+								<AddressType>P</AddressType>
+								<Addr>4356 HWY 80</Addr>
+								<City>Iowa City Hills</City>
+								<StateProv>IA</StateProv>
+								<PostalCd>43567</PostalCd>
+							</AddressInfo>
+							<Email>
+								<EmailAddress>oats@bigfeed.com</EmailAddress>
+							</Email>
+						</Contacts>
+					</Employer>
+				</Reference>
+				<Lender>
+					
+					<EntityName>Lending For You</EntityName>
+					<EntityID>708569</EntityID>
+					<EntityURL>www.lendingforyou.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-497-0921</PhoneNum>
+							<PhoneValidInd>true</PhoneValidInd>
+							<PhoneValidDt>2001-01-01</PhoneValidDt>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-23</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>8731 Yield Street</Addr>
+							<City>Alexandria</City>
+							<StateProv>VA</StateProv>
+							<PostalCd>13453</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>assisance@lfy.com</EmailAddress>
+							<EmailValidInd>false</EmailValidInd>
+							<EmailValidDt>2002-02-02</EmailValidDt>
+						</Email>
+					</Contacts>
+				</Lender>
+				<Servicer>
+					
+					<EntityName>Servicing For Polly</EntityName>
+					<EntityID>809547</EntityID>
+					<EntityURL>www.servicingforyoupolly.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-458-7273</PhoneNum>
+							<PhoneValidInd>false</PhoneValidInd>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-02-23</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>924 Servicing Way</Addr>
+							<City>Salt Lake City</City>
+							<StateProv>UT</StateProv>
+							<PostalCd>84054</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>whatdoyouneedpolly@sfy.com</EmailAddress>
+							<EmailValidInd>true</EmailValidInd>
+						</Email>
+					</Contacts>
+				</Servicer>
+				<ConsolLender>
+					
+					<EntityName>Consolidating For You</EntityName>
+					<EntityID>751587</EntityID>
+					<EntityURL>www.consolidatingforyou.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-367-9321</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-01</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>794 Consolidating Road</Addr>
+							<City>Los Angelas</City>
+							<StateProv>CA</StateProv>
+							<PostalCd>98145</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>helpforyou@cfy.com</EmailAddress>
+						</Email>
+					</Contacts>
+				</ConsolLender>
+				<School>
+					
+					<EntityName>Learning For You</EntityName>
+					<EntityID>001814</EntityID>
+					<EntityURL>www.learningforyou.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-468-9134</PhoneNum>
+							<PhoneValidDt>2004-04-04</PhoneValidDt>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1997-08-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>482 Learning Way, Room 1, 2nd Floor</Addr>
+							<City>Orlando</City>
+							<StateProv>FL</StateProv>
+							<PostalCd>32807</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>lotofknowledge@lfy.edu</EmailAddress>
+							<EmailValidDt>2003-03-03</EmailValidDt>
+						</Email>
+					</Contacts>
+				</School>
+				<Guarantor>
+					
+					<EntityName>Little GA</EntityName>
+					<EntityID>606</EntityID>
+					<EntityURL>www.littlega.org</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-564-8439</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-04-08</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>34 Andover Court</Addr>
+							<City>Salisaw</City>
+							<StateProv>OK</StateProv>
+							<PostalCd>75932</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>guarantees@lga.org</EmailAddress>
+						</Email>
+					</Contacts>
+				</Guarantor>
+				<GrantScholarshipProvider>
+					<EntityName>You Earned It GSP</EntityName>
+					<EntityID>708952</EntityID>
+					<EntityURL>www.youaresmart.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-456-9823</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-12-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>3476 Free Money Lane</Addr>
+							<City>Sweat Home</City>
+							<StateProv>AL</StateProv>
+							<PostalCd>56432</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>help@youaresmart.com</EmailAddress>
+						</Email>
+					</Contacts>
+				</GrantScholarshipProvider>
+				<AwardId>0000111122K334455</AwardId>
+				<Repayment>
+					<NextPmtAmt>145.23</NextPmtAmt>
+					<NextDueDt>2002-03-19</NextDueDt>
+					<AcctBal>565.98</AcctBal>
+					<AcctBalDt>2002-02-14</AcctBalDt>
+					<PmtPlan>Standard</PmtPlan>
+					<LastPmt>
+						<PaymentAmt>145.23</PaymentAmt>
+						<PaymentDt>2002-02-13</PaymentDt>
+					</LastPmt>
+					<PmtBeginDt>1989-11-20</PmtBeginDt>
+					<CurrIntRate>8.00</CurrIntRate>
+					<RepaidPrincipalAmt>3654.02</RepaidPrincipalAmt>
+					<CapitalizedIntAmt>2745.91</CapitalizedIntAmt>
+					<LateFees>
+						<LateFeesAmount>413.22</LateFeesAmount>
+						<LateFeesDate>2011-04-04</LateFeesDate>
+					</LateFees>
+					<CollectionCosts>
+					    <CollectionCostsAmount>555.55</CollectionCostsAmount>
+					    <CollectionCostsDate>2013-04-23</CollectionCostsDate>
+					</CollectionCosts>
+					<DefermentForbearance>
+						<DefermentForbearanceName>Deferment name</DefermentForbearanceName>
+						<DefermentForbearanceBeginDate>2011-01-01</DefermentForbearanceBeginDate>
+						<DefermentForbearanceEndDate>2012-01-01</DefermentForbearanceEndDate>
+					</DefermentForbearance>
+					<Deferment>
+						<TypeCode>Armed Forces</TypeCode>
+						<TimeUsed>12</TimeUsed>
+					</Deferment>
+					<Deferment>
+						<TypeCode>Action Programs</TypeCode>
+						<TimeUsed>24</TimeUsed>
+					</Deferment>
+					<Forbearance>
+					    <TypeCode>Administrative</TypeCode>
+					    <TimeUsed>3</TimeUsed>
+					</Forbearance>
+					<DaysPastDue>14</DaysPastDue>
+				</Repayment>
+				<Default>
+					<Def>true</Def>
+					<SatisPmtArr>false</SatisPmtArr>
+					<DefAvertRq>1</DefAvertRq>
+					<DefAvertRqDt>2011-02-04</DefAvertRqDt>
+					<DefAvertRqCure>0</DefAvertRqCure>
+					<DefAvertRqCureDt>2010-10-10</DefAvertRqCureDt>
+					<ClaimFil>true</ClaimFil>
+					<ClaimFilDt>1999-09-09</ClaimFilDt>
+					<ClaimPd>true</ClaimPd>
+					<ClaimPdDt>2001-03-04</ClaimPdDt>
+					<EligibilityReinstatementIndicator>true</EligibilityReinstatementIndicator>
+					<EligibilityReinstatementDate>2005-05-05</EligibilityReinstatementDate>
+				</Default>
+				<GrossLoanAmount>4000.00</GrossLoanAmount>
+			</Award>
+			<Award>
+				<APSUniqueAwardID>2</APSUniqueAwardID>
 				<DataProviderType>S</DataProviderType>
 				<AwardType>FFELSub</AwardType>
 				<AwardAmt>4000.00</AwardAmt>
@@ -68,7 +462,7 @@
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum>110101010</SSNum>
+					<SSNum unmasked="110101010">*****1010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -83,7 +477,9 @@
 							<StateProv>IA</StateProv>
 							<PostalCd>87645-8432</PostalCd>
 						</AddressInfo>
-						<Email>Polly_Puffin@beoing.com</Email>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+						</Email>
 					</Contacts>
 					<DtOfBirth>1964-12-01</DtOfBirth>
 					<Employer>
@@ -105,16 +501,18 @@
 								<StateProv>IL</StateProv>
 								<PostalCd>22345-9102</PostalCd>
 							</AddressInfo>
-							<Email>customerassistance@boeingair.com</Email>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
 						</Contacts>
 					</Employer>
 					<GradDt>2000-05-20</GradDt>
 				</Student>
-<Borrower>
+				<Borrower>
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum>110101010</SSNum>
+					<SSNum unmasked="110101010">*****1010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -129,7 +527,9 @@
 							<StateProv>IA</StateProv>
 							<PostalCd>87645-8432</PostalCd>
 						</AddressInfo>
-						<Email>Polly_Puffin@beoing.com</Email>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+						</Email>
 					</Contacts>
 					<DtOfBirth>1964-12-01</DtOfBirth>
 					<Employer>
@@ -151,7 +551,9 @@
 								<StateProv>IL</StateProv>
 								<PostalCd>22345-9102</PostalCd>
 							</AddressInfo>
-							<Email>customerassistance@boeingair.com</Email>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
 						</Contacts>
 					</Employer>
 					<DriversLicense>4354328654</DriversLicense>
@@ -161,7 +563,7 @@
 					<LastName>SwissCheese</LastName>
 					<FirstName>Uncle Bob</FirstName>
 					<MiddleInitial>T</MiddleInitial>
-					<SSNum>546459182</SSNum>
+					<SSNum unmasked="546459182">*****9182</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -176,7 +578,6 @@
 							<StateProv>IA</StateProv>
 							<PostalCd>43567</PostalCd>
 						</AddressInfo>
-						<Email/>
 					</Contacts>
 					<DtOfBirth>1947-08-13</DtOfBirth>
 					<Employer>
@@ -198,7 +599,9 @@
 								<StateProv>IA</StateProv>
 								<PostalCd>43567</PostalCd>
 							</AddressInfo>
-							<Email>oats@bigfeed.com</Email>
+							<Email>
+								<EmailAddress>oats@bigfeed.com</EmailAddress>
+							</Email>
 						</Contacts>
 					</Employer>
 				</Reference>
@@ -221,7 +624,9 @@
 							<StateProv>AL</StateProv>
 							<PostalCd>56432</PostalCd>
 						</AddressInfo>
-						<Email>help@btda.com</Email>
+						<Email>
+							<EmailAddress>help@btda.com</EmailAddress>
+						</Email>
 					</Contacts>
 				</DisbursingAgent>
 				<Lender>
@@ -233,6 +638,8 @@
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
 							<PhoneNum>501-497-0921</PhoneNum>
+							<PhoneValidInd>true</PhoneValidInd>
+							<PhoneValidDt>2001-01-01</PhoneValidDt>
 						</Phone>
 						<AddressInfo>
 							<AddrValidInd>1</AddrValidInd>
@@ -243,7 +650,11 @@
 							<StateProv>VA</StateProv>
 							<PostalCd>13453</PostalCd>
 						</AddressInfo>
-						<Email>assisance@lfy.com</Email>
+						<Email>
+							<EmailAddress>assisance@lfy.com</EmailAddress>
+							<EmailValidInd>false</EmailValidInd>
+							<EmailValidDt>2002-02-02</EmailValidDt>
+						</Email>
 					</Contacts>
 				</Lender>
 				<Servicer>
@@ -255,6 +666,7 @@
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
 							<PhoneNum>501-458-7273</PhoneNum>
+							<PhoneValidInd>false</PhoneValidInd>
 						</Phone>
 						<AddressInfo>
 							<AddrValidInd>1</AddrValidInd>
@@ -265,7 +677,10 @@
 							<StateProv>UT</StateProv>
 							<PostalCd>84054</PostalCd>
 						</AddressInfo>
-						<Email>whatdoyouneedpolly@sfy.com</Email>
+						<Email>
+							<EmailAddress>whatdoyouneedpolly@sfy.com</EmailAddress>
+							<EmailValidInd>true</EmailValidInd>
+						</Email>
 					</Contacts>
 				</Servicer>
 				<ConsolLender>
@@ -287,7 +702,9 @@
 							<StateProv>CA</StateProv>
 							<PostalCd>98145</PostalCd>
 						</AddressInfo>
-						<Email>helpforyou@cfy.com</Email>
+						<Email>
+							<EmailAddress>helpforyou@cfy.com</EmailAddress>
+						</Email>
 					</Contacts>
 				</ConsolLender>
 				<School>
@@ -299,6 +716,7 @@
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
 							<PhoneNum>501-468-9134</PhoneNum>
+							<PhoneValidDt>2004-04-04</PhoneValidDt>
 						</Phone>
 						<AddressInfo>
 							<AddrValidInd>1</AddrValidInd>
@@ -309,7 +727,10 @@
 							<StateProv>FL</StateProv>
 							<PostalCd>32807</PostalCd>
 						</AddressInfo>
-						<Email>lotofknowledge@lfy.edu</Email>
+						<Email>
+							<EmailAddress>lotofknowledge@lfy.edu</EmailAddress>
+							<EmailValidDt>2003-03-03</EmailValidDt>
+						</Email>
 					</Contacts>
 				</School>
 				<Guarantor>
@@ -331,7 +752,9 @@
 							<StateProv>OK</StateProv>
 							<PostalCd>75932</PostalCd>
 						</AddressInfo>
-						<Email>guarantees@lga.org</Email>
+						<Email>
+							<EmailAddress>guarantees@lga.org</EmailAddress>
+						</Email>
 					</Contacts>
 				</Guarantor>
 				<AwardId>0000111122K334455</AwardId>
@@ -349,7 +772,814 @@
 					<CurrIntRate>8.00</CurrIntRate>
 					<RepaidPrincipalAmt>3654.02</RepaidPrincipalAmt>
 					<CapitalizedIntAmt>2745.91</CapitalizedIntAmt>
+					<DaysPastDue>20</DaysPastDue>
+				</Repayment>
+				<Default>
+					<Def>false</Def>
+					<SatisPmtArr>true</SatisPmtArr>
+					<DefAvertRq>0</DefAvertRq>
+					<DefAvertRqDt>2011-02-04</DefAvertRqDt>
+					<DefAvertRqCure>1</DefAvertRqCure>
+					<DefAvertRqCureDt>2010-10-10</DefAvertRqCureDt>
+					<ClaimFil>true</ClaimFil>
+					<ClaimFilDt>1991-09-09</ClaimFilDt>
+					<ClaimPd>false</ClaimPd>
+					<ClaimPdDt>2001-03-04</ClaimPdDt>
+					<EligibilityReinstatementIndicator>true</EligibilityReinstatementIndicator>
+					<EligibilityReinstatementDate>2006-05-05</EligibilityReinstatementDate>
+				</Default>
+				<GrossLoanAmount>4000.00</GrossLoanAmount>
+			</Award>
+		</MeteorDataProviderAwardDetails>
+		<MeteorDataProviderMsg>
+			<RsMsg>Thank you for making on-time payments!!!</RsMsg>
+			<RsMsgLevel>I</RsMsgLevel>
+		</MeteorDataProviderMsg>
+	</MeteorDataProviderInfo>
+		<MeteorDataProviderInfo>
+		<MeteorDataProviderDetailInfo>
+			<DataProviderType>S</DataProviderType>
+			<DataProviderData>
+				
+				<EntityName>School2 for you</EntityName>
+				<EntityID>003800</EntityID>
+				<EntityURL>www.schoolforyou.com</EntityURL>
+				<Contacts>
+					<Phone>
+						<PhoneNumType>P</PhoneNumType>
+						<PhoneNum>105-974-1290</PhoneNum>
+					</Phone>
+		
+			<AddressInfo>
+						<AddrValidInd>1</AddrValidInd>
+						<AddrValidDt>1999-01-23</AddrValidDt>
+						<AddressType>P</AddressType>
+						<Addr>364 Hand Street</Addr>
+						<City>Seattle</City>
+						<StateProv>WA</StateProv>
+						<PostalCd>98108</PostalCd>
+					</AddressInfo>
+					<Email>
+						<EmailAddress>doitforyou@lfy.com</EmailAddress>
+					</Email>
+				</Contacts>
+			</DataProviderData>
+			<DataProviderAggregateTotal>
+				
+			</DataProviderAggregateTotal>
+		</MeteorDataProviderDetailInfo>
+		<MeteorDataProviderAwardDetails>
+			<Award>
+				<APSUniqueAwardID>3</APSUniqueAwardID>
+				<DataProviderType>FAT</DataProviderType>
+				<AwardType>FFELCSub</AwardType>
+				<AwardAmt>4000.00</AwardAmt>
+				<AwardBeginDt>1988-08-20</AwardBeginDt>
+				<AwardEndDt>1989-05-21</AwardEndDt>
+				<GradeLevelInd>4</GradeLevelInd>
+				<LoanStat>RP</LoanStat>
+				<LoanStatDt>1990-11-19</LoanStatDt>
+				<MPNInd/>
+				<CommonlineError/>
+				<Disbursement>
+					<DisbSeqNum>1</DisbSeqNum>
+					<SchedDisbDt>1988-08-20</SchedDisbDt>
+					<ActualDisbDt>1988-08-21</ActualDisbDt>
+					<DisbNetAmt>1920.00</DisbNetAmt>
+					<DisbStatCd>A</DisbStatCd>
+					<DisbStatDt>1988-08-22</DisbStatDt>
+					<DisbHold/>
+				
+				</Disbursement>
+				<Disbursement>
+					<DisbSeqNum>2</DisbSeqNum>
+					<SchedDisbDt>1988-12-22</SchedDisbDt>
+					<DisbNetAmt>1920.00</DisbNetAmt>
+					<DisbStatCd>A</DisbStatCd>
+					<DisbStatDt>1988-07-07</DisbStatDt>
+					<DisbHold/>
 					
+				</Disbursement>
+				<Student>
+					<LastName>Puffin</LastName>
+					<FirstName>Polly</FirstName>
+					<MiddleInitial>H</MiddleInitial>
+					<SSNum unmasked="110101010">*****1010</SSNum>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-456-8765</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>432 IOU Lane</Addr>
+							<City>YouBet</City>
+							<StateProv>IA</StateProv>
+							<PostalCd>87645-8432</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+						</Email>
+					</Contacts>
+					<DtOfBirth>1964-12-01</DtOfBirth>
+					<Employer>
+						
+						<EntityName>Boeing Airfreight</EntityName>
+						<EntityID/>
+						<EntityURL>www.boeing-air.com</EntityURL>
+						<Contacts>
+							<Phone>
+								<PhoneNumType>P</PhoneNumType>
+								<PhoneNum>501-456-6294</PhoneNum>
+							</Phone>
+							<AddressInfo>
+								<AddrValidInd>1</AddrValidInd>
+								<AddrValidDt>1999-10-13</AddrValidDt>
+								<AddressType>P</AddressType>
+								<Addr>9807 Boeing Drive</Addr>
+								<City>Chicago</City>
+								<StateProv>IL</StateProv>
+								<PostalCd>22345-9102</PostalCd>
+							</AddressInfo>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
+						</Contacts>
+					</Employer>
+					<GradDt>2000-05-20</GradDt>
+				</Student>
+				<Borrower>
+					<LastName>Puffin</LastName>
+					<FirstName>Polly</FirstName>
+					<MiddleInitial>H</MiddleInitial>
+					<SSNum unmasked="110101010">*****1010</SSNum>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-456-8765</PhoneNum>
+							<PhoneValidInd>false</PhoneValidInd>
+							<PhoneValidDt>2011-01-01</PhoneValidDt>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>432 IOU Lane</Addr>
+							<City>YouBet</City>
+							<StateProv>IA</StateProv>
+							<PostalCd>87645-8432</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+							<EmailValidInd>true</EmailValidInd>
+						</Email>
+					</Contacts>
+					<DtOfBirth>1964-12-01</DtOfBirth>
+					<Employer>
+						
+						<EntityName>Boeing Airfreight</EntityName>
+						<EntityID/>
+						<EntityURL>www.boeing-air.com</EntityURL>
+						<Contacts>
+							<Phone>
+								<PhoneNumType>P</PhoneNumType>
+								<PhoneNum>501-456-6294</PhoneNum>
+							</Phone>
+							<AddressInfo>
+								<AddrValidInd>1</AddrValidInd>
+								<AddrValidDt>1999-10-13</AddrValidDt>
+								<AddressType>P</AddressType>
+								<Addr>9807 Boeing Drive</Addr>
+								<City>Chicago</City>
+								<StateProv>IL</StateProv>
+								<PostalCd>22345-9102</PostalCd>
+							</AddressInfo>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
+						</Contacts>
+					</Employer>
+					<DriversLicense>4354328654</DriversLicense>
+					<DriversLicenseState>IL</DriversLicenseState>
+				</Borrower>
+				<Reference>
+					<LastName>SwissCheese</LastName>
+					<FirstName>Uncle Bob</FirstName>
+					<MiddleInitial>T</MiddleInitial>
+					<SSNum unmasked="546459182">*****9182</SSNum>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>405-209-8753</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1990-05-30</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>5468 HWY 90</Addr>
+							<City>Iowa City Hills</City>
+							<StateProv>IA</StateProv>
+							<PostalCd>43567</PostalCd>
+						</AddressInfo>
+					</Contacts>
+					<DtOfBirth>1947-08-13</DtOfBirth>
+					<Employer>
+						
+						<EntityName>Big Feed Store</EntityName>
+						<EntityID/>
+						<EntityURL/>
+						<Contacts>
+							<Phone>
+								<PhoneNumType>P</PhoneNumType>
+								<PhoneNum>501-546-8796</PhoneNum>
+							</Phone>
+							<AddressInfo>
+								<AddrValidInd>1</AddrValidInd>
+								<AddrValidDt>1990-05-30</AddrValidDt>
+								<AddressType>P</AddressType>
+								<Addr>4356 HWY 80</Addr>
+								<City>Iowa City Hills</City>
+								<StateProv>IA</StateProv>
+								<PostalCd>43567</PostalCd>
+							</AddressInfo>
+							<Email>
+								<EmailAddress>oats@bigfeed.com</EmailAddress>
+							</Email>
+						</Contacts>
+					</Employer>
+				</Reference>
+				<DisbursingAgent>
+					
+					<EntityName>Big Time Disbursing Agent</EntityName>
+					<EntityID>708952</EntityID>
+					<EntityURL>www.sendmethemoney.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-456-9823</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-12-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>3476 Disursement Lane</Addr>
+							<City>Sweat Home</City>
+							<StateProv>AL</StateProv>
+							<PostalCd>56432</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>help@btda.com</EmailAddress>
+						</Email>
+					</Contacts>
+				</DisbursingAgent>
+				<Lender>
+					
+					<EntityName>Lending For You</EntityName>
+					<EntityID>708569</EntityID>
+					<EntityURL>www.lendingforyou.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-497-0921</PhoneNum>
+							<PhoneValidInd>true</PhoneValidInd>
+							<PhoneValidDt>2001-01-01</PhoneValidDt>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-23</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>8731 Yield Street</Addr>
+							<City>Alexandria</City>
+							<StateProv>VA</StateProv>
+							<PostalCd>13453</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>assisance@lfy.com</EmailAddress>
+							<EmailValidInd>false</EmailValidInd>
+							<EmailValidDt>2002-02-02</EmailValidDt>
+						</Email>
+					</Contacts>
+				</Lender>
+				<Servicer>
+					
+					<EntityName>Servicing For Polly</EntityName>
+					<EntityID>809547</EntityID>
+					<EntityURL>www.servicingforyoupolly.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-458-7273</PhoneNum>
+							<PhoneValidInd>false</PhoneValidInd>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-02-23</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>924 Servicing Way</Addr>
+							<City>Salt Lake City</City>
+							<StateProv>UT</StateProv>
+							<PostalCd>84054</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>whatdoyouneedpolly@sfy.com</EmailAddress>
+							<EmailValidInd>true</EmailValidInd>
+						</Email>
+					</Contacts>
+				</Servicer>
+				<ConsolLender>
+					
+					<EntityName>Consolidating For You</EntityName>
+					<EntityID>751587</EntityID>
+					<EntityURL>www.consolidatingforyou.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-367-9321</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-01</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>794 Consolidating Road</Addr>
+							<City>Los Angelas</City>
+							<StateProv>CA</StateProv>
+							<PostalCd>98145</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>helpforyou@cfy.com</EmailAddress>
+						</Email>
+					</Contacts>
+				</ConsolLender>
+				<School>
+					
+					<EntityName>Learning For You</EntityName>
+					<EntityID>001814</EntityID>
+					<EntityURL>www.learningforyou.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-468-9134</PhoneNum>
+							<PhoneValidDt>2004-04-04</PhoneValidDt>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1997-08-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>482 Learning Way, Room 1, 2nd Floor</Addr>
+							<City>Orlando</City>
+							<StateProv>FL</StateProv>
+							<PostalCd>32807</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>lotofknowledge@lfy.edu</EmailAddress>
+							<EmailValidDt>2003-03-03</EmailValidDt>
+						</Email>
+					</Contacts>
+				</School>
+				<Guarantor>
+					
+					<EntityName>Little GA</EntityName>
+					<EntityID>606</EntityID>
+					<EntityURL>www.littlega.org</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-564-8439</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-04-08</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>34 Andover Court</Addr>
+							<City>Salisaw</City>
+							<StateProv>OK</StateProv>
+							<PostalCd>75932</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>guarantees@lga.org</EmailAddress>
+						</Email>
+					</Contacts>
+				</Guarantor>
+				<FinAidTranscript>
+					
+					<EntityName>FAT Provider</EntityName>
+					<EntityID>606</EntityID>
+					<EntityURL>www.littlefatp.org</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-564-8439</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-04-08</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>34 Andover Court</Addr>
+							<City>Salisaw</City>
+							<StateProv>OK</StateProv>
+							<PostalCd>75932</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>transcripts@littlefatp.org</EmailAddress>
+						</Email>
+					</Contacts>
+				</FinAidTranscript>
+				<AwardId>0000111122K334455</AwardId>
+				<Repayment>
+					<NextPmtAmt>145.23</NextPmtAmt>
+					<NextDueDt>2002-03-19</NextDueDt>
+					<AcctBal>565.98</AcctBal>
+					<AcctBalDt>2002-02-14</AcctBalDt>
+					<PmtPlan>Standard</PmtPlan>
+					<LastPmt>
+						<PaymentAmt>145.23</PaymentAmt>
+						<PaymentDt>2002-02-13</PaymentDt>
+					</LastPmt>
+					<PmtBeginDt>1989-11-20</PmtBeginDt>
+					<CurrentMonthlyPayment>122.29</CurrentMonthlyPayment>
+					<CurrIntRate>8.00</CurrIntRate>
+					<RepaidPrincipalAmt>3654.02</RepaidPrincipalAmt>
+					<CapitalizedIntAmt>2745.91</CapitalizedIntAmt>
+					<LateFees>
+						<LateFeesAmount>413.22</LateFeesAmount>
+						<LateFeesDate>2011-04-04</LateFeesDate>
+					</LateFees>
+					<CollectionCosts>
+					    <CollectionCostsAmount>555.55</CollectionCostsAmount>
+					    <CollectionCostsDate>2013-04-23</CollectionCostsDate>
+					</CollectionCosts>
+					<DefermentForbearance>
+						<DefermentForbearanceName>Deferment name</DefermentForbearanceName>
+						<DefermentForbearanceBeginDate>2011-01-01</DefermentForbearanceBeginDate>
+						<DefermentForbearanceEndDate>2012-01-01</DefermentForbearanceEndDate>
+					</DefermentForbearance>
+					<Deferment>
+						<TypeCode>Armed Forces</TypeCode>
+						<TimeUsed>12</TimeUsed>
+					</Deferment>
+					<Deferment>
+						<TypeCode>Action Programs</TypeCode>
+						<TimeUsed>24</TimeUsed>
+					</Deferment>
+					<Forbearance>
+					    <TypeCode>Administrative</TypeCode>
+					    <TimeUsed>3</TimeUsed>
+					</Forbearance>
+					<RepaymentTermRemaining>120</RepaymentTermRemaining>
+					<DaysPastDue>14</DaysPastDue>
+				</Repayment>
+				<GrossLoanAmount>4000.00</GrossLoanAmount>
+			</Award>
+			<Award>
+				<APSUniqueAwardID>4</APSUniqueAwardID>
+				<DataProviderType>S</DataProviderType>
+				<AwardType>FFELSub</AwardType>
+				<AwardAmt>4000.00</AwardAmt>
+				<AwardBeginDt>1988-08-20</AwardBeginDt>
+				<AwardEndDt>1989-05-21</AwardEndDt>
+				<GradeLevelInd>4</GradeLevelInd>
+				<LoanStat>RP</LoanStat>
+				<LoanStatDt>1990-11-19</LoanStatDt>
+				<MPNInd/>
+				<CommonlineError/>
+				<Disbursement>
+					<DisbSeqNum>1</DisbSeqNum>
+					<SchedDisbDt>1988-08-20</SchedDisbDt>
+					<ActualDisbDt>1988-08-21</ActualDisbDt>
+					<DisbNetAmt>1920.00</DisbNetAmt>
+					<DisbStatCd>A</DisbStatCd>
+					<DisbStatDt>1988-08-22</DisbStatDt>
+					<DisbHold/>
+				
+				</Disbursement>
+				<Disbursement>
+					<DisbSeqNum>2</DisbSeqNum>
+					<SchedDisbDt>1988-12-22</SchedDisbDt>
+					<DisbNetAmt>1920.00</DisbNetAmt>
+					<DisbStatCd>A</DisbStatCd>
+					<DisbStatDt>1988-07-07</DisbStatDt>
+					<DisbHold/>
+					
+				</Disbursement>
+				<Student>
+					<LastName>Puffin</LastName>
+					<FirstName>Polly</FirstName>
+					<MiddleInitial>H</MiddleInitial>
+					<SSNum unmasked="110101010">*****1010</SSNum>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-456-8765</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>432 IOU Lane</Addr>
+							<City>YouBet</City>
+							<StateProv>IA</StateProv>
+							<PostalCd>87645-8432</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+						</Email>
+					</Contacts>
+					<DtOfBirth>1964-12-01</DtOfBirth>
+					<Employer>
+						
+						<EntityName>Boeing Airfreight</EntityName>
+						<EntityID/>
+						<EntityURL>www.boeing-air.com</EntityURL>
+						<Contacts>
+							<Phone>
+								<PhoneNumType>P</PhoneNumType>
+								<PhoneNum>501-456-6294</PhoneNum>
+							</Phone>
+							<AddressInfo>
+								<AddrValidInd>1</AddrValidInd>
+								<AddrValidDt>1999-10-13</AddrValidDt>
+								<AddressType>P</AddressType>
+								<Addr>9807 Boeing Drive</Addr>
+								<City>Chicago</City>
+								<StateProv>IL</StateProv>
+								<PostalCd>22345-9102</PostalCd>
+							</AddressInfo>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
+						</Contacts>
+					</Employer>
+					<GradDt>2000-05-20</GradDt>
+				</Student>
+				<Borrower>
+					<LastName>Puffin</LastName>
+					<FirstName>Polly</FirstName>
+					<MiddleInitial>H</MiddleInitial>
+					<SSNum unmasked="110101010">*****1010</SSNum>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-456-8765</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>432 IOU Lane</Addr>
+							<City>YouBet</City>
+							<StateProv>IA</StateProv>
+							<PostalCd>87645-8432</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>Polly_Puffin@beoing.com</EmailAddress>
+						</Email>
+					</Contacts>
+					<DtOfBirth>1964-12-01</DtOfBirth>
+					<Employer>
+						
+						<EntityName>Boeing Airfreight</EntityName>
+						<EntityID/>
+						<EntityURL>www.boeing-air.com</EntityURL>
+						<Contacts>
+							<Phone>
+								<PhoneNumType>P</PhoneNumType>
+								<PhoneNum>501-456-6294</PhoneNum>
+							</Phone>
+							<AddressInfo>
+								<AddrValidInd>1</AddrValidInd>
+								<AddrValidDt>1999-10-13</AddrValidDt>
+								<AddressType>P</AddressType>
+								<Addr>9807 Boeing Drive</Addr>
+								<City>Chicago</City>
+								<StateProv>IL</StateProv>
+								<PostalCd>22345-9102</PostalCd>
+							</AddressInfo>
+							<Email>
+								<EmailAddress>customerassistance@boeingair.com</EmailAddress>
+							</Email>
+						</Contacts>
+					</Employer>
+					<DriversLicense>4354328654</DriversLicense>
+					<DriversLicenseState>IL</DriversLicenseState>
+				</Borrower>
+				<Reference>
+					<LastName>SwissCheese</LastName>
+					<FirstName>Uncle Bob</FirstName>
+					<MiddleInitial>T</MiddleInitial>
+					<SSNum unmasked="546459182">*****9182</SSNum>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>405-209-8753</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1990-05-30</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>5468 HWY 90</Addr>
+							<City>Iowa City Hills</City>
+							<StateProv>IA</StateProv>
+							<PostalCd>43567</PostalCd>
+						</AddressInfo>
+					</Contacts>
+					<DtOfBirth>1947-08-13</DtOfBirth>
+					<Employer>
+						
+						<EntityName>Big Feed Store</EntityName>
+						<EntityID/>
+						<EntityURL/>
+						<Contacts>
+							<Phone>
+								<PhoneNumType>P</PhoneNumType>
+								<PhoneNum>501-546-8796</PhoneNum>
+							</Phone>
+							<AddressInfo>
+								<AddrValidInd>1</AddrValidInd>
+								<AddrValidDt>1990-05-30</AddrValidDt>
+								<AddressType>P</AddressType>
+								<Addr>4356 HWY 80</Addr>
+								<City>Iowa City Hills</City>
+								<StateProv>IA</StateProv>
+								<PostalCd>43567</PostalCd>
+							</AddressInfo>
+							<Email>
+								<EmailAddress>oats@bigfeed.com</EmailAddress>
+							</Email>
+						</Contacts>
+					</Employer>
+				</Reference>
+				<DisbursingAgent>
+					
+					<EntityName>Big Time Disbursing Agent</EntityName>
+					<EntityID>708952</EntityID>
+					<EntityURL>www.sendmethemoney.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-456-9823</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-12-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>3476 Disursement Lane</Addr>
+							<City>Sweat Home</City>
+							<StateProv>AL</StateProv>
+							<PostalCd>56432</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>help@btda.com</EmailAddress>
+						</Email>
+					</Contacts>
+				</DisbursingAgent>
+				<Lender>
+					
+					<EntityName>Lending For You</EntityName>
+					<EntityID>708569</EntityID>
+					<EntityURL>www.lendingforyou.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-497-0921</PhoneNum>
+							<PhoneValidInd>true</PhoneValidInd>
+							<PhoneValidDt>2001-01-01</PhoneValidDt>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-23</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>8731 Yield Street</Addr>
+							<City>Alexandria</City>
+							<StateProv>VA</StateProv>
+							<PostalCd>13453</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>assisance@lfy.com</EmailAddress>
+							<EmailValidInd>false</EmailValidInd>
+							<EmailValidDt>2002-02-02</EmailValidDt>
+						</Email>
+					</Contacts>
+				</Lender>
+				<Servicer>
+					
+					<EntityName>Servicing For Polly</EntityName>
+					<EntityID>809547</EntityID>
+					<EntityURL>www.servicingforyoupolly.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-458-7273</PhoneNum>
+							<PhoneValidInd>false</PhoneValidInd>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-02-23</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>924 Servicing Way</Addr>
+							<City>Salt Lake City</City>
+							<StateProv>UT</StateProv>
+							<PostalCd>84054</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>whatdoyouneedpolly@sfy.com</EmailAddress>
+							<EmailValidInd>true</EmailValidInd>
+						</Email>
+					</Contacts>
+				</Servicer>
+				<ConsolLender>
+					
+					<EntityName>Consolidating For You</EntityName>
+					<EntityID>751587</EntityID>
+					<EntityURL>www.consolidatingforyou.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-367-9321</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1999-10-01</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>794 Consolidating Road</Addr>
+							<City>Los Angelas</City>
+							<StateProv>CA</StateProv>
+							<PostalCd>98145</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>helpforyou@cfy.com</EmailAddress>
+						</Email>
+					</Contacts>
+				</ConsolLender>
+				<School>
+					
+					<EntityName>Learning For You</EntityName>
+					<EntityID>001814</EntityID>
+					<EntityURL>www.learningforyou.com</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-468-9134</PhoneNum>
+							<PhoneValidDt>2004-04-04</PhoneValidDt>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>1997-08-13</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>482 Learning Way, Room 1, 2nd Floor</Addr>
+							<City>Orlando</City>
+							<StateProv>FL</StateProv>
+							<PostalCd>32807</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>lotofknowledge@lfy.edu</EmailAddress>
+							<EmailValidDt>2003-03-03</EmailValidDt>
+						</Email>
+					</Contacts>
+				</School>
+				<Guarantor>
+					
+					<EntityName>Little GA</EntityName>
+					<EntityID>606</EntityID>
+					<EntityURL>www.littlega.org</EntityURL>
+					<Contacts>
+						<Phone>
+							<PhoneNumType>P</PhoneNumType>
+							<PhoneNum>501-564-8439</PhoneNum>
+						</Phone>
+						<AddressInfo>
+							<AddrValidInd>1</AddrValidInd>
+							<AddrValidDt>2000-04-08</AddrValidDt>
+							<AddressType>P</AddressType>
+							<Addr>34 Andover Court</Addr>
+							<City>Salisaw</City>
+							<StateProv>OK</StateProv>
+							<PostalCd>75932</PostalCd>
+						</AddressInfo>
+						<Email>
+							<EmailAddress>guarantees@lga.org</EmailAddress>
+						</Email>
+					</Contacts>
+				</Guarantor>
+				<AwardId>0000111122K334455</AwardId>
+				<Repayment>
+					<NextPmtAmt>145.23</NextPmtAmt>
+					<NextDueDt>2002-03-15</NextDueDt>
+					<AcctBal>565.98</AcctBal>
+					<AcctBalDt>2002-02-14</AcctBalDt>
+					<PmtPlan>Standard</PmtPlan>
+					<LastPmt>
+						<PaymentAmt>145.23</PaymentAmt>
+						<PaymentDt>2002-02-13</PaymentDt>
+					</LastPmt>
+					<PmtBeginDt>1989-11-20</PmtBeginDt>
+					<CurrentMonthlyPayment>49.96</CurrentMonthlyPayment>
+					<CurrIntRate>8.00</CurrIntRate>
+					<RepaidPrincipalAmt>3654.02</RepaidPrincipalAmt>
+					<CapitalizedIntAmt>2745.91</CapitalizedIntAmt>
+					<RepaymentTermRemaining>22</RepaymentTermRemaining>
+					<DaysPastDue>20</DaysPastDue>
 				</Repayment>
 				<GrossLoanAmount>4000.00</GrossLoanAmount>
 			</Award>
@@ -360,17 +1590,5 @@
 		</MeteorDataProviderMsg>
 	</MeteorDataProviderInfo>
 	<MeteorDataAggregates>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	</MeteorDataAggregates>
 </PESCXML:MeteorRsMsg>

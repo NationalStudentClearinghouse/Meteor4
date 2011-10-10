@@ -18,6 +18,11 @@ public class SampleTokenProvider implements TokenProvider {
 	@Override
 	public SecurityToken getSecurityToken(HttpServletRequest request) throws SecurityTokenException {
 		String tokenString = request.getParameter("SecurityToken");
+		if (tokenString == null) {
+			tokenString = (String) request.getSession().getAttribute("SampleSecurityToken");
+		} else {
+			request.getSession().setAttribute("SampleSecurityToken", tokenString);
+		}
 		
 		// TODO validate signature
 		

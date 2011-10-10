@@ -12,8 +12,51 @@
 	
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
 	
+	<!-- 
+		pages 
+	-->
 	<bean name="/meteor/summary.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
-		<property name="viewName" value="rawXml"/>
+		<property name="viewName" value="awardSummary"/>
+		<lookup-method name="getSession" bean="meteorSession"/>
+	</bean>
+	
+	<bean name="/meteor/repaymentSummary.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
+		<property name="viewName" value="repaymentSummary"/>
+		<lookup-method name="getSession" bean="meteorSession"/>
+	</bean>
+	
+	<bean name="/meteor/aversion.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
+		<property name="viewName" value="aversion"/>
+		<lookup-method name="getSession" bean="meteorSession"/>
+		<property name="validRoles">
+			<list>
+				<value>FAA</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean name="/meteor/awardDetail.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
+		<property name="viewName" value="awardDetail"/>
+		<lookup-method name="getSession" bean="meteorSession"/>
+	</bean>
+	
+	<bean name="/meteor/disbursement.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
+		<property name="viewName" value="disbursement"/>
+		<lookup-method name="getSession" bean="meteorSession"/>
+	</bean>
+	
+	<bean name="/meteor/references.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
+		<property name="viewName" value="references"/>
+		<lookup-method name="getSession" bean="meteorSession"/>
+	</bean>
+	
+	<bean name="/meteor/repaymentDetail.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
+		<property name="viewName" value="repaymentDetail"/>
+		<lookup-method name="getSession" bean="meteorSession"/>
+	</bean>
+	
+	<bean name="/meteor/consolidated.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
+		<property name="viewName" value="consolidated"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
 	</bean>
 </beans> 
