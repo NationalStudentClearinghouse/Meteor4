@@ -16,6 +16,7 @@
 		<maven.compile.debug>on</maven.compile.debug>
 		
 		<meteor.version>4.0.0</meteor.version>
+		<meteor.business.version>4.0.0</meteor.business.version>
 	
 		<wss4j.version>1.6.2</wss4j.version>
 		
@@ -37,6 +38,13 @@
 			<groupId>org.meteornetwork.meteor</groupId>
 			<artifactId>meteorlib</artifactId>
 			<version>${meteor.version}</version>
+		</dependency>
+		
+		<!-- Meteor Business Logic -->
+		<dependency>
+			<groupId>org.meteornetwork.meteor</groupId>
+			<artifactId>meteorbusiness</artifactId>
+			<version>${meteor.business.version}</version>
 		</dependency>
 		
 		<!-- code generation library ( for spring scoped-proxy ) -->

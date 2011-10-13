@@ -14,7 +14,7 @@
 	         <xsd:element name="DataProviders" minOccurs="1" maxOccurs="1">
 	            <xsd:complexType>
 	               <xsd:sequence>
-	                  <xsd:element name="DataProvider" type="DataProviderOrgType" minOccurs="0" maxOccurs="unbounded"/>
+	                  <xsd:element name="DataProvider" type="OrgType" minOccurs="0" maxOccurs="unbounded"/>
 	               </xsd:sequence>
 	            </xsd:complexType>
 	         </xsd:element>
@@ -39,16 +39,6 @@
 			<xsd:element name="EntityID" type="EntityIDType" minOccurs="0"/>
 			<xsd:element name="EntityURL" type="URLType" minOccurs="0"/>
 		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="DataProviderOrgType">
-		<xsd:complexContent>
-			<xsd:extension base="OrgType">
-				<xsd:sequence>
-					<xsd:element name="MeteorVersion" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:extension>
-		</xsd:complexContent>
 	</xsd:complexType>
 	
 	<!-- ******************************************************************************* -->
@@ -134,16 +124,19 @@
 	<!-- ******************************************************************************* -->
 	
 	<xsd:simpleType name="RsMsgLevelType">
-	   <xsd:annotation>
-	      <xsd:documentation xml:lang="en">"E" = Error      </xsd:documentation>
-	      <xsd:documentation xml:lang="en">"W" = Warning    </xsd:documentation>
-	      <xsd:documentation xml:lang="en">"I" = Information</xsd:documentation>
-	   </xsd:annotation>
-	   <xsd:restriction base="xsd:string">
-	      <xsd:enumeration value="E"/>
-	      <xsd:enumeration value="W"/>
-	      <xsd:enumeration value="I"/>
-	   </xsd:restriction>
+		<xsd:union memberTypes="RsMsgLevelEnum xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="RsMsgLevelEnum">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">"E" = Error      </xsd:documentation>
+			<xsd:documentation xml:lang="en">"W" = Warning    </xsd:documentation>
+			<xsd:documentation xml:lang="en">"I" = Information</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="E"/>
+			<xsd:enumeration value="W"/>
+			<xsd:enumeration value="I"/>
+		</xsd:restriction>
 	</xsd:simpleType>
 	
 	<!-- ******************************************************************************* -->

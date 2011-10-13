@@ -4,7 +4,8 @@ import java.util.concurrent.Callable;
 
 import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
-import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
+import org.meteornetwork.meteor.provider.access.DataProviderInfo;
+
 
 /**
  * Interface for the access provider translation layer when querying for
@@ -16,14 +17,14 @@ import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
  */
 public interface DataQueryAdapter extends Callable<MeteorRsMsg> {
 
-	DataProvider getDataProvider();
+	DataProviderInfo getDataProviderInfo();
 
 	/**
 	 * The data provider to query against
 	 * 
 	 * @param dataProvider
 	 */
-	void setDataProvider(DataProvider dataProvider);
+	void setDataProviderInfo(DataProviderInfo dataProvider);
 
 	String getSsn();
 

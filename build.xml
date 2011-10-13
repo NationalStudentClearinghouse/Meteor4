@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="build-all" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	
+	<property name="maven.home" value="C:/apache-maven-3.0.3"/>
+
+	<target name="build-all" depends="meteor-business, meteor-lib, meteor-saml">
+		<ant dir="accessprovider" inheritAll="false">
+			<property name="basedir" value="${basedir}/accessprovider"/>
+		</ant>
+		<ant dir="dataprovider" inheritAll="false">
+			<property name="basedir" value="${basedir}/dataprovider"/>
+		</ant>
+		<ant dir="indexprovider" inheritAll="false">
+			<property name="basedir" value="${basedir}/indexprovider"/>
+		</ant>
+		<ant dir="uiprovider" inheritAll="false">
+			<property name="basedir" value="${basedir}/uiprovider"/>
+		</ant>
+		<ant dir="samplelogin" inheritAll="false">
+			<property name="basedir" value="${basedir}/samplelogin"/>
+		</ant>
+	</target>
+
+	<target name="meteor-saml">
+		<artifact:mvn mavenHome="${maven.home}" pom="meteorsaml/pom.xml" fork="true">
+			<arg value="clean"/>
+			<arg value="package"/>
+			<arg value="install"/>
+		</artifact:mvn>
+	</target>
+	
+	<target name="meteor-lib" depends="meteor-saml">
+		<artifact:mvn mavenHome="${maven.home}" pom="meteorlib/pom.xml" fork="true">
+			<arg value="clean"/>
+			<arg value="package"/>
+			<arg value="install"/>
+		</artifact:mvn>
+	</target>
+	
+	<target name="meteor-business" depends="meteor-lib">
+		<artifact:mvn mavenHome="${maven.home}" pom="meteorbusiness/pom.xml" fork="true">
+			<arg value="clean"/>
+			<arg value="package"/>
+			<arg value="install"/>
+		</artifact:mvn>
+	</target>
+
+</project>

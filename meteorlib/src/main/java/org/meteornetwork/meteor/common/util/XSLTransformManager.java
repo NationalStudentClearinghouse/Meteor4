@@ -55,7 +55,7 @@ public class XSLTransformManager {
 	 *            template to use for transformation
 	 * @return transform results as XML string
 	 * @throws TransformerException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public String transformXML(String source, Templates xslTemplate) throws TransformerException, IOException {
 		Transformer transformer = xslTemplate.newTransformer();
@@ -63,12 +63,14 @@ public class XSLTransformManager {
 		StreamSource streamSource = new StreamSource(new ByteArrayInputStream(source.getBytes()));
 
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-		StreamResult streamResult = new StreamResult(outStream);
+		try {
+			StreamResult streamResult = new StreamResult(outStream);
 
-		transformer.transform(streamSource, streamResult);
-		String result = outStream.toString();
-		
-		outStream.close();
-		return result;
+			transformer.transform(streamSource, streamResult);
+			String result = outStream.toString();
+			return result;
+		} finally {
+			outStream.close();
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package org.meteornetwork.meteor.business;
 
 import java.util.List;
+import java.util.Set;
 
 import org.meteornetwork.meteor.common.xml.dataresponse.Award;
 
@@ -33,7 +34,7 @@ public class BestSourceAggregator {
 	 * @return the best sources of the awards that have been added to this
 	 *         instance
 	 */
-	public List<Award> getBest() {
+	public Set<Award> getBest() {
 		return loanList.getBestSource();
 	}
 

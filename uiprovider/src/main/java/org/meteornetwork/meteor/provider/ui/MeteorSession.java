@@ -1,5 +1,8 @@
 package org.meteornetwork.meteor.provider.ui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.meteornetwork.meteor.saml.SecurityToken;
 
 public class MeteorSession {
@@ -7,6 +10,8 @@ public class MeteorSession {
 	private SecurityToken token;
 	private String ssn;
 	private String responseXml;
+	private String responseXmlUnfiltered;
+	private HashMap<Integer, ArrayList<Integer>> duplicateAwardIds;
 
 	public SecurityToken getToken() {
 		return token;
@@ -30,5 +35,21 @@ public class MeteorSession {
 
 	public void setResponseXml(String responseXml) {
 		this.responseXml = responseXml;
+	}
+
+	public String getResponseXmlUnfiltered() {
+		return responseXmlUnfiltered;
+	}
+
+	public void setResponseXmlUnfiltered(String responseXmlUnfiltered) {
+		this.responseXmlUnfiltered = responseXmlUnfiltered;
+	}
+
+	public HashMap<Integer, ArrayList<Integer>> getDuplicateAwardIds() {
+		return duplicateAwardIds;
+	}
+
+	public void setDuplicateAwardIds(HashMap<Integer, ArrayList<Integer>> duplicateAwardIds) {
+		this.duplicateAwardIds = duplicateAwardIds;
 	}
 }

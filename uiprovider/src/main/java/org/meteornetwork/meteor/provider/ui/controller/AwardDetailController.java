@@ -15,7 +15,10 @@ public class AwardDetailController extends AbstractMeteorController {
 
 	@Override
 	protected void handleMeteorRequest(ModelAndView modelAndView, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception {
-		modelAndView.addObject("apsuniqueawardid", httpRequest.getParameter("apsUniqAwardId"));
+		modelAndView.addObject("apsuniqueawardid", getAPSUniqueAwardId(httpRequest));
 	}
 
+	protected String getAPSUniqueAwardId(HttpServletRequest httpRequest) {
+		return httpRequest.getParameter("apsUniqAwardId");
+	}
 }

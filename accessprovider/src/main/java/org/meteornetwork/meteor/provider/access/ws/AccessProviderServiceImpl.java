@@ -1,19 +1,28 @@
 package org.meteornetwork.meteor.provider.access.ws;
 
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.jws.WebService;
+import javax.xml.ws.Holder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.business.BestSourceAggregator;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
+import org.meteornetwork.meteor.common.xml.dataresponse.Award;
+import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
+import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
 import org.meteornetwork.meteor.provider.access.manager.AccessProviderManager;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
 import org.meteornetwork.meteor.saml.TokenAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.SerializationUtils;
 
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.AccessProviderService", serviceName = "AccessProviderService")
 public class AccessProviderServiceImpl implements AccessProviderService {
@@ -31,13 +40,65 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 	public String findDataForBorrower(String ssn, TokenAttributes meteorAttributes) {
 		// TODO refactor the way saml attributes are passed -- can we now pass
 		// around a signed assertion using a custom CXF interceptor?
-		LOG.debug("AP received request for ssn: " + ssn);
+		LOG.debug("AP received request for best source data for ssn: " + ssn);
 
 		requestInfo.setMeteorInstitutionIdentifier(authenticationProperties.getProperty("authentication.identifier"));
 		requestInfo.setSecurityToken(new SecurityTokenImpl());
 		requestInfo.getSecurityToken().setMeteorAttributes(meteorAttributes);
 
-		return accessProviderManager.queryMeteor(ssn);
+		ResponseDataWrapper response = accessProviderManager.queryMeteor(ssn);
+		try {
+			return accessProviderManager.maskSSNs(marshalResponseData(response.getResponseDataBestSource()));
+		} catch (Exception e) {
+			LOG.error("Could not mask SSNs", e);
+			return null;
+		}
+	}
+
+	@Override
+	public void findDataForBorrowerWithConsolidated(String ssn, TokenAttributes meteorAttributes, Holder<String> resultBestSource, Holder<String> resultAll, Holder<byte[]> duplicateAwardsMap) {
+		LOG.debug("AP received request for best source data for ssn: " + ssn);
+
+		requestInfo.setMeteorInstitutionIdentifier(authenticationProperties.getProperty("authentication.identifier"));
+		requestInfo.setSecurityToken(new SecurityTokenImpl());
+		requestInfo.getSecurityToken().setMeteorAttributes(meteorAttributes);
+
+		ResponseDataWrapper response = accessProviderManager.queryMeteor(ssn);
+		try {
+			resultAll.value = accessProviderManager.maskSSNs(marshalResponseData(response.getUnfilteredResponseData()));
+			resultBestSource.value = accessProviderManager.maskSSNs(marshalResponseData(response.getResponseDataBestSource()));
+		} catch (Exception e) {
+			LOG.error("Could not mask SSNs", e);
+			return;
+		}
+
+		/*
+		 * map best source award ids to duplicate award ids
+		 */
+		HashMap<Integer, ArrayList<Integer>> duplicateAwardsMapObj = new HashMap<Integer, ArrayList<Integer>>();
+		BestSourceAggregator aggregator = response.getBestSourceAggregator();
+		for (Award award : aggregator.getBest()) {
+			ArrayList<Integer> duplicateAwardIds = new ArrayList<Integer>();
+			for (Award dupAward : aggregator.getDuplicates(award.getAPSUniqueAwardID())) {
+				duplicateAwardIds.add(dupAward.getAPSUniqueAwardID());
+			}
+
+			duplicateAwardsMapObj.put(award.getAPSUniqueAwardID(), duplicateAwardIds);
+		}
+
+		duplicateAwardsMap.value = SerializationUtils.serialize(duplicateAwardsMapObj);
+	}
+
+	private String marshalResponseData(MeteorRsMsg responseData) {
+		StringWriter marshalledResponse = new StringWriter();
+		try {
+			responseData.marshal(marshalledResponse);
+		} catch (Exception e) {
+			LOG.error("Could not marshal response data", e);
+			return null;
+		}
+
+		return marshalledResponse.toString();
 	}
 
 	public AccessProviderManager getAccessProviderManager() {

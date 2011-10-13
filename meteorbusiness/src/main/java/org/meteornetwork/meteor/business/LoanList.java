@@ -2,9 +2,11 @@ package org.meteornetwork.meteor.business;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.exolab.castor.types.Date;
 import org.meteornetwork.meteor.common.xml.dataresponse.Award;
@@ -224,8 +226,8 @@ public class LoanList {
 	/**
 	 * @return the best source awards from each group of duplicates
 	 */
-	public List<Award> getBestSource() {
-		List<Award> bestSourceAwards = new ArrayList<Award>();
+	public Set<Award> getBestSource() {
+		Set<Award> bestSourceAwards = new HashSet<Award>();
 		for (List<Award> duplicateGroup : duplicateGroups) {
 			Award bestSource = duplicateGroup.get(0);
 			LoanTypeEnum awardType = LoanTypeEnum.getNameIgnoreCase(bestSource.getAwardType());

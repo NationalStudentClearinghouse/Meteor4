@@ -4,7 +4,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
-import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelType;
+import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
 
 /**
  * Loads data providers from a properties file on the classpath. Specify the
@@ -38,7 +38,7 @@ public class PropertiesIndexServer implements IndexServerAbstraction {
 		MeteorIndexResponseWrapper response = new MeteorIndexResponseWrapper();
 
 		if (indexResponseProperties == null) {
-			response.addMessage("Could not find property file with index response data", RsMsgLevelType.E);
+			response.addMessage("Could not find property file with index response data", RsMsgLevelEnum.E);
 			return response;
 		}
 
@@ -47,7 +47,6 @@ public class PropertiesIndexServer implements IndexServerAbstraction {
 			while (true) {
 				DataProvider dataProvider = new DataProvider();
 				dataProvider.setEntityID(indexResponseProperties.getString("dp." + i + ".id"));
-				dataProvider.setMeteorVersion(indexResponseProperties.getString("dp." + i + ".meteorversion"));
 
 				try {
 					dataProvider.setEntityName(indexResponseProperties.getString("dp." + i + ".name"));

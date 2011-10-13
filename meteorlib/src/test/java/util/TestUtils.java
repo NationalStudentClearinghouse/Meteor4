@@ -41,9 +41,13 @@ public class TestUtils {
 	public static String getFileString(Class thisClass, String fileName) throws IOException {
 		File file = new File(thisClass.getResource(fileName).getFile());
 		InputStream fileStream = new FileInputStream(file);
-		return IOUtils.toString(fileStream, IOUtils.UTF8_CHARSET.displayName());
+		try {
+			return IOUtils.toString(fileStream, IOUtils.UTF8_CHARSET.displayName());
+		} finally {
+			fileStream.close();
+		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static void printDifferences(String testMethod, Diff xmlDiff) {
 		DetailedDiff detail = new DetailedDiff(xmlDiff);

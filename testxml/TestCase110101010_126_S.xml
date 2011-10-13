@@ -15,7 +15,7 @@
 						<PhoneNumType>P</PhoneNumType>
 						<PhoneNum>105-974-1290</PhoneNum>
 					</Phone>
-		
+
 			<AddressInfo>
 						<AddrValidInd>1</AddrValidInd>
 						<AddrValidDt>1999-01-23</AddrValidDt>
@@ -72,7 +72,7 @@
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum unmasked="110101010">*****1010</SSNum>
+					<SSNum>110101010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -122,7 +122,7 @@
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum unmasked="110101010">*****1010</SSNum>
+					<SSNum>110101010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -176,7 +176,7 @@
 					<LastName>SwissCheese</LastName>
 					<FirstName>Uncle Bob</FirstName>
 					<MiddleInitial>T</MiddleInitial>
-					<SSNum unmasked="546459182">*****9182</SSNum>
+					<SSNum>546459182</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -462,7 +462,7 @@
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum unmasked="110101010">*****1010</SSNum>
+					<SSNum>110101010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -512,7 +512,7 @@
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum unmasked="110101010">*****1010</SSNum>
+					<SSNum>110101010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -563,7 +563,7 @@
 					<LastName>SwissCheese</LastName>
 					<FirstName>Uncle Bob</FirstName>
 					<MiddleInitial>T</MiddleInitial>
-					<SSNum unmasked="546459182">*****9182</SSNum>
+					<SSNum>546459182</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -864,7 +864,7 @@
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum unmasked="110101010">*****1010</SSNum>
+					<SSNum>110101010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -914,7 +914,7 @@
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum unmasked="110101010">*****1010</SSNum>
+					<SSNum>110101010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -968,7 +968,7 @@
 					<LastName>SwissCheese</LastName>
 					<FirstName>Uncle Bob</FirstName>
 					<MiddleInitial>T</MiddleInitial>
-					<SSNum unmasked="546459182">*****9182</SSNum>
+					<SSNum>546459182</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -1267,7 +1267,7 @@
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum unmasked="110101010">*****1010</SSNum>
+					<SSNum>110101010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -1317,7 +1317,7 @@
 					<LastName>Puffin</LastName>
 					<FirstName>Polly</FirstName>
 					<MiddleInitial>H</MiddleInitial>
-					<SSNum unmasked="110101010">*****1010</SSNum>
+					<SSNum>110101010</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>
@@ -1368,7 +1368,7 @@
 					<LastName>SwissCheese</LastName>
 					<FirstName>Uncle Bob</FirstName>
 					<MiddleInitial>T</MiddleInitial>
-					<SSNum unmasked="546459182">*****9182</SSNum>
+					<SSNum>546459182</SSNum>
 					<Contacts>
 						<Phone>
 							<PhoneNumType>P</PhoneNumType>

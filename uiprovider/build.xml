@@ -12,7 +12,7 @@
 	</target>
 
 	<target name="maven-clean-package">
-		<artifact:mvn mavenHome="${maven.home}">
+		<artifact:mvn mavenHome="${maven.home}" pom="${basedir}/pom.xml" fork="true">
 			<arg value="clean"/>
 			<arg value="package"/>
 		</artifact:mvn>

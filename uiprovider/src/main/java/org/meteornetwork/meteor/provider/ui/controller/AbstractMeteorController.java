@@ -1,11 +1,14 @@
 package org.meteornetwork.meteor.provider.ui.controller;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.ws.Holder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,6 +19,7 @@ import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -25,14 +29,17 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 
 	private AccessProviderService accessProviderService;
 	private TokenProvider tokenProvider;
-	private List<Role> validRoles;
+	private List<Role> allowedRoles;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception {
 		ModelAndView modelView = new ModelAndView(getViewName());
 
-		// TODO create spring mvc handler interceptor with this SecurityToken
-		// logic, redirect to access denied
+		/* *********************************************
+		 * validate authentication
+		 */
+		// TODO redirect to access denied
 		SecurityToken token;
 		try {
 			token = tokenProvider.getSecurityToken(httpRequest);
@@ -41,6 +48,14 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 			return null;
 		}
 
+		// TODO redirect to access denied if role is not valid for page
+		if (!roleIsAllowed(token.getRole())) {
+			return null;
+		}
+
+		/* *********************************************
+		 * Determine if meteor needs to be queried
+		 */
 		String ssn = getSsn(httpRequest, token);
 
 		MeteorSession session = getSession();
@@ -59,16 +74,30 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 			session.setSsn(ssn);
 		}
 
-		// TODO redirect to access denied if role is not valid for page
-		if (!roleIsAllowed(token.getRole())) {
-			return null;
-		}
-		
+		/* *********************************************
+		 * Query Meteor network
+		 */
 		if (queryMeteor) {
-			session.setResponseXml(accessProviderService.findDataForBorrower(ssn, token.getMeteorAttributes()));
+			if (Role.FAA.equals(token.getRole())) {
+				Holder<String> responseBestSource = new Holder<String>();
+				Holder<String> responseAll = new Holder<String>();
+				Holder<byte[]> duplicateAwardIdsSerialized = new Holder<byte[]>();
+				accessProviderService.findDataForBorrowerWithConsolidated(ssn, token.getMeteorAttributes(), responseBestSource, responseAll, duplicateAwardIdsSerialized);
+
+				session.setResponseXml(responseBestSource.value);
+				session.setResponseXmlUnfiltered(responseAll.value);
+				if (duplicateAwardIdsSerialized.value != null) {
+					session.setDuplicateAwardIds((HashMap<Integer, ArrayList<Integer>>) SerializationUtils.deserialize(duplicateAwardIdsSerialized.value));
+				}
+			} else {
+				session.setResponseXml(accessProviderService.findDataForBorrower(ssn, token.getMeteorAttributes()));
+			}
 		}
 
-		modelView.addObject("meteorData", createStreamSource(session.getResponseXml()));
+		/* *********************************************
+		 * Render page
+		 */
+		addMeteorDataToModelView(modelView, session.getResponseXml());
 
 		// Set global parameters
 		modelView.addObject("ssn", session.getSsn());
@@ -78,6 +107,10 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 		handleMeteorRequest(modelView, httpRequest, httpResponse);
 
 		return modelView;
+	}
+
+	protected void addMeteorDataToModelView(ModelAndView modelView, String xmlData) {
+		modelView.addObject("meteorData", createStreamSource(xmlData));
 	}
 
 	private StreamSource createStreamSource(String xml) {
@@ -116,11 +149,11 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 	 * @return true if role specified is allowed to access the page
 	 */
 	protected boolean roleIsAllowed(Role role) {
-		if (validRoles == null) {
+		if (allowedRoles == null) {
 			return true;
 		}
-		for (Role validRole : validRoles) {
-			if (validRole.equals(role)) {
+		for (Role allowedRole : allowedRoles) {
+			if (allowedRole.equals(role)) {
 				return true;
 			}
 		}
@@ -151,12 +184,12 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 		this.tokenProvider = tokenProvider;
 	}
 
-	public List<Role> getValidRoles() {
-		return validRoles;
+	public List<Role> getAllowedRoles() {
+		return allowedRoles;
 	}
 
-	public void setValidRoles(List<Role> validRoles) {
-		this.validRoles = validRoles;
+	public void setAllowedRoles(List<Role> allowedRoles) {
+		this.allowedRoles = allowedRoles;
 	}
 
 }

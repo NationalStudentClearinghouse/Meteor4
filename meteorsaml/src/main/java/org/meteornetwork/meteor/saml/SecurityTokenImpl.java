@@ -73,11 +73,18 @@ public class SecurityTokenImpl implements SecurityToken {
 	public static SecurityTokenImpl fromXML(String xml) throws SecurityTokenException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(xml.getBytes(Charset.forName("utf-8")));
 		try {
-			Document doc = factory.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes(Charset.forName("utf-8"))));
+			Document doc = factory.newDocumentBuilder().parse(inputStream);
 			return fromXML(doc.getDocumentElement());
 		} catch (Exception e) {
 			throw new SecurityTokenException(e);
+		} finally {
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				throw new SecurityTokenException(e);
+			}
 		}
 	}
 

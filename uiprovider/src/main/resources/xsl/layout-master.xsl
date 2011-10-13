@@ -13,7 +13,7 @@
 	
 	<xsl:template name="subnavigation-award-detail">
 		<xsl:param name="awardId"/>
-		<strong>For this Loan:</strong> <a href="{$docroot}/meteor/awardDetail.do?apsUniqAwardId={$awardId}">View Eligibility Details</a> | <a href="{$docroot}/meteor/disbursement.do?apsUniqAwardId={$awardId}">View Disbursement Details</a> | <a href="{$docroot}/meteor/references.do?apsUniqAwardId={$awardId}">View References</a> | <a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={$awardId}">View Repayment and Billing Details</a> | <a href="{$docroot}/meteor/consolidated.do?apsUniqAwardId={$awardId}">Consolidated View</a>
+		<strong>For this Loan:</strong> <a href="{$docroot}/meteor/awardDetail.do?apsUniqAwardId={$awardId}">View Eligibility Details</a> | <a href="{$docroot}/meteor/disbursement.do?apsUniqAwardId={$awardId}">View Disbursement Details</a> | <a href="{$docroot}/meteor/references.do?apsUniqAwardId={$awardId}">View References</a> | <a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={$awardId}">View Repayment and Billing Details</a><xsl:if test="$role = 'FAA'"> | <a href="{$docroot}/meteor/consolidated.do?apsUniqAwardId={$awardId}">Consolidated View</a></xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="/">
@@ -68,10 +68,10 @@
 										<div class="studentInfo">
 										<xsl:choose>
 											<xsl:when test="($person='student') and (count(//Student) > 0)">
-												<p>Student Name: <strong><xsl:value-of select="concat(//Student[preceding::Student]/FirstName, ' ', //Student[preceding::Student]/MiddleInitial, ' ', //Student[preceding::Student]/LastName)"/> (<xsl:value-of select="//Student[preceding::Student]/SSNum"/>)</strong></p>
+												<p>Student Name: <strong><xsl:value-of select="concat(//Student[count(preceding::Student) = 0]/FirstName, ' ', //Student[count(preceding::Student) = 0]/MiddleInitial, ' ', //Student[count(preceding::Student) = 0]/LastName)"/> (<xsl:value-of select="//Student[count(preceding::Student) = 0]/SSNum"/>)</strong></p>
 											</xsl:when>
 											<xsl:when test="($person='borrower') and (count(//Borrower) > 0)">
-												<p>Borrower Name: <strong><xsl:value-of select="concat(//Borrower[preceding::Borrower]/FirstName, ' ', //Borrower[preceding::Borrower]//MiddleInitial, ' ', //Borrower[preceding::Borrower]//LastName)"/> (<xsl:value-of select="//Borrower[preceding::Borrower]/SSNum"/>)</strong></p>
+												<p>Borrower Name: <strong><xsl:value-of select="concat(//Borrower[count(preceding::Borrower) = 0]/FirstName, ' ', //Borrower[count(preceding::Borrower) = 0]//MiddleInitial, ' ', //Borrower[count(preceding::Borrower) = 0]//LastName)"/> (<xsl:value-of select="//Borrower[count(preceding::Borrower) = 0]/SSNum"/>)</strong></p>
 											</xsl:when>
 										</xsl:choose>
 										<xsl:if test="$role = 'FAA' or $role = 'APCSR' or $role = 'LENDER'">

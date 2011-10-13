@@ -11,7 +11,6 @@ public class IndexProvider {
 
 	private String institutionIdentifier;
 	private String url;
-	private String failoverUrl;
 
 	public String getInstitutionIdentifier() {
 		return institutionIdentifier;
@@ -27,14 +26,6 @@ public class IndexProvider {
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public String getFailoverUrl() {
-		return failoverUrl;
-	}
-
-	public void setFailoverUrl(String failoverUrl) {
-		this.failoverUrl = failoverUrl;
 	}
 
 }

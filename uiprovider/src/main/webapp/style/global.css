@@ -66,6 +66,23 @@ body{
 			text-decoration:none;
 			}
 	
+	.toggleControls{padding-bottom: 1em;}
+		.toggleControls .toggleControlText {
+			padding-left: 4px; 
+			text-decoration: underline;
+			}
+		.toggleControls a {
+			padding-right: 1em;
+			text-decoration: none;
+			font-weight: bold;
+			font-size: 1.2em;
+			}
+		.toggleControls a:link,
+		.toggleControls a:visited {color: #027;}
+		
+		.toggleControls a:hover {color: #0079c2;}
+		.toggleControls a:active {color: #001;}
+		
 	table{
 		font-family:Verdana, Geneva, sans-serif;
 		font-size:12px;
@@ -313,7 +330,11 @@ body{
 			border:0;
 			color:#e86d1f;
 			}
-		
+	
+	.helpContent{
+		width: auto;
+		padding-right: 20px;
+	}
 	table.tblHelp{
 		float:left;
 		width:775px;
@@ -323,7 +344,7 @@ body{
 			padding:5px 2px;
 			}
 		table.tblHelp tr td.tdHelp1{width:175px;padding:5px 0;}
-		table.tblHelp tr td.tdHelp2{width:596px;}
+		table.tblHelp tr td.tdHelp2{width:576px;}
 		
 		
 		
@@ -354,7 +375,19 @@ body{
 		table.simple th {vertical-align: bottom; text-align: center;}
 		table.simple th,
 		table.simple td.rowHead {font-weight: bold;}
-		table.simple td {veritcal-align: middle; padding: 3px 2px;}	
+		table.simple td {veritcal-align: middle; padding: 3px 2px;}
+	
+	table.consol{
+		font-size: 11px;
+		margin-bottom: 2em;
+	}
+		table.consol th,
+		table.consol td {padding: 3px 2px;}
+		
+		table.consol th,
+		table.consol td.rowHead {font-weight: bold;}
+		table.consol td.rowHead{background-color:#fff; text-align: right; padding-right: 6px;}
+		
 			
 /* **************************** */
 /* START OF MODAL POP UP LAYOUT */
@@ -373,6 +406,7 @@ body{
 	color:#000; background-color:#fff; 
 	border:4px solid #444; 
 	}
+	
 #simplemodal-container .simplemodal-data {padding:0;}
 
 #simplemodal-container p {margin:0 0 10px 0;}

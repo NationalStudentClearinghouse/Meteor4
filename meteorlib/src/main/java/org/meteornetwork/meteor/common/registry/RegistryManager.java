@@ -3,6 +3,7 @@ package org.meteornetwork.meteor.common.registry;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
+import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.saml.ProviderType;
@@ -40,4 +41,26 @@ public interface RegistryManager {
 	 *             being retrieved
 	 */
 	List<IndexProvider> getIndexProviders(Version meteorVersion) throws RegistryException;
+
+	/**
+	 * Gets connection information for a specific data provider in the registry
+	 * 
+	 * @param meteorInstitutionId
+	 *            the ID of the data provider to access
+	 * @return connection information for the specified data provider id
+	 * @throws RegistryException
+	 *             Some processing error prevents the Data Provider from being
+	 *             retrieved
+	 */
+	DataProvider getDataProvider(String meteorInstitutionId) throws RegistryException;
+
+	/**
+	 * Gets connection information for all active data providers in the registry
+	 * 
+	 * @return all active data providers in the registry
+	 * @throws RegistryException
+	 *             Some processing error prevents the Data Providers from being
+	 *             retrieved
+	 */
+	List<DataProvider> getAllDataProviders() throws RegistryException;
 }

@@ -1,0 +1,362 @@
+<!DOCTYPE HTML PUBLIC "-W3CDTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="/style/global.css">
+		<script type="text/javascript" src="/scripts/jquery-1.6.4.min.js"></script>
+		<script type="text/javascript" src="/scripts/jquery.simplemodal-1.4.1.js"></script>
+		<script type="text/javascript">
+					function showModal(id, opts) {
+						var defaultops = { maxWidth: $(window).width() - 80, maxHeight: $(window).height() - 80 };
+						$.extend(defaultops, opts);
+						$('#modal_' + id).modal(defaultops);
+						return false;
+					}
+					
+					$(document).ready( function() {
+						var $inputSSN = $(".inputSSN input.SSN");
+						$inputSSN.data('startingValue', $inputSSN.val())
+						$inputSSN.focus( function() {
+							if ($(this).val() == $inputSSN.data('startingValue')) {
+								$(this).val("");
+							}
+						});
+						
+						$inputSSN.blur( function() {
+							if ($(this).val() == "") {
+								$(this).val($inputSSN.data('startingValue'));
+							}
+						});
+					});
+				</script>
+		<title>Award Summary</title>
+		<script type="text/javascript">		
+			$(document).ready( function() {
+				$('.hideShow').hide();
+			
+				$('a.msgtrigger').click(function(){
+					var $str = '.';
+					var $str2 = $(this).attr("id");
+					var $showMe = $str+$str2;
+					$($showMe).fadeToggle("fast");
+				});
+			});	
+		</script>
+	</head>
+	<body>
+		<table cellpadding="0" cellspacing="0" width="100%" class="tblContainer">
+			<tr>
+				<td width="20" height="27" class="noPad"><img src="/imgs/corner-top-left.jpg" border="0"></td>
+				<td height="27" class="orange noPad"><img src="/imgs/spacer.gif" height="27" width="1" border="0"></td>
+				<td width="20" height="27" class="noPad"><img src="/imgs/corner-top-right.jpg" border="0"></td>
+			</tr>
+			<tr>
+				<td class="white bkHeader" colspan="3">
+					<table cellpadding="0" cellspacing="0" width="100%" class="tblHeader">
+						<tr>
+							<td class="tdHeader" width="100%">
+								<div class="logo"><a href="#" title="Meteor Network"><img src="/imgs/logo.jpg" border="0"></a></div>
+								<div class="studentInfo">
+									<p>Student Name: <strong>Polly H Puffin (*****1010)</strong></p>
+								</div>
+								<div class="navigation">
+									<ul>
+										<li class="navA"><a href="/meteor/summary.do">View Student Loans and Other Financial Aid Awards</a></li>
+										<li class="navB"><a href="/meteor/repaymentSummary.do">View Repayment and Billing Summary</a></li>
+									</ul>
+								</div>
+								<div class="subnavigation"></div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td width="20" class="white noPad"><img src="/imgs/spacer.gif" width="20px" border="0"></td>
+				<td class="white content">
+					<h1>Award Summary<span class="help"><a href="#" class="helpSection" onclick="javascript:showModal('showHelp', { minHeight: 170 })"><img src="/imgs/help.jpg" border="0"></a></span></h1>
+					<p class="tableTitle">Award Information</p>
+					<table cellpadding="0" cellspacing="0" class="tblAwardInfo">
+						<thead>
+							<tr>
+								<th class="thAwardInfo1" nowrap>View Details</th>
+								<th class="thAwardInfo2" nowrap>Borrower's Name</th>
+								<th class="thAwardInfo3" nowrap>Award Type</th>
+								<th class="thAwardInfo4" nowrap>Loan Status</th>
+								<th class="thAwardInfo5" nowrap>Award Amount</th>
+								<th class="thAwardInfo6" nowrap>Begin Date</th>
+								<th class="thAwardInfo7" nowrap>End Date</th>
+								<th class="thAwardInfo8" nowrap>School</th>
+								<th class="thAwardInfo9" nowrap>Lender / Servicer</th>
+								<th class="thAwardInfo10">Grant/Scholarship<br> Provider</th>
+								<th class="thAwardInfo11" nowrap>Guarantor</th>
+								<th class="thAwardInfo12" nowrap>Messages</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<td class="tFooter" colspan="12">
+									<p>* Denotes source of data. If you require additional information or feel that any of the data displayed for this award is incorrect or invalid, please contact the source of the data (For contact information, click on the provider's name above)</p>
+								</td>
+							</tr>
+						</tfoot>
+						<tbody>
+							<tr class="defRow">
+								<td class="tdAwardInfo1" nowrap valign="middle"><a href="/meteor/awardDetail.do?apsUniqAwardId=1"><img src="/imgs/view-details.jpg" border="0"></a></td>
+								<td class="tdAwardInfo2" nowrap>Polly H Puffin</td>
+								<td class="tdAwardInfo3" nowrap>FFEL Consolidation Stafford Subsidized</td>
+								<td class="tdAwardInfo4" nowrap>In Repayment</td>
+								<td class="tdAwardInfo5" nowrap>$4,000.00</td>
+								<td class="tdAwardInfo6" nowrap>1988-08-20</td>
+								<td class="tdAwardInfo7" nowrap>1989-05-21</td>
+								<td class="tdAwardInfo8" nowrap><a href="#" onclick="javascript:showModal('DPContact001814', { maxWidth: 574, minHeight: 170 })">Learning For You</a><div id="modal_DPContact001814" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Learning For You (ID: 001814)<br>Primary Phone: 501-468-9134 ( as of 2004-04-04)<br>482 Learning Way, Room 1, 2nd Floor<br>Orlando, FL 32807<br><a href="mailto:lotofknowledge@lfy.edu">lotofknowledge@lfy.edu</a> ( as of 2003-03-03)<br><a href="www.learningforyou.com" target="_blank">www.learningforyou.com</a><br></p>
+									</div> *</td>
+								<td class="tdAwardInfo9" nowrap><a href="#" onclick="javascript:showModal('DPContact708569', { maxWidth: 574, minHeight: 170 })">Lending For You</a><div id="modal_DPContact708569" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Lending For You (ID: 708569)<br>Primary Phone: 501-497-0921 (Valid as of 2001-01-01)<br>8731 Yield Street<br>Alexandria, VA 13453<br><a href="mailto:assisance@lfy.com">assisance@lfy.com</a> (Invalid as of 2002-02-02)<br><a href="www.lendingforyou.com" target="_blank">www.lendingforyou.com</a><br></p>
+									</div><br><a href="#" onclick="javascript:showModal('DPContact809547', { maxWidth: 574, minHeight: 170 })">Servicing For Polly</a><div id="modal_DPContact809547" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Servicing For Polly (ID: 809547)<br>Primary Phone: 501-458-7273 (Invalid)<br>924 Servicing Way<br>Salt Lake City, UT 84054<br><a href="mailto:whatdoyouneedpolly@sfy.com">whatdoyouneedpolly@sfy.com</a> (Valid)<br><a href="www.servicingforyoupolly.com" target="_blank">www.servicingforyoupolly.com</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo10" nowrap><a href="#" onclick="javascript:showModal('DPContact708952', { maxWidth: 574, minHeight: 170 })">You Earned It GSP</a><div id="modal_DPContact708952" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>You Earned It GSP (ID: 708952)<br>Primary Phone: 501-456-9823<br>3476 Free Money Lane<br>Sweat Home, AL 56432<br><a href="mailto:help@youaresmart.com">help@youaresmart.com</a><br><a href="www.youaresmart.com" target="_blank">www.youaresmart.com</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo11" nowrap><a href="#" onclick="javascript:showModal('DPContact606', { maxWidth: 574, minHeight: 170 })">Little GA</a><div id="modal_DPContact606" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Little GA (ID: 606)<br>Primary Phone: 501-564-8439<br>34 Andover Court<br>Salisaw, OK 75932<br><a href="mailto:guarantees@lga.org">guarantees@lga.org</a><br><a href="www.littlega.org" target="_blank">www.littlega.org</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo12" nowrap><a href="#" class="msgtrigger" id="trigger1"><img src="/imgs/messages.gif" border="0"></a></td>
+							</tr>
+							<tr class="defRow">
+								<td class="trigger1 hideShow" colspan="12">
+									<table cellpadding="0" cellspacing="0" class="tblMsg">
+										<thead>
+											<tr>
+												<th class="thMsg" colspan="2">Messages</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><a href="www.schoolforyou.com" target="_blank">School for you</a></td>
+												<td>Thank you for making on-time payments!!!</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr class="altRow">
+								<td class="tdAwardInfo1" nowrap valign="middle"><a href="/meteor/awardDetail.do?apsUniqAwardId=3"><img src="/imgs/view-details.jpg" border="0"></a></td>
+								<td class="tdAwardInfo2" nowrap>Polly H Puffin</td>
+								<td class="tdAwardInfo3" nowrap>FFEL Consolidation Stafford Subsidized</td>
+								<td class="tdAwardInfo4" nowrap>In Repayment</td>
+								<td class="tdAwardInfo5" nowrap>$4,000.00</td>
+								<td class="tdAwardInfo6" nowrap>1988-08-20</td>
+								<td class="tdAwardInfo7" nowrap>1989-05-21</td>
+								<td class="tdAwardInfo8" nowrap><a href="#" onclick="javascript:showModal('DPContact001814', { maxWidth: 574, minHeight: 170 })">Learning For You</a><div id="modal_DPContact001814" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Learning For You (ID: 001814)<br>Primary Phone: 501-468-9134 ( as of 2004-04-04)<br>482 Learning Way, Room 1, 2nd Floor<br>Orlando, FL 32807<br><a href="mailto:lotofknowledge@lfy.edu">lotofknowledge@lfy.edu</a> ( as of 2003-03-03)<br><a href="www.learningforyou.com" target="_blank">www.learningforyou.com</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo9" nowrap><a href="#" onclick="javascript:showModal('DPContact708569', { maxWidth: 574, minHeight: 170 })">Lending For You</a><div id="modal_DPContact708569" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Lending For You (ID: 708569)<br>Primary Phone: 501-497-0921 (Valid as of 2001-01-01)<br>8731 Yield Street<br>Alexandria, VA 13453<br><a href="mailto:assisance@lfy.com">assisance@lfy.com</a> (Invalid as of 2002-02-02)<br><a href="www.lendingforyou.com" target="_blank">www.lendingforyou.com</a><br></p>
+									</div><br><a href="#" onclick="javascript:showModal('DPContact809547', { maxWidth: 574, minHeight: 170 })">Servicing For Polly</a><div id="modal_DPContact809547" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Servicing For Polly (ID: 809547)<br>Primary Phone: 501-458-7273 (Invalid)<br>924 Servicing Way<br>Salt Lake City, UT 84054<br><a href="mailto:whatdoyouneedpolly@sfy.com">whatdoyouneedpolly@sfy.com</a> (Valid)<br><a href="www.servicingforyoupolly.com" target="_blank">www.servicingforyoupolly.com</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo10" nowrap />
+								<td class="tdAwardInfo11" nowrap><a href="#" onclick="javascript:showModal('DPContact606', { maxWidth: 574, minHeight: 170 })">Little GA</a><div id="modal_DPContact606" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Little GA (ID: 606)<br>Primary Phone: 501-564-8439<br>34 Andover Court<br>Salisaw, OK 75932<br><a href="mailto:guarantees@lga.org">guarantees@lga.org</a><br><a href="www.littlega.org" target="_blank">www.littlega.org</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo12" nowrap><a href="#" class="msgtrigger" id="trigger3"><img src="/imgs/messages.gif" border="0"></a></td>
+							</tr>
+							<tr class="altRow">
+								<td colspan="8" />
+								<td colspan="2" style="text-align: right"><strong>Financial Aid Transcript Provider:</strong></td>
+								<td class="tdAwardInfo11" colspan="2"><a href="#" onclick="javascript:showModal('DPContact606', { maxWidth: 574, minHeight: 170 })">FAT Provider</a><div id="modal_DPContact606" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>FAT Provider (ID: 606)<br>Primary Phone: 501-564-8439<br>34 Andover Court<br>Salisaw, OK 75932<br><a href="mailto:transcripts@littlefatp.org">transcripts@littlefatp.org</a><br><a href="www.littlefatp.org" target="_blank">www.littlefatp.org</a><br></p>
+									</div> *
+			</td>
+							</tr>
+							<tr class="altRow">
+								<td class="trigger3 hideShow" colspan="12">
+									<table cellpadding="0" cellspacing="0" class="tblMsg">
+										<thead>
+											<tr>
+												<th class="thMsg" colspan="2">Messages</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><a href="www.schoolforyou.com" target="_blank">School2 for you</a></td>
+												<td>Thank you for making on-time payments!!!</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr class="defRow">
+								<td class="tdAwardInfo1" nowrap valign="middle"><a href="/meteor/awardDetail.do?apsUniqAwardId=2"><img src="/imgs/view-details.jpg" border="0"></a></td>
+								<td class="tdAwardInfo2" nowrap>Polly H Puffin</td>
+								<td class="tdAwardInfo3" nowrap>FFELP Subsidized</td>
+								<td class="tdAwardInfo4" nowrap>In Repayment</td>
+								<td class="tdAwardInfo5" nowrap>$4,000.00</td>
+								<td class="tdAwardInfo6" nowrap>1988-08-20</td>
+								<td class="tdAwardInfo7" nowrap>1989-05-21</td>
+								<td class="tdAwardInfo8" nowrap><a href="#" onclick="javascript:showModal('DPContact001814', { maxWidth: 574, minHeight: 170 })">Learning For You</a><div id="modal_DPContact001814" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Learning For You (ID: 001814)<br>Primary Phone: 501-468-9134 ( as of 2004-04-04)<br>482 Learning Way, Room 1, 2nd Floor<br>Orlando, FL 32807<br><a href="mailto:lotofknowledge@lfy.edu">lotofknowledge@lfy.edu</a> ( as of 2003-03-03)<br><a href="www.learningforyou.com" target="_blank">www.learningforyou.com</a><br></p>
+									</div> *</td>
+								<td class="tdAwardInfo9" nowrap><a href="#" onclick="javascript:showModal('DPContact708569', { maxWidth: 574, minHeight: 170 })">Lending For You</a><div id="modal_DPContact708569" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Lending For You (ID: 708569)<br>Primary Phone: 501-497-0921 (Valid as of 2001-01-01)<br>8731 Yield Street<br>Alexandria, VA 13453<br><a href="mailto:assisance@lfy.com">assisance@lfy.com</a> (Invalid as of 2002-02-02)<br><a href="www.lendingforyou.com" target="_blank">www.lendingforyou.com</a><br></p>
+									</div><br><a href="#" onclick="javascript:showModal('DPContact809547', { maxWidth: 574, minHeight: 170 })">Servicing For Polly</a><div id="modal_DPContact809547" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Servicing For Polly (ID: 809547)<br>Primary Phone: 501-458-7273 (Invalid)<br>924 Servicing Way<br>Salt Lake City, UT 84054<br><a href="mailto:whatdoyouneedpolly@sfy.com">whatdoyouneedpolly@sfy.com</a> (Valid)<br><a href="www.servicingforyoupolly.com" target="_blank">www.servicingforyoupolly.com</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo10" nowrap />
+								<td class="tdAwardInfo11" nowrap><a href="#" onclick="javascript:showModal('DPContact606', { maxWidth: 574, minHeight: 170 })">Little GA</a><div id="modal_DPContact606" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Little GA (ID: 606)<br>Primary Phone: 501-564-8439<br>34 Andover Court<br>Salisaw, OK 75932<br><a href="mailto:guarantees@lga.org">guarantees@lga.org</a><br><a href="www.littlega.org" target="_blank">www.littlega.org</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo12" nowrap><a href="#" class="msgtrigger" id="trigger2"><img src="/imgs/messages.gif" border="0"></a></td>
+							</tr>
+							<tr class="defRow">
+								<td class="trigger2 hideShow" colspan="12">
+									<table cellpadding="0" cellspacing="0" class="tblMsg">
+										<thead>
+											<tr>
+												<th class="thMsg" colspan="2">Messages</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><a href="www.schoolforyou.com" target="_blank">School for you</a></td>
+												<td>Thank you for making on-time payments!!!</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr class="altRow">
+								<td class="tdAwardInfo1" nowrap valign="middle"><a href="/meteor/awardDetail.do?apsUniqAwardId=4"><img src="/imgs/view-details.jpg" border="0"></a></td>
+								<td class="tdAwardInfo2" nowrap>Polly H Puffin</td>
+								<td class="tdAwardInfo3" nowrap>FFELP Subsidized</td>
+								<td class="tdAwardInfo4" nowrap>In Repayment</td>
+								<td class="tdAwardInfo5" nowrap>$4,000.00</td>
+								<td class="tdAwardInfo6" nowrap>1988-08-20</td>
+								<td class="tdAwardInfo7" nowrap>1989-05-21</td>
+								<td class="tdAwardInfo8" nowrap><a href="#" onclick="javascript:showModal('DPContact001814', { maxWidth: 574, minHeight: 170 })">Learning For You</a><div id="modal_DPContact001814" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Learning For You (ID: 001814)<br>Primary Phone: 501-468-9134 ( as of 2004-04-04)<br>482 Learning Way, Room 1, 2nd Floor<br>Orlando, FL 32807<br><a href="mailto:lotofknowledge@lfy.edu">lotofknowledge@lfy.edu</a> ( as of 2003-03-03)<br><a href="www.learningforyou.com" target="_blank">www.learningforyou.com</a><br></p>
+									</div> *</td>
+								<td class="tdAwardInfo9" nowrap><a href="#" onclick="javascript:showModal('DPContact708569', { maxWidth: 574, minHeight: 170 })">Lending For You</a><div id="modal_DPContact708569" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Lending For You (ID: 708569)<br>Primary Phone: 501-497-0921 (Valid as of 2001-01-01)<br>8731 Yield Street<br>Alexandria, VA 13453<br><a href="mailto:assisance@lfy.com">assisance@lfy.com</a> (Invalid as of 2002-02-02)<br><a href="www.lendingforyou.com" target="_blank">www.lendingforyou.com</a><br></p>
+									</div><br><a href="#" onclick="javascript:showModal('DPContact809547', { maxWidth: 574, minHeight: 170 })">Servicing For Polly</a><div id="modal_DPContact809547" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Servicing For Polly (ID: 809547)<br>Primary Phone: 501-458-7273 (Invalid)<br>924 Servicing Way<br>Salt Lake City, UT 84054<br><a href="mailto:whatdoyouneedpolly@sfy.com">whatdoyouneedpolly@sfy.com</a> (Valid)<br><a href="www.servicingforyoupolly.com" target="_blank">www.servicingforyoupolly.com</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo10" nowrap />
+								<td class="tdAwardInfo11" nowrap><a href="#" onclick="javascript:showModal('DPContact606', { maxWidth: 574, minHeight: 170 })">Little GA</a><div id="modal_DPContact606" class="showOptions" style="width:500px;">
+										<h3>Entity Details</h3>
+										<p>Little GA (ID: 606)<br>Primary Phone: 501-564-8439<br>34 Andover Court<br>Salisaw, OK 75932<br><a href="mailto:guarantees@lga.org">guarantees@lga.org</a><br><a href="www.littlega.org" target="_blank">www.littlega.org</a><br></p>
+									</div>
+								</td>
+								<td class="tdAwardInfo12" nowrap><a href="#" class="msgtrigger" id="trigger4"><img src="/imgs/messages.gif" border="0"></a></td>
+							</tr>
+							<tr class="altRow">
+								<td class="trigger4 hideShow" colspan="12">
+									<table cellpadding="0" cellspacing="0" class="tblMsg">
+										<thead>
+											<tr>
+												<th class="thMsg" colspan="2">Messages</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><a href="www.schoolforyou.com" target="_blank">School2 for you</a></td>
+												<td>Thank you for making on-time payments!!!</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div id="modal_showHelp" class="showOptions" style="width:800px;">
+						<h3>Help</h3>
+						<p>This document provides an English description of each of the data elements on the screen that you are viewing.  If you require additional information regarding the loan that you are viewing, please contact the source of the data.</p>
+						<table cellpadding="0" cellspacing="0" class="tblHelp">
+							<tbody>
+								<tr>
+									<td class="tdHelp1">Student's Name</td>
+									<td class="tdHelp2">First, middle initial and last name of the student attending school including student SSN.</td>
+								</tr>
+								<tr>
+									<td class="tdHelp1">Borrower's Name</td>
+									<td class="tdHelp2">First, middle initial and last name of the borrower including borrower SSN.</td>
+								</tr>
+								<tr>
+									<td class="tdHelp1">Loan Status</td>
+									<td class="tdHelp2">The Loan Status depicts the current award phase.</td>
+								</tr>
+								<tr>
+									<td class="tdHelp1">Award Type</td>
+									<td class="tdHelp2">The type of financial aid being reported.</td>
+								</tr>
+								<tr>
+									<td class="tdHelp1">Award Amount</td>
+									<td class="tdHelp2">The amount of aid awarded to the recipient.</td>
+								</tr>
+								<tr>
+									<td class="tdHelp1">Begin Date</td>
+									<td class="tdHelp2">The beginning date of the award. For FFELP loans, this is the loan period begin date. </td>
+								</tr>
+								<tr>
+									<td class="tdHelp1">End Date</td>
+									<td class="tdHelp2">The ending date of the award. For FFELP loans, this is the loan period end date. </td>
+								</tr>
+								<tr>
+									<td class="tdHelp1">Entity Information</td>
+									<td class="tdHelp2">
+										<p>A star(*) denotes the source of the data displayed. Click on each link to gain demographic information on:</p>
+										<p>S - Schools</p>
+										<p>LO - Lenders</p>
+										<p>G - Guarantors</p>
+										<p>LRS - Lender Servicers</p>
+										<p>GSP - Grant and Scholarship Providers</p>
+										<p>FAT - Financial Aid Trascript Providers</p>
+									</td>
+								</tr>
+								<tr>
+									<td class="tdHelp1">Messages</td>
+									<td class="tdHelp2">Messages display a text sent by an entity that pertains to a loan or account. </td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</td>
+				<td width="20" class="white noPad"><img src="/imgs/spacer.gif" width="20px" border="0"></td>
+			</tr>
+			<tr>
+				<td width="20" height="27" class="noPad"><img src="/imgs/corner-bottom-left.jpg" border="0"></td>
+				<td height="27" class="orange noPad"><img src="/imgs/spacer.gif" height="27" width="1" border="0"></td>
+				<td width="20" height="27" class="noPad"><img src="/imgs/corner-bottom-right.jpg" border="0"></td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -29,6 +29,26 @@
 		class="javax.xml.transform.TransformerFactory"
 		factory-method="newInstance" />
 	
+	<!-- SSN masking -->
+	<bean id="MaskSSNTemplateFile" class="org.springframework.core.io.ClassPathResource">
+		<constructor-arg value="xml/maskSSNs.xsl"/>
+	</bean>
+	
+	<bean id="MaskSSNTemplate" 
+		factory-bean="transformerFactory"
+		factory-method="newTemplates">
+		
+		<constructor-arg>
+			<bean class="javax.xml.transform.stream.StreamSource">
+				<constructor-arg>
+					<bean class="java.io.File"
+						factory-bean="MaskSSNTemplateFile"
+						factory-method="getFile" />
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+	</bean>
+	
 	<!-- 
 		Convert AP 4.0.0 request to 3.3.4
 	 -->

@@ -28,7 +28,7 @@
 	<bean name="/meteor/aversion.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="aversion"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
-		<property name="validRoles">
+		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
 			</list>
@@ -55,8 +55,13 @@
 		<lookup-method name="getSession" bean="meteorSession"/>
 	</bean>
 	
-	<bean name="/meteor/consolidated.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
+	<bean name="/meteor/consolidated.do" class="org.meteornetwork.meteor.provider.ui.controller.ConsolidatedViewController" autowire="byType">
 		<property name="viewName" value="consolidated"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<property name="allowedRoles">
+			<list>
+				<value>FAA</value>
+			</list>
+		</property>
 	</bean>
 </beans> 

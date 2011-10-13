@@ -6,7 +6,7 @@ import org.meteornetwork.meteor.common.xml.indexresponse.IndexProviderData;
 import org.meteornetwork.meteor.common.xml.indexresponse.IndexProviderMessages;
 import org.meteornetwork.meteor.common.xml.indexresponse.Message;
 import org.meteornetwork.meteor.common.xml.indexresponse.MeteorIndexResponse;
-import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelType;
+import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
 
 public class MeteorIndexResponseWrapper {
 
@@ -20,10 +20,10 @@ public class MeteorIndexResponseWrapper {
 		response.setIndexProviderData(data);
 	}
 	
-	public void addMessage(String messageText, RsMsgLevelType level) {
+	public void addMessage(String messageText, RsMsgLevelEnum level) {
 		Message message = new Message();
 		message.setRsMsg(messageText);
-		message.setRsMsgLevel(level);
+		message.setRsMsgLevel(level.name());
 
 		if (response.getIndexProviderMessages() == null) {
 			response.setIndexProviderMessages(new IndexProviderMessages());

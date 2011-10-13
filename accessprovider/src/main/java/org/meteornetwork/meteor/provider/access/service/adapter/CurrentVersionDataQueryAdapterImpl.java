@@ -10,7 +10,7 @@ import org.meteornetwork.meteor.common.ws.DataProviderService;
 import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
-import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
+import org.meteornetwork.meteor.provider.access.DataProviderInfo;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -23,7 +23,7 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 
 	private static final Log LOG = LogFactory.getLog(CurrentVersionDataQueryAdapterImpl.class);
 	
-	private DataProvider dataProvider;
+	private DataProviderInfo dataProvider;
 	private AccessProvider accessProvider;
 	private String ssn;
 	private String meteorVersion;
@@ -32,14 +32,14 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 
 	@Override
 	public MeteorRsMsg call() throws Exception {
-		LOG.debug("Calling data provider (ID: " + dataProvider.getEntityID() + ", Version: " + dataProvider.getMeteorVersion());
+		LOG.debug("Calling data provider (ID: " + dataProvider.getMeteorInstitutionIdentifier() + ", Version: " + dataProvider.getRegistryInfo().getMeteorVersion());
 		
 		MeteorDataRequest request = createRequest();
 		StringWriter marshalledRequest = new StringWriter();
 		request.marshal(marshalledRequest);
 		
 		JaxWsProxyFactoryBean dataClientProxyFactory = (JaxWsProxyFactoryBean) applicationContext.getBean("dataClientProxyFactory");
-		dataClientProxyFactory.setAddress(dataProvider.getEntityURL());
+		dataClientProxyFactory.setAddress(dataProvider.getRegistryInfo().getUrl());
 
 		DataProviderService dataService = (DataProviderService) dataClientProxyFactory.create();
 		String responseXml = dataService.queryDataForBorrower(marshalledRequest.toString());
@@ -57,12 +57,12 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 	}
 
 	@Override
-	public DataProvider getDataProvider() {
+	public DataProviderInfo getDataProviderInfo() {
 		return dataProvider;
 	}
 
 	@Override
-	public void setDataProvider(DataProvider dataProvider) {
+	public void setDataProviderInfo(DataProviderInfo dataProvider) {
 		this.dataProvider = dataProvider;
 	}
 

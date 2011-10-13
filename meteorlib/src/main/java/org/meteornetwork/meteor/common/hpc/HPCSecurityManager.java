@@ -200,10 +200,15 @@ public class HPCSecurityManager {
 		Element assertionSpecifier = doc.createElement("AssertionSpecifier");
 		doc.appendChild(assertionSpecifier);
 
-		Document assertion = docBuilder.parse(new ByteArrayInputStream(xml.getBytes(IOUtils.UTF8_CHARSET)));
-		assertionSpecifier.appendChild(doc.importNode(assertion.getDocumentElement(), true));
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(xml.getBytes(IOUtils.UTF8_CHARSET));
+		try {
+			Document assertion = docBuilder.parse(inputStream);
+			assertionSpecifier.appendChild(doc.importNode(assertion.getDocumentElement(), true));
 
-		return digitalSignatureManager.sign(doc, privateKey, cert);
+			return digitalSignatureManager.sign(doc, privateKey, cert);
+		} finally {
+			inputStream.close();
+		}
 	}
 
 	/**
@@ -228,15 +233,21 @@ public class HPCSecurityManager {
 	 */
 	public String signBody(String xmlBody, String xmlAssertionSpecifier, PrivateKey privateKey, X509Certificate cert) throws SAXException, IOException, ParserConfigurationException, MeteorSecurityException {
 		DocumentBuilder docBuilder = createDocumentBuilder();
-		Document doc = docBuilder.parse(new ByteArrayInputStream(xmlBody.getBytes(IOUtils.UTF8_CHARSET)));
+		ByteArrayInputStream bodyInStream = new ByteArrayInputStream(xmlBody.getBytes(IOUtils.UTF8_CHARSET));
+		ByteArrayInputStream assertionInStream = new ByteArrayInputStream(xmlAssertionSpecifier.getBytes(IOUtils.UTF8_CHARSET));
 
-		Document assertionSpecifier = docBuilder.parse(new ByteArrayInputStream(xmlAssertionSpecifier.getBytes(IOUtils.UTF8_CHARSET)));
-		doc.getDocumentElement().appendChild(doc.importNode(assertionSpecifier.getDocumentElement(), true));
+		try {
+			Document doc = docBuilder.parse(bodyInStream);
 
-		return digitalSignatureManager.sign(doc, privateKey, cert);
+			Document assertionSpecifier = docBuilder.parse(assertionInStream);
+			doc.getDocumentElement().appendChild(doc.importNode(assertionSpecifier.getDocumentElement(), true));
+
+			return digitalSignatureManager.sign(doc, privateKey, cert);
+		} finally {
+			bodyInStream.close();
+			assertionInStream.close();
+		}
 	}
-
-	
 
 	/**
 	 * Validates the SAML assertion and signatures on an incoming HPC request
@@ -246,9 +257,10 @@ public class HPCSecurityManager {
 	 */
 	public void validateRequest(String requestXml) throws MeteorSecurityException {
 
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(requestXml.getBytes(IOUtils.UTF8_CHARSET));
 		try {
 			DocumentBuilder docBuilder = createDocumentBuilder();
-			Document requestDom = docBuilder.parse(new ByteArrayInputStream(requestXml.getBytes(IOUtils.UTF8_CHARSET)));
+			Document requestDom = docBuilder.parse(inputStream);
 
 			Element sigNSContext = XMLUtils.createDSctx(requestDom, "ds", Constants.SignatureSpecNS);
 			Element samlNSContext = XMLUtils.createDSctx(requestDom, "saml", SAML_10_NS);
@@ -258,6 +270,12 @@ public class HPCSecurityManager {
 			verifyAssertionExpiry(requestDom, samlNSContext);
 		} catch (Exception e) {
 			throw new MeteorSecurityException("Cannot validate HPC request", e);
+		} finally {
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				throw new MeteorSecurityException("Cannot validate HPC request", e);
+			}
 		}
 
 	}

@@ -16,10 +16,14 @@ import javax.annotation.Resource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.util.Version;
+import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
-import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
+import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
+import org.meteornetwork.meteor.provider.access.DataProviderInfo;
+import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
 import org.meteornetwork.meteor.provider.access.service.adapter.DataQueryAdapter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,8 @@ public class DataQueryService implements ApplicationContextAware {
 	private Properties authenticationProperties;
 	private Properties meteorProperties;
 
+	private RegistryManager registryManager;
+
 	private ApplicationContext applicationContext;
 
 	/**
@@ -51,15 +57,11 @@ public class DataQueryService implements ApplicationContextAware {
 	 * @return responses from the queried data providers that were able to
 	 *         respond
 	 */
-	public List<MeteorRsMsg> getData(Set<DataProvider> dataProviders, String ssn) {
+	public List<MeteorRsMsg> getData(ResponseDataWrapper responseData, Set<DataProviderInfo> dataProviders, String ssn) {
 		List<MeteorRsMsg> responseDataList = new ArrayList<MeteorRsMsg>();
 
-		if (dataProviders.size() == 0) {
-			return null;
-		}
-		
 		ExecutorService threadPool = Executors.newFixedThreadPool(dataProviders.size());
-		Map<DataProvider, Future<MeteorRsMsg>> futures = new HashMap<DataProvider, Future<MeteorRsMsg>>();
+		Map<DataProviderInfo, Future<MeteorRsMsg>> futures = new HashMap<DataProviderInfo, Future<MeteorRsMsg>>();
 
 		Long timeout;
 		try {
@@ -71,17 +73,22 @@ public class DataQueryService implements ApplicationContextAware {
 
 		AccessProvider accessProvider = createAccessProvider(ssn);
 
-		for (DataProvider dataProvider : dataProviders) {
-			DataQueryAdapter adapter = getAdapter(dataProvider.getMeteorVersion());
+		for (DataProviderInfo dataProviderInfo : dataProviders) {
+			if (dataProviderInfo.getRegistryInfo() == null) {
+				LOG.debug("Data provider (ID: " + dataProviderInfo.getMeteorInstitutionIdentifier() + ") is not configured correctly in the Meteor Registry");
+				continue;
+			}
+
+			DataQueryAdapter adapter = getAdapter(dataProviderInfo.getRegistryInfo().getMeteorVersion());
 			if (adapter == null) {
-				LOG.error("Data provider (ID: " + dataProvider.getEntityID() + ") has no version");
+				LOG.error("Data provider (ID: " + dataProviderInfo.getMeteorInstitutionIdentifier() + ") has no version");
 			} else {
-				adapter.setDataProvider(dataProvider);
+				adapter.setDataProviderInfo(dataProviderInfo);
 				adapter.setAccessProvider(accessProvider);
 				adapter.setSsn(ssn);
 				adapter.setMeteorVersion(meteorProperties.getProperty("meteor.version"));
 
-				futures.put(dataProvider, threadPool.submit(adapter));
+				futures.put(dataProviderInfo, threadPool.submit(adapter));
 			}
 		}
 
@@ -92,13 +99,27 @@ public class DataQueryService implements ApplicationContextAware {
 			LOG.warn("ExecutorService was interrupted", e);
 		}
 
-		for (Map.Entry<DataProvider, Future<MeteorRsMsg>> futureEntry : futures.entrySet()) {
+		boolean atLeast1DataProviderCommError = false;
+		boolean atLeast1DataProviderSuccess = false;
+
+		for (Map.Entry<DataProviderInfo, Future<MeteorRsMsg>> futureEntry : futures.entrySet()) {
 			if (futureEntry.getValue().isDone()) {
 				try {
 					responseDataList.add(futureEntry.getValue().get());
+					atLeast1DataProviderSuccess = true;
 				} catch (Exception e) {
-					LOG.error("Exception thrown when getting data from data provider (ID: " + futureEntry.getKey().getEntityID() + ")", e);
+					LOG.debug("Exception thrown when getting data from data provider (ID: " + futureEntry.getKey().getMeteorInstitutionIdentifier() + ")", e);
+					atLeast1DataProviderCommError = true;
+					// TODO add data provider to loan locator.
 				}
+			}
+		}
+
+		if (atLeast1DataProviderCommError) {
+			if (atLeast1DataProviderSuccess) {
+				responseData.addIndexProviderMessage(RsMsgLevelEnum.E, MeteorMessage.DATA_ERROR, null);
+			} else {
+				responseData.addIndexProviderMessage(RsMsgLevelEnum.E, MeteorMessage.DATA_ERROR_ALL, null);
 			}
 		}
 
@@ -163,6 +184,15 @@ public class DataQueryService implements ApplicationContextAware {
 	@Qualifier("MeteorProperties")
 	public void setMeteorProperties(Properties meteorProperties) {
 		this.meteorProperties = meteorProperties;
+	}
+
+	public RegistryManager getRegistryManager() {
+		return registryManager;
+	}
+
+	@Autowired
+	public void setRegistryManager(RegistryManager registryManager) {
+		this.registryManager = registryManager;
 	}
 
 	@Override

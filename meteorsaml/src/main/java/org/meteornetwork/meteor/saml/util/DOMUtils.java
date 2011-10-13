@@ -10,12 +10,16 @@ public class DOMUtils {
 
 	private DOMUtils() {
 	}
-	
+
 	public static String domToString(Node dom) throws IOException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		XMLUtils.outputDOM(dom, outputStream);
-		String xml = outputStream.toString();
-		outputStream.close();
-		return xml;
+		try {
+			XMLUtils.outputDOM(dom, outputStream);
+			String xml = outputStream.toString();
+
+			return xml;
+		} finally {
+			outputStream.close();
+		}
 	}
 }

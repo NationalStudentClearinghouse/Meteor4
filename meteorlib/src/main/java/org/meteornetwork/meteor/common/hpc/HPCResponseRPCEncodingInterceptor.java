@@ -20,15 +20,22 @@ public class HPCResponseRPCEncodingInterceptor extends AbstractXMLTransformInter
 		factory.setNamespaceAware(true);
 		DocumentBuilder docBuilder = factory.newDocumentBuilder();
 
-		Document doc = docBuilder.parse(new ByteArrayInputStream(soapMessage.getBytes(IOUtils.UTF8_CHARSET)));
-		Element root = doc.getDocumentElement();
-		root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(soapMessage.getBytes(IOUtils.UTF8_CHARSET));
+		try {
+			Document doc = docBuilder.parse(inputStream);
+			Element root = doc.getDocumentElement();
+			root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
 
-		Element returnElem = (Element) XPathAPI.selectSingleNode(root, "//return");
-		returnElem.setAttribute("xsi:type", "xsd:string");
+			Element returnElem = (Element) XPathAPI.selectSingleNode(root, "//return");
+			returnElem.setAttribute("xsi:type", "xsd:string");
 
-		return DOMUtils.domToString(doc);
+			return DOMUtils.domToString(doc);
+		} finally {
+			inputStream.close();
+		}
+		
+		
 	}
 
 }

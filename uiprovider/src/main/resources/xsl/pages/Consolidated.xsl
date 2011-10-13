@@ -3,9 +3,10 @@
                 xmlns:pescxml="http://schemas.pescxml.org">
     	            
 	<xsl:include href="../layout-master.xsl"/>
+	<xsl:include href="../help/ConsolidatedViewHelp.xsl"/>
 	
 	<xsl:param name="apsuniqueawardid"/>
-		
+
 	<!-- Templates / Variables for layout-master -->
 	<xsl:variable name="person"><xsl:choose>
 		<xsl:when test="$role = 'BORROWER'">borrower</xsl:when>
@@ -14,6 +15,40 @@
 	
 	<xsl:template name="htmlhead">
 		<title>Consolidated View</title>
+		
+		<script type="text/javascript">		
+			$(document).ready( function() {
+				$('.hideShow').hide();
+			
+				$('a.triggerA').click(function(e){
+					var $str = '.';
+					var $str2 = $(this).attr("id");
+					var $showMe = $str+$str2;
+					$($showMe).fadeToggle("fast");
+					if ($(this).hasClass("show")) {
+						$(this).removeClass("show").addClass("close");
+					} else {
+						$(this).removeClass("close").addClass("show");
+					}
+					
+					e.preventDefault();
+				});
+				
+				$('a#expandAll').click( function(e) {
+					$('.hideShow').toggle(true);
+					$('a.triggerA').removeClass("show").addClass("close");
+					
+					e.preventDefault();
+				});
+				
+				$('a#collapseAll').click( function(e) {
+					$('.hideShow').toggle(false);
+					$('a.triggerA').removeClass("close").addClass("show");
+					
+					e.preventDefault();
+				});
+			});	
+		</script>
 	</xsl:template>
 	
 	<xsl:template name="subnavigation">
@@ -23,568 +58,738 @@
 	</xsl:template>
 	<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 	
+	<xsl:variable name="borrower-awards" select="//Award[Borrower/SSNum/@unmasked = $ssn]"/>
+	<xsl:variable name="student-awards" select="//Award[Student/SSNum/@unmasked = $ssn]"/>
+	
 	<xsl:template match="pescxml:MeteorRsMsg">
-		<h1>Consolidated<span class="help"><a href="#" class="helpSection"><img src="imgs/help.jpg" border="0" /></a></span></h1>
+		<h1>Consolidated<span class="help"><a href="#" class="helpSection"><xsl:attribute name="onclick">javascript:showModal('showHelp', { minHeight: 170 })</xsl:attribute><img src="{$docroot}/imgs/help.jpg" border="0" /></a></span></h1>
+		<div id="modal_showHelp" class="showOptions" style="width:800px;">
+			<xsl:call-template name="consolidated-help"/>
+		</div>
+		
 		<p class="intro">The Award summary, Award Detail and Disbursement Detail blocks only display awards where the student's SSN matches the SSN entered on the Meteor Query screen. For example, PLUS loans where the SSN queried is not the student's SSN will show no information in the Award or Disbursement blocks, however information on these loans may be available within the other blocks on this screen.</p>
-		<p class="tableTitle">Award Summary <span class="expander"><a href="#" class="triggerA show" id="triggerA8">&#32;</a></span></p> 
-		<table cellpadding="0" cellspacing="0" class="tblBorrower hideShow triggerA8">
+		
+		<div class="toggleControls">
+			<a href="#" id="expandAll"><img src="{$docroot}/imgs/expandall.png" border="0"/> <span class="toggleControlText">Expand All</span></a><a href="#" id="collapseAll"><img src="{$docroot}/imgs/expandall-close.png"/> <span class="toggleControlText">Collapse All</span></a>
+		</div>
+		
+		<p class="tableTitle">Award Summary <span class="expander"><a href="#" class="triggerA show" id="triggerA1">&#32;</a></span></p> 
+		<table cellpadding="0" cellspacing="0" class="consol hideShow triggerA1">
+			<xsl:call-template name="provider-table-header">
+				<xsl:with-param name="awards" select="$student-awards"/>
+			</xsl:call-template>
 			<tbody>
-				<tr>
-					<td class="tdBorrower1">Award Type </td>
-					<td class="tdBorrower2">FFEL Consolidation </td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Award Type </td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:apply-templates select="AwardType"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Award Status</td>
-					<td class="tdBorrower2">In Repayment</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Award Status</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:apply-templates select="LoanStat"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Award Status Date</td>
-					<td class="tdBorrower2">2007-11-12</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Award Status Date</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:apply-templates select="LoanStatDt"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Award Amount </td>
-					<td class="tdBorrower2">$5,111.86</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Award Amount </td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:choose>
+						<xsl:when test="string(number(GrossLoanAmount)) != 'NaN'">
+							<xsl:value-of select="format-number(GrossLoanAmount, '$###,##0.00')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="format-number-if-exists">
+								<xsl:with-param name="number" select="AwardAmt"/>
+								<xsl:with-param name="format" select="'$###,##0.00'"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+						</xsl:choose></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Best Source of Data</td>
-					<td class="tdBorrower2">Yes</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Best Source of Data</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:choose>
+						<xsl:when test="APSUniqueAwardID = $apsuniqueawardid">Yes</xsl:when>
+						<xsl:otherwise>No</xsl:otherwise>
+					</xsl:choose></td>
+					</xsl:for-each>
 				</tr>
 			</tbody>
 		</table>
-		<p class="tableTitle clr">Award Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA7">&#32;</a></span></p>
-		<table cellpadding="0" cellspacing="0" class="tblBorrower hideShow triggerA7">
+		<p class="tableTitle clr">Award Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA2">&#32;</a></span></p>
+		<table cellpadding="0" cellspacing="0" class="consol hideShow triggerA2">
+			<xsl:call-template name="provider-table-header">
+				<xsl:with-param name="awards" select="$student-awards"/>
+			</xsl:call-template>
 			<tbody>
-				<tr>
-					<td class="tdBorrower1">Entity Address</td>
-					<td class="tdBorrower2">1220 EAST DAYTON STREET<br />PLAINFIELD,  WI  55555</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Entity Address</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:apply-templates select="." mode="best-source-address"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Entity Phone</td>
-					<td class="tdBorrower2">800-555-4084 </td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Entity Phone</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:apply-templates select="." mode="best-source-phone"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">CommonLine ID</td>
-					<td class="tdBorrower2">00075500001ABATDW01</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Award ID</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:value-of select="AwardId"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Grad Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Grad Date</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:value-of select="Student/GradDt"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Award Type</td>
-					<td class="tdBorrower2">FFEL Consolidation</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Award Type</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:apply-templates select="AwardType"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Award Amount</td>
-					<td class="tdBorrower2">$5,111.86</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Award Amount</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:choose>
+						<xsl:when test="string(number(GrossLoanAmount)) != 'NaN'">
+							<xsl:value-of select="format-number(GrossLoanAmount, '$###,##0.00')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="format-number-if-exists">
+								<xsl:with-param name="number" select="AwardAmt"/>
+								<xsl:with-param name="format" select="'$###,##0.00'"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+						</xsl:choose></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Cancelled Amount</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Cancelled Amount</td>
+					<xsl:for-each select="$student-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="sum(Disbursement/CancellationAmount)"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Repaid Principal</td>
-					<td class="tdBorrower2">$239.94</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Repaid Principal</td>
+					<xsl:for-each select="$student-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Repayment/RepaidPrincipalAmt"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Capitalized Int.</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Capitalized Int.</td>
+					<xsl:for-each select="$student-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Repayment/CapitalizedIntAmt"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Award Begin Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Award Begin Date</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:value-of select="AwardBeginDt"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Award End Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Award End Date</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:value-of select="AwardEndDt"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Grade Level</td>
-					<td class="tdBorrower2">0</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Grade Level</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:value-of select="GradeLevelInd"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">MPN</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">MPN</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:choose>
+						<xsl:when test="MPNInd = 'N'">No</xsl:when>
+						<xsl:when test="MPNInd = 'Y'">Yes</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="MPNInd"/>
+						</xsl:otherwise>
+					</xsl:choose></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">E-Signature</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">E-Signature</td>
+					<xsl:for-each select="$student-awards">
+					<td>
+						<xsl:choose>
+							<xsl:when test="Esign = 'false'"> No </xsl:when>
+							<xsl:when test="Esign = 'true'"> Yes </xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="Esign"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</td>
+				</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Guaranteed Date</td>
-					<td class="tdBorrower2">2007-11-12 </td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Loan Date</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:value-of select="LoanDt"/></td>
+					</xsl:for-each>
 				</tr>
 			</tbody>
 		</table>
-		<p class="tableTitle clr">Disbursement Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA6">&#32;</a></span></p>
-		<table cellpadding="0" cellspacing="0" class="tblBorrower hideShow triggerA6">
-				<tr>
-					<td class="tdBorrower1">Entity Address</td>
-					<td class="tdBorrower2">1220 EAST DAYTON STREET PLAINFIELD,  WI  55555</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+		<p class="tableTitle clr">Disbursement Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA3">&#32;</a></span></p>
+		<table cellpadding="0" cellspacing="0" class="consol hideShow triggerA3">
+			<xsl:call-template name="provider-table-header">
+				<xsl:with-param name="awards" select="$student-awards"/>
+			</xsl:call-template>
+			<tbody>	
+				<tr class="defRow">
+					<td class="rowHead">Entity Address</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:apply-templates select="." mode="best-source-address"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Entity Phone </td>
-					<td class="tdBorrower2">800-555-4084</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Entity Phone</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:apply-templates select="." mode="best-source-phone"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">CommonLine ID</td>
-					<td class="tdBorrower2">00075500001ABATDW01</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Award ID</td>
+					<xsl:for-each select="$student-awards">
+					<td><xsl:value-of select="AwardId"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Disbursement</td>
-					<td class="tdBorrower2">1</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Scheduled Date </td>
-					<td class="tdBorrower2">2007-11-12</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Actual Date</td>
-					<td class="tdBorrower2">2007-11-12</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Net Amount</td>
-					<td class="tdBorrower2">$5,040.60 </td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Cancelled Amount</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Cancelled Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Status</td>
-					<td class="tdBorrower2">Disbursed</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Status Date</td>
-					<td class="tdBorrower2">2007-12-01</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Hold Release Indicator Release</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-			</table>
-		<p class="tableTitle clr">Repayment Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA5">&#32;</a></span></p>
+				<xsl:call-template name="Disbursement">
+					<xsl:with-param name="i" select="0"/>
+				</xsl:call-template>
+			</tbody>
+		</table>
+		<p class="tableTitle clr">Repayment Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA4">&#32;</a></span></p>
 		
-		<table cellpadding="0" cellspacing="0" class="tblBorrower hideShow triggerA5"> 
-				<tr>
-					<td class="tdBorrower1">Entity Address</td>
-					<td class="tdBorrower2">1220 EAST DAYTON STREET PLAINFIELD,  WI  55555</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+		<table cellpadding="0" cellspacing="0" class="consol hideShow triggerA4">
+			<xsl:call-template name="provider-table-header">
+				<xsl:with-param name="awards" select="$borrower-awards"/>
+			</xsl:call-template>
+			<tbody> 
+				<tr class="defRow">
+					<td class="rowHead">Entity Address</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="." mode="best-source-address"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Entity Phone </td>
-					<td class="tdBorrower2">800-555-4084</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-				<tr>
-					<td class="tdBorrower1">CommonLine ID</td>
-					<td class="tdBorrower2">00075500001ABATDW01></td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr> 
-				<tr>
-					<td class="tdBorrower1">Original Account Balance</td>
-					<td class="tdBorrower2">$5,111.86 </td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-				<tr>
-					<td class="tdBorrower1">Capitalized Interest</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-				<tr>
-					<td class="tdBorrower1">Accrued Interest</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr> 
-				<tr>
-					<td class="tdBorrower1">Most Recent Payments </td>
-					<td class="tdBorrower2">$35.24</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-				<tr>
-					<td class="tdBorrower1">Other Fees Outstanding</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-				<tr>
-					<td class="tdBorrower1">Outstanding Balance</td>
-					<td class="tdBorrower2">$4,878.99</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-				<tr>
-					<td class="tdBorrower1">Current Interest Rate</td>
-					<td class="tdBorrower2">3.12% </td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr> 
-				<tr>
-					<td class="tdBorrower1">Payment Plan Standard</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-				<tr>
-					<td class="tdBorrower1">Payment Begin Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-				<tr>
-					<td class="tdBorrower1">Next Payment Due</td>
-					<td class="tdBorrower2">$11.66</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-				<tr>
-					<td class="tdBorrower1">Next Payment Due Date</td>
-					<td class="tdBorrower2">2008-08-10</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="altRow">
+					<td class="rowHead">Entity Phone</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="." mode="best-source-phone"/></td>
+					</xsl:for-each>
 				</tr>
-				<tr>
-					<td class="tdBorrower1">Account Balance</td>
-					<td class="tdBorrower2">$4,878.99 </td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
+				<tr class="defRow">
+					<td class="rowHead">Award ID</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="AwardId"/></td>
+					</xsl:for-each>
+				</tr> 
+				<tr class="altRow">
+					<td class="rowHead">Original Account Balance</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:choose>
+						<xsl:when test="string(number(GrossLoanAmount)) != 'NaN'">
+							<xsl:value-of select="format-number(GrossLoanAmount, '$###,##0.00')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="format-number-if-exists">
+								<xsl:with-param name="number" select="AwardAmt"/>
+								<xsl:with-param name="format" select="'$###,##0.00'"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+						</xsl:choose></td>
+					</xsl:for-each>
+				</tr>  
+				<tr class="defRow">
+					<td class="rowHead">Capitalized Interest</td>
+					<xsl:for-each select="$borrower-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Repayment/CapitalizedIntAmt"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
+				</tr>  
+				<tr class="altRow">
+					<td class="rowHead">Accrued Interest</td>
+					<xsl:for-each select="$borrower-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Repayment/AccruedInterest"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
+				</tr> 
+				<tr class="defRow">
+					<td class="rowHead">Most Recent Payments </td>
+					<xsl:for-each select="$borrower-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Repayment/LastPmt/PaymentAmt"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
+				</tr>  
+				<tr class="altRow">
+					<td class="rowHead">Other Fees Outstanding</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:call-template name="fees" /></td>
+					</xsl:for-each>
+				</tr>  
+				<tr class="defRow">
+					<td class="rowHead">Outstanding Balance</td>
+					<xsl:for-each select="$borrower-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Repayment/AcctBal"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
+				</tr>  
+				<tr class="altRow">
+					<td class="rowHead">Current Interest Rate</td>
+					<xsl:for-each select="$borrower-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Repayment/CurrIntRate"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
+				</tr> 
+				<tr class="defRow">
+					<td class="rowHead">Payment Plan Standard</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="Repayment/PmtPlan"/></td>
+					</xsl:for-each>
+				</tr>  
+				<tr class="altRow">
+					<td class="rowHead">Payment Begin Date</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="Repayment/PmtBeginDt"/></td>
+					</xsl:for-each>
+				</tr>  
+				<tr class="defRow">
+					<td class="rowHead">Next Payment Due</td>
+					<xsl:for-each select="$borrower-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Repayment/NextPmtAmt"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
+				</tr>  
+				<tr class="altRow">
+					<td class="rowHead">Next Payment Due Date</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="Repayment/NextDueDt"/></td>
+					</xsl:for-each>
 				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Account Balance</td>
+					<xsl:for-each select="$borrower-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Repayment/AcctBal"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+					</xsl:for-each>
+				</tr>
+			</tbody>
 		</table>
 
-		<p class="tableTitle clr">Borrower Demographics Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA4">&#32;</a></span></p>
-		<table cellpadding="0" cellspacing="0" class="tblBorrower hideShow triggerA4">
+		<p class="tableTitle clr">Borrower Demographics Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA5">&#32;</a></span></p>
+		<table cellpadding="0" cellspacing="0" class="consol hideShow triggerA5">
+			<xsl:call-template name="provider-table-header">
+				<xsl:with-param name="awards" select="$borrower-awards"/>
+			</xsl:call-template>
+			<tbody>
+				<tr class="defRow">
+					<td class="rowHead">Borrower Address</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="Borrower/Contacts/AddressInfo"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="altRow">
+					<td class="rowHead">Phone Number</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="Borrower/Contacts/Phone"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Email Address </td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="Borrower/Contacts/Email"/></td>
+					</xsl:for-each>
+				</tr>
+			</tbody>
+		</table>
+		
+		<p class="tableTitle clr">Reference Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA6">&#32;</a></span></p>
+		
+		<table cellpadding="0" cellspacing="0" class="consol hideShow triggerA6"> 
+			<xsl:call-template name="provider-table-header">
+				<xsl:with-param name="awards" select="$borrower-awards"/>
+			</xsl:call-template>
+			<tbody> 
+				<tr class="defRow">
+					<td class="rowHead">Entity Address</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="." mode="best-source-address"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="altRow">
+					<td class="rowHead">Entity Phone</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="." mode="best-source-phone"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Award ID</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="AwardId"/></td>
+					</xsl:for-each>
+				</tr> 
+				
+				<xsl:apply-templates select="Reference" mode="consol"/>
+			</tbody>
+		</table>
+		
+		<p class="tableTitle clr">Most Recent Deferment and Forbearance Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA7">&#32;</a></span></p>
+		
+		<table cellpadding="0" cellspacing="0" class="consol hideShow triggerA7"> 
+			<xsl:call-template name="provider-table-header">
+				<xsl:with-param name="awards" select="$borrower-awards"/>
+			</xsl:call-template>
+			<tbody>
+				<tr class="defRow">
+					<td class="rowHead">Entity Address</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="." mode="best-source-address"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="altRow">
+					<td class="rowHead">Entity Phone</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="." mode="best-source-phone"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Award ID</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="AwardId"/></td>
+					</xsl:for-each>
+				</tr> 
+				<tr class="altRow">
+					<td class="rowHead">Type</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:for-each select="Repayment/DefermentForbearance">
+						<xsl:sort select="DefermentForbearanceEndDate" data-type="text" order="descending"/>
+						<xsl:if test="position() = 1">
+							<xsl:value-of select="DefermentForbearanceName"/>
+						</xsl:if>
+					</xsl:for-each></td>
+					</xsl:for-each>
+				</tr>  
+				<tr class="defRow">
+					<td class="rowHead">Begin Date</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:for-each select="Repayment/DefermentForbearance">
+							<xsl:sort select="DefermentForbearanceEndDate" data-type="text" order="descending"/>
+							<xsl:if test="position() = 1">
+								<xsl:value-of select="DefermentForbearanceBeginDate"/>
+							</xsl:if>
+						</xsl:for-each></td>
+					</xsl:for-each>
+				</tr>  
+
+				<tr class="altRow">
+					<td class="rowHead">End Date</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:for-each select="Repayment/DefermentForbearance">
+							<xsl:sort select="DefermentForbearanceEndDate" data-type="text" order="descending"/>
+							<xsl:if test="position() = 1">
+								<xsl:value-of select="DefermentForbearanceEndDate"/>
+							</xsl:if>
+						</xsl:for-each></td>
+					</xsl:for-each>
+				</tr>
+			</tbody>
+		</table>
+		
+		<p class="tableTitle clr">Default Aversion Request, Claim and Default Details <span class="expander"><a href="#" class="triggerA show" id="triggerA8">&#32;</a></span></p>
+		
+		<table cellpadding="0" cellspacing="0" class="consol hideShow triggerA8"> 
+			<xsl:call-template name="provider-table-header">
+				<xsl:with-param name="awards" select="$borrower-awards"/>
+			</xsl:call-template>
+			<tbody>
+				<tr class="defRow">
+					<td class="rowHead">Entity Address</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="." mode="best-source-address"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="altRow">
+					<td class="rowHead">Entity Phone</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:apply-templates select="." mode="best-source-phone"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Award ID</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="AwardId"/></td>
+					</xsl:for-each>
+				</tr> 
+				<tr class="altRow">
+					<td class="rowHead">Default</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:choose>
+							<xsl:when test="Default/Def = 'true' or Default/Def = '1'">Yes</xsl:when>
+							<xsl:otherwise>No</xsl:otherwise>
+						</xsl:choose></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Satisfactory Payment Arrangements</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:choose>
+							<xsl:when test="Default/SatisPmtArr = 'false' or Default/SatisPmtArr = '0'">No</xsl:when>
+							<xsl:otherwise>Yes</xsl:otherwise>
+						</xsl:choose></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="altRow">
+					<td class="rowHead">Eligibility Reinstated</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:choose>
+							<xsl:when test="Default/EligibilityReinstatementIndicator = 'false' or Default/EligibilityReinstatementIndicator = '0'">No</xsl:when>
+							<xsl:otherwise>Yes</xsl:otherwise>
+						</xsl:choose></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Reinstatement Date</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="Default/EligibilityReinstatementDate"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="altRow">
+					<td class="rowHead">Default Aversion Requested</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:choose>
+							<xsl:when test="Default/DefAvertRq = 'false' or Default/DefAvertRq = '0'">No</xsl:when>
+							<xsl:otherwise>Yes</xsl:otherwise>
+						</xsl:choose></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Requested Date</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="Default/DefAvertRqDt"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="altRow">
+					<td class="rowHead">Claim Filed</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:choose>
+							<xsl:when test="Default/ClaimFil = 'false' or Default/ClaimFil = '0'">No</xsl:when>
+							<xsl:otherwise>Yes</xsl:otherwise>
+						</xsl:choose></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Claim Filed Date</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="Default/ClaimFilDt"/></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="altRow">
+					<td class="rowHead">Claim Paid</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:choose>
+							<xsl:when test="Default/ClaimPd = 'false' or Default/ClaimPd = '0'">No</xsl:when>
+							<xsl:otherwise>Yes</xsl:otherwise>
+						</xsl:choose></td>
+					</xsl:for-each>
+				</tr>
+				<tr class="defRow">
+					<td class="rowHead">Claim Paid Date</td>
+					<xsl:for-each select="$borrower-awards">
+					<td><xsl:value-of select="Default/ClaimFilDt"/></td>
+					</xsl:for-each>
+				</tr>
+			</tbody>
+		</table>
+	</xsl:template>
+	
+	<xsl:template name="provider-table-header">
+		<xsl:param name="awards"/>
+		<col width="250px"/>
+		<col span="{count($awards)}" width="140px"/>
+		
+		<thead>
 			<tr>
-				<td class="tdBorrower1">Borrower Address</td>
-				<td class="tdBorrower2">275 WATER ST MEDIUMSIZED,  NY  05123</td>
-				<td class="tdBorrower3">&#32;</td>
-				<td class="tdBorrower4">&#32;</td>
+				<th></th>
+				<xsl:for-each select="$awards">
+				<th>
+					<xsl:apply-templates select="DataProviderType"/><br/>
+					<xsl:apply-templates select="." mode="dataprovidername"/>
+				</th>
+				</xsl:for-each>
 			</tr>
-
-			<tr>
-				<td class="tdBorrower1">Phone Number </td>
-				<td class="tdBorrower2">608-249-4084</td>
-				<td class="tdBorrower3">&#32;</td>
-				<td class="tdBorrower4">&#32;</td>
+		</thead>
+	</xsl:template>
+	
+	<xsl:template name="Disbursement">
+		<xsl:param name="i"/>
+		<xsl:if test="count($student-awards/Disbursement[$i+1]) > 0">
+			<tr class="altRow">
+				<td></td>
+				<td colspan="{count($student-awards)}"></td>
 			</tr>
-
-			<tr>
-				<td class="tdBorrower1">Email Address </td>
-				<td class="tdBorrower2">Diana.Cole@ISP.COM</td>
-				<td class="tdBorrower3">&#32;</td>
-				<td class="tdBorrower4">&#32;</td>
+			<tr class="altRow">
+				<td class="rowHead">Disbursement <xsl:value-of select="$i+1"/> </td>
+				<xsl:for-each select="$student-awards">
+				<td></td>
+				</xsl:for-each>
 			</tr>
-		</table>
-		
-		<p class="tableTitle clr">Reference Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA3">&#32;</a></span></p>
-		
-		<table cellpadding="0" cellspacing="0" class="tblBorrower hideShow triggerA3"> 
-				<tr>
-					<td class="tdBorrower1">Entity Address</td>
-					<td class="tdBorrower2">1220 EAST DAYTON STREET PLAINFIELD,  WI  55555 </td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Entity Phone</td>
-					<td class="tdBorrower2">800-555-4084</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">CommonLine ID </td>
-					<td class="tdBorrower2">00075500001ABATDW01</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Reference Name</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Street Address</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Street Address</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">City</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">State</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Zip Code</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Phone</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Reference Name</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Street Address</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Street Address</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">City</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">State</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Zip Code</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Phone</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-		</table>
-		
-		<p class="tableTitle clr">Most Recent Deferment and Forbearance Detail <span class="expander"><a href="#" class="triggerA show" id="triggerA2">&#32;</a></span></p>
-		
-		<table cellpadding="0" cellspacing="0" class="tblBorrower hideShow triggerA2"> 
-
-				<tr>
-					<td class="tdBorrower1">Entity Address</td>
-					<td class="tdBorrower2">1220 EAST DAYTON STREET PLAINFIELD,  WI  55555</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Entity Phone</td>
-					<td class="tdBorrower2">800-555-4084</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr> 
-
-				<tr>
-					<td class="tdBorrower1">CommonLine ID</td>
-					<td class="tdBorrower2">00075500001ABATDW01</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr> 
-
-				<tr>
-					<td class="tdBorrower1">Type</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-
-				<tr>
-					<td class="tdBorrower1">Begin Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>  
-
-				<tr>
-					<td class="tdBorrower1">End Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-		</table>
-		
-		<p class="tableTitle clr">Default Aversion Request, Claim and Default Details <span class="expander"><a href="#" class="triggerA show" id="triggerA1">&#32;</a></span></p>
-		
-		<table cellpadding="0" cellspacing="0" class="tblBorrower hideShow triggerA1"> 
-
-				<tr>
-					<td class="tdBorrower1">Entity Address</td>
-					<td class="tdBorrower2">1220 EAST DAYTON STREET PLAINFIELD,  WI  55555</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Entity Phone</td>
-					<td class="tdBorrower2">800-555-4084</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">CommonLine ID</td>
-					<td class="tdBorrower2">00075500001ABATDW01</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Default No</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Satisfactory Payment Arrangements</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Eligibility Reinstated</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Reinstatement Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Default Aversion Requested</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Requested Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Claim Filed</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Claim Filed Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Claim Paid </td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-				<tr>
-					<td class="tdBorrower1">Claim Paid Date</td>
-					<td class="tdBorrower2">&#32;</td>
-					<td class="tdBorrower3">&#32;</td>
-					<td class="tdBorrower4">&#32;</td>
-				</tr>
-		</table>
+			<tr class="defRow">
+				<td class="rowHead">Scheduled Date</td>
+				<xsl:for-each select="$student-awards">
+					<td>
+						<xsl:value-of select="Disbursement[$i+1]/SchedDisbDt"/>
+					</td>
+				</xsl:for-each>
+			</tr>
+			<tr class="altRow">
+				<td class="rowHead">Actual Date</td>
+				<xsl:for-each select="$student-awards">
+					<td>
+						<xsl:value-of select="Disbursement[$i+1]/ActualDisbDt"/>
+					</td>
+				</xsl:for-each>
+			</tr>
+			<tr class="defRow">
+				<td class="rowHead">Net Amount</td>
+				<xsl:for-each select="$student-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Disbursement[$i+1]/DisbNetAmt"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+				</xsl:for-each>
+			</tr>
+			<tr class="altRow">
+				<td class="rowHead">Cancelled Amount</td>
+				<xsl:for-each select="$student-awards">
+					<td>
+						<xsl:call-template name="format-number-if-exists">
+							<xsl:with-param name="number" select="Disbursement[$i+1]/CancellationAmount"/>
+							<xsl:with-param name="format" select="'$###,##0.00'"/>
+						</xsl:call-template>
+					</td>
+				</xsl:for-each>
+			</tr>
+			<tr class="defRow">
+				<td class="rowHead">Cancelled Date</td>
+				<xsl:for-each select="$student-awards">
+				<td><xsl:value-of select="Disbursement[$i+1]/CancellationDate"/></td>
+				</xsl:for-each>
+			</tr>
+			<tr class="altRow">
+				<td class="rowHead">Status</td>
+				<xsl:for-each select="$student-awards">
+				<td class="data"><xsl:apply-templates select="Disbursement[$i+1]/DisbStatCd"/></td>
+				</xsl:for-each>
+			</tr>
+			<tr class="defRow">
+				<td class="rowHead">Status Date</td>
+				<xsl:for-each select="$student-awards">
+				<td><xsl:value-of select="Disbursement[$i+1]/DisbStatDt"/></td>
+				</xsl:for-each>
+			</tr>
+			<tr class="altRow">
+				<td class="rowHead">Hold Release Indicator</td>
+				<xsl:for-each select="$student-awards">
+				<td><xsl:apply-templates select="Disbursement[$i+1]/DisbHold"/></td>
+				</xsl:for-each>
+			</tr>
+			<xsl:call-template name="Disbursement">
+				<xsl:with-param name="i" select="$i+1"/>
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="fees">
+		<xsl:if 
+			test="count(Repayment/LateFees/LateFeesAmount) + count(Repayment/CollectionCosts/CollectionCostsAmount) + count(Repayment/ServicingFees/ServicingFeesAmount) + count(Repayment/OtherFees/OtherFeesAmount) > 0">
+			<xsl:value-of 
+				select="format-number(sum(Repayment/LateFees/LateFeesAmount) + sum(Repayment/CollectionCosts/CollectionCostsAmount ) + sum(Repayment/ServicingFees/ServicingFeesAmount ) + sum(Repayment/OtherFees/OtherFeesAmount ), '$###,##0.00')"/>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="Reference" mode="consol">
+		<tr class="altRow">
+			<td></td>
+			<td colspan="{count($borrower-awards)}"></td>
+		</tr>
+		<tr class="altRow">
+			<td class="rowHead">Reference Name</td>
+			<xsl:for-each select="$borrower-awards">
+			<td><xsl:apply-templates select="." mode="fullname"/></td>
+			</xsl:for-each>
+		</tr>
+		<tr class="defRow">
+			<td class="rowHead">Reference Address</td>
+			<xsl:for-each select="$borrower-awards">
+			<td><xsl:apply-templates select="Contacts/AddressInfo"/></td>
+			</xsl:for-each>
+		</tr>
+		<tr class="altRow">
+			<td class="rowHead">Phone</td>
+			<xsl:for-each select="$borrower-awards">
+			<td><xsl:apply-templates select="Contacts/Phone"/></td>
+			</xsl:for-each>
+		</tr>
 	</xsl:template>
 </xsl:stylesheet>

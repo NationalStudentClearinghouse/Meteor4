@@ -30,8 +30,11 @@
  	<!-- meteor common properties -->
  	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>
  	
- 	<!-- Registry Manager -->
  	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/>
+ 	
+ 	<bean id="accessProviderManager" class="org.meteornetwork.meteor.provider.access.manager.AccessProviderManager" autowire="byType">
+ 		<lookup-method name="getRequestInfo" bean="requestInfo"/>
+ 	</bean>
  	
 	<context:component-scan base-package="org.meteornetwork.meteor"/>
 </beans> 

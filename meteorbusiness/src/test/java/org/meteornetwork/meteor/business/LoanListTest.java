@@ -1,7 +1,7 @@
 package org.meteornetwork.meteor.business;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import javax.xml.transform.TransformerConfigurationException;
 
@@ -26,7 +26,7 @@ public class LoanListTest {
 		loanList.addDuplicate(award18, award15);
 		loanList.addDuplicate(award18, award16);
 
-		List<Award> bestSourceAwards = loanList.getBestSource();
+		Set<Award> bestSourceAwards = loanList.getBestSource();
 		Assert.assertTrue(bestSourceAwards.contains(award15));
 		Assert.assertTrue(bestSourceAwards.contains(award18));
 		Assert.assertFalse(bestSourceAwards.contains(award17));

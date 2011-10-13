@@ -82,6 +82,54 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<!-- Award data provider address -->
+	<xsl:template match="Award" mode="best-source-address">
+		<xsl:choose>
+			<xsl:when test="DataProviderType = 'G'">
+				<xsl:apply-templates select="Guarantor/Contacts/AddressInfo"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'LRS'">
+				<xsl:apply-templates select="Servicer/Contacts/AddressInfo"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'LO'">
+				<xsl:apply-templates select="Lender/Contacts/AddressInfo"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'S'">
+				<xsl:apply-templates select="School/Contacts/AddressInfo"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'GSP'">
+				<xsl:apply-templates select="GrantScholarshipProvider/Contacts/AddressInfo"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'FAT'">
+				<xsl:apply-templates select="FinAidTranscript/Contacts/AddressInfo"/>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+	
+	<!-- Award data provider phone -->
+	<xsl:template match="Award" mode="best-source-phone">
+		<xsl:choose>
+			<xsl:when test="DataProviderType = 'G'">
+				<xsl:apply-templates select="Guarantor/Contacts/Phone/PhoneNum"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'LRS'">
+				<xsl:apply-templates select="Servicer/Contacts/Phone/PhoneNum"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'LO'">
+				<xsl:apply-templates select="Lender/Contacts/Phone/PhoneNum"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'S'">
+				<xsl:apply-templates select="School/Contacts/Phone/PhoneNum"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'GSP'">
+				<xsl:apply-templates select="GrantScholarshipProvider/Contacts/Phone/PhoneNum"/>
+			</xsl:when>
+			<xsl:when test="DataProviderType = 'FAT'">
+				<xsl:apply-templates select="FinAidTranscript/Contacts/Phone/PhoneNum"/>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+	
 	<!-- Data Provider Type -->
 	<xsl:template match="Award/DataProviderType">
 		<xsl:choose>
@@ -96,9 +144,11 @@
 	
 	<!-- Default address formatting -->
 	<xsl:template match="Contacts/AddressInfo">
+		<div style="margin:0; padding:0">
 		<xsl:for-each select="Addr">
 		<xsl:if test="string-length(.) > 0"><xsl:value-of select="."/><br/></xsl:if> 
-		</xsl:for-each><xsl:if test="string-length(City) > 0"><xsl:value-of select="City"/>, </xsl:if><xsl:value-of select="StateProv"/><xsl:text> </xsl:text><xsl:value-of select="PostalCd"/><br/>		
+		</xsl:for-each><xsl:if test="string-length(City) > 0"><xsl:value-of select="City"/>, </xsl:if><xsl:value-of select="StateProv"/><xsl:text> </xsl:text><xsl:value-of select="PostalCd"/>
+		</div>		
 	</xsl:template>
 	
 	<!-- Address type -->
@@ -111,12 +161,14 @@
 
 	<!-- Default phone formatting -->
 	<xsl:template match="Contacts/Phone">
+		<div style="margin:0; padding:0">
 		<xsl:apply-templates select="PhoneNumType"/>
 		<xsl:apply-templates select="PhoneNum" />
 		<xsl:if test="PhoneValidInd or PhoneValidDt"> (<xsl:choose>
 			<xsl:when test="PhoneValidInd = 'true' or PhoneValidInd = '1'">Valid</xsl:when>
 			<xsl:when test="PhoneValidInd = 'false' or PhoneValidInd = '0'">Invalid</xsl:when>
 		</xsl:choose><xsl:if test="PhoneValidDt"> as of <xsl:value-of select="PhoneValidDt"/></xsl:if>)</xsl:if>
+		</div>
 	</xsl:template>
 	
 	<!-- Phone type -->

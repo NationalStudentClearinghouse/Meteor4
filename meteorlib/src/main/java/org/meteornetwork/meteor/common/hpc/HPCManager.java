@@ -102,16 +102,22 @@ public class HPCManager {
 	private String decompress(byte[] compressedContent) throws IOException {
 		ByteArrayInputStream input = new ByteArrayInputStream(compressedContent);
 		InflaterInputStream inflater = new InflaterInputStream(input);
-
-		return IOUtils.toString(inflater, IOUtils.UTF8_CHARSET.displayName());
+		try {
+			return IOUtils.toString(inflater, IOUtils.UTF8_CHARSET.displayName());
+		} finally {
+			inflater.close();
+		}
 	}
 
 	private byte[] compress(String decompressedContent) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		DeflaterOutputStream deflater = new DeflaterOutputStream(output);
 
-		deflater.write(decompressedContent.getBytes(IOUtils.UTF8_CHARSET));
-		deflater.close();
+		try {
+			deflater.write(decompressedContent.getBytes(IOUtils.UTF8_CHARSET));
+		} finally {
+			deflater.close();
+		}
 
 		return output.toByteArray();
 	}

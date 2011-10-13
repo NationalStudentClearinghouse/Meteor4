@@ -24,6 +24,8 @@
 					var $str2 = $(this).attr("id");
 					var $showMe = $str+$str2;
 					$($showMe).fadeToggle("fast");
+					
+					e.preventDefault();
 				});
 			});	
 		</script>

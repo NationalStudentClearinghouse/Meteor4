@@ -33,7 +33,7 @@ import org.meteornetwork.meteor.common.ws.DataProviderHPCService;
 import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
-import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
+import org.meteornetwork.meteor.provider.access.DataProviderInfo;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,7 +51,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 
 	private Properties authenticationProperties;
 
-	private DataProvider dataProvider;
+	private DataProviderInfo dataProvider;
 	private AccessProvider accessProvider;
 	private String ssn;
 	private String meteorVersion;
@@ -71,33 +71,33 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 
 	@Override
 	public MeteorRsMsg call() throws Exception {
-		LOG.debug("Calling data provider (ID: " + dataProvider.getEntityID() + ", Version: " + dataProvider.getMeteorVersion());
+		LOG.debug("Calling data provider (ID: " + dataProvider.getMeteorInstitutionIdentifier() + ", Version: " + dataProvider.getRegistryInfo().getMeteorVersion());
 
 		MeteorDataRequest request = createRequest();
 		StringWriter marshalledRequest = new StringWriter();
 		marshalRequest(request, marshalledRequest);
-		LOG.debug("(Query data provider ID " + dataProvider.getEntityID() + ") Marshalled meteor request: " + marshalledRequest.toString());
+		LOG.debug("(Query data provider ID " + dataProvider.getMeteorInstitutionIdentifier() + ") Marshalled meteor request: " + marshalledRequest.toString());
 
-		String transformedRequest = xslTransformManager.transformXML(marshalledRequest.toString(), requestTemplateVersionMapper.getTemplateForVersions(meteorVersion, dataProvider.getMeteorVersion()));
-		LOG.debug("(Query data provider ID " + dataProvider.getEntityID() + ") Transformed data provider request: " + transformedRequest);
+		String transformedRequest = xslTransformManager.transformXML(marshalledRequest.toString(), requestTemplateVersionMapper.getTemplateForVersions(meteorVersion, dataProvider.getRegistryInfo().getMeteorVersion()));
+		LOG.debug("(Query data provider ID " + dataProvider.getMeteorInstitutionIdentifier() + ") Transformed data provider request: " + transformedRequest);
 
 		transformedRequest = assertAndSign(transformedRequest);
 
 		HPCMessageParams messageParams = new HPCMessageParams();
-		messageParams.setRecipientId(dataProvider.getEntityID());
+		messageParams.setRecipientId(dataProvider.getMeteorInstitutionIdentifier());
 
 		String hpcRequest = hpcManager.generateHPCMessage(transformedRequest, messageParams);
 
 		JaxWsProxyFactoryBean hpcDataClientProxyFactory = (JaxWsProxyFactoryBean) applicationContext.getBean("hpcDataClientProxyFactory");
-		hpcDataClientProxyFactory.setAddress(dataProvider.getEntityURL());
+		hpcDataClientProxyFactory.setAddress(dataProvider.getRegistryInfo().getUrl());
 
 		DataProviderHPCService dataService = (DataProviderHPCService) hpcDataClientProxyFactory.create();
 		String responseXml = dataService.submitHPC(hpcRequest);
 		String unwrappedHpc = hpcManager.retrieveHPCContent(responseXml);
-		LOG.debug("(Query data provider ID " + dataProvider.getEntityID() + ") Data provider response: " + unwrappedHpc);
+		LOG.debug("(Query data provider ID " + dataProvider.getMeteorInstitutionIdentifier() + ") Data provider response: " + unwrappedHpc);
 
-		String transformedResponse = xslTransformManager.transformXML(unwrappedHpc, responseTemplateVersionMapper.getTemplateForVersions(dataProvider.getMeteorVersion(), meteorVersion));
-		LOG.debug("(Query data provider ID " + dataProvider.getEntityID() + ") Data provider response translated to Meteor 4.0: " + transformedResponse);
+		String transformedResponse = xslTransformManager.transformXML(unwrappedHpc, responseTemplateVersionMapper.getTemplateForVersions(dataProvider.getRegistryInfo().getMeteorVersion(), meteorVersion));
+		LOG.debug("(Query data provider ID " + dataProvider.getMeteorInstitutionIdentifier() + ") Data provider response translated to Meteor 4.0: " + transformedResponse);
 		
 		MeteorRsMsg response = MeteorRsMsg.unmarshal(new StringReader(transformedResponse));
 		return response;
@@ -146,12 +146,12 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 	}
 
 	@Override
-	public DataProvider getDataProvider() {
+	public DataProviderInfo getDataProviderInfo() {
 		return dataProvider;
 	}
 
 	@Override
-	public void setDataProvider(DataProvider dataProvider) {
+	public void setDataProviderInfo(DataProviderInfo dataProvider) {
 		this.dataProvider = dataProvider;
 	}
 

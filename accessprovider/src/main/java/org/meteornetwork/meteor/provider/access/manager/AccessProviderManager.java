@@ -1,27 +1,36 @@
 package org.meteornetwork.meteor.provider.access.manager;
 
-import java.io.StringWriter;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.meteornetwork.meteor.common.registry.RegistryException;
+import javax.xml.transform.Templates;
+import javax.xml.transform.TransformerException;
+
+import org.meteornetwork.meteor.common.security.RequestInfo;
+import org.meteornetwork.meteor.common.util.XSLTransformManager;
+import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
-import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
+import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
+import org.meteornetwork.meteor.provider.access.DataProviderInfo;
+import org.meteornetwork.meteor.provider.access.MeteorQueryException;
 import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
 import org.meteornetwork.meteor.provider.access.service.DataQueryService;
 import org.meteornetwork.meteor.provider.access.service.IndexQueryService;
+import org.meteornetwork.meteor.saml.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-@Service
+//@Service
 public class AccessProviderManager {
-
-	private static final Log LOG = LogFactory.getLog(AccessProviderManager.class);
 
 	private IndexQueryService indexQueryService;
 	private DataQueryService dataQueryService;
+
+	private XSLTransformManager xslTransformManager;
+	private Templates maskSSNsTemplate;
 
 	/**
 	 * Queries the meteor network for data on the provided ssn
@@ -30,39 +39,50 @@ public class AccessProviderManager {
 	 *            the ssn of the borrower to query for
 	 * @return response XML string (instance of Meteor Schema)
 	 */
-	public String queryMeteor(String ssn) {
-		ResponseDataWrapper responseData = new ResponseDataWrapper(new MeteorRsMsg());
+	public ResponseDataWrapper queryMeteor(String ssn) {
+		ResponseDataWrapper responseData = new ResponseDataWrapper();
 
-		Set<DataProvider> dataProviders = null;
+		Set<DataProviderInfo> dataProviders = null;
 		try {
 			dataProviders = indexQueryService.getDataProviders(ssn, responseData);
-		} catch (RegistryException e) {
-			// TODO handle this exception
-			LOG.error("Could not get data providers", e);
-			return null;
+		} catch (MeteorQueryException e) {
+			// could not get list of data providers. return response message as
+			// it is with whatever errors were set
+			return responseData;
 		}
 
-		List<MeteorRsMsg> dataProviderResponses = dataQueryService.getData(dataProviders, ssn);
+		RequestInfo requestInfo = getRequestInfo();
+		if (dataProviders == null || dataProviders.isEmpty()) {
+			if (Role.BORROWER.equals(requestInfo.getSecurityToken().getRole())) {
+				responseData.addIndexProviderMessage(RsMsgLevelEnum.E, MeteorMessage.INDEX_NO_DATA_PROVIDERS_FOUND_BORROWER, null);
+			} else {
+				Map<String, String> parameters = new HashMap<String, String>();
+				parameters.put("ssn", ssn);
+				responseData.addIndexProviderMessage(RsMsgLevelEnum.E, MeteorMessage.INDEX_NO_DATA_PROVIDERS_FOUND_FAA, parameters);
+			}
+		}
+
+		List<MeteorRsMsg> dataProviderResponses = dataQueryService.getData(responseData, dataProviders, ssn);
 
 		// TODO: authentication bump process
-		// TODO: perform business logic on dataProviderResponses
 		// TODO: add grand total calculations to business logic
 
 		responseData.addAllDataProviderInfo(dataProviderResponses);
 
-		return marshalResponseData(responseData.getResponseData());
+		return responseData;
 	}
 
-	private String marshalResponseData(MeteorRsMsg responseData) {
-		StringWriter marshalledResponse = new StringWriter();
-		try {
-			responseData.marshal(marshalledResponse);
-		} catch (Exception e) {
-			LOG.error("Could not marshal response data", e);
-			return null;
-		}
-
-		return marshalledResponse.toString();
+	/**
+	 * Masks the SSNs in the response xml
+	 * 
+	 * @param xml
+	 *            the response xml
+	 * @return response xml with SSNs masked and unmasked attribute added
+	 * @throws IOException 
+	 * @throws TransformerException 
+	 */
+	public String maskSSNs(String xml) throws TransformerException, IOException {
+		return xslTransformManager.transformXML(xml, maskSSNsTemplate);
 	}
 
 	public IndexQueryService getIndexQueryService() {
@@ -83,4 +103,27 @@ public class AccessProviderManager {
 		this.dataQueryService = dataQueryService;
 	}
 
+	public RequestInfo getRequestInfo() {
+		// method injection implemented by spring
+		return null;
+	}
+
+	public XSLTransformManager getXslTransformManager() {
+		return xslTransformManager;
+	}
+
+	@Autowired
+	public void setXslTransformManager(XSLTransformManager xslTransformManager) {
+		this.xslTransformManager = xslTransformManager;
+	}
+
+	public Templates getMaskSSNsTemplate() {
+		return maskSSNsTemplate;
+	}
+
+	@Autowired
+	@Qualifier("MaskSSNTemplate")
+	public void setMaskSSNsTemplate(Templates maskSSNsTemplate) {
+		this.maskSSNsTemplate = maskSSNsTemplate;
+	}
 }

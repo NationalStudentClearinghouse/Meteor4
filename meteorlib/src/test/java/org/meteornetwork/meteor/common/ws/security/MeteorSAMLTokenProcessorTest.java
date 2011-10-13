@@ -49,20 +49,28 @@ public class MeteorSAMLTokenProcessorTest {
 		addCertificateToCryptoMethod.setAccessible(true);
 
 		CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-		X509Certificate cert = (X509Certificate) certFactory.generateCertificate(new FileInputStream(new File(this.getClass().getResource("test.cer").getFile())));
-		EasyMock.expect(registryManagerMock.getCertificate("LTI_AP40", ProviderType.ACCESS)).andReturn(cert);
-		EasyMock.replay(registryManagerMock);
+		FileInputStream fileInputStream = new FileInputStream(new File(this.getClass().getResource("test.cer").getFile()));
+		try {
+			X509Certificate cert = (X509Certificate) certFactory.generateCertificate(fileInputStream);
+			EasyMock.expect(registryManagerMock.getCertificate("LTI_AP40", ProviderType.ACCESS)).andReturn(cert);
+			EasyMock.replay(registryManagerMock);
+			fileInputStream.close();
 
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		docFactory.setNamespaceAware(true);
-		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-		Document assertion = docBuilder.parse(new FileInputStream(new File(this.getClass().getResource("assertion.xml").getFile())));
-		Element token = assertion.getDocumentElement();
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			docFactory.setNamespaceAware(true);
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-		MeteorCertificateStore crypto = new MeteorCertificateStore(null, null);
+			fileInputStream = new FileInputStream(new File(this.getClass().getResource("assertion.xml").getFile()));
+			Document assertion = docBuilder.parse(fileInputStream);
+			Element token = assertion.getDocumentElement();
 
-		addCertificateToCryptoMethod.invoke(meteorSAMLTokenProcessor, token, crypto);
-		Assert.assertTrue(crypto.verifyTrust(cert.getPublicKey()));
+			MeteorCertificateStore crypto = new MeteorCertificateStore(null, null);
+
+			addCertificateToCryptoMethod.invoke(meteorSAMLTokenProcessor, token, crypto);
+			Assert.assertTrue(crypto.verifyTrust(cert.getPublicKey()));
+		} finally {
+			fileInputStream.close();
+		}
 	}
 
 }
