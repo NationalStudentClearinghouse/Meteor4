@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<wsdl:definitions xmlns:ns1="http://ws.common.meteor.meteornetwork.org/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://ws.data.provider.meteor.meteornetwork.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DataProviderService" targetNamespace="http://ws.data.provider.meteor.meteornetwork.org/">
+   <wsdl:types>
+      <xs:schema xmlns:tns="http://ws.common.meteor.meteornetwork.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" targetNamespace="http://ws.common.meteor.meteornetwork.org/" version="1.0">
+         <xs:element name="QueryDataForBorrower" type="tns:QueryDataForBorrower"/>
+         <xs:element name="QueryDataForBorrowerResponse" type="tns:QueryDataForBorrowerResponse"/>
+         <xs:complexType name="QueryDataForBorrower">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="RequestXml" type="xs:string"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="QueryDataForBorrowerResponse">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="QueryDataForBorrowerResponse" type="xs:string"/>
+            </xs:sequence>
+         </xs:complexType>
+      </xs:schema>
+   </wsdl:types>
+   <wsdl:message name="QueryDataForBorrowerResponse">
+      <wsdl:part element="ns1:QueryDataForBorrowerResponse" name="parameters"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="QueryDataForBorrower">
+      <wsdl:part element="ns1:QueryDataForBorrower" name="parameters"></wsdl:part>
+   </wsdl:message>
+   <wsdl:portType name="DataProviderService">
+      <wsdl:operation name="QueryDataForBorrower">
+         <wsdl:input message="ns1:QueryDataForBorrower" name="QueryDataForBorrower"></wsdl:input>
+         <wsdl:output message="ns1:QueryDataForBorrowerResponse" name="QueryDataForBorrowerResponse"></wsdl:output>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="DataProviderServiceSoapBinding" type="ns1:DataProviderService">
+      <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <wsdl:operation name="QueryDataForBorrower">
+         <soap12:operation soapAction="" style="document"/>
+         <wsdl:input name="QueryDataForBorrower">
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output name="QueryDataForBorrowerResponse">
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="DataProviderService">
+      <wsdl:port binding="tns:DataProviderServiceSoapBinding" name="QueryDataForBorrower">
+         <soap12:address location="http://localhost:8280/dataprovider/services/DataProviderService"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

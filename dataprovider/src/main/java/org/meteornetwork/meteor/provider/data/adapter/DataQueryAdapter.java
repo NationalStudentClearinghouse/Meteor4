@@ -1,5 +1,7 @@
 package org.meteornetwork.meteor.provider.data.adapter;
 
+import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
+
 /**
  * Interface for the data provider translation layer when querying for borrower
  * data. Implementors translate from a different version of meteor into this
@@ -13,12 +15,12 @@ public interface DataQueryAdapter {
 	/**
 	 * @return RequestWrapper object or null on error
 	 */
-	RequestWrapper getRequest();
+	RequestWrapper getRequest() throws DataQueryAdapterException;
 
 	/**
 	 * Sets response data from ResponseWrapper or nothing on error
 	 * 
 	 * @param response
 	 */
-	void setResponse(ResponseWrapper response);
+	void setResponse(MeteorDataResponseWrapper response);
 }

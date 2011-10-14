@@ -5,13 +5,15 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.security.RequestInfo;
+import org.meteornetwork.meteor.common.util.message.Messages;
 import org.meteornetwork.meteor.common.xml.dataresponse.types.PhoneNumTypeEnum;
+import org.meteornetwork.meteor.common.xml.dataresponse.types.RsMsgLevelEnum;
 import org.meteornetwork.meteor.provider.data.DataServerAbstraction;
 import org.meteornetwork.meteor.provider.data.MeteorContext;
 import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapter;
+import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapterException;
 import org.meteornetwork.meteor.provider.data.adapter.RequestWrapper;
-import org.meteornetwork.meteor.provider.data.adapter.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -37,9 +39,18 @@ public class DataProviderManager {
 	 *            sets response data using this adapter
 	 */
 	public void queryDataForBorrower(DataQueryAdapter adapter) {
-		RequestWrapper request = adapter.getRequest();
+		
+		RequestWrapper request = null;
+		try {
+			request = adapter.getRequest();
+		} catch (DataQueryAdapterException e) {
+			MeteorDataResponseWrapper dataResponse = new MeteorDataResponseWrapper();
+			dataResponse.addMessage(Messages.getMessage(e.getMeteorError().getPropertyRef()), RsMsgLevelEnum.E.name());
+			adapter.setResponse(dataResponse);
+			return;
+		}
+		
 		if (request == null) {
-			// TODO: meteor error message?
 			return;
 		}
 
@@ -54,9 +65,7 @@ public class DataProviderManager {
 			setDataProviderData(dataResponse);
 		}
 
-		ResponseWrapper response = new ResponseWrapper();
-		response.setResponse(dataResponse.getResponse());
-		adapter.setResponse(response);
+		adapter.setResponse(dataResponse);
 	}
 
 	private void setDataProviderData(MeteorDataResponseWrapper response) {

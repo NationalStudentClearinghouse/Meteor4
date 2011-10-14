@@ -83,8 +83,6 @@ public class HPCSecurityManager {
 	 *            the institution issuing the assertion
 	 * @param requestInfo
 	 *            request-specific info to insert into SAML attributes
-	 * @param requestXml
-	 *            the request xml to insert the assertion into
 	 * @return the Request XML with an AssertionSpecifier element containing the
 	 *         SAML assertion and signature
 	 * 
@@ -93,9 +91,9 @@ public class HPCSecurityManager {
 	 * @throws SecurityException
 	 * @throws UnknownHostException
 	 */
-	public String createSaml(String meteorInstitutionIdentifier, String authenticationProcessId, RequestInfo requestInfo) throws MeteorSecurityException {
+	public String createSaml(String meteorInstitutionIdentifier, RequestInfo requestInfo) throws MeteorSecurityException {
 		try {
-			XMLObject assertion = createSamlXMLObject(meteorInstitutionIdentifier, authenticationProcessId, requestInfo);
+			XMLObject assertion = createSamlXMLObject(meteorInstitutionIdentifier, requestInfo);
 
 			return DOMUtils.domToString(OpenSAMLUtil.toDom(assertion, null));
 		} catch (Exception e) {
@@ -103,7 +101,7 @@ public class HPCSecurityManager {
 		}
 	}
 
-	private XMLObject createSamlXMLObject(String meteorInstitutionIdentifier, String authenticationProcessId, RequestInfo requestInfo) throws UnknownHostException, SecurityException, WSSecurityException {
+	private XMLObject createSamlXMLObject(String meteorInstitutionIdentifier, RequestInfo requestInfo) throws UnknownHostException, SecurityException, WSSecurityException {
 		Assertion assertion = SAML1ComponentBuilder.createSamlv1Assertion(NCHELP_METEOR);
 		assertion.setVersion(SAMLVersion.VERSION_10);
 
@@ -145,7 +143,7 @@ public class HPCSecurityManager {
 			attributeStatementBeans.add(createAttributeStatement("OrganizationType", token.getOrganizationType(), subjectBean));
 		}
 
-		attributeStatementBeans.add(createAttributeStatement("AuthenticationProcessID", authenticationProcessId, subjectBean));
+		attributeStatementBeans.add(createAttributeStatement("AuthenticationProcessID", token.getAuthenticationProcessId(), subjectBean));
 		attributeStatementBeans.add(createAttributeStatement("Level", token.getLevel().toString(), subjectBean));
 		attributeStatementBeans.add(createAttributeStatement("UserHandle", token.getUserHandle(), subjectBean));
 		attributeStatementBeans.add(createAttributeStatement("Role", token.getRole().getName(), subjectBean));

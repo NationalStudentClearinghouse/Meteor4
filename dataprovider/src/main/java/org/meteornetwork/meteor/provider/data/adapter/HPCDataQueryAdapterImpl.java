@@ -13,6 +13,7 @@ import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.util.exception.MeteorSecurityException;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
+import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -46,7 +47,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	private Properties meteorProps;
 
 	@Override
-	public RequestWrapper getRequest() {
+	public RequestWrapper getRequest() throws DataQueryAdapterException {
 		String contentXml;
 		try {
 			contentXml = hpcManager.retrieveHPCContent(rawHPCMessage);
@@ -63,7 +64,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 			LOG.error("Could not validate HPC request", e1);
 			return null;
 		}
-		
+
 		String transformedContentXml;
 		try {
 			meteorVersion = xslTransformManager.getMeteorVersion(contentXml);
@@ -91,7 +92,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	}
 
 	@Override
-	public void setResponse(ResponseWrapper response) {
+	public void setResponse(MeteorDataResponseWrapper response) {
 		if (response == null) {
 			responseHPCMessage = null;
 			return;

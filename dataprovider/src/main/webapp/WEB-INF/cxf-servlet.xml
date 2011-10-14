@@ -25,7 +25,7 @@
  	</bean>
  	
  	<bean id="MeteorSignatureProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSignatureProcessor"/>
- 		
+		
  	<jaxws:endpoint 
 		id="queryDataForBorrower"
 		implementorClass="org.meteornetwork.meteor.provider.data.ws.DataProviderServiceImpl"
@@ -66,7 +66,7 @@
 				</constructor-arg>
 			</bean>
 		</jaxws:inInterceptors>
-	</jaxws:endpoint>
+	</jaxws:endpoint> 
 	
 	<jaxws:endpoint 
 		id="submitHPC"
@@ -78,6 +78,5 @@
 		<jaxws:outInterceptors>
 			<bean class="org.meteornetwork.meteor.common.hpc.HPCResponseRPCEncodingInterceptor"/>
 		</jaxws:outInterceptors>
-	</jaxws:endpoint> 
-	
+	</jaxws:endpoint>
 </beans>

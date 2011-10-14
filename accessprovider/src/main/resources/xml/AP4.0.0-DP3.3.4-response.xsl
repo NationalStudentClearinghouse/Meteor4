@@ -36,6 +36,14 @@
 		<xsl:copy><EmailAddress><xsl:value-of select="."/></EmailAddress></xsl:copy>
 	</xsl:template>
 	
+	<xsl:template match="//Award[Student/SSNum = Borrower/SSNum]/AwardType[. = 'FFELPLUS']">
+		<AwardType>FFELGB</AwardType>
+	</xsl:template>
+	
+	<xsl:template match="//Award[Student/SSNum = Borrower/SSNum]/AwardType[. = 'DLPLUS']">
+		<AwardType>DLGB</AwardType>
+	</xsl:template>
+	
 	<xsl:template match="//DataProviderType[. = 'SBS']">
 		<xsl:copy>S</xsl:copy>
 	</xsl:template>

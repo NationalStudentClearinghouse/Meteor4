@@ -5,7 +5,7 @@ import javax.jws.WebService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.ws.DataProviderService;
-import org.meteornetwork.meteor.provider.data.adapter.CurrentVersionDataQueryAdapterImpl;
+import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapterImpl;
 import org.meteornetwork.meteor.provider.data.manager.DataProviderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,7 +15,7 @@ public class DataProviderServiceImpl implements DataProviderService {
 	private static final Log LOG = LogFactory.getLog(DataProviderServiceImpl.class);
 
 	private DataProviderManager dataManager;
-	private CurrentVersionDataQueryAdapterImpl adapter;
+	private DataQueryAdapterImpl adapter;
 
 	@Override
 	public String queryDataForBorrower(String requestXml) {
@@ -36,12 +36,12 @@ public class DataProviderServiceImpl implements DataProviderService {
 		this.dataManager = dataManager;
 	}
 
-	public CurrentVersionDataQueryAdapterImpl getAdapter() {
+	public DataQueryAdapterImpl getAdapter() {
 		return adapter;
 	}
 
 	@Autowired
-	public void setAdapter(CurrentVersionDataQueryAdapterImpl adapter) {
+	public void setAdapter(DataQueryAdapterImpl adapter) {
 		this.adapter = adapter;
 	}
 

@@ -98,7 +98,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 
 		String transformedResponse = xslTransformManager.transformXML(unwrappedHpc, responseTemplateVersionMapper.getTemplateForVersions(dataProvider.getRegistryInfo().getMeteorVersion(), meteorVersion));
 		LOG.debug("(Query data provider ID " + dataProvider.getMeteorInstitutionIdentifier() + ") Data provider response translated to Meteor 4.0: " + transformedResponse);
-		
+
 		MeteorRsMsg response = MeteorRsMsg.unmarshal(new StringReader(transformedResponse));
 		return response;
 	}
@@ -127,9 +127,8 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 
 		PrivateKey privateKey = keystoreManager.getPrivateKey(privateKeyParams);
 
-		// TODO get authentication process ID from request info
 		// TODO append X509Certificate to signatures? make optional?
-		String saml = hpcSecurityManager.createSaml(accessProvider.getMeteorInstitutionIdentifier(), "1", requestInfo);
+		String saml = hpcSecurityManager.createSaml(accessProvider.getMeteorInstitutionIdentifier(), requestInfo);
 		saml = xslTransformManager.transformXML(saml, saml1ToMeteorSAMLTemplate);
 		saml = hpcSecurityManager.signAssertion(saml, privateKey, null);
 		return hpcSecurityManager.signBody(request, saml, privateKey, null);
