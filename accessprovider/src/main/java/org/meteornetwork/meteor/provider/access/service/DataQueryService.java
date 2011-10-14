@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
+import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
@@ -58,6 +59,8 @@ public class DataQueryService implements ApplicationContextAware {
 	 *         respond
 	 */
 	public List<MeteorRsMsg> getData(ResponseDataWrapper responseData, Set<DataProviderInfo> dataProviders, String ssn) {
+		assert !dataProviders.isEmpty() : "Data Provider list is empty";
+
 		List<MeteorRsMsg> responseDataList = new ArrayList<MeteorRsMsg>();
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(dataProviders.size());
@@ -110,8 +113,11 @@ public class DataQueryService implements ApplicationContextAware {
 				} catch (Exception e) {
 					LOG.debug("Exception thrown when getting data from data provider (ID: " + futureEntry.getKey().getMeteorInstitutionIdentifier() + ")", e);
 					atLeast1DataProviderCommError = true;
-					// TODO add data provider to loan locator.
+
+					addDataProviderToLoanLocator(responseData, futureEntry.getKey().getIndexProviderInfo());
 				}
+			} else {
+				addDataProviderToLoanLocator(responseData, futureEntry.getKey().getIndexProviderInfo());
 			}
 		}
 
@@ -141,10 +147,19 @@ public class DataQueryService implements ApplicationContextAware {
 	private AccessProvider createAccessProvider(String ssn) {
 		AccessProvider accessProvider = new AccessProvider();
 		accessProvider.setMeteorInstitutionIdentifier(authenticationProperties.getProperty("authentication.identifier"));
-		// TODO: set user handle
-		accessProvider.setUserHandle("User");
+		accessProvider.setUserHandle(getRequestInfo().getSecurityToken().getUserHandle());
 		accessProvider.setIssueInstant(Calendar.getInstance().getTime());
 		return accessProvider;
+	}
+
+	private RequestInfo getRequestInfo() {
+		return (RequestInfo) applicationContext.getBean("requestInfo");
+	}
+
+	private void addDataProviderToLoanLocator(ResponseDataWrapper responseData, org.meteornetwork.meteor.common.xml.indexresponse.DataProvider ipDataOnDp) {
+		if (ipDataOnDp != null) {
+			responseData.addLoanLocatorDataProvider(ipDataOnDp.getEntityID(), ipDataOnDp.getEntityName(), ipDataOnDp.getEntityURL());
+		}
 	}
 
 	public Map<String, String> getDataQueryAdapterVersionMap() {

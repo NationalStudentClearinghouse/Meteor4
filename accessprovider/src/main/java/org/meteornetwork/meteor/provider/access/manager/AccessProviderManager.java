@@ -60,6 +60,7 @@ public class AccessProviderManager {
 				parameters.put("ssn", ssn);
 				responseData.addIndexProviderMessage(RsMsgLevelEnum.E, MeteorMessage.INDEX_NO_DATA_PROVIDERS_FOUND_FAA, parameters);
 			}
+			return responseData;
 		}
 
 		List<MeteorRsMsg> dataProviderResponses = dataQueryService.getData(responseData, dataProviders, ssn);

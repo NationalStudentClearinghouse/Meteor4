@@ -64,4 +64,10 @@
 			</list>
 		</property>
 	</bean>
+	
+	<!-- Use this page to see the raw xml returned by the meteor network -->
+	<bean name="/meteor/rawxml.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
+		<property name="viewName" value="rawxml"/>
+		<lookup-method name="getSession" bean="meteorSession"/>
+	</bean>
 </beans> 

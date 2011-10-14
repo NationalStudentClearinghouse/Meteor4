@@ -10,6 +10,7 @@ package org.meteornetwork.meteor.common.registry.data;
 public class IndexProvider {
 
 	private String institutionIdentifier;
+	private String name;
 	private String url;
 
 	public String getInstitutionIdentifier() {
@@ -18,6 +19,14 @@ public class IndexProvider {
 
 	public void setInstitutionIdentifier(String institutionIdentifier) {
 		this.institutionIdentifier = institutionIdentifier;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getUrl() {

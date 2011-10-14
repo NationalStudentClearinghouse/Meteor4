@@ -83,6 +83,21 @@
 			</tbody>
 		</table>
 		
+		<xsl:call-template name="loan-locator"/>
+		
+		<xsl:if test="count(//MeteorDataProviderMsg[RsMsgLevel='E']) > 0">
+		<table cellpadding="0" cellspacing="0" class="tblMsg">
+			<thead>
+				<tr>
+					<th class="thMsg" colspan="2">Error Messages</th>
+				</tr>
+			</thead>
+			<tbody>
+				<xsl:apply-templates select="//MeteorDataProviderMsg[RsMsgLevel='E']"/>
+			</tbody>
+		</table>
+		</xsl:if>
+		
 		<!-- modal content -->
 		<div id="modal_showHelp" class="showOptions" style="width:800px;">
 			<xsl:call-template name="award-summary-help"/>
@@ -197,13 +212,63 @@
 		</tr>
 	</xsl:template>
 
+	<xsl:template name="loan-locator">
+		<xsl:if test="count(//MeteorDataProviderInfo/MeteorDataProviderDetailInfo[DataProviderType = 'UNK']) > 0">
+		<table cellpadding="0" cellspacing="0" class="tblMsg" style="margin-bottom: 1em">
+			<thead>
+				<tr>
+					<th class="thMsg" colspan="2">Loan Locator</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="2"><xsl:value-of select="//MeteorIndexProviderData[1]/EntityName"/> indicates that the following providers also have financial aid award information available. Please visit the provider's website for additional details.</td>
+				</tr>
+				<xsl:apply-templates select="//MeteorDataProviderInfo/MeteorDataProviderDetailInfo[DataProviderType = 'UNK']" mode="loan-locator"/>
+			</tbody>
+		</table>
+		</xsl:if>
+		<xsl:if test="count(//MeteorDataProviderInfo[LoanLocatorActivationIndicator = '1' or LoanLocatorActivationIndicator = 'true']) > 0">
+		<table cellpadding="0" cellspacing="0" class="tblMsg" style="margin-bottom: 1em">
+			<thead>
+				<tr>
+					<th class="thMsg" colspan="2">Loan Locator</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="2">The following providers have indicated they have additional information available. Please visit the provider's website for additional details.</td>
+				</tr>
+				<xsl:apply-templates select="//MeteorDataProviderInfo[LoanLocatorActivationIndicator = '1' or LoanLocatorActivationIndicator = 'true']/MeteorDataProviderDetailInfo" mode="loan-locator"/>
+			</tbody>
+		</table>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="MeteorDataProviderDetailInfo" mode="loan-locator">
+		<tr><td style="padding-top: 1em;">&#32;</td></tr>
+		<xsl:if test="string-length(DataProviderData/EntityName) > 0">
+		<tr>
+			<td><xsl:value-of select="DataProviderData/EntityName"/></td>
+			<td><a href="{DataProviderData/EntityURL}"><xsl:value-of select="DataProviderData/EntityURL"/></a></td>
+		</tr>
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template match="MeteorDataProviderMsg">
 		<xsl:for-each select="RsMsg">
 			<tr>
 				<td>
+				<xsl:choose>
+				<xsl:when test="../../MeteorDataProviderDetailInfo/DataProviderData/EntityURL">
 					<a href="{../../MeteorDataProviderDetailInfo/DataProviderData/EntityURL}" target="_blank">
 						<xsl:value-of select="../../MeteorDataProviderDetailInfo/DataProviderData/EntityName"/>
 					</a>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="../../MeteorDataProviderDetailInfo/DataProviderData/EntityName"/>
+				</xsl:otherwise>
+				</xsl:choose> 
 				</td>
 				<td>
 					<xsl:value-of select="." disable-output-escaping="yes"/>
@@ -211,4 +276,5 @@
 			</tr>
 		</xsl:for-each>
 	</xsl:template>
+	
 </xsl:stylesheet>

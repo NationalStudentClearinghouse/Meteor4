@@ -94,10 +94,14 @@ public class PropertyRegistryManager implements RegistryManager {
 	public DataProvider getDataProvider(String meteorInstitutionId) throws RegistryException {
 		DataProvider dataProvider = new DataProvider();
 
-		dataProvider.setInstitutionIdentifier(meteorInstitutionId);
-		List<String> supportedVersions = getSupportedVersions(meteorInstitutionId);
-		dataProvider.setMeteorVersion(supportedVersions.get(0));
-		dataProvider.setUrl(getUrl(meteorInstitutionId, ProviderType.DATA));
+		try {
+			dataProvider.setInstitutionIdentifier(meteorInstitutionId);
+			List<String> supportedVersions = getSupportedVersions(meteorInstitutionId);
+			dataProvider.setMeteorVersion(supportedVersions.get(0));
+			dataProvider.setUrl(getUrl(meteorInstitutionId, ProviderType.DATA));
+		} catch (Exception e) {
+			throw new RegistryException(e);
+		}
 
 		return dataProvider;
 	}

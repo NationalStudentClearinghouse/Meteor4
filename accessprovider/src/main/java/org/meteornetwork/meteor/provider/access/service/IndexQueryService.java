@@ -19,6 +19,7 @@ import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.ws.IndexProviderService;
 import org.meteornetwork.meteor.common.xml.indexrequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.indexrequest.MeteorIndexRequest;
+import org.meteornetwork.meteor.common.xml.indexresponse.IndexProviderData;
 import org.meteornetwork.meteor.common.xml.indexresponse.Message;
 import org.meteornetwork.meteor.common.xml.indexresponse.MeteorIndexResponse;
 import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
@@ -103,6 +104,9 @@ public class IndexQueryService implements ApplicationContextAware {
 					dataProviders.add(dpInfo);
 				}
 			}
+
+			IndexProviderData ipData = response.getIndexProviderData();
+			responseData.addLoanLocatorIndexProvider(ip.getInstitutionIdentifier(), ipData == null ? null : ipData.getEntityName(), ipData == null ? null : ipData.getEntityURL());
 			break;
 		}
 

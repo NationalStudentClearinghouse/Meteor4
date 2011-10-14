@@ -14,6 +14,7 @@ import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderAwardD
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderDetailInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderMsg;
+import org.meteornetwork.meteor.common.xml.dataresponse.MeteorIndexProviderData;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
 import org.meteornetwork.meteor.common.xml.indexresponse.Message;
 import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
@@ -27,6 +28,9 @@ public class ResponseDataWrapper {
 
 	// special DataProviderType to indicate index response message container
 	private static final String IDX = "IDX";
+	
+	// indicated DataProviderType is unknown
+	private static final String UNK = "UNK";
 
 	private transient MeteorRsMsg responseData;
 	private transient MeteorDataProviderInfo indexMessageMdpi;
@@ -38,6 +42,61 @@ public class ResponseDataWrapper {
 		this.responseData = new MeteorRsMsg();
 	}
 
+	/**
+	 * Adds information of the index provider with loan locator data
+	 * 
+	 * @param ipId
+	 *            entity id of the index provider
+	 * @param ipName
+	 *            entity name of the index provider
+	 * @param ipUrl
+	 *            entity url of the index provider
+	 */
+	public void addLoanLocatorIndexProvider(String ipId, String ipName, String ipUrl) {
+		MeteorIndexProviderData indexProviderData = new MeteorIndexProviderData();
+		indexProviderData.setEntityID(ipId);
+		indexProviderData.setEntityName(ipName);
+		indexProviderData.setEntityURL(ipUrl);
+		indexProviderData.setContacts(new Contacts());
+		responseData.addMeteorIndexProviderData(indexProviderData);
+	}
+
+	/**
+	 * Add a data provider to loan locator data
+	 * 
+	 * @param dpId
+	 *            entity id of the data provider
+	 * @param dpName
+	 *            entity name of the data provider
+	 * @param dpUrl
+	 *            entity url of the data provider. this is the entity's web url,
+	 *            not the meteor web services url
+	 */
+	public void addLoanLocatorDataProvider(String dpId, String dpName, String dpUrl) {
+		MeteorDataProviderInfo dpInfo = new MeteorDataProviderInfo();
+		
+		dpInfo.setLoanLocatorActivationIndicator(true);
+		
+		dpInfo.setMeteorDataProviderDetailInfo(new MeteorDataProviderDetailInfo());
+		dpInfo.getMeteorDataProviderDetailInfo().setDataProviderType(UNK);
+		dpInfo.getMeteorDataProviderDetailInfo().setDataProviderAggregateTotal(new DataProviderAggregateTotal());
+		
+		DataProviderData dpContact = new DataProviderData();
+		dpInfo.getMeteorDataProviderDetailInfo().setDataProviderData(dpContact);
+		
+		dpContact.setEntityID(dpId);
+		dpContact.setEntityName(dpName);
+		dpContact.setEntityURL(dpUrl);
+		dpContact.setContacts(new Contacts());
+		
+		responseData.addMeteorDataProviderInfo(dpInfo);
+	}
+
+	/**
+	 * Add response from data provider to this set of response data
+	 * 
+	 * @param dataProviderResponse
+	 */
 	public void addDataProviderInfo(MeteorRsMsg dataProviderResponse) {
 		for (MeteorDataProviderInfo info : dataProviderResponse.getMeteorDataProviderInfo()) {
 			responseData.addMeteorDataProviderInfo(info);
@@ -56,6 +115,11 @@ public class ResponseDataWrapper {
 		}
 	}
 
+	/**
+	 * Add responses from data providers to this set of response data
+	 * 
+	 * @param dataProviderResponses
+	 */
 	public void addAllDataProviderInfo(Iterable<MeteorRsMsg> dataProviderResponses) {
 		if (dataProviderResponses != null) {
 			for (MeteorRsMsg response : dataProviderResponses) {
@@ -93,6 +157,7 @@ public class ResponseDataWrapper {
 	private void addIndexProviderMessage(String message, String messageLevel) {
 		if (indexMessageMdpi == null) {
 			indexMessageMdpi = createMinimalMeteorDataProviderInfo(IDX);
+			responseData.addMeteorDataProviderInfo(indexMessageMdpi);
 		}
 
 		MeteorDataProviderMsg mdpMessage = new MeteorDataProviderMsg();

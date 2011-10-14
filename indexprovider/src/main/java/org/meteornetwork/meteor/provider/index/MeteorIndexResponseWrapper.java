@@ -10,8 +10,13 @@ import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
 
 public class MeteorIndexResponseWrapper {
 
-	private final MeteorIndexResponse response = new MeteorIndexResponse();
+	private final MeteorIndexResponse response;
 
+	public MeteorIndexResponseWrapper() {
+		response = new MeteorIndexResponse();
+		response.setDataProviders(new DataProviders());
+	}
+	
 	public void setIndexProviderData(String id, String name, String url) {
 		IndexProviderData data = new IndexProviderData();
 		data.setEntityID(id);
@@ -33,24 +38,14 @@ public class MeteorIndexResponseWrapper {
 	}
 
 	public void addDataProviders(DataProvider... dataProviders) {
-		initDataProviders();
-
 		for (DataProvider dataProvider : dataProviders) {
 			response.getDataProviders().addDataProvider(dataProvider);
 		}
 	}
 
 	public void addDataProviders(Iterable<DataProvider> dataProviders) {
-		initDataProviders();
-
 		for (DataProvider dataProvider : dataProviders) {
 			response.getDataProviders().addDataProvider(dataProvider);
-		}
-	}
-
-	private void initDataProviders() {
-		if (response.getDataProviders() == null) {
-			response.setDataProviders(new DataProviders());
 		}
 	}
 
