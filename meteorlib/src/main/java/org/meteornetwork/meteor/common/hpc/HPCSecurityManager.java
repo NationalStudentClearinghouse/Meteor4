@@ -2,17 +2,13 @@ package org.meteornetwork.meteor.common.hpc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -22,33 +18,20 @@ import javax.xml.transform.TransformerException;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.ws.security.WSSecurityException;
-import org.apache.ws.security.saml.ext.OpenSAMLUtil;
-import org.apache.ws.security.saml.ext.bean.AttributeBean;
-import org.apache.ws.security.saml.ext.bean.AttributeStatementBean;
-import org.apache.ws.security.saml.ext.bean.AuthenticationStatementBean;
-import org.apache.ws.security.saml.ext.bean.ConditionsBean;
-import org.apache.ws.security.saml.ext.bean.SubjectBean;
-import org.apache.ws.security.saml.ext.bean.SubjectLocalityBean;
-import org.apache.ws.security.saml.ext.builder.SAML1ComponentBuilder;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.XMLUtils;
 import org.apache.xpath.XPathAPI;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.DigitalSignatureManager;
 import org.meteornetwork.meteor.common.util.exception.MeteorSecurityException;
+import org.meteornetwork.meteor.saml.MeteorSamlSecurityToken;
 import org.meteornetwork.meteor.saml.ProviderType;
-import org.meteornetwork.meteor.saml.SecurityToken;
-import org.meteornetwork.meteor.saml.util.DOMUtils;
-import org.opensaml.common.SAMLVersion;
-import org.opensaml.saml1.core.Assertion;
-import org.opensaml.xml.XMLObject;
+import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 import org.opensaml.xml.security.SecurityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,8 +51,6 @@ import org.xml.sax.SAXException;
 public class HPCSecurityManager {
 
 	private static final String SAML_10_NS = "http://www.oasis-open.org/committees/security/docs/draft-sstc-schema-assertion-27.xsd";
-	private static final String NCHELP_METEOR = "nchelp.org/meteor";
-	private static final String NCHELP = "http://nchelp.org";
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
@@ -92,85 +73,16 @@ public class HPCSecurityManager {
 	 * @throws UnknownHostException
 	 */
 	public String createSaml(String meteorInstitutionIdentifier, RequestInfo requestInfo) throws MeteorSecurityException {
+		MeteorSamlSecurityToken token = new MeteorSamlSecurityToken();
+		token.setIssuer(meteorInstitutionIdentifier);
+		token.setSubjectName(meteorInstitutionIdentifier);
+		token.setMeteorAttributes(requestInfo.getSecurityToken().getMeteorAttributes());
+
 		try {
-			XMLObject assertion = createSamlXMLObject(meteorInstitutionIdentifier, requestInfo);
-
-			return DOMUtils.domToString(OpenSAMLUtil.toDom(assertion, null));
-		} catch (Exception e) {
-			throw new MeteorSecurityException("Could not create SAML assertion", e);
+			return token.toXMLString();
+		} catch (SecurityTokenException e) {
+			throw new MeteorSecurityException("Could not create SAML security token", e);
 		}
-	}
-
-	private XMLObject createSamlXMLObject(String meteorInstitutionIdentifier, RequestInfo requestInfo) throws UnknownHostException, SecurityException, WSSecurityException {
-		Assertion assertion = SAML1ComponentBuilder.createSamlv1Assertion(NCHELP_METEOR);
-		assertion.setVersion(SAMLVersion.VERSION_10);
-
-		SubjectBean subjectBean = new SubjectBean();
-		subjectBean.setSubjectName(meteorInstitutionIdentifier);
-		subjectBean.setSubjectNameQualifier(NCHELP_METEOR);
-
-		DateTime currentDateTime = new DateTime(DateTimeZone.UTC);
-
-		/*
-		 * Authentication statement
-		 */
-		AuthenticationStatementBean authStatementBean = new AuthenticationStatementBean();
-		authStatementBean.setAuthenticationInstant(currentDateTime);
-		authStatementBean.setAuthenticationMethod(NCHELP);
-		authStatementBean.setSubject(subjectBean);
-		SubjectLocalityBean subjectLocalityBean = new SubjectLocalityBean();
-		subjectLocalityBean.setIpAddress(InetAddress.getLocalHost().getHostAddress());
-		subjectLocalityBean.setDnsAddress(InetAddress.getLocalHost().getHostName());
-		authStatementBean.setSubjectLocality(subjectLocalityBean);
-
-		assertion.getAuthenticationStatements().addAll(SAML1ComponentBuilder.createSamlv1AuthenticationStatement(Collections.singletonList(authStatementBean)));
-
-		/*
-		 * Attributes
-		 */
-		List<AttributeStatementBean> attributeStatementBeans = new ArrayList<AttributeStatementBean>();
-
-		SecurityToken token = requestInfo.getSecurityToken();
-		if (token.getOrganizationId() != null) {
-			attributeStatementBeans.add(createAttributeStatement("OrganizationID", token.getOrganizationId(), subjectBean));
-		}
-
-		if (token.getOrganizationIdType() != null) {
-			attributeStatementBeans.add(createAttributeStatement("OrganizationIDType", token.getOrganizationIdType(), subjectBean));
-		}
-
-		if (token.getOrganizationType() != null) {
-			attributeStatementBeans.add(createAttributeStatement("OrganizationType", token.getOrganizationType(), subjectBean));
-		}
-
-		attributeStatementBeans.add(createAttributeStatement("AuthenticationProcessID", token.getAuthenticationProcessId(), subjectBean));
-		attributeStatementBeans.add(createAttributeStatement("Level", token.getLevel().toString(), subjectBean));
-		attributeStatementBeans.add(createAttributeStatement("UserHandle", token.getUserHandle(), subjectBean));
-		attributeStatementBeans.add(createAttributeStatement("Role", token.getRole().getName(), subjectBean));
-
-		assertion.getAttributeStatements().addAll(SAML1ComponentBuilder.createSamlv1AttributeStatement(attributeStatementBeans));
-
-		/*
-		 * Conditions
-		 */
-		ConditionsBean conditionsBean = new ConditionsBean();
-		conditionsBean.setNotBefore(currentDateTime);
-		conditionsBean.setNotAfter(currentDateTime.plusHours(4));
-
-		assertion.setConditions(SAML1ComponentBuilder.createSamlv1Conditions(conditionsBean));
-
-		return assertion;
-	}
-
-	private AttributeStatementBean createAttributeStatement(String simpleName, String value, SubjectBean subjectBean) {
-		AttributeStatementBean attributeStatementBean = new AttributeStatementBean();
-		AttributeBean attributeBean = new AttributeBean();
-		attributeBean.setSimpleName(simpleName);
-		attributeBean.setAttributeValues(Collections.singletonList(value));
-
-		attributeStatementBean.getSamlAttributes().add(attributeBean);
-		attributeStatementBean.setSubject(subjectBean);
-		return attributeStatementBean;
 	}
 
 	/**
@@ -248,7 +160,7 @@ public class HPCSecurityManager {
 	}
 
 	/**
-	 * Validates the SAML assertion and signatures on an incoming HPC request
+	 * Validates the signatures on an incoming HPC request
 	 * 
 	 * @param requestXml
 	 * @throws MeteorSecurityException
@@ -275,7 +187,6 @@ public class HPCSecurityManager {
 				throw new MeteorSecurityException("Cannot validate HPC request", e);
 			}
 		}
-
 	}
 
 	private void verifyAssertionSignature(Document requestDom, Element sigNSContext, Element samlNSContext) throws TransformerException, RegistryException, MeteorSecurityException, XMLSignatureException, XMLSecurityException, ParserConfigurationException {
@@ -294,7 +205,6 @@ public class HPCSecurityManager {
 		}
 		String institutionId = institutionAttr.getFirstChild().getNodeValue();
 
-		// TODO: support status provider
 		X509Certificate cert = registryManager.getCertificate(institutionId, ProviderType.ACCESS);
 		verifySignature(signature, cert);
 	}
@@ -338,6 +248,27 @@ public class HPCSecurityManager {
 		}
 		if (!currentTime.before(notOnOrAfter)) {
 			throw new MeteorSecurityException("Current time " + dateFormatter.format(currentTime) + " is equal to or after Assertion Condition@NotOnOrAfter " + notAfterStr);
+		}
+	}
+
+	public MeteorSamlSecurityToken getSecurityToken(String requestXml) throws MeteorSecurityException {
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(requestXml.getBytes(IOUtils.UTF8_CHARSET));
+		try {
+			DocumentBuilder docBuilder = createDocumentBuilder();
+			Document requestDom = docBuilder.parse(inputStream);
+
+			Element samlNSContext = XMLUtils.createDSctx(requestDom, "saml", SAML_10_NS);
+			Element assertionElement = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier/saml:Assertion", samlNSContext);
+
+			return MeteorSamlSecurityToken.fromXML(assertionElement);
+		} catch (Exception e) {
+			throw new MeteorSecurityException("Cannot get security token", e);
+		} finally {
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				throw new MeteorSecurityException("Cannot get security token", e);
+			}
 		}
 	}
 

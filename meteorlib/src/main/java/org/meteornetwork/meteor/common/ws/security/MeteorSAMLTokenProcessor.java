@@ -1,5 +1,9 @@
 package org.meteornetwork.meteor.common.ws.security;
 
+import java.io.IOException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSDocInfo;
 import org.apache.ws.security.WSSecurityException;
@@ -10,9 +14,11 @@ import org.apache.ws.security.validate.Validator;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
+import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.saml.ProviderType;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
+import org.meteornetwork.meteor.saml.util.DOMUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -28,24 +34,39 @@ import org.w3c.dom.NodeList;
  */
 public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 
+	private static final Log LOG = LogFactory.getLog(MeteorSAMLTokenProcessor.class);
+
 	private RegistryManager registryManager;
 
 	private static final ProviderType defaultProviderType = ProviderType.ACCESS;
 
 	@Override
 	public Credential handleSAMLToken(Element token, RequestData data, Validator validator, WSDocInfo docInfo) throws WSSecurityException {
-		if (!(data.getSigCrypto() instanceof MeteorCertificateStore)) {
-			throw new WSSecurityException("Signature crypto implementation is not MeteorCertificateStore");
-		}
+		assert data.getSigCrypto() instanceof MeteorCertificateStore : "Signature crypto implementation is not MeteorCertificateStore";
 
 		MeteorCertificateStore crypto = (MeteorCertificateStore) data.getSigCrypto();
 		addCertificateToCrypto(token, crypto);
 
-		Credential credential = super.handleSAMLToken(token, data, validator, docInfo);
+		Credential credential;
 		try {
-			getRequestInfo().setSecurityToken(SecurityTokenImpl.fromXML(token));
+			credential = super.handleSAMLToken(token, data, validator, docInfo);
+		} catch (WSSecurityException e) {
+			LOG.debug(e);
+			throw new WSSecurityException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef(), e);
+		}
+
+		try {
+			String tokenStr;
+			try {
+				tokenStr = DOMUtils.domToString(token);
+			} catch (IOException e) {
+				throw new SecurityTokenException(e);
+			}
+
+			getRequestInfo().setSecurityToken(SecurityTokenImpl.fromXML(tokenStr));
 		} catch (SecurityTokenException e) {
-			throw new WSSecurityException("Could not parse Meteor assertion", e);
+			LOG.debug("Could not parse Meteor assertion", e);
+			throw new WSSecurityException(MeteorMessage.SECURITY_INVALID_TOKEN.getPropertyRef(), e);
 		}
 
 		return credential;
@@ -66,14 +87,16 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 		try {
 			crypto.addCertificate(registryManager.getCertificate(institutionID, providerType));
 		} catch (RegistryException e) {
-			throw new WSSecurityException("Could not get X509 certificate from Meteor registry for institution " + institutionID, e);
+			LOG.debug("Could not get X509 certificate from Meteor registry for institution " + institutionID);
+			throw new WSSecurityException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef(), e);
 		}
 	}
 
 	private String getMeteorInstitutionIdentifier(Element token) throws WSSecurityException {
 		NodeList elements = token.getElementsByTagNameNS(WSConstants.SAML2_NS, "NameID");
 		if (elements == null) {
-			throw new WSSecurityException("Cannot validate SAML assertion - subject name id is missing");
+			LOG.debug("Cannot validate SAML assertion - subject name id is missing");
+			throw new WSSecurityException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef());
 		}
 
 		for (int i = 0; i < elements.getLength(); ++i) {
@@ -83,7 +106,8 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 			}
 		}
 
-		throw new WSSecurityException("Cannot validate SAML assertion - subject name id is missing");
+		LOG.debug("Cannot validate SAML assertion - subject name id is missing");
+		throw new WSSecurityException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef());
 	}
 
 	private ProviderType getProviderType(Element token) {
@@ -100,6 +124,7 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 				continue;
 			}
 
+			// TODO get rid of provider type from security token
 			return ProviderType.valueOfType(node.getFirstChild().getNodeValue());
 		}
 

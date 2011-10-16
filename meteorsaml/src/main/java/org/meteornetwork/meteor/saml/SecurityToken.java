@@ -39,6 +39,13 @@ public interface SecurityToken {
 	 */
 	String toXMLString() throws SecurityTokenException;
 
+	/**
+	 * Validates assertion has not yet expired
+	 * 
+	 * @return true if assertion has not expired, false otherwise
+	 */
+	boolean validateConditions();
+
 	String getAssertionId();
 
 	/**

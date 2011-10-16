@@ -16,6 +16,9 @@
 		   
 		<wss4j.version>1.6.2</wss4j.version>
 		
+		<xalan.version>2.7.1</xalan.version>
+		<xerces.version>2.10.0</xerces.version>
+		
 		<junit.version>4.8.2</junit.version>
 		<org.easymock.version>3.0</org.easymock.version>
 	</properties>
@@ -28,6 +31,21 @@
 		    <groupId>org.apache.ws.security</groupId>
 		    <artifactId>wss4j</artifactId>
 		    <version>${wss4j.version}</version>
+		</dependency>
+		
+		<!-- 
+			XML parsing and binding
+		 -->
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>xalan</artifactId>
+			<version>${xalan.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>${xerces.version}</version>
 		</dependency>
 		
 		<!-- 

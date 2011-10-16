@@ -11,7 +11,6 @@ import java.security.cert.CertificateException;
 import java.util.Properties;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.logging.Log;
@@ -63,7 +62,6 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 	private DigitalSignatureManager keystoreManager;
 
 	private XSLTransformManager xslTransformManager;
-	private Templates saml1ToMeteorSAMLTemplate;
 	private TemplateVersionMapper requestTemplateVersionMapper;
 	private TemplateVersionMapper responseTemplateVersionMapper;
 
@@ -127,9 +125,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 
 		PrivateKey privateKey = keystoreManager.getPrivateKey(privateKeyParams);
 
-		// TODO append X509Certificate to signatures? make optional?
 		String saml = hpcSecurityManager.createSaml(accessProvider.getMeteorInstitutionIdentifier(), requestInfo);
-		saml = xslTransformManager.transformXML(saml, saml1ToMeteorSAMLTemplate);
 		saml = hpcSecurityManager.signAssertion(saml, privateKey, null);
 		return hpcSecurityManager.signBody(request, saml, privateKey, null);
 	}
@@ -253,15 +249,4 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 	public void setKeystoreManager(DigitalSignatureManager keystoreManager) {
 		this.keystoreManager = keystoreManager;
 	}
-
-	public Templates getSaml1ToMeteorSAMLTemplate() {
-		return saml1ToMeteorSAMLTemplate;
-	}
-
-	@Autowired
-	@Qualifier("SAML1toMeteorSAMLTemplate")
-	public void setSaml1ToMeteorSAMLTemplate(Templates saml1ToMeteorSAMLTemplate) {
-		this.saml1ToMeteorSAMLTemplate = saml1ToMeteorSAMLTemplate;
-	}
-
 }

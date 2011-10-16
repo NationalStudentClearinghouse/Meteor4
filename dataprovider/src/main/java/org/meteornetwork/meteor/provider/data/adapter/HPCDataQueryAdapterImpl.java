@@ -9,9 +9,11 @@ import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
 import org.meteornetwork.meteor.common.hpc.HPCSecurityManager;
+import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.util.exception.MeteorSecurityException;
+import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,8 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 
 	private Properties meteorProps;
 
+	private RequestInfo requestInfo;
+
 	@Override
 	public RequestWrapper getRequest() throws DataQueryAdapterException {
 		String contentXml;
@@ -54,15 +58,21 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 			LOG.debug("Request XML from HPC:\n" + contentXml);
 		} catch (Exception e) {
 			LOG.error("Could not handle HPC request", e);
-			return null;
+			throw new DataQueryAdapterException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE);
 		}
 
-		// TODO: get assertion info
 		try {
 			hpcSecurityManager.validateRequest(contentXml);
 		} catch (MeteorSecurityException e1) {
 			LOG.error("Could not validate HPC request", e1);
-			return null;
+			throw new DataQueryAdapterException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE);
+		}
+
+		try {
+			requestInfo.setSecurityToken(hpcSecurityManager.getSecurityToken(contentXml));
+		} catch (MeteorSecurityException e) {
+			LOG.error(e);
+			throw new DataQueryAdapterException(MeteorMessage.SECURITY_INVALID_TOKEN);
 		}
 
 		String transformedContentXml;
@@ -82,12 +92,13 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 			meteorDataRequest = MeteorDataRequest.unmarshal(new StringReader(transformedContentXml));
 		} catch (Exception e) {
 			LOG.error("Could not parse meteor data request", e);
-			return null;
+			throw new DataQueryAdapterException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE);
 		}
 
 		requesterId = meteorDataRequest.getAccessProvider().getMeteorInstitutionIdentifier();
 		request.setAccessProvider(meteorDataRequest.getAccessProvider());
 		request.setSsn(meteorDataRequest.getSSN());
+
 		return request;
 	}
 
@@ -209,6 +220,15 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	@Qualifier("MeteorProperties")
 	public void setMeteorProps(Properties meteorProps) {
 		this.meteorProps = meteorProps;
+	}
+
+	public RequestInfo getRequestInfo() {
+		return requestInfo;
+	}
+
+	@Autowired
+	public void setRequestInfo(RequestInfo requestInfo) {
+		this.requestInfo = requestInfo;
 	}
 
 }

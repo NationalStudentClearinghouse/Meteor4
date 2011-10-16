@@ -36,6 +36,7 @@ public class SecurityTokenImplTest extends TestCase {
 
 		SecurityTokenImpl token = new SecurityTokenMock();
 
+		token.setAssertionId("12345678");
 		token.setIssuer("meteornetwork.org");
 		token.setSubjectName("LTI_AP");
 		token.setSubjectLocalityIpAddress("1.2.3.4");
@@ -51,6 +52,7 @@ public class SecurityTokenImplTest extends TestCase {
 
 		String assertionXml = token.toXMLString();
 		SecurityTokenImpl result = SecurityTokenImpl.fromXML(assertionXml);
+		Assert.assertEquals("12345678", result.getAssertionId());
 		Assert.assertEquals("meteornetwork.org", result.getIssuer());
 		Assert.assertEquals("LTI_AP", result.getSubjectName());
 		Assert.assertEquals("1.2.3.4", result.getSubjectLocalityIpAddress());
@@ -71,6 +73,7 @@ public class SecurityTokenImplTest extends TestCase {
 	public void testFromXMLFAA() throws IOException, SecurityTokenException, ParseException {
 		String assertionXml = getXmlFromFile("assertion-faa.xml");
 		SecurityTokenImpl result = SecurityTokenImpl.fromXML(assertionXml);
+		Assert.assertEquals("98287E61FB3575AF5713168076864216", result.getAssertionId());
 		Assert.assertEquals("meteornetwork.org", result.getIssuer());
 		Assert.assertEquals("LTI_AP40", result.getSubjectName());
 		Assert.assertEquals("1.2.3.4", result.getSubjectLocalityIpAddress());
@@ -92,6 +95,7 @@ public class SecurityTokenImplTest extends TestCase {
 
 		SecurityToken token = new SecurityTokenMock();
 
+		token.setAssertionId("12345678");
 		token.setIssuer("meteornetwork.org");
 		token.setSubjectName("LTI_AP");
 		token.setSubjectLocalityIpAddress("1.2.3.4");
@@ -104,6 +108,7 @@ public class SecurityTokenImplTest extends TestCase {
 
 		String assertionXml = token.toXMLString();
 		SecurityToken result = SecurityTokenImpl.fromXML(assertionXml);
+		Assert.assertEquals("12345678", result.getAssertionId());
 		Assert.assertEquals("meteornetwork.org", result.getIssuer());
 		Assert.assertEquals("LTI_AP", result.getSubjectName());
 		Assert.assertEquals("1.2.3.4", result.getSubjectLocalityIpAddress());
@@ -121,6 +126,7 @@ public class SecurityTokenImplTest extends TestCase {
 	public void testFromXMLBorrower() throws IOException, SecurityTokenException, ParseException {
 		String assertionXml = getXmlFromFile("assertion-borrower.xml");
 		SecurityToken result = SecurityTokenImpl.fromXML(assertionXml);
+		Assert.assertEquals("98287E61FB3575AF5713168076864216", result.getAssertionId());
 		Assert.assertEquals("meteornetwork.org", result.getIssuer());
 		Assert.assertEquals("LTI_AP40", result.getSubjectName());
 		Assert.assertEquals("1.2.3.4", result.getSubjectLocalityIpAddress());
@@ -139,6 +145,7 @@ public class SecurityTokenImplTest extends TestCase {
 
 		SecurityToken token = new SecurityTokenMock();
 
+		token.setAssertionId("12345678");
 		token.setIssuer("meteornetwork.org");
 		token.setSubjectName("LTI_AP");
 		token.setSubjectLocalityIpAddress("1.2.3.4");
@@ -151,6 +158,7 @@ public class SecurityTokenImplTest extends TestCase {
 
 		String assertionXml = token.toXMLString();
 		SecurityToken result = SecurityTokenImpl.fromXML(assertionXml);
+		Assert.assertEquals("12345678", result.getAssertionId());
 		Assert.assertEquals("meteornetwork.org", result.getIssuer());
 		Assert.assertEquals("LTI_AP", result.getSubjectName());
 		Assert.assertEquals("1.2.3.4", result.getSubjectLocalityIpAddress());
@@ -168,6 +176,7 @@ public class SecurityTokenImplTest extends TestCase {
 	public void testFromXMLLender() throws IOException, SecurityTokenException, ParseException {
 		String assertionXml = getXmlFromFile("assertion-lender.xml");
 		SecurityToken result = SecurityTokenImpl.fromXML(assertionXml);
+		Assert.assertEquals("98287E61FB3575AF5713168076864216", result.getAssertionId());
 		Assert.assertEquals("meteornetwork.org", result.getIssuer());
 		Assert.assertEquals("LTI_AP40", result.getSubjectName());
 		Assert.assertEquals("1.2.3.4", result.getSubjectLocalityIpAddress());
@@ -180,7 +189,7 @@ public class SecurityTokenImplTest extends TestCase {
 		Assert.assertEquals(Role.LENDER, result.getRole());
 		Assert.assertEquals("12345", result.getLender());
 	}
-	
+
 	private String getXmlFromFile(String fileName) throws IOException {
 		File file = new File(this.getClass().getResource(fileName).getFile());
 		FileInputStream fileInputStream = new FileInputStream(file);

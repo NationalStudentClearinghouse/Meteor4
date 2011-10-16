@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.message.Messages;
+import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.dataresponse.types.PhoneNumTypeEnum;
 import org.meteornetwork.meteor.common.xml.dataresponse.types.RsMsgLevelEnum;
 import org.meteornetwork.meteor.provider.data.DataServerAbstraction;
@@ -14,6 +15,7 @@ import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapter;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapterException;
 import org.meteornetwork.meteor.provider.data.adapter.RequestWrapper;
+import org.meteornetwork.meteor.saml.SecurityToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -39,7 +41,7 @@ public class DataProviderManager {
 	 *            sets response data using this adapter
 	 */
 	public void queryDataForBorrower(DataQueryAdapter adapter) {
-		
+
 		RequestWrapper request = null;
 		try {
 			request = adapter.getRequest();
@@ -49,8 +51,16 @@ public class DataProviderManager {
 			adapter.setResponse(dataResponse);
 			return;
 		}
-		
+
 		if (request == null) {
+			return;
+		}
+
+		SecurityToken token = getRequestInfo().getSecurityToken();
+		if (!token.validateConditions()) {
+			MeteorDataResponseWrapper dataResponse = new MeteorDataResponseWrapper();
+			dataResponse.addMessage(Messages.getMessage(MeteorMessage.SECURITY_TOKEN_EXPIRED.getPropertyRef()), RsMsgLevelEnum.E.name());
+			adapter.setResponse(dataResponse);
 			return;
 		}
 
@@ -58,7 +68,7 @@ public class DataProviderManager {
 
 		MeteorContext context = new MeteorContext();
 		context.setAccessProvider(request.getAccessProvider());
-		context.setSecurityToken(getRequestInfo().getSecurityToken());
+		context.setSecurityToken(token);
 		MeteorDataResponseWrapper dataResponse = dataServer.getData(context, request.getSsn());
 
 		if ("Y".equals(dataProviderProperties.getProperty("DataProvider.Data.usepropertydata"))) {

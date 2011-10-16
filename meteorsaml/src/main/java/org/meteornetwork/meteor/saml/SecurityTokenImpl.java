@@ -25,7 +25,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 import org.meteornetwork.meteor.saml.util.DOMUtils;
-import org.opensaml.common.SAMLVersion;
 import org.opensaml.saml2.core.Assertion;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -46,8 +45,6 @@ public class SecurityTokenImpl implements SecurityToken {
 	static {
 		OpenSAMLUtil.initSamlEngine();
 	}
-
-	protected static final SAMLVersion SAML_VERSION = SAMLVersion.VERSION_20;
 
 	private String assertionId;
 	private String issuer;
@@ -72,7 +69,7 @@ public class SecurityTokenImpl implements SecurityToken {
 	 */
 	public static SecurityTokenImpl fromXML(String xml) throws SecurityTokenException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
+		
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(xml.getBytes(Charset.forName("utf-8")));
 		try {
 			Document doc = factory.newDocumentBuilder().parse(inputStream);
@@ -92,12 +89,15 @@ public class SecurityTokenImpl implements SecurityToken {
 	 * Creates a SecurityTokenImpl given valid SAML 2.0 assertion xml.
 	 * 
 	 * @param tokenElem
-	 *            valid SAML 2.0 assertion with meteor attributes
+	 *            valid SAML 2.0 assertion with meteor attributes. Parent
+	 *            document must not be namespace aware.
 	 * @return token representing the assertion xml
 	 * @throws SecurityTokenException
 	 *             wraps any exception that occurs while processing
 	 */
 	public static SecurityTokenImpl fromXML(Element tokenElem) throws SecurityTokenException {
+		
+		
 		SecurityTokenImpl token = new SecurityTokenImpl();
 
 		DatatypeFactory datatypeFactory;
@@ -108,7 +108,12 @@ public class SecurityTokenImpl implements SecurityToken {
 		}
 
 		try {
-			Node node = XPathAPI.selectSingleNode(tokenElem, "Issuer");
+			Node node = XPathAPI.selectSingleNode(tokenElem, "@ID");
+			if (node != null) {
+				token.setAssertionId(node.getFirstChild().getNodeValue());
+			}
+
+			node = XPathAPI.selectSingleNode(tokenElem, "Issuer");
 			if (node != null) {
 				token.setIssuer(node.getFirstChild().getNodeValue());
 			}
@@ -228,6 +233,10 @@ public class SecurityTokenImpl implements SecurityToken {
 			DateTime currentDateTime = getCurrentDateTime();
 
 			Assertion assertion = SAML2ComponentBuilder.createAssertion();
+			if (assertionId != null) {
+				assertion.setID(assertionId);
+			}
+
 			if (issuer != null) {
 				assertion.setIssuer(SAML2ComponentBuilder.createIssuer(issuer));
 			}
@@ -260,7 +269,9 @@ public class SecurityTokenImpl implements SecurityToken {
 
 	protected ConditionsBean createConditionsBean(DateTime currentDateTime) throws SecurityTokenException {
 		ConditionsBean conditions = new ConditionsBean();
-		DateTime notBefore = conditionsNotBefore == null ? getCurrentDateTime() : conditionsNotBefore;
+
+		DateTime curTime = currentDateTime == null ? getCurrentDateTime() : currentDateTime;
+		DateTime notBefore = conditionsNotBefore == null ? curTime : conditionsNotBefore;
 		DateTime notOnOrAfter = conditionsNotOnOrAfter == null ? notBefore.plusSeconds(VALIDITY_PERIOD_DEFAULT) : conditionsNotOnOrAfter;
 
 		if (notOnOrAfter.isBefore(notBefore.getMillis())) {
@@ -334,6 +345,19 @@ public class SecurityTokenImpl implements SecurityToken {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		return factory.newDocumentBuilder();
+	}
+
+	@Override
+	public boolean validateConditions() {
+		if (conditionsNotBefore == null) {
+			return false;
+		}
+
+		if (conditionsNotOnOrAfter == null) {
+			return true;
+		}
+
+		return (conditionsNotBefore.isEqualNow() || conditionsNotBefore.isBeforeNow()) && conditionsNotOnOrAfter.isAfterNow();
 	}
 
 	public String getAssertionId() {

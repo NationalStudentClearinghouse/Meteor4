@@ -10,4 +10,8 @@ public class RegistryException extends Exception {
 	public RegistryException(Throwable e) {
 		super(e);
 	}
+
+	public RegistryException(String message) {
+		super(message);
+	}
 }

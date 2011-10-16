@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<saml:Assertion xmlns:saml="http://www.oasis-open.org/committees/security/docs/draft-sstc-schema-assertion-27.xsd" AssertionID="1317048778343" IssueInstant="2011-09-26T14:52:58+0000" Issuer="nchelp.org/meteor" MajorVersion="1" MinorVersion="0">
+   <saml:AuthenticationStatement AuthenticationInstant="2011-09-26T14:52:58+0000" AuthenticationMethod="http://nchelp.org">
+      <saml:Subject>
+         <saml:NameIdentifier Name="ap2" SecurityDomain="nchelp.org/meteor"/>
+      </saml:Subject>
+      <saml:SubjectLocality DNSAddress="lticslt-06" IPAddress="192.168.1.105"/>
+   </saml:AuthenticationStatement>
+   <saml:AttributeStatement>
+      <saml:Subject>
+         <saml:NameIdentifier Name="ap2" SecurityDomain="nchelp.org/meteor"/>
+      </saml:Subject>
+      <saml:Attribute AttributeName="AuthenticationProcessID" AttributeNamespace="nchelp.org/meteor">
+         <saml:AttributeValue>1</saml:AttributeValue>
+      </saml:Attribute>
+   </saml:AttributeStatement>
+   <saml:AttributeStatement>
+      <saml:Subject>
+         <saml:NameIdentifier Name="ap2" SecurityDomain="nchelp.org/meteor"/>
+      </saml:Subject>
+      <saml:Attribute AttributeName="Level" AttributeNamespace="nchelp.org/meteor">
+         <saml:AttributeValue>3</saml:AttributeValue>
+      </saml:Attribute>
+   </saml:AttributeStatement>
+   <saml:AttributeStatement>
+      <saml:Subject>
+         <saml:NameIdentifier Name="ap2" SecurityDomain="nchelp.org/meteor"/>
+      </saml:Subject>
+      <saml:Attribute AttributeName="UserHandle" AttributeNamespace="nchelp.org/meteor">
+         <saml:AttributeValue>username</saml:AttributeValue>
+      </saml:Attribute>
+   </saml:AttributeStatement>
+   <saml:AttributeStatement>
+      <saml:Subject>
+         <saml:NameIdentifier Name="ap2" SecurityDomain="nchelp.org/meteor"/>
+      </saml:Subject>
+      <saml:Attribute AttributeName="Role" AttributeNamespace="nchelp.org/meteor">
+         <saml:AttributeValue>BORROWER</saml:AttributeValue>
+      </saml:Attribute>
+   </saml:AttributeStatement>
+   <saml:AttributeStatement>
+      <saml:Subject>
+         <saml:NameIdentifier Name="ap2" SecurityDomain="nchelp.org/meteor"/>
+      </saml:Subject>
+      <saml:Attribute AttributeName="SSN" AttributeNamespace="nchelp.org/meteor">
+         <saml:AttributeValue>101011001</saml:AttributeValue>
+      </saml:Attribute>
+   </saml:AttributeStatement>
+   <saml:Condition NotBefore="2011-09-26T14:52:58+0000" NotOnOrAfter="2011-09-26T18:52:58+0000"/>
+</saml:Assertion>

@@ -34,7 +34,7 @@ public class PropertyRegistryManager implements RegistryManager {
 		String certFileKey = meteorInstitutionId + "." + providerType.getType() + ".Certificate";
 		if (!directoryDataProperties.containsKey(certFileKey)) {
 			LOG.error("Could not find certifiate file in properties file for institution" + meteorInstitutionId);
-			return null;
+			throw new RegistryException("Could not find certificate is registry for " + meteorInstitutionId);
 		}
 
 		String certFile = directoryDataProperties.getString(certFileKey);

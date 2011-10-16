@@ -63,6 +63,7 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 
 		try {
 			callback.setConditions(token.createConditionsBean(currentDateTime));
+			callback.getConditions().setNotAfter(callback.getConditions().getNotBefore().plusSeconds(60));
 		} catch (SecurityTokenException e) {
 			/*
 			 * will not be thrown because conditions NotBefore and NotOnOrAfter

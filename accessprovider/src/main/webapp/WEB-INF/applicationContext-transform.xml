@@ -119,25 +119,4 @@
 		</property>
 	</bean>
 	
-	<!-- 
-		Convert standard SAML 1.0 Assertion into Meteor 3.3.4 SAML Assertion
-	 -->
-	<bean id="SAML1toMeteorSAMLTemplateFile" class="org.springframework.core.io.ClassPathResource">
-		<constructor-arg value="xml/saml1-meteorSaml.xsl"/>
-	</bean>
-	
-	<bean id="SAML1toMeteorSAMLTemplate" 
-		factory-bean="transformerFactory"
-		factory-method="newTemplates">
-		
-		<constructor-arg>
-			<bean class="javax.xml.transform.stream.StreamSource">
-				<constructor-arg>
-					<bean class="java.io.File"
-						factory-bean="SAML1toMeteorSAMLTemplateFile"
-						factory-method="getFile" />
-				</constructor-arg>
-			</bean>
-		</constructor-arg>
-	</bean>
 </beans> 
