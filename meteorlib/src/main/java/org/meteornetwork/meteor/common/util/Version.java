@@ -1,5 +1,6 @@
 package org.meteornetwork.meteor.common.util;
 
+import java.io.Serializable;
 import java.util.StringTokenizer;
 
 /**
@@ -7,8 +8,13 @@ import java.util.StringTokenizer;
  * 
  * @author jlazos
  */
-public class Version {
+public class Version implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5701725419322932038L;
+	
 	private static final String DELIMITER = ".";
 	private static final String WILDCARD = "x";
 
@@ -161,6 +167,38 @@ public class Version {
 
 	private boolean match(String token, Integer versionNumber) {
 		return token.equalsIgnoreCase(WILDCARD) || Integer.valueOf(token).equals(versionNumber);
+	}
+
+	public Integer getMajor() {
+		return major;
+	}
+
+	public void setMajor(Integer major) {
+		this.major = major;
+	}
+
+	public Integer getMinor() {
+		return minor;
+	}
+
+	public void setMinor(Integer minor) {
+		this.minor = minor;
+	}
+
+	public Integer getRelease() {
+		return release;
+	}
+
+	public void setRelease(Integer release) {
+		this.release = release;
+	}
+
+	public Integer getMaintenance() {
+		return maintenance;
+	}
+
+	public void setMaintenance(Integer maintenance) {
+		this.maintenance = maintenance;
 	}
 
 }

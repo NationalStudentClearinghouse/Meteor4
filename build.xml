@@ -7,11 +7,18 @@
 		<antcall target="meteorsaml"/>
 		<antcall target="meteorlib"/>
 		<antcall target="meteorbusiness"/>
+		<antcall target="meteorregistry"/>
 		<antcall target="accessprovider"/>
 		<antcall target="dataprovider"/>
 		<antcall target="indexprovider"/>
 		<antcall target="uiprovider"/>
 		<antcall target="samplelogin"/>
+	</target>
+
+	<target name="meteorregistry">
+		<ant dir="meteorregistry" inheritAll="false">
+			<property name="basedir" value="${basedir}/meteorregistry"/>
+		</ant>
 	</target>
 
 	<target name="accessprovider">

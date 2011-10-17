@@ -10,28 +10,10 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
     xmlns:util="http://www.springframework.org/schema/util"> 
-
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-	    <property name="locations">
-	        <list>
-	        	<value>classpath:directory.properties</value>
-	        	<value>classpath:dataprovider.properties</value>
-	        </list>
-	    </property>
-	</bean>
-
+	
  	<!-- meteor common properties -->
- 	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>
  	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
- 	<util:properties id="DataProviderProperties" location="WEB-INF/classes/dataprovider.properties"/>
  	
- 	<!-- Data Server Abstraction -->
-	<bean id="DataServerAbstractionImpl" class="${default.data.server}"/>
-	
-	<bean id="DataProviderManager" class="org.meteornetwork.meteor.provider.data.manager.DataProviderManager" autowire="byType">
-		<lookup-method name="getRequestInfo" bean="requestInfo"/>
-	</bean>
-	
 	<!-- Registry Manager -->
  	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/>
 	

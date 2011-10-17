@@ -27,8 +27,7 @@ public class IndexProviderServiceImpl implements IndexProviderService {
 		try {
 			indexRequest = MeteorIndexRequest.unmarshal(new StringReader(requestXML));
 		} catch (Exception e) {
-			LOG.error("Could not unmarshal index request", e);
-			// TODO implement error handling across web services
+			LOG.debug("Could not unmarshal index request", e);
 			return null;
 		}
 		

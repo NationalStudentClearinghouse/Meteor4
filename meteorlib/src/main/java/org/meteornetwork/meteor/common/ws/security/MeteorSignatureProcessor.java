@@ -118,7 +118,6 @@ public class MeteorSignatureProcessor extends SignatureProcessor {
 			}
 		}
 
-		// TODO get rid of provider type from security token
 		return defaultProviderType;
 	}
 

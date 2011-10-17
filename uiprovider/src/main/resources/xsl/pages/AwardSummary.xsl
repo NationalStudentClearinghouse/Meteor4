@@ -215,7 +215,7 @@
 	</xsl:template>
 
 	<xsl:template name="loan-locator">
-		<xsl:if test="count(//MeteorDataProviderInfo/MeteorDataProviderDetailInfo[DataProviderType = 'UNK']) > 0">
+		<xsl:if test="count(//MeteorDataProviderInfo/MeteorDataProviderDetailInfo[DataProviderType = 'UNK']) > 0 and //MeteorIndexProviderData[1]/EntityName">
 		<table cellpadding="0" cellspacing="0" class="tblMsg" style="margin-bottom: 1em">
 			<thead>
 				<tr>

@@ -118,7 +118,7 @@ public class DataQueryService implements ApplicationContextAware {
 					atLeast1DataProviderCommError = true;
 
 					if (e instanceof ExecutionException) {
-						addDataProviderErrorMessage(responseData, futureEntry.getKey().getIndexProviderInfo(), (ExecutionException) e);
+						addDataProviderErrorMessage(responseData, futureEntry.getKey(), (ExecutionException) e);
 					} else {
 						addDataProviderToLoanLocator(responseData, futureEntry.getKey().getIndexProviderInfo());
 					}
@@ -164,7 +164,7 @@ public class DataQueryService implements ApplicationContextAware {
 		return (RequestInfo) applicationContext.getBean("requestInfo");
 	}
 
-	private void addDataProviderErrorMessage(ResponseDataWrapper responseData, org.meteornetwork.meteor.common.xml.indexresponse.DataProvider ipDataOnDp, ExecutionException e) {
+	private void addDataProviderErrorMessage(ResponseDataWrapper responseData, DataProviderInfo dataProviderInfo, ExecutionException e) {
 		String message;
 		if (e.getCause() instanceof SOAPFaultException) {
 			SOAPFaultException soapException = (SOAPFaultException) e.getCause();
@@ -176,7 +176,7 @@ public class DataQueryService implements ApplicationContextAware {
 			message = Messages.getMessage(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef());
 		}
 
-		responseData.addDataProviderErrorMessage(ipDataOnDp, message, RsMsgLevelEnum.E.name());
+		responseData.addDataProviderErrorMessage(dataProviderInfo, message, RsMsgLevelEnum.E.name());
 	}
 
 	private void addDataProviderToLoanLocator(ResponseDataWrapper responseData, org.meteornetwork.meteor.common.xml.indexresponse.DataProvider ipDataOnDp) {

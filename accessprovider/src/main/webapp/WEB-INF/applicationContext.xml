@@ -19,8 +19,6 @@
 	    	</list>
 	    </property>
 	</bean>
-	
- 	<import resource="classpath:applicationContext-meteorlib.xml"/>
  	
  	<!-- properties -->
  	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>

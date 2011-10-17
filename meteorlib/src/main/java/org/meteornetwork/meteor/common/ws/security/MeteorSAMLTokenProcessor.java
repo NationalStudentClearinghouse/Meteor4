@@ -124,7 +124,6 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 				continue;
 			}
 
-			// TODO get rid of provider type from security token
 			return ProviderType.valueOfType(node.getFirstChild().getNodeValue());
 		}
 

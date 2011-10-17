@@ -17,7 +17,6 @@ import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderMsg;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorIndexProviderData;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
-import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
 import org.meteornetwork.meteor.common.xml.indexresponse.Message;
 import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
 
@@ -178,16 +177,33 @@ public class ResponseDataWrapper {
 	 * @param errorLevel
 	 *            the message's error level
 	 */
-	public void addDataProviderErrorMessage(DataProvider dataProviderInfo, String message, String errorLevel) {
-		MeteorDataProviderInfo dpInfo = addLoanLocatorInfo(dataProviderInfo.getEntityID(), dataProviderInfo.getEntityName(), dataProviderInfo.getEntityURL());
+	public void addDataProviderErrorMessage(DataProviderInfo dataProviderInfo, String message, String errorLevel) {
+		MeteorDataProviderInfo dpInfo = null;
+		if (dataProviderInfo.getIndexProviderInfo() == null) {
+			if (dataProviderInfo.getRegistryInfo() != null) {
+				dpInfo = new MeteorDataProviderInfo();
+				dpInfo.setMeteorDataProviderDetailInfo(new MeteorDataProviderDetailInfo());
+				dpInfo.getMeteorDataProviderDetailInfo().setDataProviderType(UNK);
+				dpInfo.getMeteorDataProviderDetailInfo().setDataProviderAggregateTotal(new DataProviderAggregateTotal());
 
-		MeteorDataProviderMsg dpMsg = new MeteorDataProviderMsg();
-		dpMsg.setRsMsg(message);
-		dpMsg.setRsMsgLevel(errorLevel);
+				DataProviderData dpContact = new DataProviderData();
+				dpContact.setEntityID(dataProviderInfo.getRegistryInfo().getInstitutionIdentifier());
+				dpInfo.getMeteorDataProviderDetailInfo().setDataProviderData(dpContact);
+				dpContact.setContacts(new Contacts());
+			}
+		} else {
+			dpInfo = addLoanLocatorInfo(dataProviderInfo.getIndexProviderInfo().getEntityID(), dataProviderInfo.getIndexProviderInfo().getEntityName(), dataProviderInfo.getIndexProviderInfo().getEntityURL());
+		}
 
-		dpInfo.addMeteorDataProviderMsg(dpMsg);
+		if (dpInfo != null) {
+			MeteorDataProviderMsg dpMsg = new MeteorDataProviderMsg();
+			dpMsg.setRsMsg(message);
+			dpMsg.setRsMsgLevel(errorLevel);
 
-		responseData.addMeteorDataProviderInfo(dpInfo);
+			dpInfo.addMeteorDataProviderMsg(dpMsg);
+
+			responseData.addMeteorDataProviderInfo(dpInfo);
+		}
 	}
 
 	/**

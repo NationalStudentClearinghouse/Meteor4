@@ -1,4 +1,4 @@
-package org.meteornetwork.meteor.common.registry;
+package org.meteornetwork.meteor.registry;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -17,6 +17,8 @@ import javax.naming.ldap.LdapName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.common.registry.RegistryException;
+import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
@@ -48,11 +50,11 @@ public class LDAPRegistryManager implements RegistryManager {
 		try {
 			return getCertificate(meteorInstitutionId, providerType, ldapTemplate);
 		} catch (Exception e) {
-			LOG.error("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
+			LOG.debug("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
 			try {
 				return getCertificate(meteorInstitutionId, providerType, ldapFailoverTemplate);
 			} catch (Exception e1) {
-				LOG.error("Exception occurred while contacting LDAP failover registry", e1);
+				LOG.debug("Exception occurred while contacting LDAP failover registry", e1);
 				throw new RegistryException(e1);
 			}
 		}
@@ -99,11 +101,11 @@ public class LDAPRegistryManager implements RegistryManager {
 		try {
 			return getIndexProviders(meteorVersion, ldapTemplate);
 		} catch (Exception e) {
-			LOG.error("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
+			LOG.debug("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
 			try {
 				return getIndexProviders(meteorVersion, ldapFailoverTemplate);
 			} catch (Exception e1) {
-				LOG.error("Exception occurred while contacting LDAP failover registry", e1);
+				LOG.debug("Exception occurred while contacting LDAP failover registry", e1);
 				throw new RegistryException(e1);
 			}
 		}
@@ -166,11 +168,11 @@ public class LDAPRegistryManager implements RegistryManager {
 		try {
 			return getDataProvider(meteorInstitutionId, ldapTemplate);
 		} catch (Exception e) {
-			LOG.error("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
+			LOG.debug("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
 			try {
 				return getDataProvider(meteorInstitutionId, ldapFailoverTemplate);
 			} catch (Exception e1) {
-				LOG.error("Exception occurred while contacting LDAP failover registry", e1);
+				LOG.debug("Exception occurred while contacting LDAP failover registry", e1);
 				throw new RegistryException(e1);
 			}
 		}
@@ -207,11 +209,11 @@ public class LDAPRegistryManager implements RegistryManager {
 		try {
 			return getAllDataProviders(ldapTemplate);
 		} catch (Exception e) {
-			LOG.error("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
+			LOG.debug("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
 			try {
 				return getAllDataProviders(ldapFailoverTemplate);
 			} catch (Exception e1) {
-				LOG.error("Exception occurred while contacting LDAP failover registry", e1);
+				LOG.debug("Exception occurred while contacting LDAP failover registry", e1);
 				throw new RegistryException(e1);
 			}
 		}
@@ -276,6 +278,13 @@ public class LDAPRegistryManager implements RegistryManager {
 		}
 
 		return dataProviders;
+	}
+	
+
+	@Override
+	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) {
+		// TODO: implement
+		return new ArrayList<String>();
 	}
 
 	private String stripBaseDn(String ldapName) throws InvalidNameException {
@@ -353,12 +362,6 @@ public class LDAPRegistryManager implements RegistryManager {
 	@Qualifier("ldapFailoverTemplate")
 	public void setLdapFailoverTemplate(LdapTemplate ldapFailoverTemplate) {
 		this.ldapFailoverTemplate = ldapFailoverTemplate;
-	}
-
-	@Override
-	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) {
-		// TODO: implement
-		return new ArrayList<String>();
 	}
 
 }

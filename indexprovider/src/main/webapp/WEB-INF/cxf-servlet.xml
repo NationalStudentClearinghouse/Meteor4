@@ -64,4 +64,13 @@
 		</jaxws:inInterceptors>
 	</jaxws:endpoint> 
 	
+	<!-- Registry web service connection -->
+	<jaxws:client id="registryService"
+		serviceClass="org.meteornetwork.meteor.common.ws.RegistryService"
+		address="${directory.ws.url}"/>
+		
+	<jaxws:client id="failoverRegistryService"
+		serviceClass="org.meteornetwork.meteor.common.ws.RegistryService"
+		address="${directory.ws.failover.url}"/>
+	
 </beans>

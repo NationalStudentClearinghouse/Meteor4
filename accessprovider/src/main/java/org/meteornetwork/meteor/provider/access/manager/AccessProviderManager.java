@@ -69,7 +69,6 @@ public class AccessProviderManager {
 		List<MeteorRsMsg> dataProviderResponses = dataQueryService.getData(responseData, dataProviders, ssn);
 
 		// TODO: authentication bump process
-		// TODO: add grand total calculations to business logic
 
 		responseData.addAllDataProviderInfo(dataProviderResponses);
 

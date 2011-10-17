@@ -1,4 +1,4 @@
-package org.meteornetwork.meteor.common.registry;
+package org.meteornetwork.meteor.registry;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -15,6 +15,8 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.common.registry.RegistryException;
+import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
