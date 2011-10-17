@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerException;
 
+import org.meteornetwork.meteor.business.GrandTotalCalculator;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
@@ -41,6 +42,8 @@ public class AccessProviderManager {
 	 */
 	public ResponseDataWrapper queryMeteor(String ssn) {
 		ResponseDataWrapper responseData = new ResponseDataWrapper();
+		responseData.setGrandTotalCalculator(new GrandTotalCalculator());
+		responseData.getGrandTotalCalculator().setBorrowerSsn(ssn);
 
 		Set<DataProviderInfo> dataProviders = null;
 		try {
@@ -79,8 +82,8 @@ public class AccessProviderManager {
 	 * @param xml
 	 *            the response xml
 	 * @return response xml with SSNs masked and unmasked attribute added
-	 * @throws IOException 
-	 * @throws TransformerException 
+	 * @throws IOException
+	 * @throws TransformerException
 	 */
 	public String maskSSNs(String xml) throws TransformerException, IOException {
 		return xslTransformManager.transformXML(xml, maskSSNsTemplate);

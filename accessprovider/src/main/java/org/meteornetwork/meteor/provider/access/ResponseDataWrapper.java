@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.meteornetwork.meteor.business.BestSourceAggregator;
+import org.meteornetwork.meteor.business.GrandTotalCalculator;
 import org.meteornetwork.meteor.common.util.message.Messages;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.dataresponse.Award;
@@ -37,6 +38,7 @@ public class ResponseDataWrapper {
 	private transient MeteorRsMsg responseData;
 	private transient MeteorDataProviderInfo indexMessageMdpi;
 	private transient BestSourceAggregator bestSourceAggregator;
+	private GrandTotalCalculator grandTotalCalculator;
 
 	private transient Integer nextAwardId = 0;
 
@@ -264,7 +266,8 @@ public class ResponseDataWrapper {
 	/**
 	 * Get response data with awards filtered by best source logic. Creates a
 	 * new BestSourceAggregator to filter the awards, which is accessible by
-	 * invoking getBestSourceAggregator() after calling this method
+	 * invoking getBestSourceAggregator() after calling this method. Also
+	 * calculates grand totals of best source awards
 	 * 
 	 * @return response data with awards filtered by best source logic
 	 */
@@ -303,6 +306,14 @@ public class ResponseDataWrapper {
 			}
 		}
 
+		grandTotalCalculator.setConsolidationLoanDates(withBestSource);
+		for (MeteorDataProviderInfo info : withBestSource.getMeteorDataProviderInfo()) {
+			grandTotalCalculator.setDataProviderInfo(info);
+			grandTotalCalculator.calculateOriginalBalance();
+			grandTotalCalculator.calculateOutstandingBalance();
+			grandTotalCalculator.calculateOtherFees();
+		}
+
 		return withBestSource;
 	}
 
@@ -315,5 +326,13 @@ public class ResponseDataWrapper {
 	 */
 	public BestSourceAggregator getBestSourceAggregator() {
 		return bestSourceAggregator;
+	}
+
+	public GrandTotalCalculator getGrandTotalCalculator() {
+		return grandTotalCalculator;
+	}
+
+	public void setGrandTotalCalculator(GrandTotalCalculator grandTotalCalculator) {
+		this.grandTotalCalculator = grandTotalCalculator;
 	}
 }

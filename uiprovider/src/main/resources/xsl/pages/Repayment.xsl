@@ -121,7 +121,7 @@
 									<td>Grand Total Original Account Balance:</td>
 									<td>
 										<xsl:call-template name="format-number-if-exists">
-											<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OriginalBalanceGrandTotal[@borrowerSsn = $ssn]"/>
+											<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OriginalBalanceGrandTotal"/>
 											<xsl:with-param name="format" select="'$###,##0.00'"/>
 										</xsl:call-template>
 									</td>
@@ -130,7 +130,7 @@
 									<td>Grand Total Outstanding Account Balance:</td>
 									<td>
 										<xsl:call-template name="format-number-if-exists">
-											<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OutstandingBalanceGrandTotal[@borrowerSsn = $ssn]"/>
+											<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OutstandingBalanceGrandTotal"/>
 											<xsl:with-param name="format" select="'$###,##0.00'"/>
 										</xsl:call-template>
 									</td>
@@ -139,7 +139,7 @@
 									<td>Grand Total Other Fees Currently Outstanding:</td>
 									<td>
 										<xsl:call-template name="format-number-if-exists">
-											<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OtherFeesOutstandingGrandTotal[@borrowerSsn = $ssn]"/>
+											<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OtherFeesOutstandingGrandTotal"/>
 											<xsl:with-param name="format" select="'$###,##0.00'"/>
 										</xsl:call-template>
 									</td>
