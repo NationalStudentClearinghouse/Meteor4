@@ -16,6 +16,7 @@ import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderMsg;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorIndexProviderData;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
+import org.meteornetwork.meteor.common.xml.indexresponse.DataProvider;
 import org.meteornetwork.meteor.common.xml.indexresponse.Message;
 import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
 
@@ -28,8 +29,9 @@ public class ResponseDataWrapper {
 
 	// special DataProviderType to indicate index response message container
 	private static final String IDX = "IDX";
-	
-	// indicated DataProviderType is unknown
+
+	// indicated DataProviderType is unknown - UNK data provider types are
+	// interpreted as loan locator messages
 	private static final String UNK = "UNK";
 
 	private transient MeteorRsMsg responseData;
@@ -73,34 +75,69 @@ public class ResponseDataWrapper {
 	 *            not the meteor web services url
 	 */
 	public void addLoanLocatorDataProvider(String dpId, String dpName, String dpUrl) {
+
+		responseData.addMeteorDataProviderInfo(addLoanLocatorInfo(dpId, dpName, dpUrl));
+	}
+
+	private MeteorDataProviderInfo addLoanLocatorInfo(String dpId, String dpName, String dpUrl) {
 		MeteorDataProviderInfo dpInfo = new MeteorDataProviderInfo();
-		
+
 		dpInfo.setLoanLocatorActivationIndicator(true);
-		
+
 		dpInfo.setMeteorDataProviderDetailInfo(new MeteorDataProviderDetailInfo());
 		dpInfo.getMeteorDataProviderDetailInfo().setDataProviderType(UNK);
 		dpInfo.getMeteorDataProviderDetailInfo().setDataProviderAggregateTotal(new DataProviderAggregateTotal());
-		
+
 		DataProviderData dpContact = new DataProviderData();
 		dpInfo.getMeteorDataProviderDetailInfo().setDataProviderData(dpContact);
-		
+
 		dpContact.setEntityID(dpId);
 		dpContact.setEntityName(dpName);
 		dpContact.setEntityURL(dpUrl);
 		dpContact.setContacts(new Contacts());
-		
-		responseData.addMeteorDataProviderInfo(dpInfo);
+
+		return dpInfo;
 	}
 
 	/**
-	 * Add response from data provider to this set of response data
+	 * Add response from data provider to this set of response data. If loan
+	 * locator activation indicator is set or there is an error message in the
+	 * response, the data provider is added to the loan locator
 	 * 
+	 * @param dataProviderInfo
+	 *            - information from the index provider about this data provider
 	 * @param dataProviderResponse
 	 */
 	public void addDataProviderInfo(MeteorRsMsg dataProviderResponse) {
 		for (MeteorDataProviderInfo info : dataProviderResponse.getMeteorDataProviderInfo()) {
 			responseData.addMeteorDataProviderInfo(info);
+
+			boolean loanLocatorActivationIndicator = info.getLoanLocatorActivationIndicator() == null ? false : info.getLoanLocatorActivationIndicator();
+			boolean hasErrorMessage = false;
+			if (info.getMeteorDataProviderMsgCount() > 0) {
+				for (MeteorDataProviderMsg message : info.getMeteorDataProviderMsg()) {
+					if (RsMsgLevelEnum.E.name().equals(message.getRsMsgLevel())) {
+						hasErrorMessage = true;
+						break;
+					}
+				}
+			}
+
+			if ((hasErrorMessage || loanLocatorActivationIndicator) && info.getMeteorDataProviderDetailInfo() != null && info.getMeteorDataProviderDetailInfo().getDataProviderData() != null) {
+				DataProviderData data = info.getMeteorDataProviderDetailInfo().getDataProviderData();
+				addLoanLocatorDataProvider(data.getEntityID(), data.getEntityName(), data.getEntityURL());
+			}
+
+			transformMessages(info);
 			setAPSUniqueAwardIds(info);
+		}
+	}
+
+	private void transformMessages(MeteorDataProviderInfo info) {
+		if (info.getMeteorDataProviderMsgCount() > 0) {
+			for (MeteorDataProviderMsg message : info.getMeteorDataProviderMsg()) {
+				message.setRsMsg(Messages.getMessage(message.getRsMsg()));
+			}
 		}
 	}
 
@@ -129,6 +166,29 @@ public class ResponseDataWrapper {
 	}
 
 	/**
+	 * Adds error message from data provider and adds data provider to loan
+	 * locator
+	 * 
+	 * @param dataProviderInfo
+	 *            the entity id, name, and url of the data provider
+	 * @param message
+	 *            the data provider message
+	 * @param errorLevel
+	 *            the message's error level
+	 */
+	public void addDataProviderErrorMessage(DataProvider dataProviderInfo, String message, String errorLevel) {
+		MeteorDataProviderInfo dpInfo = addLoanLocatorInfo(dataProviderInfo.getEntityID(), dataProviderInfo.getEntityName(), dataProviderInfo.getEntityURL());
+
+		MeteorDataProviderMsg dpMsg = new MeteorDataProviderMsg();
+		dpMsg.setRsMsg(message);
+		dpMsg.setRsMsgLevel(errorLevel);
+
+		dpInfo.addMeteorDataProviderMsg(dpMsg);
+
+		responseData.addMeteorDataProviderInfo(dpInfo);
+	}
+
+	/**
 	 * Adds message from index provider to response
 	 * 
 	 * @param message
@@ -154,7 +214,15 @@ public class ResponseDataWrapper {
 		addIndexProviderMessage(messageContent, msgLevel.name());
 	}
 
-	private void addIndexProviderMessage(String message, String messageLevel) {
+	/**
+	 * Add message to index provider messages
+	 * 
+	 * @param message
+	 *            message
+	 * @param messageLevel
+	 *            message level
+	 */
+	public void addIndexProviderMessage(String message, String messageLevel) {
 		if (indexMessageMdpi == null) {
 			indexMessageMdpi = createMinimalMeteorDataProviderInfo(IDX);
 			responseData.addMeteorDataProviderInfo(indexMessageMdpi);

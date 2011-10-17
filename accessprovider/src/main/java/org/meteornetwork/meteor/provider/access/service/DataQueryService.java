@@ -7,18 +7,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
+import javax.xml.ws.soap.SOAPFaultException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.Version;
+import org.meteornetwork.meteor.common.util.message.Messages;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
@@ -114,7 +117,11 @@ public class DataQueryService implements ApplicationContextAware {
 					LOG.debug("Exception thrown when getting data from data provider (ID: " + futureEntry.getKey().getMeteorInstitutionIdentifier() + ")", e);
 					atLeast1DataProviderCommError = true;
 
-					addDataProviderToLoanLocator(responseData, futureEntry.getKey().getIndexProviderInfo());
+					if (e instanceof ExecutionException) {
+						addDataProviderErrorMessage(responseData, futureEntry.getKey().getIndexProviderInfo(), (ExecutionException) e);
+					} else {
+						addDataProviderToLoanLocator(responseData, futureEntry.getKey().getIndexProviderInfo());
+					}
 				}
 			} else {
 				atLeast1DataProviderCommError = true;
@@ -155,6 +162,21 @@ public class DataQueryService implements ApplicationContextAware {
 
 	private RequestInfo getRequestInfo() {
 		return (RequestInfo) applicationContext.getBean("requestInfo");
+	}
+
+	private void addDataProviderErrorMessage(ResponseDataWrapper responseData, org.meteornetwork.meteor.common.xml.indexresponse.DataProvider ipDataOnDp, ExecutionException e) {
+		String message;
+		if (e.getCause() instanceof SOAPFaultException) {
+			SOAPFaultException soapException = (SOAPFaultException) e.getCause();
+			message = Messages.getMessage(soapException.getMessage());
+			if (message.equals(soapException.getMessage())) {
+				message = Messages.getMessage(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef());
+			}
+		} else {
+			message = Messages.getMessage(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef());
+		}
+
+		responseData.addDataProviderErrorMessage(ipDataOnDp, message, RsMsgLevelEnum.E.name());
 	}
 
 	private void addDataProviderToLoanLocator(ResponseDataWrapper responseData, org.meteornetwork.meteor.common.xml.indexresponse.DataProvider ipDataOnDp) {

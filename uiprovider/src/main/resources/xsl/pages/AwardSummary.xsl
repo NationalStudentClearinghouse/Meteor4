@@ -93,7 +93,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				<xsl:apply-templates select="//MeteorDataProviderMsg[RsMsgLevel='E']"/>
+				<xsl:apply-templates select="//MeteorDataProviderMsg[RsMsgLevel='E' and ../MeteorDataProviderDetailInfo/DataProviderType = 'IDX']"/>
+				<xsl:apply-templates select="//MeteorDataProviderMsg[RsMsgLevel='E' and ../MeteorDataProviderDetailInfo/DataProviderType != 'IDX']"/>
 			</tbody>
 		</table>
 		</xsl:if>
@@ -257,6 +258,7 @@
 	
 	<xsl:template match="MeteorDataProviderMsg">
 		<xsl:for-each select="RsMsg">
+			<tr><td style="padding-top: 1em;">&#32;</td></tr>
 			<tr>
 				<td>
 				<xsl:choose>
