@@ -7,6 +7,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -160,6 +161,26 @@ public class PropertyRegistryManager implements RegistryManager {
 	public void setDirectoryProperties(Properties directoryProperties) {
 		this.directoryProperties = directoryProperties;
 		directoryDataProperties = ResourceBundle.getBundle(this.directoryProperties.getProperty("directory.properties.directorydata"));
+	}
+
+	@Override
+	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) {
+		List<String> aliasesList = new ArrayList<String>();
+		String aliases;
+		try {
+			aliases = directoryDataProperties.getString(meteorInstitutionId + "." + providerType.getType() + ".Aliases");
+		} catch (MissingResourceException e) {
+			return aliasesList;
+		}
+
+		if (aliases != null) {
+			StringTokenizer tokenizer = new StringTokenizer(aliases, ",");
+			while (tokenizer.hasMoreTokens()) {
+				aliasesList.add(tokenizer.nextToken());
+			}
+		}
+
+		return aliasesList;
 	}
 
 }

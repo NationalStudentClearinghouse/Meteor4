@@ -63,4 +63,15 @@ public interface RegistryManager {
 	 *             retrieved
 	 */
 	List<DataProvider> getAllDataProviders() throws RegistryException;
+
+	/**
+	 * Gets the list of aliases for a meteor institution.
+	 * 
+	 * @param meteorInstitutionId
+	 *            the institution to get aliases for
+	 * @param providerType
+	 *            the provider type of the institution
+	 * @return the list of aliases for a meteor institution
+	 */
+	List<String> getAliases(String meteorInstitutionId, ProviderType providerType);
 }

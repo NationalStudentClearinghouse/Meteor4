@@ -355,4 +355,10 @@ public class LDAPRegistryManager implements RegistryManager {
 		this.ldapFailoverTemplate = ldapFailoverTemplate;
 	}
 
+	@Override
+	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) {
+		// TODO: implement
+		return new ArrayList<String>();
+	}
+
 }

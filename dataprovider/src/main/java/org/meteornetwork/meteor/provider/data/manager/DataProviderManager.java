@@ -1,12 +1,18 @@
 package org.meteornetwork.meteor.provider.data.manager;
 
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.message.Messages;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
+import org.meteornetwork.meteor.common.xml.dataresponse.Award;
+import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderAwardDetails;
+import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
+import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
 import org.meteornetwork.meteor.common.xml.dataresponse.types.PhoneNumTypeEnum;
 import org.meteornetwork.meteor.common.xml.dataresponse.types.RsMsgLevelEnum;
 import org.meteornetwork.meteor.provider.data.DataServerAbstraction;
@@ -15,6 +21,8 @@ import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapter;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapterException;
 import org.meteornetwork.meteor.provider.data.adapter.RequestWrapper;
+import org.meteornetwork.meteor.saml.ProviderType;
+import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +40,8 @@ public class DataProviderManager {
 
 	private DataServerAbstraction dataServer;
 	private Properties dataProviderProperties;
+
+	private RegistryManager registryManager;
 
 	/**
 	 * Executes query for single SSN
@@ -75,6 +85,10 @@ public class DataProviderManager {
 			setDataProviderData(dataResponse);
 		}
 
+		if (Role.APCSR.equals(token.getRole()) || Role.LENDER.equals(token.getRole())) {
+			filterAliases(dataResponse, request, token);
+		}
+
 		adapter.setResponse(dataResponse);
 	}
 
@@ -95,6 +109,97 @@ public class DataProviderManager {
 		params.setPostalCode(dataProviderProperties.getProperty("DataProvider.Data.Contacts.PostalCd"));
 
 		params.setDataProviderData();
+	}
+
+	private void filterAliases(MeteorDataResponseWrapper dataResponse, RequestWrapper request, SecurityToken token) {
+		List<String> aliases;
+		if (Role.LENDER.equals(token.getRole())) {
+			aliases = registryManager.getAliases(token.getLender(), ProviderType.LENDER);
+		} else {
+			aliases = registryManager.getAliases(request.getAccessProvider().getMeteorInstitutionIdentifier(), ProviderType.ACCESS);
+		}
+
+		MeteorRsMsg responseMsg = dataResponse.getResponse();
+
+		if (responseMsg.getMeteorDataProviderInfoCount() <= 0) {
+			return;
+		}
+
+		if ((aliases == null || aliases.isEmpty())) {
+			removeAllAwardsAndMessages(responseMsg);
+			return;
+		}
+
+		for (MeteorDataProviderInfo info : responseMsg.getMeteorDataProviderInfo()) {
+			if (aliases.contains(getDataProviderId(info))) {
+				continue;
+			}
+
+			MeteorDataProviderAwardDetails awardDetails = info.getMeteorDataProviderAwardDetails();
+			if (awardDetails != null && awardDetails.getAwardCount() > 0) {
+				for (Award award : awardDetails.getAward()) {
+					filterAwardIfNotAlias(aliases, award, awardDetails);
+				}
+			}
+		}
+	}
+
+	private void removeAllAwardsAndMessages(MeteorRsMsg responseMsg) {
+		for (MeteorDataProviderInfo info : responseMsg.getMeteorDataProviderInfo()) {
+			if (info.getMeteorDataProviderAwardDetails() != null) {
+				info.getMeteorDataProviderAwardDetails().removeAllAward();
+			}
+
+			info.removeAllMeteorDataProviderMsg();
+		}
+	}
+
+	private String getDataProviderId(MeteorDataProviderInfo info) {
+		if (info.getMeteorDataProviderDetailInfo() == null) {
+			return null;
+		}
+
+		if (info.getMeteorDataProviderDetailInfo().getDataProviderData() == null) {
+			return null;
+		}
+
+		return info.getMeteorDataProviderDetailInfo().getDataProviderData().getEntityID();
+	}
+
+	private void filterAwardIfNotAlias(List<String> aliases, Award award, MeteorDataProviderAwardDetails awardDetails) {
+		if (award.getConsolLender() != null && award.getConsolLender().getEntityID() != null && aliases.contains(award.getConsolLender().getEntityID())) {
+			return;
+		}
+
+		if (award.getDisbursingAgent() != null && award.getDisbursingAgent().getEntityID() != null && aliases.contains(award.getDisbursingAgent().getEntityID())) {
+			return;
+		}
+
+		if (award.getFinAidTranscript() != null && award.getFinAidTranscript().getEntityID() != null && aliases.contains(award.getFinAidTranscript().getEntityID())) {
+			return;
+		}
+
+		if (award.getGrantScholarshipProvider() != null && award.getGrantScholarshipProvider().getEntityID() != null && aliases.contains(award.getGrantScholarshipProvider().getEntityID())) {
+			return;
+		}
+
+		if (award.getGuarantor() != null && award.getGuarantor().getEntityID() != null && aliases.contains(award.getGuarantor().getEntityID())) {
+			return;
+		}
+
+		if (award.getLender() != null && award.getLender().getEntityID() != null && aliases.contains(award.getLender().getEntityID())) {
+			return;
+		}
+
+		if (award.getServicer() != null && award.getServicer().getEntityID() != null && aliases.contains(award.getServicer().getEntityID())) {
+			return;
+		}
+
+		if (award.getSchool() != null && award.getSchool().getEntityID() != null && aliases.contains(award.getSchool().getEntityID())) {
+			return;
+		}
+
+		awardDetails.removeAward(award);
 	}
 
 	public RequestInfo getRequestInfo() {
@@ -120,5 +225,14 @@ public class DataProviderManager {
 	@Qualifier("DataProviderProperties")
 	public void setDataProviderProperties(Properties dataProviderProperties) {
 		this.dataProviderProperties = dataProviderProperties;
+	}
+
+	public RegistryManager getRegistryManager() {
+		return registryManager;
+	}
+
+	@Autowired
+	public void setRegistryManager(RegistryManager registryManager) {
+		this.registryManager = registryManager;
 	}
 }
