@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.ModelAndView;
 
-public class MeteorQueryController extends AbstractMeteorController {
+public class MeteorQueryController extends AbstractMeteorQueryController {
 
 	@Override
 	protected void handleMeteorRequest(ModelAndView modelAndView, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception {

@@ -185,8 +185,9 @@
 			<td class="tdPayment2" nowrap="nowrap">
 				<xsl:choose>
 				<xsl:when test="$role = 'BORROWER'">
-					<xsl:if test="ConsolidationLoan = '0'">
-					<xsl:apply-templates select="Student" mode="fullname"/>
+					<xsl:variable name="isConsolidation"><xsl:apply-templates select="AwardType" mode="is-consolidation"/></xsl:variable>
+					<xsl:if test="$isConsolidation = 'false'">
+						<xsl:apply-templates select="Student" mode="fullname"/>
 					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>

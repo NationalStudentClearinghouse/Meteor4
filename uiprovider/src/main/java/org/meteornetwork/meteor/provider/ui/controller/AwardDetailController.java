@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author jlazos
  * 
  */
-public class AwardDetailController extends AbstractMeteorController {
+public class AwardDetailController extends AbstractMeteorQueryController {
 
 	@Override
 	protected void handleMeteorRequest(ModelAndView modelAndView, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception {

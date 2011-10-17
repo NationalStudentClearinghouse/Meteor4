@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
-import org.meteornetwork.meteor.common.util.message.Messages;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.dataresponse.Award;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderAwardDetails;
@@ -53,13 +52,14 @@ public class DataProviderManager {
 	 */
 	public void queryDataForBorrower(DataQueryAdapter adapter) {
 
+		/* ****************************************
+		 * handle any errors that happened during adapter processing
+		 */
 		RequestWrapper request = null;
 		try {
 			request = adapter.getRequest();
 		} catch (DataQueryAdapterException e) {
-			MeteorDataResponseWrapper dataResponse = new MeteorDataResponseWrapper();
-			dataResponse.addMessage(Messages.getMessage(e.getMeteorError().getPropertyRef()), RsMsgLevelEnum.E.name());
-			adapter.setResponse(dataResponse);
+			adapter.setResponse(createResponseWithMessage(e.getMeteorError(), RsMsgLevelEnum.E));
 			return;
 		}
 
@@ -67,14 +67,53 @@ public class DataProviderManager {
 			return;
 		}
 
+		/* *****************************************
+		 * verify info on security token
+		 */
 		SecurityToken token = getRequestInfo().getSecurityToken();
 		if (!token.validateConditions()) {
-			MeteorDataResponseWrapper dataResponse = new MeteorDataResponseWrapper();
-			dataResponse.addMessage(MeteorMessage.SECURITY_TOKEN_EXPIRED.getPropertyRef(), RsMsgLevelEnum.E.name());
-			adapter.setResponse(dataResponse);
+			LOG.debug("SAML conditions are not valid or expired");
+			adapter.setResponse(createResponseWithMessage(MeteorMessage.SECURITY_TOKEN_EXPIRED, RsMsgLevelEnum.E));
 			return;
 		}
 
+		String minimumAuthLevel = dataProviderProperties.getProperty("accessprovider.minimum.authentication.level");
+		if (minimumAuthLevel == null) {
+			LOG.fatal("Data Provider not configured correctly -- missing accessprovider.minimum.authentication.level property");
+			adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_NO_MINIMUM_LEVEL, RsMsgLevelEnum.E));
+			return;
+		}
+
+		if (Integer.valueOf(minimumAuthLevel).compareTo(token.getLevel()) > 0) {
+			LOG.debug("Minimum authentication level not met");
+			adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_INSUFFICIENT_LEVEL, RsMsgLevelEnum.E));
+			return;
+		}
+
+		if (Role.BORROWER.equals(token.getRole())) {
+			String assertionSsn = token.getSsn();
+			if (assertionSsn == null) {
+				LOG.debug("Borrower's SAML is missing assertion SSN");
+				adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_NOSSN, RsMsgLevelEnum.E));
+				return;
+			}
+
+			if (!assertionSsn.equals(request.getSsn())) {
+				LOG.debug("Borrower's SAML Ssn does not match request SSN");
+				adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_SSN_NOTAUTHORIZED, RsMsgLevelEnum.E));
+				return;
+			}
+		}
+
+		if (Role.HELPDESK.equals(token.getRole())) {
+			LOG.debug("Help desk users are not allowed to query for data provider data.");
+			adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_SSN_NOTAUTHORIZED, RsMsgLevelEnum.E));
+			return;
+		}
+
+		/* ******************************************
+		 * Query data
+		 */
 		LOG.debug("Request received for data on SSN: " + request.getSsn() + " from Access Provider " + request.getAccessProvider().getMeteorInstitutionIdentifier());
 
 		MeteorContext context = new MeteorContext();
@@ -91,6 +130,12 @@ public class DataProviderManager {
 		}
 
 		adapter.setResponse(dataResponse);
+	}
+
+	private MeteorDataResponseWrapper createResponseWithMessage(MeteorMessage message, RsMsgLevelEnum level) {
+		MeteorDataResponseWrapper dataResponse = new MeteorDataResponseWrapper();
+		dataResponse.addMessage(message.getPropertyRef(), level.name());
+		return dataResponse;
 	}
 
 	private void setDataProviderData(MeteorDataResponseWrapper response) {

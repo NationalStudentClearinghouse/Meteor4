@@ -7,15 +7,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 public class MeteorExceptionResolver extends SimpleMappingExceptionResolver {
 
+	private static final Log LOG = LogFactory.getLog(MeteorExceptionResolver.class);
+	
 	private Properties uiproviderProperties;
 
 	@Override
 	protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+		LOG.debug("UI provider threw the following exception", ex);
+		
 		ModelAndView modelView = super.doResolveException(request, response, handler, ex);
 
 		modelView.addObject("docroot", request.getContextPath());

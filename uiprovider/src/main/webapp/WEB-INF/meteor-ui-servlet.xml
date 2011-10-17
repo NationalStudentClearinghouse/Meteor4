@@ -26,14 +26,42 @@
 	<!-- 
 		pages 
 	-->
+	<bean name="/meteor/query.do" class="org.meteornetwork.meteor.provider.ui.controller.QuerySSNController" autowire="byType">
+		<property name="viewName" value="querySsn"/>
+		<property name="allowedRoles">
+			<list>
+				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
+				<value>BORROWER</value>
+			</list>
+		</property>
+	</bean>
+	
 	<bean name="/meteor/summary.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="awardSummary"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<property name="allowedRoles">
+			<list>
+				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
+				<value>BORROWER</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean name="/meteor/repaymentSummary.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="repaymentSummary"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<property name="allowedRoles">
+			<list>
+				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
+				<value>BORROWER</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean name="/meteor/aversion.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
@@ -49,21 +77,53 @@
 	<bean name="/meteor/awardDetail.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
 		<property name="viewName" value="awardDetail"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<property name="allowedRoles">
+			<list>
+				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
+				<value>BORROWER</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean name="/meteor/disbursement.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
 		<property name="viewName" value="disbursement"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<property name="allowedRoles">
+			<list>
+				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
+				<value>BORROWER</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean name="/meteor/references.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
 		<property name="viewName" value="references"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<property name="allowedRoles">
+			<list>
+				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
+				<value>BORROWER</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean name="/meteor/repaymentDetail.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
 		<property name="viewName" value="repaymentDetail"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<property name="allowedRoles">
+			<list>
+				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
+				<value>BORROWER</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean name="/meteor/consolidated.do" class="org.meteornetwork.meteor.provider.ui.controller.ConsolidatedViewController" autowire="byType">
@@ -80,5 +140,13 @@
 	<bean name="/meteor/rawxml.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="rawxml"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<property name="allowedRoles">
+			<list>
+				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
+				<value>BORROWER</value>
+			</list>
+		</property>
 	</bean>
 </beans> 

@@ -245,6 +245,22 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template match="Award/AwardType" mode="is-consolidation">
+		<xsl:choose>
+			<xsl:when test=". = 'FFELConsl'">true</xsl:when>
+			<xsl:when test=". = 'FFELCSub'">true</xsl:when>
+			<xsl:when test=". = 'FFELCUsub'">true</xsl:when>
+			<xsl:when test=". = 'FFELCHeal'">true</xsl:when>
+			<xsl:when test=". = 'FFELCOthr'">true</xsl:when>
+			<xsl:when test=". = 'DLConsl'">true</xsl:when>
+			<xsl:when test=". = 'DLCSub'">true</xsl:when>
+			<xsl:when test=". = 'DLCUsub'">true</xsl:when>
+			<xsl:when test=". = 'DLCHeal'">true</xsl:when>
+			<xsl:when test=". = 'DLCOthr'">true</xsl:when>
+			<xsl:otherwise>false</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
 	<!-- Loan status codes -->
 	<xsl:template match="Award/LoanStat">
 		<xsl:choose>

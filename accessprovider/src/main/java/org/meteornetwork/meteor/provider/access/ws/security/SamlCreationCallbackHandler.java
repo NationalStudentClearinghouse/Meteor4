@@ -50,6 +50,7 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 		token.setLevel(requestInfo.getSecurityToken().getLevel());
 		token.setUserHandle(requestInfo.getSecurityToken().getUserHandle());
 		token.setRole(requestInfo.getSecurityToken().getRole());
+		token.setSsn(requestInfo.getSecurityToken().getSsn());
 		token.setLender(requestInfo.getSecurityToken().getLender());
 
 		callback.setSamlVersion(SAMLVersion.VERSION_20);

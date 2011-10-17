@@ -38,8 +38,6 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 
 	@Override
 	public String findDataForBorrower(String ssn, TokenAttributes meteorAttributes) {
-		// TODO refactor the way saml attributes are passed -- can we now pass
-		// around a signed assertion using a custom CXF interceptor?
 		LOG.debug("AP received request for best source data for ssn: " + ssn);
 
 		requestInfo.setMeteorInstitutionIdentifier(authenticationProperties.getProperty("authentication.identifier"));
