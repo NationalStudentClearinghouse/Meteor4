@@ -4,7 +4,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation=" 
 		http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
+    xmlns:util="http://www.springframework.org/schema/util">
 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	    <property name="locations">
@@ -13,6 +15,8 @@
 	    	</list>
 	    </property>
 	</bean>
+	
+	<util:properties id="UiProviderProperties" location="WEB-INF/classes/uiprovider.properties"/>
 	
 	<!-- 
 		Meteor Session bean

@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
 import org.meteornetwork.meteor.provider.ui.MeteorSession;
+import org.meteornetwork.meteor.provider.ui.exception.MeteorAccessException;
 import org.meteornetwork.meteor.provider.ui.token.TokenProvider;
 import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
@@ -39,18 +40,16 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 		/* *********************************************
 		 * validate authentication
 		 */
-		// TODO redirect to access denied
 		SecurityToken token;
 		try {
 			token = tokenProvider.getSecurityToken(httpRequest);
 		} catch (SecurityTokenException e) {
 			LOG.error("Could not get authenticated security token", e);
-			return null;
+			throw new MeteorAccessException();
 		}
 
-		// TODO redirect to access denied if role is not valid for page
 		if (!roleIsAllowed(token.getRole())) {
-			return null;
+			throw new MeteorAccessException();
 		}
 
 		/* *********************************************
@@ -60,18 +59,21 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 
 		MeteorSession session = getSession();
 
+		SecurityToken sessionToken = session.getToken();
+		String sessionSsn = session.getSsn();
+		
 		boolean queryMeteor = false;
-		if (!token.equals(session.getToken())) {
+		if (!token.equals(sessionToken)) {
 			queryMeteor = true;
-			session.setToken(token);
+			sessionToken = token;
 		}
 
 		if (session.getSsn() == null && ssn == null) {
 			// TODO if SSN is missing, redirect to SSN query page
 			return null;
-		} else if (ssn != null && !ssn.equals(session.getSsn())) {
+		} else if (ssn != null && !ssn.equals(sessionSsn)) {
 			queryMeteor = true;
-			session.setSsn(ssn);
+			sessionSsn = ssn;
 		}
 
 		/* *********************************************
@@ -94,6 +96,9 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 			}
 		}
 
+		session.setToken(sessionToken);
+		session.setSsn(sessionSsn);
+		
 		/* *********************************************
 		 * Render page
 		 */

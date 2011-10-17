@@ -10,6 +10,17 @@
 		<property name="basename" value="views"/>
 	</bean>
 	
+	<bean class="org.meteornetwork.meteor.provider.ui.MeteorExceptionResolver">
+		<property name="uiProviderProperties" ref="UiProviderProperties"/>
+		<property name="exceptionMappings">
+			<map>
+				<entry key="org.meteornetwork.meteor.provider.ui.exception.MeteorAccessException" value="denied"/>
+				<entry key="java.lang.Exception" value="error"/>
+			</map>
+		</property>
+		<property name="defaultErrorView" value="error" />
+	</bean>
+	
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
 	
 	<!-- 
@@ -65,7 +76,7 @@
 		</property>
 	</bean>
 	
-	<!-- Use this page to see the raw xml returned by the meteor network -->
+	<!-- Use this page to see the raw xml returned by the meteor network. Comment out in production -->
 	<bean name="/meteor/rawxml.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="rawxml"/>
 		<lookup-method name="getSession" bean="meteorSession"/>

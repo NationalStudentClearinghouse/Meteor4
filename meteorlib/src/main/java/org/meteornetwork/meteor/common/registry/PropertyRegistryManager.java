@@ -164,13 +164,13 @@ public class PropertyRegistryManager implements RegistryManager {
 	}
 
 	@Override
-	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) {
+	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
 		List<String> aliasesList = new ArrayList<String>();
 		String aliases;
 		try {
 			aliases = directoryDataProperties.getString(meteorInstitutionId + "." + providerType.getType() + ".Aliases");
 		} catch (MissingResourceException e) {
-			return aliasesList;
+			throw new RegistryException(e);
 		}
 
 		if (aliases != null) {

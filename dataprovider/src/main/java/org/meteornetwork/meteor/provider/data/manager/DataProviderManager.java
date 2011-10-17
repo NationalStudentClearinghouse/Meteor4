@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.message.Messages;
@@ -69,7 +70,7 @@ public class DataProviderManager {
 		SecurityToken token = getRequestInfo().getSecurityToken();
 		if (!token.validateConditions()) {
 			MeteorDataResponseWrapper dataResponse = new MeteorDataResponseWrapper();
-			dataResponse.addMessage(Messages.getMessage(MeteorMessage.SECURITY_TOKEN_EXPIRED.getPropertyRef()), RsMsgLevelEnum.E.name());
+			dataResponse.addMessage(MeteorMessage.SECURITY_TOKEN_EXPIRED.getPropertyRef(), RsMsgLevelEnum.E.name());
 			adapter.setResponse(dataResponse);
 			return;
 		}
@@ -112,11 +113,17 @@ public class DataProviderManager {
 	}
 
 	private void filterAliases(MeteorDataResponseWrapper dataResponse, RequestWrapper request, SecurityToken token) {
+		boolean couldntFindAliases = false;
 		List<String> aliases;
-		if (Role.LENDER.equals(token.getRole())) {
-			aliases = registryManager.getAliases(token.getLender(), ProviderType.LENDER);
-		} else {
-			aliases = registryManager.getAliases(request.getAccessProvider().getMeteorInstitutionIdentifier(), ProviderType.ACCESS);
+		try {
+			if (Role.LENDER.equals(token.getRole())) {
+				aliases = registryManager.getAliases(token.getLender(), ProviderType.LENDER);
+			} else {
+				aliases = registryManager.getAliases(request.getAccessProvider().getMeteorInstitutionIdentifier(), ProviderType.ACCESS);
+			}
+		} catch (RegistryException e) {
+			aliases = null;
+			couldntFindAliases = true;
 		}
 
 		MeteorRsMsg responseMsg = dataResponse.getResponse();
@@ -127,6 +134,9 @@ public class DataProviderManager {
 
 		if ((aliases == null || aliases.isEmpty())) {
 			removeAllAwardsAndMessages(responseMsg);
+			if (couldntFindAliases) {
+				dataResponse.addMessage(MeteorMessage.ACCESS_ALIAS_ERROR.getPropertyRef(), RsMsgLevelEnum.E.name());
+			}
 			return;
 		}
 

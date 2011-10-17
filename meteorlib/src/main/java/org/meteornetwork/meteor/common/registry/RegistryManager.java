@@ -73,5 +73,5 @@ public interface RegistryManager {
 	 *            the provider type of the institution
 	 * @return the list of aliases for a meteor institution
 	 */
-	List<String> getAliases(String meteorInstitutionId, ProviderType providerType);
+	List<String> getAliases(String meteorInstitutionId, ProviderType providerType) throws RegistryException;
 }
