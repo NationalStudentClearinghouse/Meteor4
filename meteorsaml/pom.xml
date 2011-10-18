@@ -14,7 +14,7 @@
 		<maven.compile.debug>on</maven.compile.debug>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		   
-		<wss4j.version>1.6.2</wss4j.version>
+		<wss4j.version>1.6.3</wss4j.version>
 		
 		<xalan.version>2.7.1</xalan.version>
 		<xerces.version>2.10.0</xerces.version>

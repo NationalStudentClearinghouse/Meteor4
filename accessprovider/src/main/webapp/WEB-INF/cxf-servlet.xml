@@ -16,9 +16,13 @@
 		<aop:scoped-proxy/>
 	</bean>
  	
- 	<bean id="samlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.provider.access.ws.security.SamlCreationCallbackHandler">
+ 	<bean id="samlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSamlCreationCallbackHandler">
 		<lookup-method name="getRequestInfo" bean="requestInfo"/>
 	</bean>
+	
+	<bean id="registrySamlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.RegistrySamlCreationCallbackHandler"/>
+	
+	<bean id="passwordCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
 	
  	<jaxws:endpoint 
 		id="accessProviderService"
@@ -80,10 +84,40 @@
 	<!-- Registry web service connection -->
 	<jaxws:client id="registryService"
 		serviceClass="org.meteornetwork.meteor.common.ws.RegistryService"
-		address="${directory.ws.url}"/>
+		address="${directory.ws.url}">
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="SAMLTokenSigned"/>
+						<entry key="samlCallbackRef" value-ref="registrySamlCreationCallbackHandler" />
+						<entry key="samlPropFile" value="authentication.properties" />
+						<entry key="signaturePropFile" value="authentication.properties" />
+						<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>
+	</jaxws:client>
 		
 	<jaxws:client id="failoverRegistryService"
 		serviceClass="org.meteornetwork.meteor.common.ws.RegistryService"
-		address="${directory.ws.failover.url}"/>
+		address="${directory.ws.failover.url}">
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="SAMLTokenSigned"/>
+						<entry key="samlCallbackRef" value-ref="registrySamlCreationCallbackHandler" />
+						<entry key="samlPropFile" value="authentication.properties" />
+						<entry key="signaturePropFile" value="authentication.properties" />
+						<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>
+	</jaxws:client>
 
 </beans>

@@ -1,7 +1,5 @@
 package org.meteornetwork.meteor.common.ws.security;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ws.security.WSConstants;
@@ -16,9 +14,6 @@ import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.saml.ProviderType;
-import org.meteornetwork.meteor.saml.SecurityTokenImpl;
-import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
-import org.meteornetwork.meteor.saml.util.DOMUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -32,9 +27,9 @@ import org.w3c.dom.NodeList;
  * @author jlazos
  * 
  */
-public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
+public class RegistrySAMLTokenProcessor extends SAMLTokenProcessor {
 
-	private static final Log LOG = LogFactory.getLog(MeteorSAMLTokenProcessor.class);
+	private static final Log LOG = LogFactory.getLog(RegistrySAMLTokenProcessor.class);
 
 	private RegistryManager registryManager;
 
@@ -53,20 +48,6 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 		} catch (WSSecurityException e) {
 			LOG.debug(e);
 			throw new WSSecurityException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef(), e);
-		}
-
-		try {
-			String tokenStr;
-			try {
-				tokenStr = DOMUtils.domToString(token);
-			} catch (IOException e) {
-				throw new SecurityTokenException(e);
-			}
-
-			getRequestInfo().setSecurityToken(SecurityTokenImpl.fromXML(tokenStr));
-		} catch (SecurityTokenException e) {
-			LOG.debug("Could not parse Meteor assertion", e);
-			throw new WSSecurityException(MeteorMessage.SECURITY_INVALID_TOKEN.getPropertyRef(), e);
 		}
 
 		return credential;

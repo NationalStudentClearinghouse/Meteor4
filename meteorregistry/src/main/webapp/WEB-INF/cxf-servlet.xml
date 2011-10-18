@@ -13,12 +13,47 @@
 	<bean id="registryServiceImpl" autowire="byType" class="org.meteornetwork.meteor.registry.ws.RegistryServiceImpl"/>
  	
  	<bean id="MeteorSignatureProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSignatureProcessor"/>
-		
+	<bean id="RegistrySAMLTokenProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.RegistrySAMLTokenProcessor"/>
+	
  	<jaxws:endpoint 
 		id="registryService"
 		implementorClass="org.meteornetwork.meteor.registry.ws.RegistryServiceImpl"
 		implementor="#registryServiceImpl"
 		bindingUri="http://www.w3.org/2003/05/soap/bindings/HTTP/"
-		address="/RegistryService"/>
+		address="/RegistryService">
+		
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="SAMLTokenSigned Signature"/>
+						<entry key="signaturePropFile" value="wss4j.properties" />
+						<entry key="wss4j.processor.map">
+							<map key-type="javax.xml.namespace.QName">
+								<entry>
+									<key>
+										<bean class="javax.xml.namespace.QName">
+											<constructor-arg value="urn:oasis:names:tc:SAML:2.0:assertion"/>
+											<constructor-arg value="Assertion"/>
+										</bean>
+									</key>
+									<ref bean="RegistrySAMLTokenProcessor"/>
+								</entry>
+								<entry>
+									<key>
+										<bean class="javax.xml.namespace.QName">
+											<constructor-arg value="http://www.w3.org/2000/09/xmldsig#"/>
+											<constructor-arg value="Signature"/>
+										</bean>
+									</key>
+									<ref bean="MeteorSignatureProcessor"/>
+								</entry>
+							</map>
+						</entry>
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
 	
 </beans>

@@ -52,7 +52,7 @@ public class SecurityTokenImpl implements SecurityToken {
 	private String subjectLocalityIpAddress;
 	private String subjectLocalityDnsAddress;
 
-	private static final Integer VALIDITY_PERIOD_DEFAULT = 14400;
+	private static final Integer VALIDITY_PERIOD_DEFAULT = 14400; // seconds
 	private DateTime conditionsNotBefore;
 	private DateTime conditionsNotOnOrAfter;
 
@@ -69,7 +69,7 @@ public class SecurityTokenImpl implements SecurityToken {
 	 */
 	public static SecurityTokenImpl fromXML(String xml) throws SecurityTokenException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		
+
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(xml.getBytes(Charset.forName("utf-8")));
 		try {
 			Document doc = factory.newDocumentBuilder().parse(inputStream);
@@ -96,8 +96,7 @@ public class SecurityTokenImpl implements SecurityToken {
 	 *             wraps any exception that occurs while processing
 	 */
 	public static SecurityTokenImpl fromXML(Element tokenElem) throws SecurityTokenException {
-		
-		
+
 		SecurityTokenImpl token = new SecurityTokenImpl();
 
 		DatatypeFactory datatypeFactory;

@@ -20,6 +20,7 @@
 	    </property>
 	</bean>
 	
+	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
 	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
 	<util:properties id="IndexProviderProperties" location="WEB-INF/classes/indexprovider.properties"/>
 	

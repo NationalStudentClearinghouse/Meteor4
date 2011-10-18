@@ -16,14 +16,12 @@
 		<maven.compile.debug>on</maven.compile.debug>
 		
 		<meteor.version>4.0.0</meteor.version>
-	
-		<wss4j.version>1.6.2</wss4j.version>
 		
 		<cglib.version>2.2.2</cglib.version>
-		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+		<org.springframework.version>3.0.6.RELEASE</org.springframework.version>
 		<javax.servlet-api.version>2.5</javax.servlet-api.version>
-		<cxf.version>2.4.2</cxf.version>
-		<cxf.wss4j.version>1.6.2</cxf.wss4j.version>
+		<cxf.version>2.4.3</cxf.version>
+		<cxf.wss4j.version>1.6.3</cxf.wss4j.version>
 				
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<log4j.version>1.2.16</log4j.version>
@@ -111,15 +109,6 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>${javax.servlet-api.version}</version>
-		</dependency>
-
-		<!-- 
-			WSS4J
-		 -->
-		<dependency>
-		    <groupId>org.apache.ws.security</groupId>
-		    <artifactId>wss4j</artifactId>
-		    <version>${wss4j.version}</version>
 		</dependency>
 		
 		<!-- 

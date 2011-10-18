@@ -45,13 +45,15 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 		MeteorSession session = getSession();
 
 		SecurityToken sessionToken = session.getToken();
-		String sessionSsn = session.getSsn();
 
 		boolean queryMeteor = false;
 		if (!token.equals(sessionToken)) {
+			session.clear();
 			queryMeteor = true;
 			sessionToken = token;
 		}
+		
+		String sessionSsn = session.getSsn();
 
 		if (session.getSsn() == null && ssn == null) {
 			// if SSN is missing, redirect to query ssn page

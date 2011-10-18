@@ -18,11 +18,10 @@
 		
 		<meteor.version>4.0.0</meteor.version>
 		
-		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+		<org.springframework.version>3.0.6.RELEASE</org.springframework.version>
 		<org.springframework.ldap.version>1.3.1.RELEASE</org.springframework.ldap.version>
-		<cxf.version>2.4.2</cxf.version>
-		<!-- The WSS4J version must match the version used by CXF -->
-		<wss4j.version>1.6.2</wss4j.version>
+		<cxf.version>2.4.3</cxf.version>
+		<cxf.wss4j.version>1.6.3</cxf.wss4j.version>
 		
 		<castor.version>1.3.2</castor.version>
 		<castor.plugin.version>2.1</castor.plugin.version>
@@ -74,13 +73,6 @@
 			<groupId>org.meteornetwork.meteor</groupId>
 			<artifactId>meteorsaml</artifactId>
 			<version>${meteor.version}</version>
-		</dependency>
-		
-		<!-- WSS4J -->
-		<dependency>
-			<groupId>org.apache.ws.security</groupId>
-			<artifactId>wss4j</artifactId>
-			<version>${wss4j.version}</version>
 		</dependency>
 
 		<!-- 
@@ -159,6 +151,12 @@
 			<version>${cxf.version}</version>
 		</dependency>
 
+		<dependency>
+		    <groupId>org.apache.cxf</groupId>
+		    <artifactId>cxf-rt-ws-security</artifactId>
+		    <version>${cxf.version}</version>
+		</dependency>
+		
 		<!-- 
 			Logging
 		 -->

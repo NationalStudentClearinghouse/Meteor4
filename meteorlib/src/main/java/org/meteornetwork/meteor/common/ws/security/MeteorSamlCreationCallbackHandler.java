@@ -1,7 +1,6 @@
-package org.meteornetwork.meteor.provider.access.ws.security;
+package org.meteornetwork.meteor.common.ws.security;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.Properties;
 
@@ -22,9 +21,10 @@ import org.opensaml.common.SAMLVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class SamlCreationCallbackHandler implements CallbackHandler {
+public class MeteorSamlCreationCallbackHandler implements CallbackHandler {
 
 	private static final String METEORNETWORK_ORG = "meteornetwork.org";
+	private static final Integer SAML_TOKEN_VALIDITY_PERIOD = 60; // seconds
 
 	private Properties authenticationProperties;
 
@@ -37,12 +37,12 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 		}
 	}
 
-	private void generateSaml(SAMLCallback callback) throws UnknownHostException {
+	private void generateSaml(SAMLCallback callback) {
 		RequestInfo requestInfo = getRequestInfo();
 
 		SecurityTokenBeanMethodImpl token = new SecurityTokenBeanMethodImpl();
 		token.setSubjectName(authenticationProperties.getProperty("authentication.identifier"));
-		token.setProviderType(ProviderType.ACCESS);
+		token.setProviderType(ProviderType.valueOfType(authenticationProperties.getProperty("authentication.providertype")));
 		token.setOrganizationId(requestInfo.getSecurityToken().getOrganizationId());
 		token.setOrganizationIdType(requestInfo.getSecurityToken().getOrganizationIdType());
 		token.setOrganizationType(requestInfo.getSecurityToken().getOrganizationType());
@@ -64,7 +64,7 @@ public class SamlCreationCallbackHandler implements CallbackHandler {
 
 		try {
 			callback.setConditions(token.createConditionsBean(currentDateTime));
-			callback.getConditions().setNotAfter(callback.getConditions().getNotBefore().plusSeconds(60));
+			callback.getConditions().setNotAfter(callback.getConditions().getNotBefore().plusSeconds(SAML_TOKEN_VALIDITY_PERIOD));
 		} catch (SecurityTokenException e) {
 			/*
 			 * will not be thrown because conditions NotBefore and NotOnOrAfter

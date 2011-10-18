@@ -9,9 +9,10 @@ import org.meteornetwork.meteor.saml.SecurityTokenImpl;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 
 /**
- * Works with the Meteor example login provider 
+ * Works with the Meteor example login provider
+ * 
  * @author jlazos
- *
+ * 
  */
 public class SampleTokenProvider implements TokenProvider {
 
@@ -23,16 +24,17 @@ public class SampleTokenProvider implements TokenProvider {
 		} else {
 			request.getSession().setAttribute("SampleSecurityToken", tokenString);
 		}
-		
-		// TODO validate signature
-		
+
+		// TODO convert sample login to use SAML token profile. Do not pass
+		// complete saml assertion on request
+
 		SecurityToken token;
 		try {
 			token = SecurityTokenImpl.fromXML(new String(Base64Utility.decode(tokenString), IOUtils.UTF8_CHARSET));
 		} catch (Exception e) {
 			throw new SecurityTokenException(e);
 		}
-		
+
 		return token;
 	}
 

@@ -22,6 +22,8 @@
 
  	<!-- meteor common properties -->
  	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>
+ 	
+ 	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
  	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
  	<util:properties id="DataProviderProperties" location="WEB-INF/classes/dataprovider.properties"/>
  	

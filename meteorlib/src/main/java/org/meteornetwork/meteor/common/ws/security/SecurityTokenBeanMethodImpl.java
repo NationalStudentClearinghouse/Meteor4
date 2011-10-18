@@ -1,4 +1,4 @@
-package org.meteornetwork.meteor.provider.access.ws.security;
+package org.meteornetwork.meteor.common.ws.security;
 
 import org.apache.ws.security.saml.ext.bean.AttributeStatementBean;
 import org.apache.ws.security.saml.ext.bean.AuthenticationStatementBean;

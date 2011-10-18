@@ -52,4 +52,15 @@ public class MeteorSession {
 	public void setDuplicateAwardIds(HashMap<Integer, ArrayList<Integer>> duplicateAwardIds) {
 		this.duplicateAwardIds = duplicateAwardIds;
 	}
+
+	/**
+	 * nullifies all parameters on this session object
+	 */
+	public void clear() {
+		token = null;
+		ssn = null;
+		responseXml = null;
+		responseXmlUnfiltered = null;
+		duplicateAwardIds = null;
+	}
 }
