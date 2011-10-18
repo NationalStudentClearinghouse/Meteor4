@@ -37,6 +37,7 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 			token = tokenProvider.getSecurityToken(httpRequest);
 		} catch (SecurityTokenException e) {
 			LOG.error("Could not get authenticated security token", e);
+			// TODO: display different message than 'Access Denied' when token is not available
 			throw new MeteorAccessException();
 		}
 
