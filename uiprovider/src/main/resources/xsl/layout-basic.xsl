@@ -10,7 +10,6 @@
 	    indent="yes" />
 	
 	<xsl:param name="docroot"/>
-	<xsl:param name="contact-url" select="''"/>
 	
 	<xsl:template match="/">
 		<html>

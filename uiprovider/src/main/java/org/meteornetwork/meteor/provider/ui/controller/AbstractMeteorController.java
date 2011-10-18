@@ -1,6 +1,7 @@
 package org.meteornetwork.meteor.provider.ui.controller;
 
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -20,6 +22,8 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 
 	private static final Log LOG = LogFactory.getLog(AbstractMeteorController.class);
 
+	private Properties uiProviderProperties;
+	
 	private TokenProvider tokenProvider;
 	private List<Role> allowedRoles;
 
@@ -82,5 +86,15 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 
 	public void setAllowedRoles(List<Role> allowedRoles) {
 		this.allowedRoles = allowedRoles;
+	}
+
+	public Properties getUiProviderProperties() {
+		return uiProviderProperties;
+	}
+
+	@Autowired
+	@Qualifier("UiProviderProperties")
+	public void setUiProviderProperties(Properties uiProviderProperties) {
+		this.uiProviderProperties = uiProviderProperties;
 	}
 }

@@ -61,15 +61,29 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 			sessionSsn = ssn;
 		}
 
+		session.setToken(sessionToken);
+		session.setSsn(sessionSsn);
+
 		/* *********************************************
 		 * Query Meteor network
 		 */
-		if (queryMeteor) {
-			if (Role.FAA.equals(token.getRole())) {
+		if (queryMeteor || httpRequest.getParameter("splash") != null) {
+			/*
+			 * redirect to loading screen first.
+			 */
+			if (httpRequest.getParameter("splash") == null && "Yes".equals(getUiProviderProperties().getProperty("uiprovider.splashenabled"))) {
+				ModelAndView queryStatusModelView = new ModelAndView("queryStatus");
+				queryStatusModelView.addObject("docroot", httpRequest.getContextPath());
+				queryStatusModelView.addObject("redirect-url", httpRequest.getRequestURL().toString());
+				queryStatusModelView.addObject("sourceXml", createStreamSource("<?xml version=\"1.0\" encoding=\"utf-8\"?><node></node>"));
+				return queryStatusModelView;
+			}
+
+			if (Role.FAA.equals(sessionToken.getRole())) {
 				Holder<String> responseBestSource = new Holder<String>();
 				Holder<String> responseAll = new Holder<String>();
 				Holder<byte[]> duplicateAwardIdsSerialized = new Holder<byte[]>();
-				accessProviderService.findDataForBorrowerWithConsolidated(ssn, token.getMeteorAttributes(), responseBestSource, responseAll, duplicateAwardIdsSerialized);
+				accessProviderService.findDataForBorrowerWithConsolidated(sessionSsn, sessionToken.getMeteorAttributes(), responseBestSource, responseAll, duplicateAwardIdsSerialized);
 
 				session.setResponseXml(responseBestSource.value);
 				session.setResponseXmlUnfiltered(responseAll.value);
@@ -77,12 +91,9 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 					session.setDuplicateAwardIds((HashMap<Integer, ArrayList<Integer>>) SerializationUtils.deserialize(duplicateAwardIdsSerialized.value));
 				}
 			} else {
-				session.setResponseXml(accessProviderService.findDataForBorrower(ssn, token.getMeteorAttributes()));
+				session.setResponseXml(accessProviderService.findDataForBorrower(sessionSsn, sessionToken.getMeteorAttributes()));
 			}
 		}
-
-		session.setToken(sessionToken);
-		session.setSsn(sessionSsn);
 
 		/* *********************************************
 		 * Render page
@@ -90,8 +101,8 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 		addMeteorDataToModelView(modelView, session.getResponseXml());
 
 		// Set global parameters
-		modelView.addObject("ssn", session.getSsn());
-		modelView.addObject("role", token.getRole() == null ? null : token.getRole().getName());
+		modelView.addObject("ssn", sessionSsn);
+		modelView.addObject("role", sessionToken.getRole() == null ? null : sessionToken.getRole().getName());
 		modelView.addObject("docroot", httpRequest.getContextPath());
 
 		handleMeteorRequest(modelView, httpRequest, httpResponse);

@@ -3,8 +3,10 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:pescxml="http://schemas.pescxml.org">
    	        
-	<xsl:include href="../layout-error.xsl"/>
+	<xsl:include href="../layout-basic.xsl"/>
 	
+	<xsl:param name="contact-url" select="''"/>
+		
 	<xsl:template name="htmlhead">
 		<title>HTTP 403 - Access Denied</title>
 	</xsl:template>
