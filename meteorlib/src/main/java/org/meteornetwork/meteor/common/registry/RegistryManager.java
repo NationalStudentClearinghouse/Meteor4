@@ -7,6 +7,7 @@ import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.saml.ProviderType;
+import org.meteornetwork.meteor.saml.Role;
 
 /**
  * Interface for interacting with the Meteor Registry
@@ -74,4 +75,37 @@ public interface RegistryManager {
 	 * @return the list of aliases for a meteor institution
 	 */
 	List<String> getAliases(String meteorInstitutionId, ProviderType providerType) throws RegistryException;
+
+	/**
+	 * Gets the minimum authentication level accepted by the provider for the
+	 * specified role
+	 * 
+	 * @param meteorInstitutionId
+	 *            id of the provider
+	 * @param authProcId
+	 *            the authentication process being considered
+	 * @param providerType
+	 *            the provider type of the provider
+	 * @param role
+	 *            the role whose authentication level to return
+	 * @return the minimum authentication level the specified provider will
+	 *         accept for the specified role
+	 * 
+	 * @throws RegistryException
+	 */
+	Integer getAuthenticationLevel(String meteorInstitutionId, String authProcId, ProviderType providerType, Role role) throws RegistryException;
+
+	/**
+	 * Gets the roles allowed by the specified provider
+	 * 
+	 * @param meteorInstitutionId
+	 *            id of the provider
+	 * @param authProcId
+	 *            the authentication process being considered
+	 * @param providerType
+	 *            the provider type of the provider
+	 * @return the roles allowed by the specified provider
+	 * @throws RegistryException
+	 */
+	List<Role> getRoles(String meteorInstitutionId, String authProcId, ProviderType providerType) throws RegistryException;
 }

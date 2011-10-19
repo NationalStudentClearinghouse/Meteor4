@@ -12,6 +12,7 @@ import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.saml.ProviderType;
+import org.meteornetwork.meteor.saml.Role;
 
 @WebService
 public interface RegistryService {
@@ -35,4 +36,12 @@ public interface RegistryService {
 	@WebMethod(operationName = "GetAliases")
 	@WebResult(name = "GetAliasesResponse")
 	ArrayList<String> getAliases(@WebParam(name = "MeteorInstitutionId") String meteorInstitutionId, @WebParam(name = "ProviderType") ProviderType providerType) throws RegistryException;
+
+	@WebMethod(operationName = "GetAuthenticationLevel")
+	@WebResult(name = "GetAuthenticationLevelResponse")
+	Integer getAuthenticationLevel(@WebParam(name = "MeteorInstitutionId") String meteorInstitutionId, @WebParam(name = "AuthenticationProcessId") String authProcId, @WebParam(name = "ProviderType") ProviderType providerType, @WebParam(name = "Role") Role role) throws RegistryException;
+
+	@WebMethod(operationName = "GetRoles")
+	@WebResult(name = "GetRolesResponse")
+	ArrayList<Role> getRoles(@WebParam(name = "MeteorInstitutionId") String meteorInstitutionId, @WebParam(name = "AuthenticationProcessId") String authProcId, @WebParam(name = "ProviderType") ProviderType providerType) throws RegistryException;
 }
