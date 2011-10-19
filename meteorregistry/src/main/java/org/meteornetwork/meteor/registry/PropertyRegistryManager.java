@@ -21,6 +21,7 @@ import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.saml.ProviderType;
+import org.meteornetwork.meteor.saml.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -154,17 +155,6 @@ public class PropertyRegistryManager implements RegistryManager {
 		return supportedVersions;
 	}
 
-	public Properties getDirectoryProperties() {
-		return directoryProperties;
-	}
-
-	@Autowired
-	@Qualifier("DirectoryProperties")
-	public void setDirectoryProperties(Properties directoryProperties) {
-		this.directoryProperties = directoryProperties;
-		directoryDataProperties = ResourceBundle.getBundle(this.directoryProperties.getProperty("directory.properties.directorydata"));
-	}
-
 	@Override
 	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
 		List<String> aliasesList = new ArrayList<String>();
@@ -183,6 +173,39 @@ public class PropertyRegistryManager implements RegistryManager {
 		}
 
 		return aliasesList;
+	}
+
+	@Override
+	public Integer getAuthenticationLevel(String meteorInstitutionId, String authProcId, ProviderType providerType, Role role) throws RegistryException {
+		try {
+			String authLevel = directoryDataProperties.getString(meteorInstitutionId + "." + role.getName() + ".AuthenticationLevel");
+			return (Integer.valueOf(authLevel));
+		} catch (MissingResourceException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Role> getRoles(String meteorInstitutionId, String authProcId, ProviderType providerType) throws RegistryException {
+		List<Role> roles = new ArrayList<Role>();
+		for (Role role : Role.values()) {
+			if (getAuthenticationLevel(meteorInstitutionId, authProcId, providerType, role) != null) {
+				roles.add(role);
+			}
+		}
+
+		return roles;
+	}
+
+	public Properties getDirectoryProperties() {
+		return directoryProperties;
+	}
+
+	@Autowired
+	@Qualifier("DirectoryProperties")
+	public void setDirectoryProperties(Properties directoryProperties) {
+		this.directoryProperties = directoryProperties;
+		directoryDataProperties = ResourceBundle.getBundle(this.directoryProperties.getProperty("directory.properties.directorydata"));
 	}
 
 }

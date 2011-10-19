@@ -11,6 +11,7 @@ import java.util.List;
 import javax.naming.InvalidNameException;
 import javax.naming.Name;
 import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchControls;
 import javax.naming.ldap.LdapName;
@@ -23,6 +24,7 @@ import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.saml.ProviderType;
+import org.meteornetwork.meteor.saml.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ldap.core.AttributesMapper;
@@ -279,12 +281,92 @@ public class LDAPRegistryManager implements RegistryManager {
 
 		return dataProviders;
 	}
-	
 
 	@Override
-	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) {
-		// TODO: implement
-		return new ArrayList<String>();
+	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
+		try {
+			return getAliases(ldapTemplate, meteorInstitutionId, providerType);
+		} catch (Exception e) {
+			LOG.debug("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
+			try {
+				return getAliases(ldapFailoverTemplate, meteorInstitutionId, providerType);
+			} catch (Exception e1) {
+				LOG.debug("Exception occurred while contacting LDAP failover registry", e1);
+				throw new RegistryException(e1);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<String> getAliases(LdapTemplate ldapTemplate, String meteorInstitutionId, ProviderType providerType) throws RegistryException {
+
+		List<String> aliases = (List<String>) ldapTemplate.lookup("File=" + providerType.getType() + ",FileTypeFamily=Meteor,Institution=" + meteorInstitutionId, new AttributesMapper() {
+			public List<String> mapFromAttributes(Attributes attrs) throws NamingException {
+				List<String> aliases = new ArrayList<String>();
+				Attribute aliasAttrs = attrs.get("Alias");
+				if (aliasAttrs != null) {
+					for (int i = 0; i < aliasAttrs.size(); ++i) {
+						aliases.add((String) aliasAttrs.get(i));
+					}
+				}
+				return aliases;
+			}
+		});
+
+		return aliases == null ? new ArrayList<String>() : aliases;
+	}
+
+	@Override
+	public Integer getAuthenticationLevel(String meteorInstitutionId, String authProcId, ProviderType providerType, Role role) throws RegistryException {
+		try {
+			return getAuthenticationLevel(ldapTemplate, meteorInstitutionId, authProcId, providerType, role);
+		} catch (Exception e) {
+			LOG.debug("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
+			try {
+				return getAuthenticationLevel(ldapFailoverTemplate, meteorInstitutionId, authProcId, providerType, role);
+			} catch (Exception e1) {
+				LOG.debug("Exception occurred while contacting LDAP failover registry", e1);
+				throw new RegistryException(e1);
+			}
+		}
+	}
+
+	private Integer getAuthenticationLevel(LdapTemplate ldapTemplate, String meteorInstitutionId, String authProcId, ProviderType providerType, Role role) throws RegistryException {
+		Integer authLevel = (Integer) ldapTemplate.lookup("Role=" + role.getName() + ",AuthenticationProcess=" + authProcId + ",File=" + providerType.getType() + ",FileTypeFamily=Meteor,Institution=" + meteorInstitutionId, new AttributesMapper() {
+			public Integer mapFromAttributes(Attributes attrs) throws NamingException {
+				Attribute authLevel = attrs.get("AuthenticationLevel");
+				return authLevel == null || authLevel.size() <= 0 ? null : Integer.valueOf((String) authLevel.get());
+			}
+		});
+
+		return authLevel;
+	}
+
+	@Override
+	public List<Role> getRoles(String meteorInstitutionId, String authProcId, ProviderType providerType) throws RegistryException {
+		try {
+			return getRoles(ldapTemplate, meteorInstitutionId, authProcId, providerType);
+		} catch (Exception e) {
+			LOG.debug("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
+			try {
+				return getRoles(ldapFailoverTemplate, meteorInstitutionId, authProcId, providerType);
+			} catch (Exception e1) {
+				LOG.debug("Exception occurred while contacting LDAP failover registry", e1);
+				throw new RegistryException(e1);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Role> getRoles(LdapTemplate ldapTemplate, String meteorInstitutionId, String authProcId, ProviderType providerType) {
+		List<Role> roles = (List<Role>) ldapTemplate.search("AuthenticationProcess=" + authProcId + ",File=" + providerType.getType() + ",FileTypeFamily=Meteor,Institution=" + meteorInstitutionId, "(Role=*)", SearchControls.SUBTREE_SCOPE, new AttributesMapper() {
+			@Override
+			public Role mapFromAttributes(Attributes attrs) throws NamingException {
+				return Role.valueOfName((String) attrs.get("Role").get());
+			}
+		});
+
+		return roles;
 	}
 
 	private String stripBaseDn(String ldapName) throws InvalidNameException {

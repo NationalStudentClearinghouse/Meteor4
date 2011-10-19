@@ -11,6 +11,7 @@ import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.common.ws.RegistryService;
 import org.meteornetwork.meteor.saml.ProviderType;
+import org.meteornetwork.meteor.saml.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.SerializationUtils;
 
@@ -47,6 +48,18 @@ public class RegistryServiceImpl implements RegistryService {
 	public ArrayList<String> getAliases(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
 		ArrayList<String> returnList = new ArrayList<String>();
 		returnList.addAll(registryManager.getAliases(meteorInstitutionId, providerType));
+		return returnList;
+	}
+
+	@Override
+	public Integer getAuthenticationLevel(String meteorInstitutionId, String authProcId, ProviderType providerType, Role role) throws RegistryException {
+		return registryManager.getAuthenticationLevel(meteorInstitutionId, authProcId, providerType, role);
+	}
+
+	@Override
+	public ArrayList<Role> getRoles(String meteorInstitutionId, String authProcId, ProviderType providerType) throws RegistryException {
+		ArrayList<Role> returnList = new ArrayList<Role>();
+		returnList.addAll(registryManager.getRoles(meteorInstitutionId, authProcId, providerType));
 		return returnList;
 	}
 
