@@ -46,7 +46,7 @@ public class MeteorSamlCreationCallbackHandler implements CallbackHandler {
 		token.setOrganizationId(requestInfo.getSecurityToken().getOrganizationId());
 		token.setOrganizationIdType(requestInfo.getSecurityToken().getOrganizationIdType());
 		token.setOrganizationType(requestInfo.getSecurityToken().getOrganizationType());
-		token.setAuthenticationProcessId(authenticationProperties.getProperty("authentication.process.identifier"));
+		token.setAuthenticationProcessId(requestInfo.getSecurityToken().getAuthenticationProcessId());
 		token.setLevel(requestInfo.getSecurityToken().getLevel());
 		token.setUserHandle(requestInfo.getSecurityToken().getUserHandle());
 		token.setRole(requestInfo.getSecurityToken().getRole());
