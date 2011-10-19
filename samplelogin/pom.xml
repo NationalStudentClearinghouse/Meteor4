@@ -13,7 +13,7 @@
 	<properties>
 		<meteor.version>4.0.0</meteor.version>
 		
-		<cxf.version>2.4.3</cxf.version>
+		<javax.servlet-api.version>2.5</javax.servlet-api.version>
 	</properties>
 
 	<dependencies>
@@ -24,17 +24,14 @@
 			<version>${meteor.version}</version>
 		</dependency>
 		
-		<!-- Meteor Common Library -->
+		<!-- 
+			Javax Servlet API 
+		-->
 		<dependency>
-			<groupId>org.meteornetwork.meteor</groupId>
-			<artifactId>meteorlib</artifactId>
-			<version>${meteor.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.apache.cxf</groupId>
-		    <artifactId>cxf-common-utilities</artifactId>
-		    <version>${cxf.version}</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${javax.servlet-api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	

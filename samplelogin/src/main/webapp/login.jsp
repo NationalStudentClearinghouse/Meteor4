@@ -1,13 +1,12 @@
 <%@ page import="java.io.*,
 				 java.security.*,
 				 java.util.ResourceBundle,
-				 org.apache.cxf.common.util.Base64Exception,
-				 org.apache.cxf.common.util.Base64Utility,
-				 org.meteornetwork.meteor.common.util.DigitalSignatureManager,
-				 org.meteornetwork.meteor.common.util.PrivateKeyParams,
+				 java.util.UUID,
 				 org.meteornetwork.meteor.saml.Role,
 				 org.meteornetwork.meteor.saml.SecurityToken,
-				 org.meteornetwork.meteor.saml.SecurityTokenImpl"%>
+				 org.meteornetwork.meteor.saml.SecurityTokenImpl,
+				 org.meteornetwork.meteor.saml.exception.SecurityTokenException,
+				 org.meteornetwork.meteor.samplelogin.SecurityTokenManager"%>
 
 <%
 	
@@ -35,28 +34,15 @@
 	String password = request.getParameter("password");
 	
 	/* Get Keystore Information from authentication.properties to access your private key.*/
-	ResourceBundle res = ResourceBundle.getBundle("authentication");
-	/* The URL for the access provider you (as a Meteor authentication agent) will send users to.*/
-	String accessProviderURL = res.getString("authentication.accessProviderURL");
-	String keystoreType = res.getString("authentication.keystore.type");
-	String keystoreFile = res.getString("authentication.keystore.file");
-	String keystorePassword = res.getString("authentication.keystore.password");
-	String privateKeyAlias = res.getString("authentication.privatekey.alias");
-	String privateKeyPassword = res.getString("authentication.privatekey.password");
+	ResourceBundle res = ResourceBundle.getBundle("samplelogin");
+	/* The URL for the ui provider you (as a Meteor authentication agent) will send users to.*/
+	String uiProviderUrl = res.getString("samplelogin.uiprovider.url");
+	/* The URL the ui provider will use to retrieve your cached security token */
+	String artifactResolveUrl = res.getString("samplelogin.artifactresolver.url");
 	
 	/* Include your Meteor Institution ID to identify which organization is authenticating users.*/
-	String authenticationAgentID = res.getString("authentication.identifier");
-	String authenticationProcessID = res.getString("authentication.process.identifier");
-	//boolean shouldSign = (!"No".equalsIgnoreCase(res.getString("authentication.signassertion", "Yes")));
-	
-	/****************************** FOR TEST / DEBUGGING USE ONLY *************************************/
-	System.out.println("authentication.keystore.type=" + keystoreType);
-	System.out.println("authentication.keystore.file=" + keystoreFile);
-	System.out.println("authentication.privatekey.alias=" + privateKeyAlias);
-	System.out.println("authentication.identifier=" + authenticationAgentID);
-	System.out.println("authentication.process.identifier=" + authenticationProcessID);
-	//System.out.println("authentication.signassertion (Yes=true) converted to:" + Boolean.toString(shouldSign));
-	/****************************** FOR TEST / DEBUGGING USE ONLY *************************************/
+	String authenticationAgentID = res.getString("samplelogin.authentication.identifier");
+	String authenticationProcessID = res.getString("samplelogin.authentication.process.identifier");
 	
 	/**************************************************************************/
 	/* Before creating and signing a SecurityToken (aka SAML assertion) for    */
@@ -111,24 +97,13 @@
 	} catch (Exception e) {
 		System.out.println("An error occured adding attributes to the SecurityToken: " + e.getMessage());
 	}
-
-	/* Open the keystore, read the private key, and add the key to the security token.*/
-	PrivateKey privateKey = null;
-	DigitalSignatureManager digitalSignatureManager = new DigitalSignatureManager();
 	
+	UUID artifactId = null;
 	try {
-		PrivateKeyParams params = new PrivateKeyParams();
-		params.setKeystoreFile(keystoreFile);
-		params.setKeystoreType(keystoreType);
-		params.setKeystorePass(keystorePassword);
-		params.setPrivateKeyAlias(privateKeyAlias);
-		params.setPrivateKeyPass(privateKeyPassword);
-		privateKey = digitalSignatureManager.getPrivateKey(params);
-	} catch (Exception e) {
-		System.out.println("An error occured while accessing the private key: " + e.getMessage());
+		artifactId = SecurityTokenManager.getInstance().putToken(token);
+	} catch (SecurityTokenException e) {
+		System.out.println("An error occurred generating the SecurityToken" + e.getMessage());
 	}
-	
-	String signedAssertion = digitalSignatureManager.sign(token.toXML(), privateKey, null);
 %>
 <html>
 <head>
@@ -166,10 +141,11 @@
 	</p>
 </center>
 
-<form name="gotometeor" action="<%=accessProviderURL%>" method="POST" target="_blank">
+<form name="gotometeor" action="<%=uiProviderUrl%>" method="POST" target="_blank">
 
 	<input type="hidden" name="ssn" value="<%=borrowerSsn%>"/>
-	<input type="hidden" name="SecurityToken" value="<%=Base64Utility.encode(signedAssertion.getBytes())%>"/>
+	<input type="hidden" name="tokenId" value="<%=artifactId == null ? "" : artifactId.toString()%>"/>
+	<input type="hidden" name="url" value="<%=artifactResolveUrl%>"/>
 	
 	<center>
 	<br/>

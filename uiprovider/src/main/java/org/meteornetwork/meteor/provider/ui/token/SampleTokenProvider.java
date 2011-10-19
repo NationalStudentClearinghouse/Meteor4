@@ -1,8 +1,14 @@
 package org.meteornetwork.meteor.provider.ui.token;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.cxf.common.util.Base64Utility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.helpers.IOUtils;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
@@ -16,21 +22,28 @@ import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
  */
 public class SampleTokenProvider implements TokenProvider {
 
+	private static final Log LOG = LogFactory.getLog(SampleTokenProvider.class);
+
 	@Override
 	public SecurityToken getSecurityToken(HttpServletRequest request) throws SecurityTokenException {
-		String tokenString = request.getParameter("SecurityToken");
-		if (tokenString == null) {
+		String tokenId = request.getParameter("tokenId");
+		String tokenString = null;
+
+		if (tokenId == null) {
 			tokenString = (String) request.getSession().getAttribute("SampleSecurityToken");
 		} else {
-			request.getSession().setAttribute("SampleSecurityToken", tokenString);
+			try {
+				tokenString = getTokenFromURL(request.getParameter("url"), tokenId);
+				request.getSession().setAttribute("SampleSecurityToken", tokenString);
+			} catch (IOException e) {
+				LOG.debug("Could not get security token from sample login provider", e);
+				throw new SecurityTokenException();
+			}
 		}
-
-		// TODO convert sample login to use SAML token profile. Do not pass
-		// complete saml assertion on request
 
 		SecurityToken token;
 		try {
-			token = SecurityTokenImpl.fromXML(new String(Base64Utility.decode(tokenString), IOUtils.UTF8_CHARSET));
+			token = SecurityTokenImpl.fromXML(tokenString);
 		} catch (Exception e) {
 			throw new SecurityTokenException(e);
 		}
@@ -38,4 +51,13 @@ public class SampleTokenProvider implements TokenProvider {
 		return token;
 	}
 
+	private String getTokenFromURL(String urlStr, String tokenId) throws IOException {
+		String charset = "UTF-8";
+
+		String query = String.format("artifactId=%s", URLEncoder.encode(tokenId, "UTF-8"));
+		URLConnection connection = new URL(urlStr + "?" + query).openConnection();
+		connection.setRequestProperty("Accept-Charset", charset);
+
+		return IOUtils.readStringFromStream(connection.getInputStream());
+	}
 }
