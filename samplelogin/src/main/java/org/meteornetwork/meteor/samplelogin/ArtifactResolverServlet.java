@@ -17,13 +17,15 @@ public class ArtifactResolverServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = -7408386657589904993L;
 
-	public void doGet (HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
-	{
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		SecurityTokenManager tokenManager = SecurityTokenManager.getInstance();
-		
+
 		UUID uuid = UUID.fromString(req.getParameter("artifactId"));
-		String token = tokenManager.getToken(uuid);
-		
+		String token = null;
+		synchronized (tokenManager) {
+			token = tokenManager.getToken(uuid);
+		}
+
 		ServletOutputStream outstream = res.getOutputStream();
 		outstream.write(token.getBytes(Charset.forName("UTF-8")));
 		outstream.close();

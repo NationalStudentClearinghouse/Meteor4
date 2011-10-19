@@ -100,7 +100,10 @@
 	
 	UUID artifactId = null;
 	try {
-		artifactId = SecurityTokenManager.getInstance().putToken(token);
+		SecurityTokenManager tokenManager = SecurityTokenManager.getInstance();
+		synchronized(tokenManager) {
+			artifactId = SecurityTokenManager.getInstance().putToken(token);
+		}
 	} catch (SecurityTokenException e) {
 		System.out.println("An error occurred generating the SecurityToken" + e.getMessage());
 	}
