@@ -33,6 +33,7 @@ import org.apache.ws.security.saml.ext.bean.ConditionsBean;
 import org.apache.ws.security.saml.ext.bean.SubjectBean;
 import org.apache.ws.security.saml.ext.bean.SubjectLocalityBean;
 import org.apache.ws.security.saml.ext.builder.SAML1ComponentBuilder;
+import org.apache.xpath.XPathAPI;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
@@ -44,8 +45,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.sun.org.apache.xpath.internal.XPathAPI;
 
 /**
  * Represents an old Meteor SAML assertion. The term "Meteor SAML assertion"
