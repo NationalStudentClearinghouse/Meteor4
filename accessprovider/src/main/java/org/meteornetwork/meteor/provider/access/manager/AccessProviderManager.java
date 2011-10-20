@@ -68,8 +68,6 @@ public class AccessProviderManager {
 
 		List<MeteorRsMsg> dataProviderResponses = dataQueryService.getData(responseData, dataProviders, ssn);
 
-		// TODO: authentication bump process
-
 		responseData.addAllDataProviderInfo(dataProviderResponses);
 
 		return responseData;

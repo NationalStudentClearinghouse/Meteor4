@@ -22,10 +22,16 @@ public class PasswordCallbackHandler implements CallbackHandler {
 			if (callback instanceof PasswordCallback) {
 				PasswordCallback pwdCallback = (PasswordCallback) callback;
 				String password = authenticationProperties.getProperty("org.apache.ws.security.saml.issuer.key.password");
+				if (password == null) {
+					password = authenticationProperties.getProperty("org.apache.ws.security.crypto.merlin.keystore.private.password");
+				}
 				pwdCallback.setPassword(password.toCharArray());
 			} else if (callback instanceof WSPasswordCallback) {
 				WSPasswordCallback pwdCallback = (WSPasswordCallback) callback;
 				String password = authenticationProperties.getProperty("org.apache.ws.security.saml.issuer.key.password");
+				if (password == null) {
+					password = authenticationProperties.getProperty("org.apache.ws.security.crypto.merlin.keystore.private.password");
+				}
 				pwdCallback.setPassword(password);
 			}
 		}

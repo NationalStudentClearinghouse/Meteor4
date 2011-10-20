@@ -14,6 +14,7 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
+import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.ws.IndexProviderService;
@@ -31,9 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class IndexQueryService implements ApplicationContextAware {
 
 	private static final Log LOG = LogFactory.getLog(IndexQueryService.class);
@@ -122,8 +122,7 @@ public class IndexQueryService implements ApplicationContextAware {
 
 		AccessProvider accessProvider = new AccessProvider();
 		accessProvider.setMeteorInstitutionIdentifier(authenticationProperties.getProperty("authentication.identifier"));
-		// TODO: set user handle
-		accessProvider.setUserHandle("User");
+		accessProvider.setUserHandle(getRequestInfo().getSecurityToken().getUserHandle());
 		accessProvider.setIssueInstant(Calendar.getInstance().getTime());
 
 		request.setAccessProvider(accessProvider);
@@ -207,4 +206,8 @@ public class IndexQueryService implements ApplicationContextAware {
 		this.registryManager = registryManager;
 	}
 
+	public RequestInfo getRequestInfo() {
+		// method injection implemented by spring
+		return null;
+	}
 }

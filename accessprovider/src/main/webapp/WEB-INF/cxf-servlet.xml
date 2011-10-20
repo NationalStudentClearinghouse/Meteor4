@@ -30,7 +30,19 @@
 		implementor="#accessProviderServiceImpl"
 		endpointName="findDataForBorrower"
 		bindingUri="http://www.w3.org/2003/05/soap/bindings/HTTP/"
-		address="/AccessProviderService" />
+		address="/AccessProviderService">
+		
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="Signature"/>
+						<entry key="signaturePropFile" value="wss4j.properties" />
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
 	
 	<!-- client proxies -->
 	<bean id="dataClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">

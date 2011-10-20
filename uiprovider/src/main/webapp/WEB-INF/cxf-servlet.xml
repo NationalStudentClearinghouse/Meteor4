@@ -12,8 +12,24 @@
 	<import resource="classpath:META-INF/cxf/cxf.xml"/>
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 	
+	<bean id="passwordCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
+	
 	<jaxws:client id="accessProviderClient"
 		serviceClass="org.meteornetwork.meteor.common.ws.AccessProviderService"
-		address="${accessprovider.url}" />
+		address="${accessprovider.url}">
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="Signature"/>
+						<entry key="signaturePropFile" value="authentication.properties" />
+						<entry key="user" value="${org.apache.ws.security.crypto.merlin.keystore.alias}" />
+						<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>
+	</jaxws:client>
 		
 </beans>
