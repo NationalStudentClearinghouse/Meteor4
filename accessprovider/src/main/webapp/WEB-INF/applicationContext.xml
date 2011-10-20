@@ -34,5 +34,9 @@
  		<lookup-method name="getRequestInfo" bean="requestInfo"/>
  	</bean>
  	
+ 	<bean id="indexQueryService" class="org.meteornetwork.meteor.provider.access.service.IndexQueryService" autowire="byType">
+ 		<lookup-method name="getRequestInfo" bean="requestInfo"/>
+ 	</bean>
+ 	
 	<context:component-scan base-package="org.meteornetwork.meteor"/>
 </beans> 

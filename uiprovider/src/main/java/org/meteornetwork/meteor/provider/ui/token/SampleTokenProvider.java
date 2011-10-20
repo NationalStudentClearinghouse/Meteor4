@@ -48,6 +48,10 @@ public class SampleTokenProvider implements TokenProvider {
 			throw new SecurityTokenException(e);
 		}
 
+		if (!token.validateConditions()) {
+			LOG.debug("Token expired");
+			throw new SecurityTokenException();
+		}
 		return token;
 	}
 
