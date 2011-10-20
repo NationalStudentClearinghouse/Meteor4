@@ -67,11 +67,11 @@
 										<div class="logo"><a href="#" title="Meteor Network"><img src="{$docroot}/imgs/logo.jpg" border="0" /></a></div>
 										<div class="studentInfo">
 										<xsl:choose>
-											<xsl:when test="($person='student') and (count(//Student) > 0)">
-												<p>Student Name: <strong><xsl:value-of select="concat(//Student[count(preceding::Student) = 0]/FirstName, ' ', //Student[count(preceding::Student) = 0]/MiddleInitial, ' ', //Student[count(preceding::Student) = 0]/LastName)"/> (<xsl:value-of select="//Student[count(preceding::Student) = 0]/SSNum"/>)</strong></p>
+											<xsl:when test="($person='student')">
+												<p>Student Name: <strong><xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/FirstName"/>&#32;<xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/MiddleInitial"/>&#32;<xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/LastName"/>&#32;(<xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/SSNum"/>)</strong></p>
 											</xsl:when>
 											<xsl:when test="($person='borrower') and (count(//Borrower) > 0)">
-												<p>Borrower Name: <strong><xsl:value-of select="concat(//Borrower[count(preceding::Borrower) = 0]/FirstName, ' ', //Borrower[count(preceding::Borrower) = 0]//MiddleInitial, ' ', //Borrower[count(preceding::Borrower) = 0]//LastName)"/> (<xsl:value-of select="//Borrower[count(preceding::Borrower) = 0]/SSNum"/>)</strong></p>
+												<p>Borrower Name: <strong><xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/FirstName"/>&#32;<xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/MiddleInitial"/>&#32;<xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/LastName"/>&#32;(<xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/SSNum"/>)</strong></p>
 											</xsl:when>
 										</xsl:choose>
 										<xsl:if test="$role = 'FAA' or $role = 'APCSR' or $role = 'LENDER'">

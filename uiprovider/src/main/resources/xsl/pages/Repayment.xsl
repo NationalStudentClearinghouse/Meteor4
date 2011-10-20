@@ -52,7 +52,7 @@
 		</xsl:if>
 		
 		<p class="tableTitle">Award Information</p>
-		<xsl:apply-templates select="//MeteorDataProviderInfo">
+		<xsl:apply-templates select="//MeteorDataProviderInfo[count(MeteorDataProviderAwardDetails/Award[Borrower/SSNum/@unmasked=$ssn]) > 0]">
 			<xsl:sort select="MeteorDataProviderDetailInfo/DataProviderData/EntityName" data-type="text" order="ascending"/>
 		</xsl:apply-templates>
 		<div id="modal_showHelp" class="showOptions" style="width:800px;">
