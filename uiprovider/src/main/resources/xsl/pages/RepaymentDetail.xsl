@@ -276,7 +276,7 @@
 						</thead>
 						<tbody>
 							<xsl:apply-templates select="//Repayment/Deferment | //Repayment/Forbearance">
-								<xsl:sort select="TypeCode" order="ascending"/>
+								<xsl:sort select="DefermentForbearanceTypeCode" order="ascending"/>
 								<xsl:sort select="../../DataProviderType" order="ascending"/>
 							</xsl:apply-templates>
 							<tr>
@@ -317,9 +317,9 @@
 	
 	<xsl:template match="Repayment/Deferment | Repayment/Forbearance">
 		<tr>
-			<td class="col1"><xsl:value-of select="TypeCode"/><xsl:if test="name() = 'Forbearance'"> Forbearance</xsl:if></td>
+			<td class="col1"><xsl:value-of select="DefermentForbearanceTypeCode"/><xsl:if test="name() = 'Forbearance'"> Forbearance</xsl:if></td>
 			<td class="col2"><xsl:apply-templates select="../.." mode="select-best-source-no-link"/></td>
-			<td class="col3"><xsl:value-of select="TimeUsed"/></td>
+			<td class="col3"><xsl:value-of select="DefermentForbearanceTimeUsed"/></td>
 		</tr>
 	</xsl:template>
 	

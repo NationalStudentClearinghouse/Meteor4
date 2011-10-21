@@ -372,20 +372,20 @@
 					<RepaidPrincipalAmt>3654.02</RepaidPrincipalAmt>
 					<CapitalizedIntAmt>2745.91</CapitalizedIntAmt>
 					<Deferment>
-						<TypeCode>Armed Forces</TypeCode>
-						<TimeUsed>120</TimeUsed>
+						<DefermentForbearanceTypeCode>Armed Forces</DefermentForbearanceTypeCode>
+						<DefermentForbearanceTimeUsed>120</DefermentForbearanceTimeUsed>
 					</Deferment>
 					<Deferment>
-						<TypeCode>Parental Leave</TypeCode>
-						<TimeUsed>240</TimeUsed>
+						<DefermentForbearanceTypeCode>Parental Leave</DefermentForbearanceTypeCode>
+						<DefermentForbearanceTimeUsed>240</DefermentForbearanceTimeUsed>
 					</Deferment>
 					<Forbearance>
-						<TypeCode>Administrative</TypeCode>
-						<TimeUsed>100</TimeUsed>
+						<DefermentForbearanceTypeCode>Administrative</DefermentForbearanceTypeCode>
+						<DefermentForbearanceTimeUsed>100</DefermentForbearanceTimeUsed>
 					</Forbearance>
 					<Forbearance>
-						<TypeCode>NonAdministrative</TypeCode>
-						<TimeUsed>99</TimeUsed>
+						<DefermentForbearanceTypeCode>NonAdministrative</DefermentForbearanceTypeCode>
+						<DefermentForbearanceTimeUsed>99</DefermentForbearanceTimeUsed>
 					</Forbearance>
 					<RepaymentTermRemaining>123</RepaymentTermRemaining>
 					<DaysPastDue>999</DaysPastDue>

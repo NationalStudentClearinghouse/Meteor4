@@ -53,15 +53,15 @@ public class MeteorSchema40Test {
 		
 		Assert.assertEquals(2, award.getRepayment().getDefermentCount());
 		Deferment deferment = award.getRepayment().getDeferment(0);
-		Assert.assertEquals("Armed Forces", deferment.getTypeCode());
+		Assert.assertEquals("Armed Forces", deferment.getDefermentForbearanceTypeCode());
 		deferment = award.getRepayment().getDeferment(1);
-		Assert.assertEquals("240", deferment.getTimeUsed());
+		Assert.assertEquals("240", deferment.getDefermentForbearanceTimeUsed());
 		
 		Assert.assertEquals(2, award.getRepayment().getForbearanceCount());
 		Forbearance forbearance = award.getRepayment().getForbearance(0);
-		Assert.assertEquals("Administrative", forbearance.getTypeCode());
+		Assert.assertEquals("Administrative", forbearance.getDefermentForbearanceTypeCode());
 		forbearance = award.getRepayment().getForbearance(1);
-		Assert.assertEquals("99", forbearance.getTimeUsed());
+		Assert.assertEquals("99", forbearance.getDefermentForbearanceTimeUsed());
 		
 		Assert.assertEquals("http://not-a-real-domain-false1.com", award.getOnlinePaymentProcessURL());
 		Assert.assertEquals("http://not-a-real-domain-false2.com", award.getOnlineDeferForbProcessURL());

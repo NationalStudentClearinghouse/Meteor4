@@ -390,12 +390,12 @@
                   <DefermentForbearanceEndDate>2003-03-13</DefermentForbearanceEndDate>
                </DefermentForbearance>
                <Deferment>
-                  <TypeCode>abcdefghijklmnopqrst</TypeCode>
-                  <TimeUsed>123</TimeUsed>
+                  <DefermentForbearanceTypeCode>abcdefghijklmnopqrst</DefermentForbearanceTypeCode>
+                  <DefermentForbearanceTimeUsed>123</DefermentForbearanceTimeUsed>
                </Deferment>
                <Forbearance>
-                  <TypeCode>tsrqponmlkjihgfedcba</TypeCode>
-                  <TimeUsed>999</TimeUsed>
+                  <DefermentForbearanceTypeCode>tsrqponmlkjihgfedcba</DefermentForbearanceTypeCode>
+                  <DefermentForbearanceTimeUsed>999</DefermentForbearanceTimeUsed>
                </Forbearance>
                <RepaymentTermRemaining>321</RepaymentTermRemaining>
                <DaysPastDue>222</DaysPastDue>
