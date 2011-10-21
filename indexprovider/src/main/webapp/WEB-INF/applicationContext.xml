@@ -25,7 +25,7 @@
 	<util:properties id="IndexProviderProperties" location="WEB-INF/classes/indexprovider.properties"/>
 	
 	<!-- Index Server Abstraction -->
-	<bean id="IndexServerAbstractionImpl" class="${default.index.server}"/>
+	<bean id="IndexServerAbstractionImpl" class="${default.index.server}" autowire="byType"/>
 	
 	<bean id="IndexProviderManager" class="org.meteornetwork.meteor.provider.index.manager.IndexProviderManager" autowire="byType">
 		<lookup-method name="getRequestInfo" bean="requestInfo"/>

@@ -182,6 +182,9 @@ public class ResponseDataWrapper {
 		if (dataProviderInfo.getIndexProviderInfo() == null) {
 			if (dataProviderInfo.getRegistryInfo() != null) {
 				dpInfo = new MeteorDataProviderInfo();
+				
+				dpInfo.setLoanLocatorActivationIndicator(true);
+				
 				dpInfo.setMeteorDataProviderDetailInfo(new MeteorDataProviderDetailInfo());
 				dpInfo.getMeteorDataProviderDetailInfo().setDataProviderType(UNK);
 				dpInfo.getMeteorDataProviderDetailInfo().setDataProviderAggregateTotal(new DataProviderAggregateTotal());
@@ -213,7 +216,7 @@ public class ResponseDataWrapper {
 	 *            the message to add to the response
 	 */
 	public void addIndexProviderMessage(Message message) {
-		addIndexProviderMessage(message.getRsMsg(), message.getRsMsgLevel());
+		addIndexProviderMessage(Messages.getMessage(message.getRsMsg()), message.getRsMsgLevel());
 	}
 
 	/**

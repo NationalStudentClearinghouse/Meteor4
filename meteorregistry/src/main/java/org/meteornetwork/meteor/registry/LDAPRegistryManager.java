@@ -198,8 +198,15 @@ public class LDAPRegistryManager implements RegistryManager {
 			}
 		});
 
+		String ldapDescription = (String) ldapTemplate.lookup("Institution=" + meteorInstitutionId, new AttributesMapper() {
+			public String mapFromAttributes(Attributes attrs) throws NamingException {
+				Attribute attr = attrs.get("description");
+				return attr == null ? null : (String) attr.get();
+			}
+		});
 		DataProvider dataProvider = new DataProvider();
 		dataProvider.setInstitutionIdentifier(meteorInstitutionId);
+		dataProvider.setDescription(ldapDescription);
 		dataProvider.setMeteorVersion(ldapDP.version);
 		dataProvider.setUrl(dpUrl);
 
@@ -267,8 +274,15 @@ public class LDAPRegistryManager implements RegistryManager {
 				continue;
 			}
 
+			String ldapDescription = (String) ldapTemplate.lookup("Institution=" + ldapDP.id, new AttributesMapper() {
+				public String mapFromAttributes(Attributes attrs) throws NamingException {
+					Attribute attr = attrs.get("description");
+					return attr == null ? null : (String) attr.get();
+				}
+			});
 			DataProvider dataProvider = new DataProvider();
 			dataProvider.setInstitutionIdentifier(ldapDP.id);
+			dataProvider.setDescription(ldapDescription);
 			dataProvider.setMeteorVersion(ldapDP.version);
 			dataProvider.setUrl((String) ldapTemplate.lookup(ldapDP.preferredTransport, new AttributesMapper() {
 				public Object mapFromAttributes(Attributes attrs) throws NamingException {

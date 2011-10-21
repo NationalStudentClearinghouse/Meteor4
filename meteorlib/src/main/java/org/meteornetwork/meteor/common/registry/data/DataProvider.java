@@ -1,6 +1,5 @@
 package org.meteornetwork.meteor.common.registry.data;
 
-
 /**
  * Contains information about a Data Provider returned from the Meteor Registry
  * 
@@ -10,6 +9,7 @@ package org.meteornetwork.meteor.common.registry.data;
 public class DataProvider {
 
 	private String institutionIdentifier;
+	private String description;
 	private String url;
 	private String meteorVersion;
 
@@ -19,6 +19,14 @@ public class DataProvider {
 
 	public void setInstitutionIdentifier(String institutionIdentifier) {
 		this.institutionIdentifier = institutionIdentifier;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getUrl() {

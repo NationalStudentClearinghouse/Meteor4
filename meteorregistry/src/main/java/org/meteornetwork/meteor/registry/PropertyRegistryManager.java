@@ -101,6 +101,7 @@ public class PropertyRegistryManager implements RegistryManager {
 		try {
 			dataProvider.setInstitutionIdentifier(meteorInstitutionId);
 			List<String> supportedVersions = getSupportedVersions(meteorInstitutionId);
+			dataProvider.setDescription(getDescription(meteorInstitutionId));
 			dataProvider.setMeteorVersion(supportedVersions.get(0));
 			dataProvider.setUrl(getUrl(meteorInstitutionId, ProviderType.DATA));
 		} catch (Exception e) {
@@ -130,6 +131,11 @@ public class PropertyRegistryManager implements RegistryManager {
 
 	private String getUrl(String id, ProviderType providerType) {
 		String thisKey = id + "." + providerType.getType() + ".URL";
+		return directoryDataProperties.containsKey(thisKey) ? directoryDataProperties.getString(thisKey) : null;
+	}
+	
+	private String getDescription(String id) {
+		String thisKey = id + ".Description";
 		return directoryDataProperties.containsKey(thisKey) ? directoryDataProperties.getString(thisKey) : null;
 	}
 
