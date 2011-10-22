@@ -1,5 +1,6 @@
 package org.meteornetwork.meteor.provider.data.manager;
 
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Properties;
 
@@ -18,6 +19,7 @@ import org.meteornetwork.meteor.common.xml.dataresponse.types.RsMsgLevelEnum;
 import org.meteornetwork.meteor.provider.data.DataServerAbstraction;
 import org.meteornetwork.meteor.provider.data.MeteorContext;
 import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
+import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper.DataProviderDataParams;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapter;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapterException;
 import org.meteornetwork.meteor.provider.data.adapter.RequestWrapper;
@@ -40,8 +42,38 @@ public class DataProviderManager {
 
 	private DataServerAbstraction dataServer;
 	private Properties dataProviderProperties;
+	private Properties meteorProperties;
 
 	private RegistryManager registryManager;
+
+	/**
+	 * Creates meteor status response
+	 * 
+	 * @return MeteorRsMsg xml string with status response
+	 */
+	public String createStatusResponse() {
+		MeteorDataResponseWrapper dataResponse = new MeteorDataResponseWrapper();
+
+		DataProviderDataParams params = dataResponse.new DataProviderDataParams();
+		params.setName(dataProviderProperties.getProperty("DataProvider.Data.Name"));
+		params.setId(dataProviderProperties.getProperty("DataProvider.Data.ID"));
+		params.setUrl(dataProviderProperties.getProperty("DataProvider.Data.URL"));
+		params.setType(dataProviderProperties.getProperty("DataProvider.Data.Type"));
+
+		params.setDataProviderData();
+
+		String version = meteorProperties.getProperty("meteor.version");
+		dataResponse.addMessage("Version " + version == null ? "" : version, RsMsgLevelEnum.I.name());
+		StringWriter marshalledResponse = new StringWriter();
+		try {
+			dataResponse.getResponse().marshal(marshalledResponse);
+		} catch (Exception e) {
+			LOG.error("Could not marshal meteor response", e);
+			return null;
+		}
+
+		return marshalledResponse.toString();
+	}
 
 	/**
 	 * Executes query for single SSN
@@ -282,6 +314,16 @@ public class DataProviderManager {
 		this.dataProviderProperties = dataProviderProperties;
 	}
 
+	public Properties getMeteorProperties() {
+		return meteorProperties;
+	}
+
+	@Autowired
+	@Qualifier("MeteorProperties")
+	public void setMeteorProperties(Properties meteorProperties) {
+		this.meteorProperties = meteorProperties;
+	}
+
 	public RegistryManager getRegistryManager() {
 		return registryManager;
 	}
@@ -290,4 +332,5 @@ public class DataProviderManager {
 	public void setRegistryManager(RegistryManager registryManager) {
 		this.registryManager = registryManager;
 	}
+
 }

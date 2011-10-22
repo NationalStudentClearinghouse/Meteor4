@@ -27,10 +27,9 @@
  	<bean id="MeteorSignatureProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSignatureProcessor"/>
 		
  	<jaxws:endpoint 
-		id="queryDataForBorrower"
+		id="dataProviderService"
 		implementorClass="org.meteornetwork.meteor.provider.data.ws.DataProviderServiceImpl"
 		implementor="#dataProviderServiceImpl"
-		endpointName="QueryDataForBorrower"
 		bindingUri="http://www.w3.org/2003/05/soap/bindings/HTTP/"
 		address="/DataProviderService">
 		

@@ -27,6 +27,12 @@ public class DataProviderServiceImpl implements DataProviderService {
 		return adapter.getResponseXml();
 	}
 
+	@Override
+	public String getStatus() {
+		LOG.debug("Received status request");
+		return dataManager.createStatusResponse();
+	}
+
 	public DataProviderManager getDataManager() {
 		return dataManager;
 	}

@@ -249,12 +249,10 @@
 	
 	<xsl:template match="MeteorDataProviderDetailInfo" mode="loan-locator">
 		<tr><td style="padding-top: 1em;">&#32;</td></tr>
-		<xsl:if test="string-length(DataProviderData/EntityName) > 0">
 		<tr>
 			<td><xsl:value-of select="DataProviderData/EntityName"/></td>
 			<td><a href="{DataProviderData/EntityURL}"><xsl:value-of select="DataProviderData/EntityURL"/></a></td>
 		</tr>
-		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="MeteorDataProviderMsg">
