@@ -254,11 +254,10 @@ public class HPCSecurityManager {
 	public MeteorSamlSecurityToken getSecurityToken(String requestXml) throws MeteorSecurityException {
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(requestXml.getBytes(IOUtils.UTF8_CHARSET));
 		try {
-			DocumentBuilder docBuilder = createDocumentBuilder();
+			DocumentBuilder docBuilder = createDocumentBuilder(false);
 			Document requestDom = docBuilder.parse(inputStream);
 
-			Element samlNSContext = XMLUtils.createDSctx(requestDom, "saml", SAML_10_NS);
-			Element assertionElement = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier/saml:Assertion", samlNSContext);
+			Element assertionElement = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier/Assertion");
 
 			return MeteorSamlSecurityToken.fromXML(assertionElement);
 		} catch (Exception e) {
@@ -273,8 +272,12 @@ public class HPCSecurityManager {
 	}
 
 	private DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
+		return createDocumentBuilder(true);
+	}
+	
+	private DocumentBuilder createDocumentBuilder(boolean namespaceAware) throws ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true);
+		factory.setNamespaceAware(namespaceAware);
 		return factory.newDocumentBuilder();
 	}
 
