@@ -72,6 +72,8 @@ public class FileDataServer implements DataServerAbstraction {
 			}
 			xml = new String(bytes);
 			if (xml != null && xml.length() > 0) {
+				// remove UTF-8 pre-prolog bytes
+				xml = xml.trim().replaceFirst("^([\\W]+)<","<");
 				try {
 					MeteorDataResponseWrapper tmpResp = new MeteorDataResponseWrapper(xml);
 					MeteorDataProviderInfo[] mdpi = tmpResp.getResponse().getMeteorDataProviderInfo();
