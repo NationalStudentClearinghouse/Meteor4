@@ -50,7 +50,6 @@
 		<xsl:if test="$role = 'BORROWER'">
 		<p><a href="{$docroot}/meteor/summary.do">View eligibility and disbursement data for your student loans and other financial awards.</a></p>
 		<p><a href="{$docroot}/meteor/repaymentSummary.do">View repayment and billing data for your student loans.</a></p>
-		<p><a href="dataproviderlist?Level=dataproviderlist">View a list of organizations providing data to Meteor.</a></p>
 		</xsl:if>
 	</xsl:template>
 	

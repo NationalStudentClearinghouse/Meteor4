@@ -114,6 +114,11 @@
 	</xsl:template>
 	
 	<xsl:template match="Disbursement">
+		<xsl:if test="position() != 1">
+		<tr>
+			<td colspan="2"><hr/></td>
+		</tr>
+		</xsl:if>
 		<tr>
 			<td class="tdBorrower1">Sequence Number:</td>
 			<td class="tdBorrower2" colspan="3">

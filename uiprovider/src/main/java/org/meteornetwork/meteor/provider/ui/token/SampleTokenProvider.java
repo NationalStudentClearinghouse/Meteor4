@@ -13,6 +13,7 @@ import org.apache.cxf.helpers.IOUtils;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
+import org.meteornetwork.meteor.saml.exception.SecurityTokenException.CauseCode;
 
 /**
  * Works with the Meteor example login provider
@@ -29,8 +30,11 @@ public class SampleTokenProvider implements TokenProvider {
 		String tokenId = request.getParameter("tokenId");
 		String tokenString = null;
 
-		if (tokenId == null) {
+		if (tokenId == null || "".equals(tokenId)) {
 			tokenString = (String) request.getSession().getAttribute("SampleSecurityToken");
+			if (tokenString == null || "".equals(tokenString)) {
+				throw new SecurityTokenException(CauseCode.SESSION_EXPIRED);
+			}
 		} else {
 			try {
 				tokenString = getTokenFromURL(request.getParameter("url"), tokenId);

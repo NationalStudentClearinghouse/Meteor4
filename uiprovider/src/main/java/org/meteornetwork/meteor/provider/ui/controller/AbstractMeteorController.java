@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.provider.ui.exception.MeteorAccessException;
+import org.meteornetwork.meteor.provider.ui.exception.MeteorSessionExpiredException;
 import org.meteornetwork.meteor.provider.ui.token.TokenProvider;
 import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
+import org.meteornetwork.meteor.saml.exception.SecurityTokenException.CauseCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,7 +25,7 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 	private static final Log LOG = LogFactory.getLog(AbstractMeteorController.class);
 
 	private Properties uiProviderProperties;
-	
+
 	private TokenProvider tokenProvider;
 	private List<Role> allowedRoles;
 
@@ -36,15 +38,17 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 		try {
 			token = tokenProvider.getSecurityToken(httpRequest);
 		} catch (SecurityTokenException e) {
-			LOG.error("Could not get authenticated security token", e);
-			// TODO: display different message than 'Access Denied' when token is not available
+			LOG.debug("Could not get authenticated security token", e);
+			if (CauseCode.SESSION_EXPIRED.equals(e.getCauseCode())) {
+				throw new MeteorSessionExpiredException();
+			}
 			throw new MeteorAccessException();
 		}
 
 		if (!roleIsAllowed(token.getRole())) {
 			throw new MeteorAccessException();
 		}
-		
+
 		return handleMeteorRequest(httpRequest, httpResponse, token);
 	}
 

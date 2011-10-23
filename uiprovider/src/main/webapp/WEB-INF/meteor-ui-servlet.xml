@@ -15,6 +15,7 @@
 		<property name="exceptionMappings">
 			<map>
 				<entry key="org.meteornetwork.meteor.provider.ui.exception.MeteorAccessException" value="denied"/>
+				<entry key="org.meteornetwork.meteor.provider.ui.exception.MeteorSessionExpiredException" value="sessionExpired"/>
 				<entry key="java.lang.Exception" value="error"/>
 			</map>
 		</property>
@@ -41,6 +42,7 @@
 	<bean name="/meteor/summary.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="awardSummary"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
@@ -54,6 +56,7 @@
 	<bean name="/meteor/repaymentSummary.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="repaymentSummary"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
@@ -67,6 +70,7 @@
 	<bean name="/meteor/aversion.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="aversion"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
@@ -77,6 +81,7 @@
 	<bean name="/meteor/awardDetail.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
 		<property name="viewName" value="awardDetail"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
@@ -90,6 +95,7 @@
 	<bean name="/meteor/disbursement.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
 		<property name="viewName" value="disbursement"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
@@ -103,6 +109,7 @@
 	<bean name="/meteor/references.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
 		<property name="viewName" value="references"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
@@ -116,6 +123,7 @@
 	<bean name="/meteor/repaymentDetail.do" class="org.meteornetwork.meteor.provider.ui.controller.AwardDetailController" autowire="byType">
 		<property name="viewName" value="repaymentDetail"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
@@ -129,6 +137,7 @@
 	<bean name="/meteor/consolidated.do" class="org.meteornetwork.meteor.provider.ui.controller.ConsolidatedViewController" autowire="byType">
 		<property name="viewName" value="consolidated"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
@@ -140,6 +149,7 @@
 	<bean name="/meteor/rawxml.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="rawxml"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
+		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>

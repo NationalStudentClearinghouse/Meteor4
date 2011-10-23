@@ -43,6 +43,7 @@ public class DataProviderManager {
 	private DataServerAbstraction dataServer;
 	private Properties dataProviderProperties;
 	private Properties meteorProperties;
+	private Properties authenticationProperties;
 
 	private RegistryManager registryManager;
 
@@ -91,7 +92,9 @@ public class DataProviderManager {
 		try {
 			request = adapter.getRequest();
 		} catch (DataQueryAdapterException e) {
-			adapter.setResponse(createResponseWithMessage(e.getMeteorError(), RsMsgLevelEnum.E));
+			MeteorDataResponseWrapper response = createResponseWithMessage(e.getMeteorError(), RsMsgLevelEnum.E);
+			setDataProviderData(response);
+			adapter.setResponse(response);
 			return;
 		}
 
@@ -105,41 +108,67 @@ public class DataProviderManager {
 		SecurityToken token = getRequestInfo().getSecurityToken();
 		if (!token.validateConditions()) {
 			LOG.debug("SAML conditions are not valid or expired");
-			adapter.setResponse(createResponseWithMessage(MeteorMessage.SECURITY_TOKEN_EXPIRED, RsMsgLevelEnum.E));
+			MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.SECURITY_TOKEN_EXPIRED, RsMsgLevelEnum.E);
+			setDataProviderData(response);
+			adapter.setResponse(response);
 			return;
 		}
 
-		String minimumAuthLevel = dataProviderProperties.getProperty("accessprovider.minimum.authentication.level");
-		if (minimumAuthLevel == null) {
-			LOG.fatal("Data Provider not configured correctly -- missing accessprovider.minimum.authentication.level property");
-			adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_NO_MINIMUM_LEVEL, RsMsgLevelEnum.E));
+		String minimumAuthLevelStr = dataProviderProperties.getProperty("accessprovider.minimum.authentication.level");
+		if (minimumAuthLevelStr == null) {
+			LOG.error("Data Provider not configured correctly -- missing accessprovider.minimum.authentication.level property");
+			MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.DATA_NO_MINIMUM_LEVEL, RsMsgLevelEnum.E);
+			setDataProviderData(response);
+			adapter.setResponse(response);
 			return;
 		}
 
-		if (Integer.valueOf(minimumAuthLevel).compareTo(token.getLevel()) > 0) {
+		Integer minimumAuthLevel = Integer.valueOf(minimumAuthLevelStr);
+		Integer registryMinimumAuthLevel;
+		try {
+			registryMinimumAuthLevel = registryManager.getAuthenticationLevel(authenticationProperties.getProperty("authentication.identifier"), token.getAuthenticationProcessId(), ProviderType.DATA, token.getRole());
+		} catch (RegistryException e) {
+			LOG.debug("Could not access the registry", e);
+			MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.REGISTRY_NO_CONNECTION, RsMsgLevelEnum.E);
+			setDataProviderData(response);
+			adapter.setResponse(response);
+			return;
+		}
+		
+		minimumAuthLevel = minimumAuthLevel.compareTo(registryMinimumAuthLevel) > 0 ? minimumAuthLevel : registryMinimumAuthLevel;
+		
+		if (minimumAuthLevel.compareTo(token.getLevel()) > 0) {
 			LOG.debug("Minimum authentication level not met");
-			adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_INSUFFICIENT_LEVEL, RsMsgLevelEnum.E));
+			MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.DATA_INSUFFICIENT_LEVEL, RsMsgLevelEnum.E);
+			setDataProviderData(response);
+			adapter.setResponse(response);
 			return;
 		}
-
+		
 		if (Role.BORROWER.equals(token.getRole())) {
 			String assertionSsn = token.getSsn();
 			if (assertionSsn == null) {
 				LOG.debug("Borrower's SAML is missing assertion SSN");
-				adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_NOSSN, RsMsgLevelEnum.E));
+				MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.DATA_NOSSN, RsMsgLevelEnum.E);
+				setDataProviderData(response);
+				adapter.setResponse(response);
 				return;
 			}
 
 			if (!assertionSsn.equals(request.getSsn())) {
 				LOG.debug("Borrower's SAML Ssn does not match request SSN");
-				adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_SSN_NOTAUTHORIZED, RsMsgLevelEnum.E));
+				MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.DATA_SSN_NOTAUTHORIZED, RsMsgLevelEnum.E);
+				setDataProviderData(response);
+				adapter.setResponse(response);
 				return;
 			}
 		}
 
 		if (Role.HELPDESK.equals(token.getRole())) {
 			LOG.debug("Help desk users are not allowed to query for data provider data.");
-			adapter.setResponse(createResponseWithMessage(MeteorMessage.DATA_SSN_NOTAUTHORIZED, RsMsgLevelEnum.E));
+			MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.DATA_SSN_NOTAUTHORIZED, RsMsgLevelEnum.E);
+			setDataProviderData(response);
+			adapter.setResponse(response);
 			return;
 		}
 
@@ -212,6 +241,7 @@ public class DataProviderManager {
 		if ((aliases == null || aliases.isEmpty())) {
 			removeAllAwardsAndMessages(responseMsg);
 			if (couldntFindAliases) {
+				setDataProviderData(dataResponse);
 				dataResponse.addMessage(MeteorMessage.ACCESS_ALIAS_ERROR.getPropertyRef(), RsMsgLevelEnum.E.name());
 			}
 			return;
@@ -322,6 +352,16 @@ public class DataProviderManager {
 	@Qualifier("MeteorProperties")
 	public void setMeteorProperties(Properties meteorProperties) {
 		this.meteorProperties = meteorProperties;
+	}
+
+	public Properties getAuthenticationProperties() {
+		return authenticationProperties;
+	}
+
+	@Autowired
+	@Qualifier("AuthenticationProperties")
+	public void setAuthenticationProperties(Properties authenticationProperties) {
+		this.authenticationProperties = authenticationProperties;
 	}
 
 	public RegistryManager getRegistryManager() {

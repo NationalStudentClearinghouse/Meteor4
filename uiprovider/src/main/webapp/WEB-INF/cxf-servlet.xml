@@ -14,22 +14,24 @@
 	
 	<bean id="passwordCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
 	
-	<jaxws:client id="accessProviderClient"
-		serviceClass="org.meteornetwork.meteor.common.ws.AccessProviderService"
-		address="${accessprovider.url}">
-		
-		<jaxws:outInterceptors>
-			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
-				<constructor-arg>
-					<map>
-						<entry key="action" value="Signature"/>
-						<entry key="signaturePropFile" value="authentication.properties" />
-						<entry key="user" value="${org.apache.ws.security.crypto.merlin.keystore.alias}" />
-						<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
-					</map>
-				</constructor-arg>
-			</bean>
-		</jaxws:outInterceptors>
-	</jaxws:client>
+	<bean id="accessClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
+		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.AccessProviderService"/>
+		<property name="address" value="${accessprovider.url}"/>
+		<property name="bindingId" value="http://www.w3.org/2003/05/soap/bindings/HTTP/"/>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+					<constructor-arg>
+						<map>
+							<entry key="action" value="Signature"/>
+							<entry key="signaturePropFile" value="authentication.properties" />
+							<entry key="user" value="${org.apache.ws.security.crypto.merlin.keystore.alias}" />
+							<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+						</map>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
 		
 </beans>

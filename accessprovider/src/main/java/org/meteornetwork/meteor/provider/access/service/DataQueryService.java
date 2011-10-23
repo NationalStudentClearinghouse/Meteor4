@@ -123,7 +123,9 @@ public class DataQueryService implements ApplicationContextAware {
 						addDataProviderToLoanLocator(responseData, futureEntry.getKey().getIndexProviderInfo());
 					}
 				}
-			} else {
+			}
+
+			if (!futureEntry.getValue().isDone()) {
 				atLeast1DataProviderCommError = true;
 				addDataProviderToLoanLocator(responseData, futureEntry.getKey().getIndexProviderInfo());
 			}

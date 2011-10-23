@@ -11,25 +11,20 @@ import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.common.ws.RegistryService;
 import org.meteornetwork.meteor.saml.ProviderType;
 import org.meteornetwork.meteor.saml.Role;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.SerializationUtils;
 
 public class RegistryWebServiceClient implements RegistryManager {
 
 	private static final Log LOG = LogFactory.getLog(RegistryWebServiceClient.class);
 
-	private RegistryService registryService;
-	private RegistryService failoverRegistryService;
-
 	@Override
 	public X509Certificate getCertificate(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
 		try {
-			return (X509Certificate) SerializationUtils.deserialize(registryService.getCertificate(meteorInstitutionId, providerType));
+			return (X509Certificate) SerializationUtils.deserialize(getRegistryService().getCertificate(meteorInstitutionId, providerType));
 		} catch (Exception e) {
 			LOG.debug("Exception occurred when trying to contact web service registry. Trying failover registry", e);
 			try {
-				return (X509Certificate) SerializationUtils.deserialize(failoverRegistryService.getCertificate(meteorInstitutionId, providerType));
+				return (X509Certificate) SerializationUtils.deserialize(getFailoverRegistryService().getCertificate(meteorInstitutionId, providerType));
 			} catch (Exception e1) {
 				LOG.debug("Exception occurred when trying to contact failover web service registry.", e1);
 				throw new RegistryException(e1);
@@ -40,11 +35,11 @@ public class RegistryWebServiceClient implements RegistryManager {
 	@Override
 	public List<IndexProvider> getIndexProviders(Version meteorVersion) throws RegistryException {
 		try {
-			return registryService.getIndexProviders(meteorVersion);
+			return getRegistryService().getIndexProviders(meteorVersion);
 		} catch (Exception e) {
 			LOG.debug("Exception occurred when trying to contact web service registry. Trying failover registry", e);
 			try {
-				return failoverRegistryService.getIndexProviders(meteorVersion);
+				return getFailoverRegistryService().getIndexProviders(meteorVersion);
 			} catch (Exception e1) {
 				LOG.debug("Exception occurred when trying to contact failover web service registry.", e1);
 				throw new RegistryException(e1);
@@ -55,11 +50,11 @@ public class RegistryWebServiceClient implements RegistryManager {
 	@Override
 	public DataProvider getDataProvider(String meteorInstitutionId) throws RegistryException {
 		try {
-			return registryService.getDataProvider(meteorInstitutionId);
+			return getRegistryService().getDataProvider(meteorInstitutionId);
 		} catch (Exception e) {
 			LOG.debug("Exception occurred when trying to contact web service registry. Trying failover registry", e);
 			try {
-				return failoverRegistryService.getDataProvider(meteorInstitutionId);
+				return getFailoverRegistryService().getDataProvider(meteorInstitutionId);
 			} catch (Exception e1) {
 				LOG.debug("Exception occurred when trying to contact failover web service registry.", e1);
 				throw new RegistryException(e1);
@@ -70,11 +65,11 @@ public class RegistryWebServiceClient implements RegistryManager {
 	@Override
 	public List<DataProvider> getAllDataProviders() throws RegistryException {
 		try {
-			return registryService.getAllDataProviders();
+			return getRegistryService().getAllDataProviders();
 		} catch (Exception e) {
 			LOG.debug("Exception occurred when trying to contact web service registry. Trying failover registry", e);
 			try {
-				return failoverRegistryService.getAllDataProviders();
+				return getFailoverRegistryService().getAllDataProviders();
 			} catch (Exception e1) {
 				LOG.debug("Exception occurred when trying to contact failover web service registry.", e1);
 				throw new RegistryException(e1);
@@ -85,11 +80,11 @@ public class RegistryWebServiceClient implements RegistryManager {
 	@Override
 	public List<String> getAliases(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
 		try {
-			return registryService.getAliases(meteorInstitutionId, providerType);
+			return getRegistryService().getAliases(meteorInstitutionId, providerType);
 		} catch (Exception e) {
 			LOG.debug("Exception occurred when trying to contact web service registry. Trying failover registry", e);
 			try {
-				return failoverRegistryService.getAliases(meteorInstitutionId, providerType);
+				return getFailoverRegistryService().getAliases(meteorInstitutionId, providerType);
 			} catch (Exception e1) {
 				LOG.debug("Exception occurred when trying to contact failover web service registry.", e1);
 				throw new RegistryException(e1);
@@ -100,11 +95,11 @@ public class RegistryWebServiceClient implements RegistryManager {
 	@Override
 	public Integer getAuthenticationLevel(String meteorInstitutionId, String authProcId, ProviderType providerType, Role role) throws RegistryException {
 		try {
-			return registryService.getAuthenticationLevel(meteorInstitutionId, authProcId, providerType, role);
+			return getRegistryService().getAuthenticationLevel(meteorInstitutionId, authProcId, providerType, role);
 		} catch (Exception e) {
 			LOG.debug("Exception occurred when trying to contact web service registry. Trying failover registry", e);
 			try {
-				return failoverRegistryService.getAuthenticationLevel(meteorInstitutionId, authProcId, providerType, role);
+				return getFailoverRegistryService().getAuthenticationLevel(meteorInstitutionId, authProcId, providerType, role);
 			} catch (Exception e1) {
 				LOG.debug("Exception occurred when trying to contact failover web service registry.", e1);
 				throw new RegistryException(e1);
@@ -115,11 +110,11 @@ public class RegistryWebServiceClient implements RegistryManager {
 	@Override
 	public List<Role> getRoles(String meteorInstitutionId, String authProcId, ProviderType providerType) throws RegistryException {
 		try {
-			return registryService.getRoles(meteorInstitutionId, authProcId, providerType);
+			return getRegistryService().getRoles(meteorInstitutionId, authProcId, providerType);
 		} catch (Exception e) {
 			LOG.debug("Exception occurred when trying to contact web service registry. Trying failover registry", e);
 			try {
-				return failoverRegistryService.getRoles(meteorInstitutionId, authProcId, providerType);
+				return getFailoverRegistryService().getRoles(meteorInstitutionId, authProcId, providerType);
 			} catch (Exception e1) {
 				LOG.debug("Exception occurred when trying to contact failover web service registry.", e1);
 				throw new RegistryException(e1);
@@ -128,23 +123,13 @@ public class RegistryWebServiceClient implements RegistryManager {
 	}
 
 	public RegistryService getRegistryService() {
-		return registryService;
-	}
-
-	@Autowired
-	@Qualifier("registryService")
-	public void setRegistryService(RegistryService registryService) {
-		this.registryService = registryService;
+		// overridden by spring method-injection
+		return null;
 	}
 
 	public RegistryService getFailoverRegistryService() {
-		return failoverRegistryService;
-	}
-
-	@Autowired
-	@Qualifier("failoverRegistryService")
-	public void setFailoverRegistryService(RegistryService failoverRegistryService) {
-		this.failoverRegistryService = failoverRegistryService;
+		// overridden by spring method-injection
+		return null;
 	}
 
 }

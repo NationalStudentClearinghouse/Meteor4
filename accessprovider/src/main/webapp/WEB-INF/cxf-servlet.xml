@@ -94,42 +94,44 @@
 	</bean>
 	
 	<!-- Registry web service connection -->
-	<jaxws:client id="registryService"
-		serviceClass="org.meteornetwork.meteor.common.ws.RegistryService"
-		address="${directory.ws.url}">
-		
-		<jaxws:outInterceptors>
-			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
-				<constructor-arg>
-					<map>
-						<entry key="action" value="SAMLTokenSigned"/>
-						<entry key="samlCallbackRef" value-ref="registrySamlCreationCallbackHandler" />
-						<entry key="samlPropFile" value="authentication.properties" />
-						<entry key="signaturePropFile" value="authentication.properties" />
-						<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
-					</map>
-				</constructor-arg>
-			</bean>
-		</jaxws:outInterceptors>
-	</jaxws:client>
-		
-	<jaxws:client id="failoverRegistryService"
-		serviceClass="org.meteornetwork.meteor.common.ws.RegistryService"
-		address="${directory.ws.failover.url}">
-		
-		<jaxws:outInterceptors>
-			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
-				<constructor-arg>
-					<map>
-						<entry key="action" value="SAMLTokenSigned"/>
-						<entry key="samlCallbackRef" value-ref="registrySamlCreationCallbackHandler" />
-						<entry key="samlPropFile" value="authentication.properties" />
-						<entry key="signaturePropFile" value="authentication.properties" />
-						<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
-					</map>
-				</constructor-arg>
-			</bean>
-		</jaxws:outInterceptors>
-	</jaxws:client>
+	<bean id="registryProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.RegistryService"/>
+		<property name="address" value="${directory.ws.url}"/>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+					<constructor-arg>
+						<map>
+							<entry key="action" value="SAMLTokenSigned"/>
+							<entry key="samlCallbackRef" value-ref="registrySamlCreationCallbackHandler" />
+							<entry key="samlPropFile" value="authentication.properties" />
+							<entry key="signaturePropFile" value="authentication.properties" />
+							<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+						</map>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="registryFailoverProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.RegistryService"/>
+		<property name="address" value="${directory.ws.failover.url}"/>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+					<constructor-arg>
+						<map>
+							<entry key="action" value="SAMLTokenSigned"/>
+							<entry key="samlCallbackRef" value-ref="registrySamlCreationCallbackHandler" />
+							<entry key="samlPropFile" value="authentication.properties" />
+							<entry key="signaturePropFile" value="authentication.properties" />
+							<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+						</map>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
 
 </beans>

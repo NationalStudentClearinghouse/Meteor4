@@ -28,7 +28,25 @@
  	<!-- meteor common properties -->
  	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>
  	
- 	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/>
+ 	<!-- 
+ 		If you are using RegistryWebServiceClient, uncomment REGISTRY BEAN DEFINITON 2. 
+ 		Else, uncomment REGISTRY BEAN DEFINITION 1 
+ 	-->
+ 	<!-- 
+ 		REGISTRY BEAN DEFINITION 1:
+ 	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/> 
+ 	-->
+ 	<!-- 
+ 		REGISTRY BEAN DEFINITION 2:
+ 	 -->
+ 	<bean id="registryServiceBean" factory-bean="registryProxyFactory" factory-method="create" scope="prototype"/>
+ 	<bean id="registryFailoverServiceBean" factory-bean="registryFailoverProxyFactory" factory-method="create" scope="prototype"/>
+ 	<bean id="RegistryManager" class="${directory.class}">
+ 		<lookup-method name="getRegistryService" bean="registryServiceBean"/>
+ 		<lookup-method name="getFailoverRegistryService" bean="registryFailoverServiceBean"/>
+ 	</bean>
+ 	<!-- END REGISTRY BEAN DEFINITION 2 -->
+ 	
  	
  	<bean id="accessProviderManager" class="org.meteornetwork.meteor.provider.access.manager.AccessProviderManager" autowire="byType">
  		<lookup-method name="getRequestInfo" bean="requestInfo"/>

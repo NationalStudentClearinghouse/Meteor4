@@ -11,12 +11,12 @@ import javax.xml.ws.Holder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.meteornetwork.meteor.common.util.message.Ssn;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
 import org.meteornetwork.meteor.provider.ui.MeteorSession;
 import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.SerializationUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -24,8 +24,6 @@ import org.springframework.web.servlet.view.RedirectView;
 public abstract class AbstractMeteorQueryController extends AbstractMeteorController {
 
 	public static final Log LOG = LogFactory.getLog(AbstractMeteorQueryController.class);
-
-	private AccessProviderService accessProviderService;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -81,10 +79,14 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 				return queryStatusModelView;
 			}
 
+			JaxWsProxyFactoryBean accessClientProxy = getAccessClientProxy();
+			AccessProviderService accessProviderService = (AccessProviderService) accessClientProxy.create();
+			
 			if (Role.FAA.equals(sessionToken.getRole())) {
 				Holder<String> responseBestSource = new Holder<String>();
 				Holder<String> responseAll = new Holder<String>();
 				Holder<byte[]> duplicateAwardIdsSerialized = new Holder<byte[]>();
+				
 				accessProviderService.findDataForBorrowerWithConsolidated(sessionSsn, sessionToken.getMeteorAttributes(), responseBestSource, responseAll, duplicateAwardIdsSerialized);
 
 				session.setResponseXml(responseBestSource.value);
@@ -147,12 +149,8 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 		return null;
 	}
 
-	public AccessProviderService getAccessProviderService() {
-		return accessProviderService;
-	}
-
-	@Autowired
-	public void setAccessProviderService(AccessProviderService accessProviderService) {
-		this.accessProviderService = accessProviderService;
+	public JaxWsProxyFactoryBean getAccessClientProxy() {
+		// overridden by spring method-injection
+		return null;
 	}
 }
