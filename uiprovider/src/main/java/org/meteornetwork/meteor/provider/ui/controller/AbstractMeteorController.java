@@ -34,6 +34,7 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 		/* *********************************************
 		 * validate authentication
 		 */
+		LOG.debug("Authenticating user");
 		SecurityToken token;
 		try {
 			token = tokenProvider.getSecurityToken(httpRequest);
@@ -49,6 +50,7 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 			throw new MeteorAccessException();
 		}
 
+		LOG.debug("User is authenticated with role " + token.getRole().getName() + ", handling request");
 		return handleMeteorRequest(httpRequest, httpResponse, token);
 	}
 

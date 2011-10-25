@@ -33,7 +33,7 @@ public class MeteorSignatureProcessor extends SignatureProcessor {
 
 	private RegistryManager registryManager;
 
-	private static final ProviderType defaultProviderType = ProviderType.ACCESS;
+	private static final ProviderType DEFAULT_PROVIDER_TYPE = ProviderType.ACCESS;
 
 	@Override
 	public List<WSSecurityEngineResult> handleToken(Element elem, RequestData data, WSDocInfo wsDocInfo) throws WSSecurityException {
@@ -74,6 +74,7 @@ public class MeteorSignatureProcessor extends SignatureProcessor {
 		ProviderType providerType = getProviderType(token);
 
 		try {
+			LOG.debug("Getting certificate for " + institutionID + ", provider type " + providerType.getType());
 			crypto.addCertificate(registryManager.getCertificate(institutionID, providerType));
 		} catch (RegistryException e) {
 			LOG.debug("Could not get X509 certificate from Meteor registry for institution " + institutionID);
@@ -102,7 +103,7 @@ public class MeteorSignatureProcessor extends SignatureProcessor {
 	private ProviderType getProviderType(Element token) {
 		NodeList elements = token.getElementsByTagNameNS(WSConstants.SAML2_NS, "Attribute");
 		if (elements == null) {
-			return defaultProviderType;
+			return DEFAULT_PROVIDER_TYPE;
 		}
 
 		for (int i = 0; i < elements.getLength(); ++i) {
@@ -118,7 +119,7 @@ public class MeteorSignatureProcessor extends SignatureProcessor {
 			}
 		}
 
-		return defaultProviderType;
+		return DEFAULT_PROVIDER_TYPE;
 	}
 
 	public RegistryManager getRegistryManager() {

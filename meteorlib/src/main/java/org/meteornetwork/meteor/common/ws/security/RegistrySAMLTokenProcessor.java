@@ -66,6 +66,7 @@ public class RegistrySAMLTokenProcessor extends SAMLTokenProcessor {
 		ProviderType providerType = getProviderType(token);
 
 		try {
+			LOG.debug("Getting certificate for " + institutionID + ", provider type " + providerType.getType());
 			crypto.addCertificate(registryManager.getCertificate(institutionID, providerType));
 		} catch (RegistryException e) {
 			LOG.debug("Could not get X509 certificate from Meteor registry for institution " + institutionID);
@@ -74,6 +75,7 @@ public class RegistrySAMLTokenProcessor extends SAMLTokenProcessor {
 	}
 
 	private String getMeteorInstitutionIdentifier(Element token) throws WSSecurityException {
+		LOG.debug("Getting identifier from assertion");
 		NodeList elements = token.getElementsByTagNameNS(WSConstants.SAML2_NS, "NameID");
 		if (elements == null) {
 			LOG.debug("Cannot validate SAML assertion - subject name id is missing");

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,7 +61,7 @@ public class MeteorSamlSecurityToken extends SecurityTokenImpl implements Securi
 	private static final Log LOG = LogFactory.getLog(MeteorSamlSecurityToken.class);
 
 	private static Templates SAML1_METEORSAML_TEMPLATE;
-	
+
 	static {
 		OpenSAMLUtil.initSamlEngine();
 
@@ -77,7 +78,7 @@ public class MeteorSamlSecurityToken extends SecurityTokenImpl implements Securi
 			try {
 				samlTemplateInputStream.close();
 			} catch (IOException e) {
-				//empty catch block
+				// empty catch block
 			}
 		}
 	}
@@ -271,10 +272,14 @@ public class MeteorSamlSecurityToken extends SecurityTokenImpl implements Securi
 			authStatementBean.setAuthenticationMethod(NCHELP);
 			authStatementBean.setSubject(subjectBean);
 
-			SubjectLocalityBean subjectLocalityBean = new SubjectLocalityBean();
-			subjectLocalityBean.setIpAddress(getSubjectLocalityIpAddress() == null ? InetAddress.getLocalHost().getHostAddress() : getSubjectLocalityIpAddress());
-			subjectLocalityBean.setDnsAddress(getSubjectLocalityDnsAddress() == null ? InetAddress.getLocalHost().getHostName() : getSubjectLocalityDnsAddress());
-			authStatementBean.setSubjectLocality(subjectLocalityBean);
+			try {
+				SubjectLocalityBean subjectLocalityBean = new SubjectLocalityBean();
+				subjectLocalityBean.setIpAddress(getSubjectLocalityIpAddress() == null ? InetAddress.getLocalHost().getHostAddress() : getSubjectLocalityIpAddress());
+				subjectLocalityBean.setDnsAddress(getSubjectLocalityDnsAddress() == null ? InetAddress.getLocalHost().getHostName() : getSubjectLocalityDnsAddress());
+				authStatementBean.setSubjectLocality(subjectLocalityBean);
+			} catch (UnknownHostException e) {
+				// do not set if local host cannot be resolved
+			}
 
 			assertion.getAuthenticationStatements().addAll(SAML1ComponentBuilder.createSamlv1AuthenticationStatement(Collections.singletonList(authStatementBean)));
 

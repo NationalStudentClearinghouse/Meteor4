@@ -64,6 +64,7 @@ public class DataQueryService implements ApplicationContextAware {
 	public List<MeteorRsMsg> getData(ResponseDataWrapper responseData, Set<DataProviderInfo> dataProviders, String ssn) {
 		assert !dataProviders.isEmpty() : "Data Provider list is empty";
 
+		LOG.debug("Querying data providers for request ssn " + ssn);
 		List<MeteorRsMsg> responseDataList = new ArrayList<MeteorRsMsg>();
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(dataProviders.size());
@@ -100,6 +101,7 @@ public class DataQueryService implements ApplicationContextAware {
 
 		threadPool.shutdown();
 		try {
+			LOG.debug("Calling data providers (ssn: " + ssn + ")...");
 			threadPool.awaitTermination(timeout, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			LOG.warn("ExecutorService was interrupted", e);
@@ -110,6 +112,7 @@ public class DataQueryService implements ApplicationContextAware {
 
 		for (Map.Entry<DataProviderInfo, Future<MeteorRsMsg>> futureEntry : futures.entrySet()) {
 			if (futureEntry.getValue().isDone()) {
+				LOG.debug("Checking response for data provider " + futureEntry.getKey().getMeteorInstitutionIdentifier());
 				try {
 					responseDataList.add(futureEntry.getValue().get());
 					atLeast1DataProviderSuccess = true;
@@ -123,9 +126,8 @@ public class DataQueryService implements ApplicationContextAware {
 						addDataProviderToLoanLocator(responseData, futureEntry.getKey().getIndexProviderInfo());
 					}
 				}
-			}
-
-			if (!futureEntry.getValue().isDone()) {
+			} else {
+				LOG.debug("Data provider " + futureEntry.getKey().getMeteorInstitutionIdentifier() + " was unable to respond");
 				atLeast1DataProviderCommError = true;
 				addDataProviderToLoanLocator(responseData, futureEntry.getKey().getIndexProviderInfo());
 			}

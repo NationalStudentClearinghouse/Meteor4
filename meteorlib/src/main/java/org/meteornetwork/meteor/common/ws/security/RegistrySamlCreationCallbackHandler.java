@@ -10,6 +10,8 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ws.security.saml.ext.SAMLCallback;
 import org.apache.ws.security.saml.ext.bean.AttributeBean;
 import org.apache.ws.security.saml.ext.bean.AttributeStatementBean;
@@ -26,6 +28,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 public class RegistrySamlCreationCallbackHandler implements CallbackHandler {
 
+	private static final Log LOG = LogFactory.getLog(RegistrySamlCreationCallbackHandler.class);
+	
 	private static final String METEORNETWORK_ORG = "meteornetwork.org";
 	private static final Integer VALIDITY_PERIOD_DEFAULT = 120; // seconds
 
@@ -41,6 +45,7 @@ public class RegistrySamlCreationCallbackHandler implements CallbackHandler {
 	}
 
 	private void generateSaml(SAMLCallback callback) {
+		LOG.debug("Adding assertion to registry request");
 		callback.setSamlVersion(SAMLVersion.VERSION_20);
 		callback.setIssuer(METEORNETWORK_ORG);
 

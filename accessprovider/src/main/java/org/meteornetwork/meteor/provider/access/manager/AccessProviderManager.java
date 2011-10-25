@@ -9,6 +9,8 @@ import java.util.Set;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.business.GrandTotalCalculator;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
@@ -26,6 +28,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 //@Service
 public class AccessProviderManager {
+
+	private static final Log LOG = LogFactory.getLog(AccessProviderManager.class);
 
 	private IndexQueryService indexQueryService;
 	private DataQueryService dataQueryService;
@@ -56,6 +60,7 @@ public class AccessProviderManager {
 
 		RequestInfo requestInfo = getRequestInfo();
 		if (dataProviders == null || dataProviders.isEmpty()) {
+			LOG.debug("No data providers found");
 			if (Role.BORROWER.equals(requestInfo.getSecurityToken().getRole())) {
 				responseData.addIndexProviderMessage(RsMsgLevelEnum.E, MeteorMessage.INDEX_NO_DATA_PROVIDERS_FOUND_BORROWER, null);
 			} else {

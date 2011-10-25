@@ -56,6 +56,7 @@ public class MeteorSAMLTokenProcessor extends SAMLTokenProcessor {
 		}
 
 		try {
+			LOG.debug("Parsing meteor assertion from request");
 			String tokenStr;
 			try {
 				tokenStr = DOMUtils.domToString(token);

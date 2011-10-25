@@ -46,7 +46,12 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 
 		ResponseDataWrapper response = accessProviderManager.queryMeteor(ssn);
 		try {
-			return accessProviderManager.maskSSNs(marshalResponseData(response.getResponseDataBestSource()));
+			String marshalledResponse = marshalResponseData(response.getResponseDataBestSource());
+			if (marshalledResponse == null) {
+				return null;
+			}
+			LOG.debug("Returning data for ssn: " + ssn);
+			return accessProviderManager.maskSSNs(marshalledResponse);
 		} catch (Exception e) {
 			LOG.error("Could not mask SSNs", e);
 			return null;
@@ -63,8 +68,10 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 
 		ResponseDataWrapper response = accessProviderManager.queryMeteor(ssn);
 		try {
-			resultAll.value = accessProviderManager.maskSSNs(marshalResponseData(response.getUnfilteredResponseData()));
-			resultBestSource.value = accessProviderManager.maskSSNs(marshalResponseData(response.getResponseDataBestSource()));
+			String marshalledResponse = marshalResponseData(response.getUnfilteredResponseData());
+			resultAll.value = marshalledResponse == null ? null : accessProviderManager.maskSSNs(marshalledResponse);
+			marshalledResponse = marshalResponseData(response.getResponseDataBestSource());
+			resultBestSource.value = marshalledResponse == null ? null : accessProviderManager.maskSSNs(marshalledResponse);
 		} catch (Exception e) {
 			LOG.error("Could not mask SSNs", e);
 			return;
@@ -85,6 +92,7 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 		}
 
 		duplicateAwardsMap.value = SerializationUtils.serialize(duplicateAwardsMapObj);
+		LOG.debug("Returning data for ssn: " + ssn);
 	}
 
 	private String marshalResponseData(MeteorRsMsg responseData) {

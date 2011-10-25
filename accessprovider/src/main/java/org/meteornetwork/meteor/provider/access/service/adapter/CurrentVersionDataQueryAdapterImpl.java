@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, ApplicationContextAware {
 
 	private static final Log LOG = LogFactory.getLog(CurrentVersionDataQueryAdapterImpl.class);
-	
+
 	private DataProviderInfo dataProvider;
 	private AccessProvider accessProvider;
 	private String ssn;
@@ -33,18 +33,19 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 	@Override
 	public MeteorRsMsg call() throws Exception {
 		LOG.debug("Calling data provider (ID: " + dataProvider.getMeteorInstitutionIdentifier() + ", Version: " + dataProvider.getRegistryInfo().getMeteorVersion());
-		
+
 		MeteorDataRequest request = createRequest();
 		StringWriter marshalledRequest = new StringWriter();
 		request.marshal(marshalledRequest);
-		
+
 		JaxWsProxyFactoryBean dataClientProxyFactory = (JaxWsProxyFactoryBean) applicationContext.getBean("dataClientProxyFactory");
 		dataClientProxyFactory.setAddress(dataProvider.getRegistryInfo().getUrl());
 
 		DataProviderService dataService = (DataProviderService) dataClientProxyFactory.create();
 		String responseXml = dataService.queryDataForBorrower(marshalledRequest.toString());
-		
+
 		MeteorRsMsg response = MeteorRsMsg.unmarshal(new StringReader(responseXml));
+		LOG.debug("Response from data provider (ID: " + dataProvider.getMeteorInstitutionIdentifier() + "): " + responseXml);
 		return response;
 	}
 
@@ -76,7 +77,6 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 		this.ssn = ssn;
 	}
 
-
 	@Override
 	public String getMeteorVersion() {
 		return meteorVersion;
@@ -86,7 +86,7 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 	public void setMeteorVersion(String meteorVersion) {
 		this.meteorVersion = meteorVersion;
 	}
-	
+
 	@Override
 	public AccessProvider getAccessProvider() {
 		return accessProvider;
@@ -101,6 +101,5 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
-
 
 }

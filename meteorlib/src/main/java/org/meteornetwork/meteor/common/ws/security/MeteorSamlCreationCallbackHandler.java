@@ -8,6 +8,8 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ws.security.saml.ext.SAMLCallback;
 import org.apache.ws.security.saml.ext.bean.AttributeStatementBean;
 import org.apache.ws.security.saml.ext.bean.AuthenticationStatementBean;
@@ -22,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 public class MeteorSamlCreationCallbackHandler implements CallbackHandler {
+
+	private static final Log LOG = LogFactory.getLog(RegistrySamlCreationCallbackHandler.class);
 
 	private static final String METEORNETWORK_ORG = "meteornetwork.org";
 	private static final Integer SAML_TOKEN_VALIDITY_PERIOD = 60; // seconds
@@ -38,6 +42,7 @@ public class MeteorSamlCreationCallbackHandler implements CallbackHandler {
 	}
 
 	private void generateSaml(SAMLCallback callback) {
+		LOG.debug("Adding assertion to meteor request");
 		RequestInfo requestInfo = getRequestInfo();
 
 		SecurityTokenBeanMethodImpl token = new SecurityTokenBeanMethodImpl();

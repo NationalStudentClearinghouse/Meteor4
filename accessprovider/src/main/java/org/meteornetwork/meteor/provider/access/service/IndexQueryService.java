@@ -73,6 +73,8 @@ public class IndexQueryService implements ApplicationContextAware {
 		Set<DataProviderInfo> dataProviders = new HashSet<DataProviderInfo>();
 		boolean atLeast1IndexProviderSuccessful = false;
 		for (IndexProvider ip : indexProviders) {
+			LOG.debug("Calling index provider " + ip.getInstitutionIdentifier());
+
 			MeteorIndexResponse response = null;
 			try {
 				response = callIndexProvider(createRequest(ssn), ip.getUrl());
@@ -85,7 +87,7 @@ public class IndexQueryService implements ApplicationContextAware {
 
 			if (response.getIndexProviderMessages() != null && response.getIndexProviderMessages().getMessageCount() > 0) {
 				for (Message message : response.getIndexProviderMessages().getMessage()) {
-					LOG.debug("Adding message from index provider: \"" + message.getRsMsg() + "\"");
+					LOG.debug("Adding message from index provider" + ip.getInstitutionIdentifier() + ": \"" + message.getRsMsg() + "\"");
 					responseData.addIndexProviderMessage(message);
 				}
 			}
@@ -164,6 +166,7 @@ public class IndexQueryService implements ApplicationContextAware {
 
 		Set<DataProviderInfo> dataProviders = new HashSet<DataProviderInfo>();
 		for (org.meteornetwork.meteor.common.registry.data.DataProvider dataProvider : registryDataProviders) {
+			LOG.debug("Adding data provider with ID '" + dataProvider.getInstitutionIdentifier() + "'");
 			DataProviderInfo dpInfo = new DataProviderInfo(dataProvider.getInstitutionIdentifier());
 			dpInfo.setRegistryInfo(dataProvider);
 			dataProviders.add(dpInfo);
