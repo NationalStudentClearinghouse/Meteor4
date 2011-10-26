@@ -2,22 +2,22 @@ package org.meteornetwork.meteor.provider.ui.controller;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.Holder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.meteornetwork.meteor.common.util.SerializationUtils;
 import org.meteornetwork.meteor.common.util.message.Ssn;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
 import org.meteornetwork.meteor.provider.ui.MeteorSession;
 import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -29,7 +29,7 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 	@Override
 	protected ModelAndView handleMeteorRequest(HttpServletRequest httpRequest, HttpServletResponse httpResponse, SecurityToken token) throws Exception {
 		LOG.debug("Determining if query needs to be made to meteor network...");
-		
+
 		ModelAndView modelView = new ModelAndView(getViewName());
 
 		/* *********************************************
@@ -42,7 +42,7 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 			LOG.debug("SSN " + ssn + " is invalid");
 			return new ModelAndView(new RedirectView("/meteor/query.do?invalid", true));
 		}
-		
+
 		MeteorSession session = getSession();
 
 		SecurityToken sessionToken = session.getToken();
@@ -69,15 +69,20 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 
 		session.setToken(sessionToken);
 		session.setSsn(sessionSsn);
-		
+
 		LOG.debug("Query SSN: " + sessionSsn);
+
+		// if APCSR or LENDER, check inquiry role
+		if ((Role.APCSR.equals(sessionToken.getRole()) || Role.LENDER.equals(sessionToken.getRole())) && httpRequest.getParameter("inquiryRole") != null) {
+			session.setInquiryRole(httpRequest.getParameter("inquiryRole"));
+		}
 
 		/* *********************************************
 		 * Query Meteor network
 		 */
 		if (queryMeteor || httpRequest.getParameter("splash") != null) {
 			LOG.debug("Querying meteor network");
-			
+
 			/*
 			 * redirect to loading screen first.
 			 */
@@ -93,9 +98,9 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 			JaxWsProxyFactoryBean accessClientProxy = getAccessClientProxy();
 			AccessProviderService accessProviderService = (AccessProviderService) accessClientProxy.create();
 
-			if (Role.FAA.equals(sessionToken.getRole())) {
+			if (Role.FAA.equals(sessionToken.getRole()) || Role.APCSR.equals(sessionToken.getRole()) || Role.LENDER.equals(sessionToken.getRole())) {
 				LOG.debug("User role is " + sessionToken.getRole().getName() + ", querying meteor network for duplicate data as well as best source");
-				
+
 				Holder<String> responseBestSource = new Holder<String>();
 				Holder<String> responseAll = new Holder<String>();
 				Holder<byte[]> duplicateAwardIdsSerialized = new Holder<byte[]>();
@@ -105,7 +110,7 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 				session.setResponseXml(responseBestSource.value);
 				session.setResponseXmlUnfiltered(responseAll.value);
 				if (duplicateAwardIdsSerialized.value != null) {
-					session.setDuplicateAwardIds((HashMap<Integer, ArrayList<Integer>>) SerializationUtils.deserialize(duplicateAwardIdsSerialized.value));
+					session.setDuplicateAwardIds((TreeMap<Integer, ArrayList<Integer>>) SerializationUtils.deserialize(duplicateAwardIdsSerialized.value));
 				}
 			} else {
 				LOG.debug("Querying meteor network for best source data");
@@ -120,8 +125,11 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 
 		// Set global parameters
 		modelView.addObject("ssn", sessionSsn);
-		modelView.addObject("role", sessionToken.getRole() == null ? null : sessionToken.getRole().getName());
+		modelView.addObject("role", sessionToken.getRole() == null ? "" : sessionToken.getRole().getName());
 		modelView.addObject("docroot", httpRequest.getContextPath());
+		if (Role.APCSR.equals(sessionToken.getRole()) || Role.LENDER.equals(sessionToken.getRole())) {
+			modelView.addObject("inquiryRole", session.getInquiryRole() == null ? "" : session.getInquiryRole());
+		}
 
 		handleMeteorRequest(modelView, httpRequest, httpResponse);
 

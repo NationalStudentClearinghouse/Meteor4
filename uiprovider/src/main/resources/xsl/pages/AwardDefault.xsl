@@ -8,7 +8,7 @@
 	
 	<!-- Templates / Variables for layout-master -->
 	<xsl:variable name="person"><xsl:choose>
-		<xsl:when test="$role = 'BORROWER'">borrower</xsl:when>
+		<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">borrower</xsl:when>
 		<xsl:otherwise>student</xsl:otherwise>
 	</xsl:choose></xsl:variable>
 	
@@ -152,11 +152,11 @@
 	<xsl:template match="Award">
 		<tr class="defRow">
 			<td class="tdPayment1" nowrap="nowrap" valign="middle"><a href="{$docroot}/meteor/awardDetail.do?apsUniqAwardId={APSUniqueAwardID}"><img src="{$docroot}/imgs/view-details.jpg" border="0" /></a></td>
-			<td class="tdPayment4" nowrap="nowrap">
-				<xsl:apply-templates select="LoanStat"/>
-			</td>
 			<td class="tdPayment3" nowrap="nowrap">
 				<xsl:apply-templates select="AwardType"/>
+			</td>
+			<td class="tdPayment4" nowrap="nowrap">
+				<xsl:apply-templates select="LoanStat"/>
 			</td>
 			<td class="tdPayment6" nowrap="nowrap">
 				<xsl:value-of select="Repayment/PmtBeginDt"/>

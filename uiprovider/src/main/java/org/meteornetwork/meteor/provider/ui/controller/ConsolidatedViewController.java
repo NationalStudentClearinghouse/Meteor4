@@ -3,9 +3,9 @@ package org.meteornetwork.meteor.provider.ui.controller;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,20 +14,24 @@ import org.meteornetwork.meteor.common.xml.dataresponse.Award;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderAwardDetails;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 public class ConsolidatedViewController extends AwardDetailController {
 
+	private static final Logger LOG = LoggerFactory.getLogger(ConsolidatedViewController.class);
+	
 	@Override
 	protected void handleMeteorRequest(ModelAndView modelAndView, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception {
 		super.handleMeteorRequest(modelAndView, httpRequest, httpResponse);
 		
 		// tailor response to show only specified award and its duplicates
-		
+		LOG.debug("Preparing consolidated view");
 		Integer awardId = Integer.valueOf(getAPSUniqueAwardId(httpRequest));
 		
 		MeteorRsMsg allAwards;
-		HashMap<Integer, ArrayList<Integer>> duplicateMap = getSession().getDuplicateAwardIds();
+		TreeMap<Integer, ArrayList<Integer>> duplicateMap = getSession().getDuplicateAwardIds();
 		Set<Integer> apsUniqueAwardIds = new HashSet<Integer>();
 		apsUniqueAwardIds.add(awardId);
 		

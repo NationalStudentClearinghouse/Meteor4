@@ -28,6 +28,8 @@
 		<xalan.version>2.7.1</xalan.version>
 		<xerces.version>2.10.0</xerces.version>
 		
+		<logback.version>0.9.30</logback.version>
+		<slf4j.version>1.6.3</slf4j.version>		
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<log4j.version>1.2.16</log4j.version>
 		

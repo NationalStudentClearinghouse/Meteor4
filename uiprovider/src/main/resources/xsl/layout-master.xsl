@@ -13,7 +13,7 @@
 	
 	<xsl:template name="subnavigation-award-detail">
 		<xsl:param name="awardId"/>
-		<strong>For this Loan:</strong> <a href="{$docroot}/meteor/awardDetail.do?apsUniqAwardId={$awardId}">View Eligibility Details</a> | <a href="{$docroot}/meteor/disbursement.do?apsUniqAwardId={$awardId}">View Disbursement Details</a> | <a href="{$docroot}/meteor/references.do?apsUniqAwardId={$awardId}">View References</a> | <a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={$awardId}">View Repayment and Billing Details</a><xsl:if test="$role = 'FAA'"> | <a href="{$docroot}/meteor/consolidated.do?apsUniqAwardId={$awardId}">Consolidated View</a></xsl:if>
+		<strong>For this Loan:</strong> <a href="{$docroot}/meteor/awardDetail.do?apsUniqAwardId={$awardId}">View Eligibility Details</a> | <a href="{$docroot}/meteor/disbursement.do?apsUniqAwardId={$awardId}">View Disbursement Details</a> | <a href="{$docroot}/meteor/references.do?apsUniqAwardId={$awardId}">View References</a> | <a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={$awardId}">View Repayment and Billing Details</a><xsl:if test="$role = 'FAA' or $inquiryRole = 'FAA'"> | <a href="{$docroot}/meteor/consolidated.do?apsUniqAwardId={$awardId}">Consolidated View</a></xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="/">
@@ -77,7 +77,14 @@
 										<xsl:if test="$role = 'FAA' or $role = 'APCSR' or $role = 'LENDER'">
 											<div class="inputSSN">
 												<form method="POST" action="{$docroot}/meteor/summary.do">
-													<input type="text" class="SSN" name="ssn" value="Enter New SSN" /><input type="image" src="{$docroot}/imgs/btn-ssn.jpg" class="btn" />
+													<div>
+														<input type="text" class="SSN" name="ssn" value="Enter New SSN" /><input type="image" src="{$docroot}/imgs/btn-ssn.jpg" class="btn" />
+													</div>
+													<xsl:if test="$role = 'APCSR' or $role = 'LENDER'">
+													<div style="clear: left">
+														View as: <input type="radio" name="inquiryRole" value="BORROWER"><xsl:if test="$inquiryRole = 'BORROWER'"><xsl:attribute name="checked" value="checked"/></xsl:if></input>Borrower <input type="radio" name="inquiryRole" value="FAA"><xsl:if test="$inquiryRole = 'FAA'"><xsl:attribute name="checked" value="checked"/></xsl:if></input>FAA
+													</div>
+													</xsl:if>
 												</form>
 											</div>
 										</xsl:if>
@@ -87,7 +94,7 @@
 											<ul>
 												<li class="navA"><a href="{$docroot}/meteor/summary.do">View Student Loans and Other Financial Aid Awards</a></li>
 												<li class="navB"><a href="{$docroot}/meteor/repaymentSummary.do">View Repayment and Billing Summary</a></li>
-												<xsl:if test="$role = 'FAA'">
+												<xsl:if test="$role = 'FAA' or $inquiryRole = 'FAA'">
 													<li class="navC"><a href="{$docroot}/meteor/aversion.do">View Default Aversion Request, Claim and Default Details</a></li>
 												</xsl:if>					
 											</ul>

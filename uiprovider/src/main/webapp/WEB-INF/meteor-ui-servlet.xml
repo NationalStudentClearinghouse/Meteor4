@@ -74,6 +74,8 @@
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
 			</list>
 		</property>
 	</bean>
@@ -141,6 +143,8 @@
 		<property name="allowedRoles">
 			<list>
 				<value>FAA</value>
+				<value>LENDER</value>
+				<value>APCSR</value>
 			</list>
 		</property>
 	</bean>

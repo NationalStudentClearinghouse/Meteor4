@@ -9,7 +9,7 @@
 	
 	<!-- Templates / Variables for layout-master -->
 	<xsl:variable name="person"><xsl:choose>
-		<xsl:when test="$role = 'BORROWER'">borrower</xsl:when>
+		<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">borrower</xsl:when>
 		<xsl:otherwise>student</xsl:otherwise>
 	</xsl:choose></xsl:variable>
 	
@@ -54,7 +54,7 @@
 		<table cellpadding="0" cellspacing="0" class="tblBorrower">
 			<tbody>
 				<xsl:apply-templates select="//Award[APSUniqueAwardID=$apsuniqueawardid]/Disbursement"/>
-				<xsl:if test="$role != 'BORROWER' and count(//Award[APSUniqueAwardID=$apsuniqueawardid]/Disbursement) = 0 or $role = 'BORROWER' and count(//Award[APSUniqueAwardID=$apsuniqueawardid]) = 0 ">
+				<xsl:if test="$role != 'BORROWER' and $inquiryRole != 'BORROWER' and count(//Award[APSUniqueAwardID=$apsuniqueawardid]/Disbursement) = 0 or $role = 'BORROWER' and count(//Award[APSUniqueAwardID=$apsuniqueawardid]) = 0 ">
 				<tr>
 					<td class="tdBorrower2">No Disbursements Found</td>
 				</tr>

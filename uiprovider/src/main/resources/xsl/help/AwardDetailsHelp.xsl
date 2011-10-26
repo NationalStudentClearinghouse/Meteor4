@@ -8,7 +8,7 @@
 		<p>This document provides an English description of each of the data elements on the screen that you are viewing.  If you require additional information regarding the loan that you are viewing, please contact the source of the data.</p>
 		<table cellpadding="0" cellspacing="0" class="tblHelp">
 			<tbody>
-				<xsl:if test="$role != 'BORROWER'">
+				<xsl:if test="$role != 'BORROWER' and $inquiryRole != 'BORROWER'">
 				<tr>
 					<td class="tdHelp1">Student Name</td>
 					<td class="tdHelp2">First, middle initial and last name of the student attending school including student SSN.</td>

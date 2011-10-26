@@ -9,7 +9,7 @@
 
 	<!-- Templates / Variables for layout-master -->
 	<xsl:variable name="person"><xsl:choose>
-		<xsl:when test="$role = 'BORROWER'">borrower</xsl:when>
+		<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">borrower</xsl:when>
 		<xsl:otherwise>student</xsl:otherwise>
 	</xsl:choose></xsl:variable>
 	
@@ -31,21 +31,21 @@
 						$(this).removeClass("close").addClass("show");
 					}
 					
-					e.preventDefault();
+					e.preventDefault ? e.preventDefault() : e.returnValue = false;
 				});
 				
 				$('a#expandAll').click( function(e) {
 					$('.hideShow').toggle(true);
 					$('a.triggerA').removeClass("show").addClass("close");
 					
-					e.preventDefault();
+					e.preventDefault ? e.preventDefault() : e.returnValue = false;
 				});
 				
 				$('a#collapseAll').click( function(e) {
 					$('.hideShow').toggle(false);
 					$('a.triggerA').removeClass("close").addClass("show");
 					
-					e.preventDefault();
+					e.preventDefault ? e.preventDefault() : e.returnValue = false;
 				});
 			});	
 		</script>

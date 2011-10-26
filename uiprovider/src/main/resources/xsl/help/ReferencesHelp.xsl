@@ -9,7 +9,7 @@
 			<table cellpadding="0" cellspacing="0" class="tblHelp">
 				<tbody>
 					<xsl:choose>
-					<xsl:when test="$role = 'BORROWER'">
+					<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
 					<tr>
 						<td class="tdHelp1">Borrower's Name</td>
 						<td class="tdHelp2">First, middle initial and last name of the borrower.</td>

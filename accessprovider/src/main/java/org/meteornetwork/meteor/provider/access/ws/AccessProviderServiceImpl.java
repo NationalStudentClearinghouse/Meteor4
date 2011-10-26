@@ -1,20 +1,16 @@
 package org.meteornetwork.meteor.provider.access.ws;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import javax.jws.WebService;
 import javax.xml.ws.Holder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.business.BestSourceAggregator;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
-import org.meteornetwork.meteor.common.util.SerializationUtils;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
 import org.meteornetwork.meteor.common.xml.dataresponse.Award;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
@@ -22,8 +18,11 @@ import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
 import org.meteornetwork.meteor.provider.access.manager.AccessProviderManager;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
 import org.meteornetwork.meteor.saml.TokenAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.SerializationUtils;
 
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.AccessProviderService", serviceName = "AccessProviderService")
 public class AccessProviderServiceImpl implements AccessProviderService {
@@ -81,7 +80,7 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 		/*
 		 * map best source award ids to duplicate award ids
 		 */
-		HashMap<Integer, ArrayList<Integer>> duplicateAwardsMapObj = new HashMap<Integer, ArrayList<Integer>>();
+		TreeMap<Integer, ArrayList<Integer>> duplicateAwardsMapObj = new TreeMap<Integer, ArrayList<Integer>>();
 		BestSourceAggregator aggregator = response.getBestSourceAggregator();
 		for (Award award : aggregator.getBest()) {
 			ArrayList<Integer> duplicateAwardIds = new ArrayList<Integer>();
@@ -92,12 +91,7 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 			duplicateAwardsMapObj.put(award.getAPSUniqueAwardID(), duplicateAwardIds);
 		}
 
-		try {
-			duplicateAwardsMap.value = SerializationUtils.serialize(duplicateAwardsMapObj);
-		} catch (IOException e) {
-			LOG.error("Could not serialize duplicate awards map");
-			return;
-		}
+		duplicateAwardsMap.value = duplicateAwardsMapObj == null || duplicateAwardsMapObj.isEmpty() ? null : SerializationUtils.serialize(duplicateAwardsMapObj);
 
 		LOG.debug("Returning data for ssn: " + ssn);
 	}

@@ -9,7 +9,7 @@
 		
 	<!-- Templates / Variables for layout-master -->
 	<xsl:variable name="person"><xsl:choose>
-		<xsl:when test="$role = 'BORROWER'">borrower</xsl:when>
+		<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">borrower</xsl:when>
 		<xsl:otherwise>student</xsl:otherwise>
 	</xsl:choose></xsl:variable>
 	

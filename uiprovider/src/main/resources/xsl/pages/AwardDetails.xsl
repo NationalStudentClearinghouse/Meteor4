@@ -10,7 +10,7 @@
 		
 	<!-- Templates / Variables for layout-master -->
 	<xsl:variable name="person"><xsl:choose>
-		<xsl:when test="$role = 'BORROWER'">borrower</xsl:when>
+		<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">borrower</xsl:when>
 		<xsl:otherwise>student</xsl:otherwise>
 	</xsl:choose></xsl:variable>
 	
@@ -34,7 +34,7 @@
 	</xsl:template>
 	
 	<xsl:template match="Award">
-		<xsl:if test="$role = 'BORROWER'">
+		<xsl:if test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
 			<p class="tableTitle">Student Name: <xsl:apply-templates select="Student" mode="fullname"/> (<xsl:value-of select="Student/SSNum"/>)</p>
 		</xsl:if>
 		<xsl:for-each select="Borrower">
@@ -53,7 +53,7 @@
 						</xsl:for-each>
 						<xsl:value-of select="concat(City, ', ', StateProv, ' ', PostalCd)"/>
 					</td>
-					<xsl:if test="$role != 'BORROWER' and (AddressValidInd or AddressValidDt)">
+					<xsl:if test="$role != 'BORROWER' and $inquiryRole != 'BORROWER' and (AddressValidInd or AddressValidDt)">
 					<td class="tdBorrower3">Address Validated:</td>
 					<td class="tdBorrower4"><xsl:choose>
 						<xsl:when test="AddressValidInd = 'true' or AddressValidInd = '1'">Yes</xsl:when>
@@ -66,7 +66,7 @@
 				<tr>
 					<td class="tdBorrower1"><xsl:apply-templates select="PhoneNumType" /></td>
 					<td class="tdBorrower2"><xsl:apply-templates select="PhoneNum" /></td>
-					<xsl:if test="$role != 'BORROWER' and (PhoneValidInd or PhoneValidDt)">
+					<xsl:if test="$role != 'BORROWER' and $inquiryRole != 'BORROWER'and (PhoneValidInd or PhoneValidDt)">
 					<td class="tdBorrower3">Phone Validated:</td>
 					<td class="tdBorrower4"><xsl:choose>
 						<xsl:when test="PhoneValidInd = 'true' or PhoneValidInd = '1'">Yes</xsl:when>
@@ -79,7 +79,7 @@
 				<tr>
 					<td class="tdBorrower1">Email Address:</td>
 					<td class="tdBorrower2"><xsl:value-of select="EmailAddress"/></td>
-					<xsl:if test="$role != 'BORROWER' and (EmailValidInd or EmailValidDt)">
+					<xsl:if test="$role != 'BORROWER' and $inquiryRole != 'BORROWER' and (EmailValidInd or EmailValidDt)">
 					<td class="tdBorrower3">Email Validated:</td>
 					<td class="tdBorrower4"><xsl:choose>
 						<xsl:when test="EmailValidInd = 'true' or EmailValidInd = '1'">Yes</xsl:when>

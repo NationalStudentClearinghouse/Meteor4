@@ -8,7 +8,7 @@
 	
 	<!-- Templates / Variables for layout-master -->
 	<xsl:variable name="person"><xsl:choose>
-		<xsl:when test="$role = 'BORROWER'">borrower</xsl:when>
+		<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">borrower</xsl:when>
 		<xsl:otherwise>student</xsl:otherwise>
 	</xsl:choose></xsl:variable>
 	
@@ -25,7 +25,7 @@
 					var $showMe = $str+$str2;
 					$($showMe).fadeToggle("fast");
 					
-					e.preventDefault();
+					e.preventDefault ? e.preventDefault() : e.returnValue = false;
 				});
 			});	
 		</script>
@@ -37,7 +37,7 @@
 	<xsl:template match="pescxml:MeteorRsMsg">
 		<h1>Award Summary<span class="help"><a href="#" class="helpSection"><xsl:attribute name="onclick">javascript:showModal('showHelp', { minHeight: 170 })</xsl:attribute><img src="{$docroot}/imgs/help.jpg" border="0" /></a></span></h1>
 		
-		<xsl:if test="$role != 'BORROWER'">
+		<xsl:if test="$role != 'BORROWER' and $inquiryRole != 'BORROWER'">
 			<p class="intro">Only awards where the student&#39;s SSN matches the SSN entered on the Meteor Query screen are displayed. For example, PLUS loans where the SSN entered is the borrower&#39;s SSN are not included in this display, but will appear on the Repayment Summary screen.</p>
 		</xsl:if>
 		
@@ -66,7 +66,7 @@
 			</tfoot>
 			<tbody>
 				<xsl:choose>
-				<xsl:when test="$role = 'BORROWER'">
+				<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
 					<xsl:apply-templates select="//Award[Borrower/SSNum/@unmasked=$ssn]">
 						<xsl:sort select="Disbursement[last()]/ActualDisbDt | Disbursement[last() and (not(ActualDisbDt))]/SchedDisbDt" order="descending" data-type="text" />
 						<xsl:sort select="AwardType" order="ascending" data-type="text"/>
@@ -114,7 +114,7 @@
 			<td class="tdAwardInfo1" nowrap="nowrap" valign="middle"><a href="{$docroot}/meteor/awardDetail.do?apsUniqAwardId={APSUniqueAwardID}"><img src="{$docroot}/imgs/view-details.jpg" border="0" /></a></td>
 			<td class="tdAwardInfo2" nowrap="nowrap">
 				<xsl:choose>
-				<xsl:when test="$role = 'BORROWER'">
+				<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
 					<xsl:variable name="isConsolidation"><xsl:apply-templates select="AwardType" mode="is-consolidation"/></xsl:variable>
 					<xsl:if test="$isConsolidation = 'false'">
 						<xsl:apply-templates select="Student" mode="fullname"/>

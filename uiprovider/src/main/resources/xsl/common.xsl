@@ -6,6 +6,7 @@
 	<xsl:param name="ssn"/>
 	<xsl:param name="role"/>
 	<xsl:param name="docroot"/>
+	<xsl:param name="inquiryRole" select="''"/>
 
 	<!-- Format number if exists -->
 	<xsl:template name="format-number-if-exists">

@@ -3,14 +3,14 @@ package org.meteornetwork.meteor.common.registry;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.common.ws.RegistryService;
 import org.meteornetwork.meteor.saml.ProviderType;
 import org.meteornetwork.meteor.saml.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.SerializationUtils;
 
 public class RegistryWebServiceClient implements RegistryManager {
