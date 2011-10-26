@@ -82,7 +82,7 @@
 													</div>
 													<xsl:if test="$role = 'APCSR' or $role = 'LENDER'">
 													<div style="clear: left">
-														View as: <input type="radio" name="inquiryRole" value="BORROWER"><xsl:if test="$inquiryRole = 'BORROWER'"><xsl:attribute name="checked" value="checked"/></xsl:if></input>Borrower <input type="radio" name="inquiryRole" value="FAA"><xsl:if test="$inquiryRole = 'FAA'"><xsl:attribute name="checked" value="checked"/></xsl:if></input>FAA
+														View as: <input type="radio" name="inquiryRole" value="BORROWER"><xsl:if test="$inquiryRole != 'FAA'"><xsl:attribute name="checked" value="checked"/></xsl:if></input>Borrower <input type="radio" name="inquiryRole" value="FAA"><xsl:if test="$inquiryRole = 'FAA'"><xsl:attribute name="checked" value="checked"/></xsl:if></input>FAA
 													</div>
 													</xsl:if>
 												</form>

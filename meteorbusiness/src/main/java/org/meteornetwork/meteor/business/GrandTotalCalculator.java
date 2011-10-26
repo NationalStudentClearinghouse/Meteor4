@@ -45,7 +45,7 @@ public class GrandTotalCalculator {
 
 		public static PaidLoanStatus getByCodeIgnoreCase(String name) {
 			for (PaidLoanStatus value : PaidLoanStatus.values()) {
-				if (name.equalsIgnoreCase(value.getCode())) {
+				if (value.getCode().equalsIgnoreCase(name)) {
 					return value;
 				}
 			}
