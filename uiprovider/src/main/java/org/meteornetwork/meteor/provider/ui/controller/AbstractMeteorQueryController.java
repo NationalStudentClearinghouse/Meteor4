@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.Holder;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.meteornetwork.meteor.common.util.SerializationUtils;
 import org.meteornetwork.meteor.common.util.message.Ssn;
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 public abstract class AbstractMeteorQueryController extends AbstractMeteorController {
 
-	public static final Log LOG = LogFactory.getLog(AbstractMeteorQueryController.class);
+	public static final Logger LOG = LoggerFactory.getLogger(AbstractMeteorQueryController.class);
 
 	@SuppressWarnings("unchecked")
 	@Override

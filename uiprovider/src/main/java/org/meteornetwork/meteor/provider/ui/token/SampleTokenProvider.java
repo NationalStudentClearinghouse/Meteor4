@@ -7,8 +7,8 @@ import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.helpers.IOUtils;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
@@ -23,7 +23,7 @@ import org.meteornetwork.meteor.saml.exception.SecurityTokenException.CauseCode;
  */
 public class SampleTokenProvider implements TokenProvider {
 
-	private static final Log LOG = LogFactory.getLog(SampleTokenProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SampleTokenProvider.class);
 
 	@Override
 	public SecurityToken getSecurityToken(HttpServletRequest request) throws SecurityTokenException {

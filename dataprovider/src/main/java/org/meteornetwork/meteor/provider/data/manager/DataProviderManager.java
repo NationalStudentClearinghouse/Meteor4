@@ -4,8 +4,8 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
@@ -38,7 +38,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 // @Service
 public class DataProviderManager {
 
-	private static final Log LOG = LogFactory.getLog(DataProviderManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataProviderManager.class);
 
 	private DataServerAbstraction dataServer;
 	private Properties dataProviderProperties;

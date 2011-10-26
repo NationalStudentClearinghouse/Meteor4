@@ -7,14 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 public class MeteorExceptionResolver extends SimpleMappingExceptionResolver {
 
-	private static final Log LOG = LogFactory.getLog(MeteorExceptionResolver.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MeteorExceptionResolver.class);
 	
 	private Properties uiproviderProperties;
 

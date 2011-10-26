@@ -3,8 +3,8 @@ package org.meteornetwork.meteor.common.registry;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
@@ -15,7 +15,7 @@ import org.springframework.util.SerializationUtils;
 
 public class RegistryWebServiceClient implements RegistryManager {
 
-	private static final Log LOG = LogFactory.getLog(RegistryWebServiceClient.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RegistryWebServiceClient.class);
 
 	@Override
 	public X509Certificate getCertificate(String meteorInstitutionId, ProviderType providerType) throws RegistryException {

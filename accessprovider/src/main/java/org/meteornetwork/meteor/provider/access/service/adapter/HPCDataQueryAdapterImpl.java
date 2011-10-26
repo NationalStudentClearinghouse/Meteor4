@@ -13,8 +13,8 @@ import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
@@ -46,7 +46,7 @@ import org.xml.sax.SAXException;
 @Scope("prototype")
 public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationContextAware {
 
-	private static final Log LOG = LogFactory.getLog(HPCDataQueryAdapterImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HPCDataQueryAdapterImpl.class);
 
 	private Properties authenticationProperties;
 

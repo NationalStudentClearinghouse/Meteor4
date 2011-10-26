@@ -6,8 +6,8 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.provider.ui.exception.MeteorAccessException;
 import org.meteornetwork.meteor.provider.ui.exception.MeteorSessionExpiredException;
 import org.meteornetwork.meteor.provider.ui.token.TokenProvider;
@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
 public abstract class AbstractMeteorController extends ParameterizableViewController {
 
-	private static final Log LOG = LogFactory.getLog(AbstractMeteorController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractMeteorController.class);
 
 	private Properties uiProviderProperties;
 

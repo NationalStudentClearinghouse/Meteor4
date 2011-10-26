@@ -9,8 +9,8 @@ import java.util.Properties;
 import javax.jws.WebService;
 import javax.xml.ws.Holder;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.business.BestSourceAggregator;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.AccessProviderService", serviceName = "AccessProviderService")
 public class AccessProviderServiceImpl implements AccessProviderService {
 
-	private static final Log LOG = LogFactory.getLog(AccessProviderServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AccessProviderServiceImpl.class);
 
 	private AccessProviderManager accessProviderManager;
 

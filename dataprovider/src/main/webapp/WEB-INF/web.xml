@@ -36,5 +36,11 @@
 	<servlet-mapping> 
 		<servlet-name>CXFServlet</servlet-name> 
 		<url-pattern>/services/*</url-pattern> 
-	</servlet-mapping> 
+	</servlet-mapping>
+		
+	<env-entry>
+		<env-entry-name>logback/dataprovider</env-entry-name>
+		<env-entry-value>logback.xml</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	</env-entry> 
 </web-app>

@@ -4,8 +4,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
 import org.meteornetwork.meteor.common.hpc.HPCSecurityManager;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 
-	private static final Log LOG = LogFactory.getLog(HPCDataQueryAdapterImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HPCDataQueryAdapterImpl.class);
 
 	private String rawHPCMessage;
 	private String responseHPCMessage;
@@ -57,21 +57,21 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 			contentXml = hpcManager.retrieveHPCContent(rawHPCMessage);
 			LOG.debug("Request XML from HPC:\n" + contentXml);
 		} catch (Exception e) {
-			LOG.error("Could not handle HPC request", e);
+			LOG.debug("Could not handle HPC request", e);
 			throw new DataQueryAdapterException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE);
 		}
 
 		try {
 			hpcSecurityManager.validateRequest(contentXml);
 		} catch (MeteorSecurityException e1) {
-			LOG.error("Could not validate HPC request", e1);
+			LOG.debug("Could not validate HPC request", e1);
 			throw new DataQueryAdapterException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE);
 		}
 
 		try {
 			requestInfo.setSecurityToken(hpcSecurityManager.getSecurityToken(contentXml));
 		} catch (MeteorSecurityException e) {
-			LOG.error(e);
+			LOG.debug("Could not parse SecurityToken from HPC request", e);
 			throw new DataQueryAdapterException(MeteorMessage.SECURITY_INVALID_TOKEN);
 		}
 

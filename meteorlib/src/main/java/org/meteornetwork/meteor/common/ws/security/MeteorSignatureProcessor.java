@@ -2,8 +2,8 @@ package org.meteornetwork.meteor.common.ws.security;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSDocInfo;
 import org.apache.ws.security.WSSecurityEngineResult;
@@ -29,7 +29,7 @@ import org.w3c.dom.NodeList;
  */
 public class MeteorSignatureProcessor extends SignatureProcessor {
 
-	private static final Log LOG = LogFactory.getLog(MeteorSignatureProcessor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MeteorSignatureProcessor.class);
 
 	private RegistryManager registryManager;
 
@@ -43,7 +43,7 @@ public class MeteorSignatureProcessor extends SignatureProcessor {
 		try {
 			return super.handleToken(elem, data, wsDocInfo);
 		} catch (WSSecurityException e) {
-			LOG.debug(e);
+			LOG.debug("Could not handle token", e);
 			throw new WSSecurityException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef(), e);
 		}
 	}

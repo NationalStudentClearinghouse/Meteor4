@@ -1,7 +1,7 @@
 package org.meteornetwork.meteor.common.ws.security;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSDocInfo;
 import org.apache.ws.security.WSSecurityException;
@@ -29,7 +29,7 @@ import org.w3c.dom.NodeList;
  */
 public class RegistrySAMLTokenProcessor extends SAMLTokenProcessor {
 
-	private static final Log LOG = LogFactory.getLog(RegistrySAMLTokenProcessor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RegistrySAMLTokenProcessor.class);
 
 	private RegistryManager registryManager;
 
@@ -46,7 +46,7 @@ public class RegistrySAMLTokenProcessor extends SAMLTokenProcessor {
 		try {
 			credential = super.handleSAMLToken(token, data, validator, docInfo);
 		} catch (WSSecurityException e) {
-			LOG.debug(e);
+			LOG.debug("Could not handle SAML token", e);
 			throw new WSSecurityException(MeteorMessage.ACCESS_INVALID_MESSAGE_SIGNATURE.getPropertyRef(), e);
 		}
 

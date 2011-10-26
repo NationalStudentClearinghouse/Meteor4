@@ -13,8 +13,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.registry.data.DataProvider;
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 public class PropertyRegistryManager implements RegistryManager {
 
-	private static final Log LOG = LogFactory.getLog(PropertyRegistryManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(PropertyRegistryManager.class);
 
 	private Properties directoryProperties;
 	private ResourceBundle directoryDataProperties;

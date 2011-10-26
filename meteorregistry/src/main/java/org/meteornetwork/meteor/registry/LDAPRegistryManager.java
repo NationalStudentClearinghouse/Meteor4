@@ -16,8 +16,8 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchControls;
 import javax.naming.ldap.LdapName;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.registry.data.DataProvider;
@@ -34,7 +34,7 @@ import org.springframework.ldap.core.LdapTemplate;
 
 public class LDAPRegistryManager implements RegistryManager {
 
-	private static final Log LOG = LogFactory.getLog(LDAPRegistryManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LDAPRegistryManager.class);
 
 	private static final String STATUS_ACTIVE = "AC";
 

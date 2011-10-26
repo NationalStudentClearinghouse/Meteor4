@@ -9,8 +9,8 @@ import java.util.Set;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.business.GrandTotalCalculator;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 //@Service
 public class AccessProviderManager {
 
-	private static final Log LOG = LogFactory.getLog(AccessProviderManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AccessProviderManager.class);
 
 	private IndexQueryService indexQueryService;
 	private DataQueryService dataQueryService;

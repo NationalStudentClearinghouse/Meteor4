@@ -7,8 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
@@ -25,7 +25,7 @@ import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
  */
 public class FileDataServer implements DataServerAbstraction {
 
-	private static transient final Log log = LogFactory.getLog(FileDataServer.class);
+	private static transient final Logger log = LoggerFactory.getLogger(FileDataServer.class);
 
 	private ResourceBundle dataProviderProperties;
 

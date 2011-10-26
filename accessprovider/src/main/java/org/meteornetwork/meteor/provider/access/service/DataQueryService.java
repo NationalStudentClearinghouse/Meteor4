@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 import javax.xml.ws.soap.SOAPFaultException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.Version;
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataQueryService implements ApplicationContextAware {
 
-	private static final Log LOG = LogFactory.getLog(DataQueryService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataQueryService.class);
 
 	private static final Long DATAPROVIDER_TIMEOUT_DEFAULT = 20000L;
 

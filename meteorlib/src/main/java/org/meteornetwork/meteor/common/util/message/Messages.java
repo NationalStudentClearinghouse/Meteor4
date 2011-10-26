@@ -37,8 +37,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Messages.java
@@ -51,7 +51,7 @@ import org.apache.commons.logging.LogFactory;
 public class Messages {
 
 	private static Properties props = null;
-	private static Log log = LogFactory.getLog(Messages.class);
+	private static Logger log = LoggerFactory.getLogger(Messages.class);
 	private static Map variables = new HashMap();
 
 	private static void init() {

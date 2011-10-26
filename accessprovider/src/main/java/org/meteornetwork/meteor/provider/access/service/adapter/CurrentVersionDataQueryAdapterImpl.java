@@ -3,8 +3,8 @@ package org.meteornetwork.meteor.provider.access.service.adapter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.meteornetwork.meteor.common.ws.DataProviderService;
 import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, ApplicationContextAware {
 
-	private static final Log LOG = LogFactory.getLog(CurrentVersionDataQueryAdapterImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CurrentVersionDataQueryAdapterImpl.class);
 
 	private DataProviderInfo dataProvider;
 	private AccessProvider accessProvider;

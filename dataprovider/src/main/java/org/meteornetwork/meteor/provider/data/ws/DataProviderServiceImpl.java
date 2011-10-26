@@ -2,8 +2,8 @@ package org.meteornetwork.meteor.provider.data.ws;
 
 import javax.jws.WebService;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.ws.DataProviderService;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapterImpl;
 import org.meteornetwork.meteor.provider.data.manager.DataProviderManager;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.DataProviderService", serviceName = "DataProviderService")
 public class DataProviderServiceImpl implements DataProviderService {
 
-	private static final Log LOG = LogFactory.getLog(DataProviderServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataProviderServiceImpl.class);
 
 	private DataProviderManager dataManager;
 	private DataQueryAdapterImpl adapter;

@@ -26,6 +26,8 @@
 		<xalan.version>2.7.1</xalan.version>
 		<xerces.version>2.10.0</xerces.version>
 		
+		<logback.version>0.9.30</logback.version>
+		<slf4j.version>1.6.3</slf4j.version>		
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<log4j.version>1.2.16</log4j.version>
 		
@@ -134,15 +136,43 @@
 			Logging
 		 -->
 		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>${logback.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>${slf4j.version}</version>
+		</dependency>
+		 
+		<!-- Replace commons logging and log4j with jcl-over-slf4j and log4j-over-slf4j. Note: specifying 
+			scope 'provided' on commons-logging and log4j is a Maven 2 hack. If you are using the maven
+			eclipse:eclipse plugin, commons-logging and log4j will appear on the eclipse classpath.
+		 -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>jcl-over-slf4j</artifactId>
+		    <version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>${commons-logging.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>log4j-over-slf4j</artifactId>
+		    <version>${slf4j.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<!-- 

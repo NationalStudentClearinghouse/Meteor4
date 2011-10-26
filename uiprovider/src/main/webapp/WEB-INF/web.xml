@@ -41,4 +41,10 @@
 		<error-code>500</error-code>
 		<location>/error500.html</location>
 	</error-page>
+			
+	<env-entry>
+		<env-entry-name>logback/uiprovider</env-entry-name>
+		<env-entry-value>logback.xml</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	</env-entry>
 </web-app>

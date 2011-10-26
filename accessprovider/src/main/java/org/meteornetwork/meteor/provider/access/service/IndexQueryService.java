@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
@@ -36,7 +36,7 @@ import org.springframework.context.ApplicationContextAware;
 //@Service
 public class IndexQueryService implements ApplicationContextAware {
 
-	private static final Log LOG = LogFactory.getLog(IndexQueryService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(IndexQueryService.class);
 
 	private Properties authenticationProperties;
 	private Properties meteorProperties;

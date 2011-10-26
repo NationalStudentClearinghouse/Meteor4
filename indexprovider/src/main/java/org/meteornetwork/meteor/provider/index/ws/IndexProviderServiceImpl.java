@@ -5,8 +5,8 @@ import java.io.StringWriter;
 
 import javax.jws.WebService;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.ws.IndexProviderService;
 import org.meteornetwork.meteor.common.xml.indexrequest.MeteorIndexRequest;
 import org.meteornetwork.meteor.common.xml.indexresponse.MeteorIndexResponse;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.IndexProviderService", serviceName = "IndexProviderService")
 public class IndexProviderServiceImpl implements IndexProviderService {
 
-	private static final Log LOG = LogFactory.getLog(IndexProviderServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(IndexProviderServiceImpl.class);
 
 	private IndexProviderManager manager;
 	@Override

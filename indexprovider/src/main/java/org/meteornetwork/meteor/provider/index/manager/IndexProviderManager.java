@@ -2,8 +2,8 @@ package org.meteornetwork.meteor.provider.index.manager;
 
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.xml.indexrequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.indexresponse.MeteorIndexResponse;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 //@Service
 public class IndexProviderManager {
 
-	private static final Log LOG = LogFactory.getLog(IndexProviderManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(IndexProviderManager.class);
 
 	private IndexServerAbstraction indexServer;
 	private Properties indexProviderProperties;

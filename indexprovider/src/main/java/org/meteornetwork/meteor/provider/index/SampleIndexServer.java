@@ -2,8 +2,8 @@ package org.meteornetwork.meteor.provider.index;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.registry.data.DataProvider;
@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SampleIndexServer implements IndexServerAbstraction {
 
-	private static final Log LOG = LogFactory.getLog(SampleIndexServer.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SampleIndexServer.class);
 
 	private RegistryManager registryManager;
 

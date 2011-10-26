@@ -3,8 +3,8 @@ package org.meteornetwork.meteor.provider.data.adapter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class DataQueryAdapterImpl implements DataQueryAdapter {
 
-	private static final Log LOG = LogFactory.getLog(DataQueryAdapterImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataQueryAdapterImpl.class);
 
 	private String requestXml;
 	private String responseXml;
