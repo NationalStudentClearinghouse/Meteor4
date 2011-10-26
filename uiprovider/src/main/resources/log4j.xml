@@ -4,76 +4,25 @@
 <log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
 
 	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
-		<!-- <param name="Threshold" value="WARN"/> -->
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{3} (%F:%L) - %m%n"/>
 		</layout>
 	</appender>
 
 	<appender name="FILE" class="org.apache.log4j.FileAppender">
-		<param name="File" value="meteor.log"/>
+		<param name="File" value="c:/Projects/Meteor/testing/logs/UI40.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{3} (%F:%L) - %m%n"/>
-		</layout>
-	</appender>
-
-	<appender name="ROLLING" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="meteor.log"/>
-		<param name="MaxFileSize" value="10MB"/>
-		<param name="MaxBackupIndex" value="20"/>
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{3} (%F:%L) - %m%n"/>
-		</layout>
-	</appender>
-
-	<appender name="ROLLING-WARN" class="org.apache.log4j.RollingFileAppender">
-		<param name="Threshold" value="WARN"/>
-		<param name="File" value="meteor-warn.log"/>
-		<param name="MaxFileSize" value="1MB"/>
-		<param name="MaxBackupIndex" value="20"/>
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{3} (%F:%L) - %m%n"/>
-		</layout>
-	</appender>
-
-	<appender name="ROLLING-INFO" class="org.apache.log4j.RollingFileAppender">
-		<param name="Threshold" value="INFO"/>
-		<param name="File" value="meteor-info.log"/>
-		<param name="MaxFileSize" value="5MB"/>
-		<param name="MaxBackupIndex" value="20"/>
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{3} (%F:%L) - %m%n"/>
-		</layout>
-	</appender>
-
-	<appender name="ROLLING-DEBUG" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="meteor-debug.log"/>
-		<param name="MaxFileSize" value="10MB"/>
-		<param name="MaxBackupIndex" value="20"/>
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %C{3} (%F:%L) - %m%n"/>
-		</layout>
-	</appender>
-
-	<appender name="EMAIL" class="org.apache.log4j.net.SMTPAppender">
-		<param name="Threshold" value="ERROR"/>
-		<param name="To" value="meteor@yourmeteorhome.com"/>
-		<param name="From" value="meteor@yourmeteorhome.com"/>
-		<param name="Subject" value="Meteor Error"/>
-		<param name="SMTPHost" value="smtp"/>
-		<param name="BufferSize" value="10"/>
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d %-5p [%t] %C{3} (%F:%L) - %m%n"/>
 		</layout>
 	</appender>
 	
 	<logger name="org.meteornetwork.meteor">
 		<level value="debug"/>
-		
+		<appender-ref ref="FILE"/>
 		<appender-ref ref="STDOUT"/>
 	</logger>
 	
 	<root>
-		<priority value="debug"/>
+		<priority value="info"/>
 	</root>
 </log4j:configuration>

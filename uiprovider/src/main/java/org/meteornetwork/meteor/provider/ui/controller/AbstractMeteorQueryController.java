@@ -12,12 +12,12 @@ import javax.xml.ws.Holder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.meteornetwork.meteor.common.util.SerializationUtils;
 import org.meteornetwork.meteor.common.util.message.Ssn;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
 import org.meteornetwork.meteor.provider.ui.MeteorSession;
 import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
-import org.springframework.util.SerializationUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 

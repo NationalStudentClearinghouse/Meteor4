@@ -1,5 +1,6 @@
 package org.meteornetwork.meteor.provider.access.ws;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.meteornetwork.meteor.business.BestSourceAggregator;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
+import org.meteornetwork.meteor.common.util.SerializationUtils;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
 import org.meteornetwork.meteor.common.xml.dataresponse.Award;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
@@ -22,7 +24,6 @@ import org.meteornetwork.meteor.saml.SecurityTokenImpl;
 import org.meteornetwork.meteor.saml.TokenAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.util.SerializationUtils;
 
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.AccessProviderService", serviceName = "AccessProviderService")
 public class AccessProviderServiceImpl implements AccessProviderService {
@@ -91,7 +92,13 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 			duplicateAwardsMapObj.put(award.getAPSUniqueAwardID(), duplicateAwardIds);
 		}
 
-		duplicateAwardsMap.value = SerializationUtils.serialize(duplicateAwardsMapObj);
+		try {
+			duplicateAwardsMap.value = SerializationUtils.serialize(duplicateAwardsMapObj);
+		} catch (IOException e) {
+			LOG.error("Could not serialize duplicate awards map");
+			return;
+		}
+
 		LOG.debug("Returning data for ssn: " + ssn);
 	}
 
