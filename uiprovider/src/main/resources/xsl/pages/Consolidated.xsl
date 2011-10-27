@@ -584,7 +584,7 @@
 					<xsl:for-each select="$borrower-awards">
 					<td><xsl:choose>
 							<xsl:when test="Default/Def = 'true' or Default/Def = '1'">Yes</xsl:when>
-							<xsl:otherwise>No</xsl:otherwise>
+							<xsl:when test="Default/Def = 'false' or Default/Def='0'">No</xsl:when>
 						</xsl:choose></td>
 					</xsl:for-each>
 				</tr>
@@ -593,7 +593,7 @@
 					<xsl:for-each select="$borrower-awards">
 					<td><xsl:choose>
 							<xsl:when test="Default/SatisPmtArr = 'false' or Default/SatisPmtArr = '0'">No</xsl:when>
-							<xsl:otherwise>Yes</xsl:otherwise>
+							<xsl:when test="Default/SatisPmtArr = 'true' or Default/SatisPmtArr = '1'">Yes</xsl:when>
 						</xsl:choose></td>
 					</xsl:for-each>
 				</tr>
@@ -602,7 +602,7 @@
 					<xsl:for-each select="$borrower-awards">
 					<td><xsl:choose>
 							<xsl:when test="Default/EligibilityReinstatementIndicator = 'false' or Default/EligibilityReinstatementIndicator = '0'">No</xsl:when>
-							<xsl:otherwise>Yes</xsl:otherwise>
+							<xsl:when test="Default/EligibilityReinstatementIndicator = 'true' or Default/EligibilityReinstatementIndicator = '1'">Yes</xsl:when>
 						</xsl:choose></td>
 					</xsl:for-each>
 				</tr>
@@ -617,7 +617,7 @@
 					<xsl:for-each select="$borrower-awards">
 					<td><xsl:choose>
 							<xsl:when test="Default/DefAvertRq = 'false' or Default/DefAvertRq = '0'">No</xsl:when>
-							<xsl:otherwise>Yes</xsl:otherwise>
+							<xsl:when test="Default/DefAvertRq = 'true' or Default/DefAvertRq = '1'">Yes</xsl:when>
 						</xsl:choose></td>
 					</xsl:for-each>
 				</tr>
@@ -632,7 +632,7 @@
 					<xsl:for-each select="$borrower-awards">
 					<td><xsl:choose>
 							<xsl:when test="Default/ClaimFil = 'false' or Default/ClaimFil = '0'">No</xsl:when>
-							<xsl:otherwise>Yes</xsl:otherwise>
+							<xsl:when test="Default/ClaimFil = 'true' or Default/ClaimFil = '1'">Yes</xsl:when>
 						</xsl:choose></td>
 					</xsl:for-each>
 				</tr>
@@ -647,7 +647,7 @@
 					<xsl:for-each select="$borrower-awards">
 					<td><xsl:choose>
 							<xsl:when test="Default/ClaimPd = 'false' or Default/ClaimPd = '0'">No</xsl:when>
-							<xsl:otherwise>Yes</xsl:otherwise>
+							<xsl:when test="Default/ClaimPd = 'true' or Default/ClaimPd = '1'">Yes</xsl:when>
 						</xsl:choose></td>
 					</xsl:for-each>
 				</tr>

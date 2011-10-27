@@ -66,9 +66,11 @@
 					<th class="thPayment9" nowrap="nowrap">Data Provider Type</th>
 				</tr>
 			</thead>
+			<tbody>
 			<xsl:apply-templates select="//MeteorDataProviderInfo[count(MeteorDataProviderAwardDetails/Award[Borrower/SSNum/@unmasked=$ssn]) > 0]">
 				<xsl:sort select="MeteorDataProviderDetailInfo/DataProviderData/EntityName" data-type="text" order="ascending"/>
 			</xsl:apply-templates>
+			</tbody>
 		</table>
 		<div id="modal_showHelp" class="showOptions" style="width:800px;">
 			<xsl:call-template name="repayment-help"/>
@@ -92,106 +94,102 @@
 	</xsl:template>
 	
 	<xsl:template match="MeteorDataProviderInfo">	
-		<tfoot>
-			<tr>
-				<td class="tFooter" colspan="9" style="text-align: right"><a href="#" class="msgtrigger" id="triggerRepay{position()}">Repayment Info <img src="{$docroot}/imgs/repayment-info.gif" border="0" /></a> | <a href="#" class="msgtrigger" id="triggerTotals{position()}">Grand Totals <img src="{$docroot}/imgs/totals.gif" border="0" /></a><xsl:if test="count(MeteorDataProviderMsg/RsMsg) > 0"> | <a href="#" class="msgtrigger" id="triggerMsg{position()}">Messages <img src="{$docroot}/imgs/messages.gif" border="0" /></a></xsl:if></td>
-			</tr>
-			<tr class="altRow">
-				<td class="triggerRepay{position()} hideShow" colspan="12">
-					<table cellpadding="0" cellspacing="0" class="tblMsg">
-						<thead>
-							<tr>
-								<th class="thMsg" colspan="2">Repayment Info</th>
-							</tr>
-						</thead>
-						<tbody>
-							<xsl:if test="count(MeteorDataProviderAwardDetails/Award[Borrower/SSNum/@unmasked = $ssn]/Repayment/DaysPastDue) > 0">
-							<tr>
-								<td class="tdBorrowerPastDue" colspan="4"><strong>You are <xsl:apply-templates select="MeteorDataProviderAwardDetails" mode="max-days-past-due"/> Days Past Due!</strong></td>
-							</tr>
-							</xsl:if>
-							<xsl:variable name="repayment-due-date">
-								<xsl:apply-templates select="MeteorDataProviderAwardDetails" mode="earliest-due-date"/>
-							</xsl:variable>
-							<tr>
-								<td>Next Payment Due Date:</td>
-								<td><xsl:value-of select="$repayment-due-date"/></td>
-							</tr>
-							<tr>
-								<td>Amount Due:</td>
-								<td><xsl:call-template name="SumAmount"><xsl:with-param name="DUEDATE" select="$repayment-due-date"/></xsl:call-template></td>
-							</tr>
-						</tbody>
-					</table>
-				</td>
-			</tr>
-			<tr class="altRow">
-				<td class="triggerTotals{position()} hideShow" colspan="12">
-					<table cellpadding="0" cellspacing="0" class="tblMsg">
-						<thead>
-							<tr>
-								<th class="thMsg" colspan="2">Grand Totals</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Grand Total Original Account Balance:</td>
-								<td>
-									<xsl:call-template name="format-number-if-exists">
-										<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OriginalBalanceGrandTotal"/>
-										<xsl:with-param name="format" select="'$###,##0.00'"/>
-									</xsl:call-template>
-								</td>
-							</tr>
-							<tr>
-								<td>Grand Total Outstanding Account Balance:</td>
-								<td>
-									<xsl:call-template name="format-number-if-exists">
-										<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OutstandingBalanceGrandTotal"/>
-										<xsl:with-param name="format" select="'$###,##0.00'"/>
-									</xsl:call-template>
-								</td>
-							</tr>
-							<tr>
-								<td>Grand Total Other Fees Currently Outstanding:</td>
-								<td>
-									<xsl:call-template name="format-number-if-exists">
-										<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OtherFeesOutstandingGrandTotal"/>
-										<xsl:with-param name="format" select="'$###,##0.00'"/>
-									</xsl:call-template>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</td>
-			</tr>
-			<tr class="altRow">
-				<td class="triggerMsg{position()} hideShow" colspan="12">
-					<table cellpadding="0" cellspacing="0" class="tblMsg">
-						<thead>
-							<tr>
-								<th class="thMsg" colspan="2">Messages</th>
-							</tr>
-						</thead>
-						<tbody>
-							<xsl:apply-templates select="MeteorDataProviderMsg"/>
-						</tbody>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td class="tFooter" colspan="9"><p>If you require additional information or feel that any of the data displayed for this award is incorrect or invalid, please contact the source of the data (For contact information, click on the provider&#39;s name above)</p></td>
-			</tr>
-		</tfoot>
-		<tbody>
-			<xsl:apply-templates select="MeteorDataProviderAwardDetails/Award[Borrower/SSNum/@unmasked=$ssn]">
-				<xsl:sort select="Disbursement[last()]/ActualDisbDt | Disbursement[last() and (not(ActualDisbDt))]/SchedDisbDt" order="descending" data-type="text" />
-				<xsl:sort select="AwardType" order="ascending" data-type="text"/>
-			</xsl:apply-templates>
-		</tbody>
+		<xsl:apply-templates select="MeteorDataProviderAwardDetails/Award[Borrower/SSNum/@unmasked=$ssn]">
+			<xsl:sort select="Disbursement[last()]/ActualDisbDt | Disbursement[last() and (not(ActualDisbDt))]/SchedDisbDt" order="descending" data-type="text" />
+			<xsl:sort select="AwardType" order="ascending" data-type="text"/>
+		</xsl:apply-templates>
+		<tr>
+			<td class="tFooter" colspan="9" style="text-align: right"><a href="#" class="msgtrigger" id="triggerRepay{position()}">Repayment Info <img src="{$docroot}/imgs/repayment-info.gif" border="0" /></a> | <a href="#" class="msgtrigger" id="triggerTotals{position()}">Grand Totals <img src="{$docroot}/imgs/totals.gif" border="0" /></a><xsl:if test="count(MeteorDataProviderMsg/RsMsg) > 0"> | <a href="#" class="msgtrigger" id="triggerMsg{position()}">Messages <img src="{$docroot}/imgs/messages.gif" border="0" /></a></xsl:if></td>
+		</tr>
+		<tr class="altRow">
+			<td class="triggerRepay{position()} hideShow" colspan="12">
+				<table cellpadding="0" cellspacing="0" class="tblMsg">
+					<thead>
+						<tr>
+							<th class="thMsg" colspan="2">Repayment Info</th>
+						</tr>
+					</thead>
+					<tbody>
+						<xsl:if test="count(MeteorDataProviderAwardDetails/Award[Borrower/SSNum/@unmasked = $ssn]/Repayment/DaysPastDue) > 0">
+						<tr>
+							<td class="tdBorrowerPastDue" colspan="4"><strong>You are <xsl:apply-templates select="MeteorDataProviderAwardDetails" mode="max-days-past-due"/> Days Past Due!</strong></td>
+						</tr>
+						</xsl:if>
+						<xsl:variable name="repayment-due-date">
+							<xsl:apply-templates select="MeteorDataProviderAwardDetails" mode="earliest-due-date"/>
+						</xsl:variable>
+						<tr>
+							<td>Next Payment Due Date:</td>
+							<td><xsl:value-of select="$repayment-due-date"/></td>
+						</tr>
+						<tr>
+							<td>Amount Due:</td>
+							<td><xsl:call-template name="SumAmount"><xsl:with-param name="DUEDATE" select="$repayment-due-date"/></xsl:call-template></td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr class="altRow">
+			<td class="triggerTotals{position()} hideShow" colspan="12">
+				<table cellpadding="0" cellspacing="0" class="tblMsg">
+					<thead>
+						<tr>
+							<th class="thMsg" colspan="2">Grand Totals</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Grand Total Original Account Balance:</td>
+							<td>
+								<xsl:call-template name="format-number-if-exists">
+									<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OriginalBalanceGrandTotal"/>
+									<xsl:with-param name="format" select="'$###,##0.00'"/>
+								</xsl:call-template>
+							</td>
+						</tr>
+						<tr>
+							<td>Grand Total Outstanding Account Balance:</td>
+							<td>
+								<xsl:call-template name="format-number-if-exists">
+									<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OutstandingBalanceGrandTotal"/>
+									<xsl:with-param name="format" select="'$###,##0.00'"/>
+								</xsl:call-template>
+							</td>
+						</tr>
+						<tr>
+							<td>Grand Total Other Fees Currently Outstanding:</td>
+							<td>
+								<xsl:call-template name="format-number-if-exists">
+									<xsl:with-param name="number" select="MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OtherFeesOutstandingGrandTotal"/>
+									<xsl:with-param name="format" select="'$###,##0.00'"/>
+								</xsl:call-template>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr class="altRow">
+			<td class="triggerMsg{position()} hideShow" colspan="12">
+				<table cellpadding="0" cellspacing="0" class="tblMsg">
+					<thead>
+						<tr>
+							<th class="thMsg" colspan="2">Messages</th>
+						</tr>
+					</thead>
+					<tbody>
+						<xsl:apply-templates select="MeteorDataProviderMsg"/>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="tFooter" colspan="9"><p>If you require additional information or feel that any of the data displayed for this award is incorrect or invalid, please contact the source of the data (For contact information, click on the provider&#39;s name above)</p></td>
+		</tr>
 	</xsl:template>
 	
-	<xsl:template match="Award">
+	<xsl:template match="Award[DataProviderType != 'GSP']">
 		<tr>
 			<xsl:attribute name="class"><xsl:choose>
 				<xsl:when test="position() mod 2 = 1">defRow</xsl:when>

@@ -49,7 +49,7 @@ public enum LoanTypeEnum {
 
 	public static LoanTypeEnum getNameIgnoreCase(String name) {
 		for (LoanTypeEnum value : LoanTypeEnum.values()) {
-			if (name.equalsIgnoreCase(value.getName())) {
+			if (value.getName().equalsIgnoreCase(name)) {
 				return value;
 			}
 		}

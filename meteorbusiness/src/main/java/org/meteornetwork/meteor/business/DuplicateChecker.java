@@ -120,18 +120,9 @@ public class DuplicateChecker {
 		LoanTypeEnum existingAwardType = LoanTypeEnum.getNameIgnoreCase(existingAward.getAwardType());
 		LoanTypeEnum newAwardType = LoanTypeEnum.getNameIgnoreCase(newAward.getAwardType());
 
-		/*
-		 * If <AwardType> equals any of the following values, then move the
-		 * award directly to the Award Summary screen as Best Source
-		 */
-		if (awardTypeAlwaysBestSource(existingAwardType) && awardTypeAlwaysBestSource(newAwardType)) {
-			return false;
-		}
-
 		if (existingAwardType != null && existingAwardType.equals(newAwardType)) {
 			return step6();
 		}
-
 		return existingAwardType != null && newAwardType != null && LoanTypeEnum.isConsolidation(existingAwardType) && LoanTypeEnum.isConsolidation(newAwardType) ? step5() : false;
 	}
 
@@ -139,6 +130,7 @@ public class DuplicateChecker {
 	 * If <AwardType> equals any of the following values, then move the award
 	 * directly to the Award Summary screen as Best Source
 	 */
+	@SuppressWarnings("unused")
 	private boolean awardTypeAlwaysBestSource(LoanTypeEnum type) {
 		if (type != null) {
 			switch (type) {
