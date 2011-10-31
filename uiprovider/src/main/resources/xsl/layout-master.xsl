@@ -13,7 +13,7 @@
 	
 	<xsl:template name="subnavigation-award-detail">
 		<xsl:param name="awardId"/>
-		<strong>For this Loan:</strong> <a href="{$docroot}/meteor/awardDetail.do?apsUniqAwardId={$awardId}">View Eligibility Details</a> | <a href="{$docroot}/meteor/disbursement.do?apsUniqAwardId={$awardId}">View Disbursement Details</a> | <a href="{$docroot}/meteor/references.do?apsUniqAwardId={$awardId}">View References</a> | <a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={$awardId}">View Repayment and Billing Details</a><xsl:if test="$role = 'FAA' or $inquiryRole = 'FAA'"> | <a href="{$docroot}/meteor/consolidated.do?apsUniqAwardId={$awardId}">Consolidated View</a></xsl:if>
+		<strong>For this Loan:</strong> <a href="{$docroot}/meteor/awardDetail.do?apsUniqAwardId={$awardId}">View Eligibility Details</a> | <a href="{$docroot}/meteor/disbursement.do?apsUniqAwardId={$awardId}">View Disbursement Details</a> | <a href="{$docroot}/meteor/references.do?apsUniqAwardId={$awardId}">View References</a><xsl:if test="//Award[APSUniqueAwardID = $awardId and DataProviderType != 'GSP']"> | <a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={$awardId}">View Repayment and Billing Details</a></xsl:if><xsl:if test="$role = 'FAA' or $inquiryRole = 'FAA'"> | <a href="{$docroot}/meteor/consolidated.do?apsUniqAwardId={$awardId}">Consolidated View</a></xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="/">
@@ -68,10 +68,10 @@
 										<div class="studentInfo">
 										<xsl:choose>
 											<xsl:when test="($person='student')">
-												<p>Student Name: <strong><xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/FirstName"/>&#32;<xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/MiddleInitial"/>&#32;<xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/LastName"/>&#32;(<xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/SSNum"/>)</strong></p>
+												<p>Student Name: <strong><xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/FirstName"/>&#32;  <xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/MiddleInitial"/>&#32;  <xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/LastName"/>&#32;(<xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/SSNum"/>)</strong></p>
 											</xsl:when>
 											<xsl:when test="($person='borrower') and (count(//Borrower) > 0)">
-												<p>Borrower Name: <strong><xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/FirstName"/>&#32;<xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/MiddleInitial"/>&#32;<xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/LastName"/>&#32;(<xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/SSNum"/>)</strong></p>
+												<p>Borrower Name: <strong><xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/FirstName"/>&#32;  <xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/MiddleInitial"/>&#32;  <xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/LastName"/>&#32;  (<xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/SSNum"/>)</strong></p>
 											</xsl:when>
 										</xsl:choose>
 										<xsl:if test="$role = 'FAA' or $role = 'APCSR' or $role = 'LENDER'">
@@ -111,6 +111,7 @@
 						<td width="20" class="white noPad"><img src="{$docroot}/imgs/spacer.gif" width="20px" border="0" /></td>
 						<td class="white content">
 							<xsl:apply-templates select="pescxml:MeteorRsMsg"/>
+							<xsl:apply-templates select="node"/>
 						</td>
 						<td width="20" class="white noPad"><img src="{$docroot}/imgs/spacer.gif" width="20px" border="0" /></td>
 					</tr>
@@ -122,6 +123,12 @@
 				</table>
 			</body>
 		</html>
+	</xsl:template>
+	
+	<xsl:template match="node">
+		<p>
+			We are sorry, your request was unable to complete. Please try again later. If the problem persists, please contact your Meteor provider.
+		</p>
 	</xsl:template>
 
 </xsl:stylesheet>

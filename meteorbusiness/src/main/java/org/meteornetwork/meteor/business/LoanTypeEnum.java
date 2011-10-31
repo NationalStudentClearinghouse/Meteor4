@@ -28,9 +28,10 @@ public enum LoanTypeEnum {
 	DLPLUS("DLPLUS"),
 	DLGB("DLGB"),
 
+	PERKINS("Perkins"),
+	
 	FWSP("FWSP"),
 	SEOG("SEOG"),
-	PERKINS("Perkins"),
 	CWC("CWC"),
 	PELL("Pell"),
 	OTHER("Other"),
@@ -75,6 +76,25 @@ public enum LoanTypeEnum {
 		case DLCUSUB:
 		case DLCHEAL:
 		case DLCOTHR:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	/**
+	 * Returns true if loan type is a grant/scholarship loan
+	 * 
+	 * @param type
+	 * @return true if loan type is a consolidation loan
+	 */
+	public static boolean isGrantScholarship(LoanTypeEnum type) {
+		switch (type) {
+		case FWSP:
+		case SEOG:
+		case PELL:
+		case STATEGRNT:
+		case STATESCHL:
 			return true;
 		default:
 			return false;

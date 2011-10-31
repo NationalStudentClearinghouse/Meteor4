@@ -20,7 +20,7 @@ public enum ProviderType {
 	
 	public static ProviderType valueOfType(String type) {
 		for (ProviderType value : ProviderType.values()) {
-			if (type.equals(value.getType())) {
+			if (value.getType().equals(type)) {
 				return value;
 			}
 		}

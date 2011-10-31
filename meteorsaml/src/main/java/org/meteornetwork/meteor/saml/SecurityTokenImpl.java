@@ -51,7 +51,7 @@ public class SecurityTokenImpl implements SecurityToken {
 	private String subjectLocalityIpAddress;
 	private String subjectLocalityDnsAddress;
 
-	private static final Integer VALIDITY_PERIOD_DEFAULT = 14400; // seconds
+	private static final Integer VALIDITY_PERIOD_DEFAULT = 3600; // seconds
 	private DateTime conditionsNotBefore;
 	private DateTime conditionsNotOnOrAfter;
 

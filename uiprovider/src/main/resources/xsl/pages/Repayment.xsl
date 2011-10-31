@@ -76,7 +76,9 @@
 			<xsl:call-template name="repayment-help"/>
 		</div>
 		
-		<xsl:call-template name="loan-locator"/>
+		<xsl:if test="$role != 'APCSR'">
+			<xsl:call-template name="loan-locator"/>
+		</xsl:if>
 		
 		<xsl:if test="count(//MeteorDataProviderMsg[RsMsgLevel='E']) > 0">
 		<table cellpadding="0" cellspacing="0" class="tblMsg">
@@ -93,11 +95,13 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template match="MeteorDataProviderInfo">	
+	<xsl:template match="MeteorDataProviderInfo">
 		<xsl:apply-templates select="MeteorDataProviderAwardDetails/Award[Borrower/SSNum/@unmasked=$ssn]">
 			<xsl:sort select="Disbursement[last()]/ActualDisbDt | Disbursement[last() and (not(ActualDisbDt))]/SchedDisbDt" order="descending" data-type="text" />
 			<xsl:sort select="AwardType" order="ascending" data-type="text"/>
 		</xsl:apply-templates>
+		<xsl:variable name="atLeast1NonGrantScholarship"><xsl:apply-templates select="MeteorDataProviderAwardDetails/Award[Borrower/SSNum/@unmasked=$ssn]" mode="count"/></xsl:variable>
+		<xsl:if test="string-length($atLeast1NonGrantScholarship) > 0">
 		<tr>
 			<td class="tFooter" colspan="9" style="text-align: right"><a href="#" class="msgtrigger" id="triggerRepay{position()}">Repayment Info <img src="{$docroot}/imgs/repayment-info.gif" border="0" /></a> | <a href="#" class="msgtrigger" id="triggerTotals{position()}">Grand Totals <img src="{$docroot}/imgs/totals.gif" border="0" /></a><xsl:if test="count(MeteorDataProviderMsg/RsMsg) > 0"> | <a href="#" class="msgtrigger" id="triggerMsg{position()}">Messages <img src="{$docroot}/imgs/messages.gif" border="0" /></a></xsl:if></td>
 		</tr>
@@ -187,78 +191,93 @@
 		<tr>
 			<td class="tFooter" colspan="9"><p>If you require additional information or feel that any of the data displayed for this award is incorrect or invalid, please contact the source of the data (For contact information, click on the provider&#39;s name above)</p></td>
 		</tr>
+		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template match="Award[DataProviderType != 'GSP']">
-		<tr>
-			<xsl:attribute name="class"><xsl:choose>
-				<xsl:when test="position() mod 2 = 1">defRow</xsl:when>
-				<xsl:otherwise>altRow</xsl:otherwise>
-			</xsl:choose></xsl:attribute>
-			<td class="tdPayment1" nowrap="nowrap" valign="middle"><a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={APSUniqueAwardID}"><img src="{$docroot}/imgs/view-details.jpg" border="0" /></a></td>
-			<td class="tdPayment2" nowrap="nowrap">
-				<xsl:choose>
-				<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
-					<xsl:variable name="isConsolidation"><xsl:apply-templates select="AwardType" mode="is-consolidation"/></xsl:variable>
-					<xsl:if test="$isConsolidation = 'false'">
-						<xsl:apply-templates select="Student" mode="fullname"/>
-					</xsl:if>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:apply-templates select="Borrower" mode="fullname"/>
-				</xsl:otherwise>
-				</xsl:choose>
-			</td>
-			<td class="tdPayment3" nowrap="nowrap">
-				<xsl:apply-templates select="AwardType"/>
-			</td>
-			<td class="tdPayment4" nowrap="nowrap">
-				<xsl:apply-templates select="LoanStat"/>
-			</td>
-			<td class="tdPayment5" nowrap="nowrap">
-				<xsl:choose>
-					<xsl:when test="string(number(GrossLoanAmount)) != 'NaN'">
-						<xsl:value-of select="format-number(GrossLoanAmount, '$###,##0.00')"/>
+	<!-- Award count excludes grants and scholarships -->
+	<xsl:template match="Award" mode="count"><xsl:variable name="isGrantScholarship"><xsl:apply-templates select="AwardType" mode="is-grant-scholarship"/></xsl:variable><xsl:if test="$isGrantScholarship != 'true'">1</xsl:if></xsl:template>
+	
+	<xsl:template match="Award">
+		<xsl:variable name="isGrantScholarship"><xsl:apply-templates select="AwardType" mode="is-grant-scholarship"/></xsl:variable>
+		<xsl:if test="$isGrantScholarship != 'true'">
+			<tr>
+				<xsl:attribute name="class"><xsl:choose>
+					<xsl:when test="position() mod 2 = 1">defRow</xsl:when>
+					<xsl:otherwise>altRow</xsl:otherwise>
+				</xsl:choose></xsl:attribute>
+				<td class="tdPayment1" nowrap="nowrap" valign="middle"><a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={APSUniqueAwardID}"><img src="{$docroot}/imgs/view-details.jpg" border="0" /></a></td>
+				<td class="tdPayment2" nowrap="nowrap">
+					<xsl:choose>
+					<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
+						<xsl:variable name="isConsolidation"><xsl:apply-templates select="AwardType" mode="is-consolidation"/></xsl:variable>
+						<xsl:if test="$isConsolidation = 'false'">
+							<xsl:apply-templates select="Student" mode="fullname"/>
+						</xsl:if>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:call-template name="format-number-if-exists">
-							<xsl:with-param name="number" select="AwardAmt"/>
-							<xsl:with-param name="format" select="'$###,##0.00'"/>
-						</xsl:call-template>
+						<xsl:apply-templates select="Borrower" mode="fullname"/>
 					</xsl:otherwise>
-				</xsl:choose>
-			</td>
-			<td class="tdPayment6" nowrap="nowrap">
-				<xsl:choose>
-					<xsl:when test="AwardBeginDt">
-						<xsl:value-of select="AwardBeginDt"/>
-					</xsl:when>
-				</xsl:choose>
-			</td>
-			<td class="tdPayment7" nowrap="nowrap">
-				<xsl:choose>
-					<xsl:when test="AwardEndDt">
-						<xsl:value-of select="AwardEndDt"/>
-					</xsl:when>
-				</xsl:choose>
-			</td>
-			<td class="tdPayment8" nowrap="nowrap">
-				<xsl:apply-templates select="." mode="select-best-source"/>
-			</td>
-			<td class="tdPayment9" nowrap="nowrap">
-				<xsl:apply-templates select="DataProviderType" />
-			</td>
-		</tr>
-		<xsl:if test="OnlinePaymentProcessURL or OnlineDeferForbProcessURL">
-		<tr>
-			<xsl:attribute name="class"><xsl:choose>
-				<xsl:when test="position() mod 2 = 1">defRow</xsl:when>
-				<xsl:otherwise>altRow</xsl:otherwise>
-			</xsl:choose></xsl:attribute>
-			<td colspan="9" style="text-align: right">
-				<xsl:if test="OnlinePaymentProcessURL"><a href="{OnlinePaymentProcessURL}">Make a Payment</a></xsl:if> <xsl:if test="OnlinePaymentProcessURL and OnlineDeferForbProcessURL"> | </xsl:if> <xsl:if test="OnlineDeferForbProcessURL"><a href="{OnlineDeferForbProcessURL}">Apply for a Deferment/Forbearance</a></xsl:if>
-			</td>
-		</tr>
+					</xsl:choose>
+				</td>
+				<td class="tdPayment3" nowrap="nowrap">
+					<xsl:apply-templates select="AwardType"/>
+				</td>
+				<td class="tdPayment4" nowrap="nowrap">
+					<xsl:apply-templates select="LoanStat"/>
+				</td>
+				<td class="tdPayment5" nowrap="nowrap">
+					<xsl:choose>
+						<xsl:when test="string(number(GrossLoanAmount)) != 'NaN'">
+							<xsl:value-of select="format-number(GrossLoanAmount, '$###,##0.00')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="format-number-if-exists">
+								<xsl:with-param name="number" select="AwardAmt"/>
+								<xsl:with-param name="format" select="'$###,##0.00'"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</td>
+				<td class="tdPayment6" nowrap="nowrap">
+					<xsl:choose>
+						<xsl:when test="AwardBeginDt">
+							<xsl:value-of select="AwardBeginDt"/>
+						</xsl:when>
+					</xsl:choose>
+				</td>
+				<td class="tdPayment7" nowrap="nowrap">
+					<xsl:choose>
+						<xsl:when test="AwardEndDt">
+							<xsl:value-of select="AwardEndDt"/>
+						</xsl:when>
+					</xsl:choose>
+				</td>
+				<td class="tdPayment8" nowrap="nowrap">
+					<xsl:apply-templates select="." mode="select-best-source"/>
+				</td>
+				<td class="tdPayment9" nowrap="nowrap">
+					<xsl:apply-templates select="DataProviderType" />
+				</td>
+			</tr>
+			<xsl:if test="($role = 'BORROWER' or $inquiryRole = 'BORROWER') and (OnlinePaymentProcessURL or OnlineDeferForbProcessURL)">
+			<tr>
+				<xsl:attribute name="class"><xsl:choose>
+					<xsl:when test="position() mod 2 = 1">defRow</xsl:when>
+					<xsl:otherwise>altRow</xsl:otherwise>
+				</xsl:choose></xsl:attribute>
+				<td colspan="9" style="text-align: right">
+					<xsl:if test="OnlinePaymentProcessURL"><xsl:choose>
+						<xsl:when test="$role = 'APCSR'"><a href="#">Make a Payment</a></xsl:when>
+						<xsl:otherwise><a href="{OnlinePaymentProcessURL}">Make a Payment</a></xsl:otherwise>
+					</xsl:choose></xsl:if> 
+					<xsl:if test="OnlinePaymentProcessURL and OnlineDeferForbProcessURL"> | </xsl:if> 
+					<xsl:if test="OnlineDeferForbProcessURL"><xsl:choose>
+						<xsl:when test="$role = 'APCSR'"><a href="#">Apply for a Deferment/Forbearance</a></xsl:when>
+						<xsl:otherwise><a href="{OnlineDeferForbProcessURL}">Apply for a Deferment/Forbearance</a></xsl:otherwise>
+					</xsl:choose></xsl:if>
+				</td>
+			</tr>
+			</xsl:if>
 		</xsl:if>
 	</xsl:template>
 	

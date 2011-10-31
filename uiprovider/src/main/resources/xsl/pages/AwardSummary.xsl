@@ -83,7 +83,9 @@
 			</tbody>
 		</table>
 		
-		<xsl:call-template name="loan-locator"/>
+		<xsl:if test="$role != 'APCSR'">
+			<xsl:call-template name="loan-locator"/>
+		</xsl:if>
 		
 		<xsl:if test="count(//MeteorDataProviderMsg[RsMsgLevel='E']) > 0">
 		<table cellpadding="0" cellspacing="0" class="tblMsg">
@@ -116,9 +118,14 @@
 				<xsl:choose>
 				<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
 					<xsl:variable name="isConsolidation"><xsl:apply-templates select="AwardType" mode="is-consolidation"/></xsl:variable>
-					<xsl:if test="$isConsolidation = 'false'">
+					<xsl:choose>
+					<xsl:when test="$isConsolidation = 'false'">
 						<xsl:apply-templates select="Student" mode="fullname"/>
-					</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:apply-templates select="Borrower" mode="fullname"/>
+					</xsl:otherwise>
+					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:apply-templates select="Borrower" mode="fullname"/>

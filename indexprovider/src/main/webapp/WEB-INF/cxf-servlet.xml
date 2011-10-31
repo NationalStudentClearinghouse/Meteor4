@@ -15,7 +15,7 @@
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 	
 	<http-conf:conduit name="*.http-conduit">
-		<http-conf:client ConnectionTimeout="30000" ReceiveTimeout="120000"/>
+		<http-conf:client ConnectionTimeout="30000" ReceiveTimeout="180000"/>
 	</http-conf:conduit>
 	
 	<bean id="indexProviderServiceImpl" autowire="byType" class="org.meteornetwork.meteor.provider.index.ws.IndexProviderServiceImpl" scope="request">

@@ -116,13 +116,18 @@ public class GrandTotalCalculator {
 
 		BigDecimal total = BigDecimal.ZERO;
 		for (Award award : dataProviderInfo.getMeteorDataProviderAwardDetails().getAward()) {
-			if (award.getBorrower() != null && borrowerSsn.equals(award.getBorrower().getSSNum().getContent()) && !consolLoanWithinDaysOfPaidLoanStatDt(award)) {
+			if (award.getBorrower() != null && borrowerSsn.equals(award.getBorrower().getSSNum().getContent()) && !consolLoanWithinDaysOfPaidLoanStatDt(award) && !isGrantScholarship(award)) {
 				BigDecimal toAdd = award.getGrossLoanAmount() == null ? (award.getAwardAmt() == null ? BigDecimal.ZERO : award.getAwardAmt()) : award.getGrossLoanAmount();
 				total = total.add(toAdd);
 			}
 		}
 
 		totals.setOriginalBalanceGrandTotal(total);
+	}
+
+	private boolean isGrantScholarship(Award award) {
+		LoanTypeEnum loanType = LoanTypeEnum.getNameIgnoreCase(award.getAwardType());
+		return loanType != null && LoanTypeEnum.isGrantScholarship(loanType);
 	}
 
 	private boolean consolLoanWithinDaysOfPaidLoanStatDt(Award award) {
@@ -166,7 +171,7 @@ public class GrandTotalCalculator {
 
 		BigDecimal total = BigDecimal.ZERO;
 		for (Award award : dataProviderInfo.getMeteorDataProviderAwardDetails().getAward()) {
-			if (award.getBorrower() != null && borrowerSsn.equals(award.getBorrower().getSSNum().getContent())) {
+			if (award.getBorrower() != null && borrowerSsn.equals(award.getBorrower().getSSNum().getContent()) && !isGrantScholarship(award)) {
 				if (award.getRepayment() != null && award.getRepayment().getAcctBal() != null) {
 					total = total.add(award.getRepayment().getAcctBal());
 				}
@@ -206,7 +211,7 @@ public class GrandTotalCalculator {
 
 		BigDecimal total = BigDecimal.ZERO;
 		for (Award award : dataProviderInfo.getMeteorDataProviderAwardDetails().getAward()) {
-			if (award.getBorrower() != null && borrowerSsn.equals(award.getBorrower().getSSNum().getContent()) && award.getRepayment() != null) {
+			if (award.getBorrower() != null && borrowerSsn.equals(award.getBorrower().getSSNum().getContent()) && award.getRepayment() != null && !isGrantScholarship(award)) {
 				if (award.getRepayment().getLateFeesCount() > 0) {
 					for (LateFees fees : award.getRepayment().getLateFees()) {
 						total = total.add(fees.getLateFeesAmount());

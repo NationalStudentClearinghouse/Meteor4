@@ -262,6 +262,18 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template match="Award/AwardType" mode="is-grant-scholarship">
+		<xsl:choose>
+			<xsl:when test=". = 'FWSP'">true</xsl:when>
+			<xsl:when test=". = 'SEOG'">true</xsl:when>
+			<xsl:when test=". = 'CWC'">true</xsl:when>
+			<xsl:when test=". = 'Pell'">true</xsl:when>
+			<xsl:when test=". = 'StateGrnt'">true</xsl:when>
+			<xsl:when test=". = 'StateSchl'">true</xsl:when>
+			<xsl:otherwise>false</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
 	<!-- Loan status codes -->
 	<xsl:template match="Award/LoanStat">
 		<xsl:choose>

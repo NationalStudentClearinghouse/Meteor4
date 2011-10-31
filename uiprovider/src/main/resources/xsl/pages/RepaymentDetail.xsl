@@ -78,7 +78,7 @@
 		</div>
 	</xsl:template>
 	
-	<xsl:template match="Award[DataProviderType != 'GSP']">
+	<xsl:template match="Award">
 		<tr>
 			<xsl:attribute name="class"><xsl:choose>
 				<xsl:when test="position() mod 2 = 1">defRow</xsl:when>

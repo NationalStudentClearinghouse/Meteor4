@@ -1,6 +1,5 @@
 package org.meteornetwork.meteor.registry.ws;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.jws.WebService;

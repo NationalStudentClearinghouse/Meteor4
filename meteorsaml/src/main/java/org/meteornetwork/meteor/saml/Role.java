@@ -24,7 +24,7 @@ public enum Role {
 	
 	public static Role valueOfName(String name) {
 		for (Role value : Role.values()) {
-			if (name.equals(value.getName())) {
+			if (value.getName().equals(name)) {
 				return value;
 			}
 		}

@@ -11,7 +11,7 @@
 		<script type="text/javascript" src="{$docroot}/scripts/jquery-1.6.4.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready( function() {
-				$.get('<xsl:value-of select="$redirect-url"/>?splash', function() {
+				$.get('<xsl:value-of select="$redirect-url"/>?splash=&#38;' + (new Date()).getTime(), function() {
 					window.location.href = '<xsl:value-of select="$redirect-url"/>';
 				});
 			});

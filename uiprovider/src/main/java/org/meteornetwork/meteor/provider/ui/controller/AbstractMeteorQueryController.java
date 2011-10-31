@@ -143,7 +143,6 @@ public abstract class AbstractMeteorQueryController extends AbstractMeteorContro
 	private StreamSource createStreamSource(String xml) {
 		if (xml == null) {
 			LOG.debug("XML from access provider is null - displaying default xml");
-			// TODO: use template instead
 			return new StreamSource(new ByteArrayInputStream("<?xml version=\"1.0\" encoding=\"utf-8\"?><node></node>".getBytes()));
 		}
 		return new StreamSource(new ByteArrayInputStream(xml.getBytes()));
