@@ -18,8 +18,8 @@
 		<http-conf:client ConnectionTimeout="30000" ReceiveTimeout="180000"/>
 	</http-conf:conduit>
 	
-	<bean id="accessProviderServiceImpl" autowire="byType" class="org.meteornetwork.meteor.provider.access.ws.AccessProviderServiceImpl" scope="request">
-		<aop:scoped-proxy/>
+	<bean id="accessProviderServiceImpl" autowire="byType" class="org.meteornetwork.meteor.provider.access.ws.AccessProviderServiceImpl">
+		<lookup-method name="getRequestInfo" bean="requestInfo"/>
 	</bean>
  	
  	<bean id="samlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSamlCreationCallbackHandler">

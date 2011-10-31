@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("DataQueryAdapterImpl")
 @Scope("prototype")
 public class DataQueryAdapterImpl implements DataQueryAdapter {
 

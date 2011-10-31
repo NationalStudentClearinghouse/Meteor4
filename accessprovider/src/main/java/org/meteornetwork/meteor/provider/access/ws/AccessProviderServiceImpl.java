@@ -33,13 +33,13 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 
 	private Properties authenticationProperties;
 
-	private RequestInfo requestInfo;
 	private RegistryManager registryManager;
 
 	@Override
 	public String findDataForBorrower(String ssn, TokenAttributes meteorAttributes) {
 		LOG.debug("AP received request for best source data for ssn: " + ssn);
 
+		RequestInfo requestInfo = getRequestInfo();
 		requestInfo.setMeteorInstitutionIdentifier(authenticationProperties.getProperty("authentication.identifier"));
 		requestInfo.setSecurityToken(new SecurityTokenImpl());
 		requestInfo.getSecurityToken().setMeteorAttributes(meteorAttributes);
@@ -62,6 +62,7 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 	public void findDataForBorrowerWithConsolidated(String ssn, TokenAttributes meteorAttributes, Holder<String> resultBestSource, Holder<String> resultAll, Holder<byte[]> duplicateAwardsMap) {
 		LOG.debug("AP received request for best source data for ssn: " + ssn);
 
+		RequestInfo requestInfo = getRequestInfo();
 		requestInfo.setMeteorInstitutionIdentifier(authenticationProperties.getProperty("authentication.identifier"));
 		requestInfo.setSecurityToken(new SecurityTokenImpl());
 		requestInfo.getSecurityToken().setMeteorAttributes(meteorAttributes);
@@ -118,12 +119,8 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 	}
 
 	public RequestInfo getRequestInfo() {
-		return requestInfo;
-	}
-
-	@Autowired
-	public void setRequestInfo(RequestInfo requestInfo) {
-		this.requestInfo = requestInfo;
+		// overridden by spring method injection
+		return null;
 	}
 
 	public RegistryManager getRegistryManager() {

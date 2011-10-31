@@ -19,6 +19,7 @@ public class IndexProviderServiceImpl implements IndexProviderService {
 	private static final Logger LOG = LoggerFactory.getLogger(IndexProviderServiceImpl.class);
 
 	private IndexProviderManager manager;
+	
 	@Override
 	public String findDataProvidersForBorrower(String requestXML) {
 		LOG.debug("IP received requestXML: " + requestXML);
@@ -43,6 +44,7 @@ public class IndexProviderServiceImpl implements IndexProviderService {
 		
 		return marshalledResponseWriter.toString();
 	}
+	
 	public IndexProviderManager getManager() {
 		return manager;
 	}

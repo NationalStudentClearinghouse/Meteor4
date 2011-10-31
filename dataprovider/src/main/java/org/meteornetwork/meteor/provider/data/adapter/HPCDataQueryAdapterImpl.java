@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
  * @author jlazos
  * 
  */
-@Component
+@Component("HPCDataQueryAdapterImpl")
 @Scope("prototype")
 public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 

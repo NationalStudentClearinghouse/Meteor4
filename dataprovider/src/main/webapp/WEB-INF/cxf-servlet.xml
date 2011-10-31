@@ -18,12 +18,11 @@
 		<http-conf:client ConnectionTimeout="30000" ReceiveTimeout="180000"/>
 	</http-conf:conduit>
 	
-	<bean id="dataProviderServiceImpl" autowire="byType" class="org.meteornetwork.meteor.provider.data.ws.DataProviderServiceImpl" scope="request">
-		<aop:scoped-proxy/>
-	</bean>
-	
-	<bean id="dataProviderHPCServiceImpl" autowire="byType" class="org.meteornetwork.meteor.provider.data.ws.DataProviderHPCServiceImpl" scope="request">
-		<aop:scoped-proxy/>
+	<bean id="dataProviderServiceImpl" autowire="byType" class="org.meteornetwork.meteor.provider.data.ws.DataProviderServiceImpl">
+		<lookup-method name="getAdapter" bean="DataQueryAdapterImpl"/>
+	</bean>	
+	<bean id="dataProviderHPCServiceImpl" autowire="byType" class="org.meteornetwork.meteor.provider.data.ws.DataProviderHPCServiceImpl">
+		<lookup-method name="getAdapter" bean="HPCDataQueryAdapterImpl"/>
 	</bean>
  	
  	<bean id="MeteorSAMLTokenProcessor" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSAMLTokenProcessor">

@@ -15,16 +15,21 @@ public class DataProviderHPCServiceImpl implements DataProviderHPCService {
 	private static final Logger LOG = LoggerFactory.getLogger(DataProviderHPCServiceImpl.class);
 
 	private DataProviderManager dataManager;
-	private HPCDataQueryAdapterImpl adapter;
 
 	@Override
 	public String submitHPC(String rawHPCMessage) {
 		LOG.debug("DP received HPC request: " + rawHPCMessage);
 
+		HPCDataQueryAdapterImpl adapter = getAdapter();
 		adapter.setRawHPCMessage(rawHPCMessage.trim());
 		dataManager.queryDataForBorrower(adapter);
 
 		return adapter.getResponseHPCMessage();
+	}
+
+	public HPCDataQueryAdapterImpl getAdapter() {
+		// overridden by spring method-injection
+		return null;
 	}
 
 	public DataProviderManager getDataManager() {
@@ -36,13 +41,4 @@ public class DataProviderHPCServiceImpl implements DataProviderHPCService {
 		this.dataManager = dataManager;
 	}
 
-	public HPCDataQueryAdapterImpl getAdapter() {
-		return adapter;
-	}
-
-	@Autowired
-	public void setAdapter(HPCDataQueryAdapterImpl adapter) {
-		this.adapter = adapter;
-	}
-	
 }
