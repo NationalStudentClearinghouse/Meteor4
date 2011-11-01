@@ -58,7 +58,7 @@ public class SecurityTokenImplTest extends TestCase {
 		Assert.assertEquals("1.2.3.4", result.getSubjectLocalityIpAddress());
 		Assert.assertEquals("notarealdomain-false.com", result.getSubjectLocalityDnsAddress());
 		Assert.assertEquals(parseDate("2063-04-05T00:00:00.000-0000").getTime(), result.getConditionsNotBefore().getMillis());
-		Assert.assertEquals(parseDate("2063-04-05T04:00:00.000-0000").getTime(), result.getConditionsNotOnOrAfter().getMillis());
+		Assert.assertEquals(parseDate("2063-04-05T01:00:00.000-0000").getTime(), result.getConditionsNotOnOrAfter().getMillis());
 		Assert.assertEquals(ProviderType.ACCESS, result.getProviderType());
 		Assert.assertEquals("12345", result.getOrganizationId());
 		Assert.assertEquals("OPEID", result.getOrganizationIdType());
@@ -114,7 +114,7 @@ public class SecurityTokenImplTest extends TestCase {
 		Assert.assertEquals("1.2.3.4", result.getSubjectLocalityIpAddress());
 		Assert.assertEquals("notarealdomain-false.com", result.getSubjectLocalityDnsAddress());
 		Assert.assertEquals(parseDate("2063-04-05T00:00:00.000-0000").getTime(), result.getConditionsNotBefore().getMillis());
-		Assert.assertEquals(parseDate("2063-04-05T04:00:00.000-0000").getTime(), result.getConditionsNotOnOrAfter().getMillis());
+		Assert.assertEquals(parseDate("2063-04-05T01:00:00.000-0000").getTime(), result.getConditionsNotOnOrAfter().getMillis());
 		Assert.assertEquals("1", result.getAuthenticationProcessId());
 		Assert.assertEquals(Integer.valueOf(3), result.getLevel());
 		Assert.assertEquals("theuser", result.getUserHandle());
@@ -164,7 +164,7 @@ public class SecurityTokenImplTest extends TestCase {
 		Assert.assertEquals("1.2.3.4", result.getSubjectLocalityIpAddress());
 		Assert.assertEquals("notarealdomain-false.com", result.getSubjectLocalityDnsAddress());
 		Assert.assertEquals(parseDate("2063-04-05T00:00:00.000-0000").getTime(), result.getConditionsNotBefore().getMillis());
-		Assert.assertEquals(parseDate("2063-04-05T04:00:00.000-0000").getTime(), result.getConditionsNotOnOrAfter().getMillis());
+		Assert.assertEquals(parseDate("2063-04-05T01:00:00.000-0000").getTime(), result.getConditionsNotOnOrAfter().getMillis());
 		Assert.assertEquals("1", result.getAuthenticationProcessId());
 		Assert.assertEquals(Integer.valueOf(3), result.getLevel());
 		Assert.assertEquals("theuser", result.getUserHandle());
