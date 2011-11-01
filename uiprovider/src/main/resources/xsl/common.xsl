@@ -224,6 +224,7 @@
 			<xsl:when test=". = 'FFELPLUS'">FFELP PLUS</xsl:when>
 			<xsl:when test=". = 'FFELSub'">FFELP Subsidized</xsl:when>
 			<xsl:when test=". = 'FFELUnSub'">FFELP Unsubsidized</xsl:when>
+			<xsl:when test=". = 'FFELUnsub'">FFELP Unsubsidized</xsl:when>
 			<xsl:when test=". = 'FFELGB'">FFELP GradPLUS</xsl:when>
 			<xsl:when test=". = 'AltLoan'">Alternative Loan</xsl:when>
 			<xsl:when test=". = 'HEAL'">Health Education Assistance Loan</xsl:when>
@@ -233,6 +234,7 @@
 			<xsl:when test=". = 'DLCHeal'">DL Consolidation HEAL</xsl:when>
 			<xsl:when test=". = 'DLCOthr'">DL Consolidation Other</xsl:when>
 			<xsl:when test=". = 'DLSub'">Subsidized Direct Loan</xsl:when>
+			<xsl:when test=". = 'DLUnSub'">Unsubsidized Direct Loan</xsl:when>
 			<xsl:when test=". = 'DLUnsub'">Unsubsidized Direct Loan</xsl:when>
 			<xsl:when test=". = 'DLPLUS'">DL PLUS</xsl:when>
 			<xsl:when test=". = 'DLGB'">DL GradPLUS</xsl:when>
