@@ -28,7 +28,7 @@
  	<util:properties id="DataProviderProperties" location="WEB-INF/classes/dataprovider.properties"/>
  	
  	<!-- Data Server Abstraction -->
-	<bean id="DataServerAbstractionImpl" class="${default.data.server}"/>
+	<bean id="DataServerAbstractionImpl" class="${default.data.server}" autowire="byType"/>
 	
 	<bean id="DataProviderManager" class="org.meteornetwork.meteor.provider.data.manager.DataProviderManager" autowire="byType">
 		<lookup-method name="getRequestInfo" bean="requestInfo"/>

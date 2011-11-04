@@ -19,6 +19,7 @@ public class HPCMessageParams {
 	private String recipientId;
 	private HPCMode transactionMode = HPCMode.SYNC;
 	private String transactionType = "METEORDATA";
+	private String contentType = transactionType;
 
 	public UUID getMessageId() {
 		return messageId;
@@ -74,6 +75,14 @@ public class HPCMessageParams {
 
 	public void setTransactionType(String transactionType) {
 		this.transactionType = transactionType;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 }
