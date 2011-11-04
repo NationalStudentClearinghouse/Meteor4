@@ -15,15 +15,20 @@ import org.meteornetwork.meteor.common.ws.DataProviderHPCService;
 import org.meteornetwork.meteor.common.xml.dataresponse.types.RsMsgLevelEnum;
 import org.meteornetwork.meteor.common.xml.hpc.types.HPCCompressionType;
 import org.meteornetwork.meteor.common.xml.hpc.types.HPCEncodingType;
-import org.meteornetwork.meteor.provider.data.adapter.HPCDataQueryAdapterImpl;
 import org.meteornetwork.meteor.saml.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Legacy HPC implementation for backwards-compatibility with existing data
+ * provider software
+ * 
+ * @author jlazos
+ */
 public class HPCDataServer implements DataServerAbstraction {
 
-	private static final Logger LOG = LoggerFactory.getLogger(HPCDataQueryAdapterImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HPCDataServer.class);
 
 	private ResourceBundle dataProviderProperties;
 
@@ -97,9 +102,7 @@ public class HPCDataServer implements DataServerAbstraction {
 		}
 
 		try {
-			MeteorDataResponseWrapper response = new MeteorDataResponseWrapper(unwrappedResponse);
-			response.createMinimalResponse();
-			return response;
+			return new MeteorDataResponseWrapper(unwrappedResponse);
 		} catch (Exception e) {
 			LOG.error("Unable to unmarshal MeteorRsMsg from response xml", e);
 			return createMinimalErrorResponse();
