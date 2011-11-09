@@ -53,18 +53,27 @@ public class DataProviderManager {
 	 * @return MeteorRsMsg xml string with status response
 	 */
 	public String createStatusResponse() {
-		MeteorDataResponseWrapper dataResponse = new MeteorDataResponseWrapper();
+		MeteorDataResponseWrapper dataResponse;
 
-		DataProviderDataParams params = dataResponse.new DataProviderDataParams();
-		params.setName(dataProviderProperties.getProperty("DataProvider.Data.Name"));
-		params.setId(dataProviderProperties.getProperty("DataProvider.Data.ID"));
-		params.setUrl(dataProviderProperties.getProperty("DataProvider.Data.URL"));
-		params.setType(dataProviderProperties.getProperty("DataProvider.Data.Type"));
+		RequestInfo requestInfo = getRequestInfo();
+		if (requestInfo.getSecurityToken() == null || requestInfo.getSecurityToken().getRole() == null || !Role.HELPDESK.equals(requestInfo.getSecurityToken().getRole())) {
+			dataResponse = createResponseWithMessage(MeteorMessage.DATA_SSN_NOTAUTHORIZED, RsMsgLevelEnum.E);
+		} else {
 
-		params.setDataProviderData();
+			dataResponse = new MeteorDataResponseWrapper();
 
-		String version = meteorProperties.getProperty("meteor.version");
-		dataResponse.addMessage("Version " + version == null ? "" : version, RsMsgLevelEnum.I.name());
+			DataProviderDataParams params = dataResponse.new DataProviderDataParams();
+			params.setName(dataProviderProperties.getProperty("DataProvider.Data.Name"));
+			params.setId(dataProviderProperties.getProperty("DataProvider.Data.ID"));
+			params.setUrl(dataProviderProperties.getProperty("DataProvider.Data.URL"));
+			params.setType(dataProviderProperties.getProperty("DataProvider.Data.Type"));
+
+			params.setDataProviderData();
+
+			String version = meteorProperties.getProperty("meteor.version");
+			dataResponse.addMessage("Version " + version == null ? "" : version, RsMsgLevelEnum.I.name());
+		}
+
 		StringWriter marshalledResponse = new StringWriter();
 		try {
 			dataResponse.getResponse().marshal(marshalledResponse);
@@ -134,9 +143,9 @@ public class DataProviderManager {
 			adapter.setResponse(response);
 			return;
 		}
-		
+
 		minimumAuthLevel = minimumAuthLevel.compareTo(registryMinimumAuthLevel) > 0 ? minimumAuthLevel : registryMinimumAuthLevel;
-		
+
 		if (minimumAuthLevel.compareTo(token.getLevel()) > 0) {
 			LOG.debug("Minimum authentication level not met");
 			MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.DATA_INSUFFICIENT_LEVEL, RsMsgLevelEnum.E);
@@ -144,7 +153,7 @@ public class DataProviderManager {
 			adapter.setResponse(response);
 			return;
 		}
-		
+
 		if (Role.BORROWER.equals(token.getRole())) {
 			String assertionSsn = token.getSsn();
 			if (assertionSsn == null) {

@@ -1,0 +1,54 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<context-param> 
+		<param-name>contextConfigLocation</param-name> 
+		<param-value>
+			WEB-INF/cxf-servlet.xml
+			WEB-INF/applicationContext.xml
+		</param-value> 
+	</context-param> 
+		
+	<listener> 
+		<listener-class> 
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class> 
+	</listener> 
+	
+	<servlet>
+        <servlet-name>statusprovider</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+			<param-name>threadContextInheritable</param-name>
+			<param-value>true</param-value>
+		</init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>statusprovider</servlet-name>
+        <url-pattern>/meteor/*</url-pattern>
+    </servlet-mapping> 
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error404.html</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error403.html</location>
+	</error-page>
+	
+	<!-- error-page>
+		<error-code>500</error-code>
+		<location>/error500.html</location>
+	</error-page-->
+			
+	<env-entry>
+		<env-entry-name>logback/statusprovider</env-entry-name>
+		<env-entry-value>logback.xml</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	</env-entry>
+</web-app>

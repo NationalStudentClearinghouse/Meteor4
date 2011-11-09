@@ -110,7 +110,7 @@ public interface SecurityToken {
 
 	/**
 	 * Optional. The time when the assertion is no longer valid. Defaults to the
-	 * value set using setConditionsNotBefore() plus 4 hours.
+	 * value set using setConditionsNotBefore() plus 1 hour.
 	 * 
 	 * @param dateTime
 	 */

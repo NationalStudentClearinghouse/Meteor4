@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation=" 
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd"> 
+	
+	<import resource="classpath:META-INF/cxf/cxf.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+	
+	<http-conf:conduit name="*.http-conduit">
+		<http-conf:client ConnectionTimeout="30000" ReceiveTimeout="180000"/>
+	</http-conf:conduit>
+	
+	<bean id="samlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSamlCreationCallbackHandler">
+		<lookup-method name="getRequestInfo" bean="requestInfo"/>
+	</bean>
+	
+	<bean id="registrySamlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.RegistrySamlCreationCallbackHandler"/>
+	
+	<bean id="passwordCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
+	
+	<!-- client proxies -->
+	<bean id="dataClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
+		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.DataProviderService"/>
+		<property name="bindingId" value="http://www.w3.org/2003/05/soap/bindings/HTTP/"/>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+					<constructor-arg>
+						<map>
+							<entry key="action" value="SAMLTokenSigned"/>
+							<entry key="samlCallbackRef" value-ref="samlCreationCallbackHandler" />
+							<entry key="samlPropFile" value="authentication.properties" />
+							<entry key="signaturePropFile" value="authentication.properties" />
+							<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+						</map>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Registry web service connection -->
+	<bean id="registryProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.RegistryService"/>
+		<property name="address" value="${directory.ws.url}"/>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+					<constructor-arg>
+						<map>
+							<entry key="action" value="SAMLTokenSigned"/>
+							<entry key="samlCallbackRef" value-ref="registrySamlCreationCallbackHandler" />
+							<entry key="samlPropFile" value="authentication.properties" />
+							<entry key="signaturePropFile" value="authentication.properties" />
+							<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+						</map>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="registryFailoverProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.RegistryService"/>
+		<property name="address" value="${directory.ws.failover.url}"/>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+					<constructor-arg>
+						<map>
+							<entry key="action" value="SAMLTokenSigned"/>
+							<entry key="samlCallbackRef" value-ref="registrySamlCreationCallbackHandler" />
+							<entry key="samlPropFile" value="authentication.properties" />
+							<entry key="signaturePropFile" value="authentication.properties" />
+							<entry key="passwordCallbackRef" value-ref="passwordCallbackHandler" />
+						</map>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>	
+</beans>

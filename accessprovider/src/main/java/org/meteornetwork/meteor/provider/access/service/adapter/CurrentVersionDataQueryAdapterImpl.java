@@ -32,16 +32,20 @@ public class CurrentVersionDataQueryAdapterImpl implements DataQueryAdapter, App
 
 	@Override
 	public MeteorRsMsg call() throws Exception {
-		LOG.debug("Calling data provider (ID: " + dataProvider.getMeteorInstitutionIdentifier() + ", Version: " + dataProvider.getRegistryInfo().getMeteorVersion());
+		LOG.debug("Calling data provider (ID: " + dataProvider.getMeteorInstitutionIdentifier() + ", Version: " + dataProvider.getRegistryInfo().getMeteorVersion() + " for ssn " + ssn + ")");
 
+		LOG.debug("Marshalling request (ID: " + dataProvider.getMeteorInstitutionIdentifier() + ", Version: " + dataProvider.getRegistryInfo().getMeteorVersion() + " for ssn " + ssn + ")");
 		MeteorDataRequest request = createRequest();
 		StringWriter marshalledRequest = new StringWriter();
 		request.marshal(marshalledRequest);
 
+		LOG.debug("Creating client proxy factory (ID: " + dataProvider.getMeteorInstitutionIdentifier() + ", Version: " + dataProvider.getRegistryInfo().getMeteorVersion() + " for ssn " + ssn + ")");
 		JaxWsProxyFactoryBean dataClientProxyFactory = (JaxWsProxyFactoryBean) applicationContext.getBean("dataClientProxyFactory");
 		dataClientProxyFactory.setAddress(dataProvider.getRegistryInfo().getUrl());
 
+		LOG.debug("Creating web service client (ID: " + dataProvider.getMeteorInstitutionIdentifier() + ", Version: " + dataProvider.getRegistryInfo().getMeteorVersion() + " for ssn " + ssn + ")");
 		DataProviderService dataService = (DataProviderService) dataClientProxyFactory.create();
+		LOG.debug("Calling web service (ID: " + dataProvider.getMeteorInstitutionIdentifier() + ", Version: " + dataProvider.getRegistryInfo().getMeteorVersion() + " for ssn " + ssn + ")");
 		String responseXml = dataService.queryDataForBorrower(marshalledRequest.toString());
 
 		MeteorRsMsg response = MeteorRsMsg.unmarshal(new StringReader(responseXml));

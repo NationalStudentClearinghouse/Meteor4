@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation=" 
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
+    xmlns:util="http://www.springframework.org/schema/util"> 
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	    <property name="locations">
+	    	<list>
+	    		<value>classpath:directory.properties</value>
+	    		<value>classpath:authentication.properties</value>
+	    	</list>
+	    </property>
+	</bean>
+	
+	<!-- 
+ 		If you are using RegistryWebServiceClient, uncomment REGISTRY BEAN DEFINITON 2. 
+ 		Else, uncomment REGISTRY BEAN DEFINITION 1 
+ 	-->
+ 	<!-- 
+ 		REGISTRY BEAN DEFINITION 1:
+ 	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/> 
+ 	-->
+ 	<!-- 
+ 		REGISTRY BEAN DEFINITION 2:
+ 	 -->
+ 	<bean id="registryServiceBean" factory-bean="registryProxyFactory" factory-method="create" scope="prototype"/>
+ 	<bean id="registryFailoverServiceBean" factory-bean="registryFailoverProxyFactory" factory-method="create" scope="prototype"/>
+ 	<bean id="RegistryManager" class="${directory.class}">
+ 		<lookup-method name="getRegistryService" bean="registryServiceBean"/>
+ 		<lookup-method name="getFailoverRegistryService" bean="registryFailoverServiceBean"/>
+ 	</bean>
+ 	<!-- END REGISTRY BEAN DEFINITION 2 -->
+ 	
+	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
+	<util:properties id="StatusProviderProperties" location="WEB-INF/classes/statusprovider.properties"/>
+	
+	<bean id="statusProviderManager" class="org.meteornetwork.meteor.status.manager.StatusProviderManager" autowire="byType">
+		<lookup-method name="getRequestInfo" bean="requestInfo"/>
+	</bean>
+	
+	<context:component-scan base-package="org.meteornetwork.meteor"/>
+</beans>

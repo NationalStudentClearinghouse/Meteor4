@@ -1,25 +1,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
 	<groupId>org.meteornetwork.meteor</groupId>
-	<artifactId>uiprovider</artifactId>
-	<version>4.0.0</version>
-	
+	<artifactId>statusprovider</artifactId>
 	<packaging>war</packaging>
-		
-	<name>Meteor UI Provider</name>
+	<version>4.0.0</version>
+	<name>Meteor Status Provider</name>
 	<url>http://www.meteornetwork.org</url>
 	
 	<properties>
 		<maven.compile.debug>on</maven.compile.debug>
 		
 		<meteor.version>4.0.0</meteor.version>
-		
+
 		<cglib.version>2.2.2</cglib.version>
 		<org.springframework.version>3.0.6.RELEASE</org.springframework.version>
 		<javax.servlet-api.version>2.5</javax.servlet-api.version>
+		<jstl.version>1.2</jstl.version>
+		
 		<cxf.version>2.4.3</cxf.version>
 		<cxf.wss4j.version>1.6.4</cxf.wss4j.version>
 		<wss4j.version>1.6.4</wss4j.version>
@@ -33,7 +31,7 @@
 		
 		<junit.version>4.8.2</junit.version>
 	</properties>
-	
+
 	<dependencies>
 		<!-- Meteor Common Library -->
 		<dependency>
@@ -41,7 +39,7 @@
 			<artifactId>meteorlib</artifactId>
 			<version>${meteor.version}</version>
 		</dependency>
-		
+
 		<!-- code generation library ( for spring method injection ) -->
 		<dependency>
 		    <groupId>cglib</groupId>
@@ -117,6 +115,12 @@
 			<scope>provided</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl.version}</version>
+		</dependency>
+
 		<!-- 
 			Apache CXF
 		 -->
@@ -223,8 +227,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
 	<build>
-		<finalName>uiprovider</finalName>
+		<finalName>statusprovider</finalName>
 	</build>
 </project>
