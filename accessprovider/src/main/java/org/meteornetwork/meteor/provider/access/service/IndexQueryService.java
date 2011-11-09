@@ -3,16 +3,17 @@ package org.meteornetwork.meteor.provider.access.service;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
+import org.meteornetwork.meteor.common.registry.data.DataProvider;
 import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.Version;
@@ -27,6 +28,8 @@ import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
 import org.meteornetwork.meteor.provider.access.DataProviderInfo;
 import org.meteornetwork.meteor.provider.access.MeteorQueryException;
 import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -93,16 +96,19 @@ public class IndexQueryService implements ApplicationContextAware {
 			}
 
 			if (response.getDataProviders().getDataProviderCount() > 0) {
+				Map<String, DataProvider> registryDataProvidersMap;
+				try {
+					registryDataProvidersMap = getAllDataProvidersMap();
+				} catch (RegistryException e1) {
+					LOG.debug("Could not get list of data providers from registry", e1);
+					continue;
+				}
+
 				for (org.meteornetwork.meteor.common.xml.indexresponse.DataProvider dataProvider : response.getDataProviders().getDataProvider()) {
 					LOG.debug("Adding data provider with ID '" + dataProvider.getEntityID() + "'");
 					DataProviderInfo dpInfo = new DataProviderInfo(dataProvider.getEntityID());
 					dpInfo.setIndexProviderInfo(dataProvider);
-					try {
-						dpInfo.setRegistryInfo(registryManager.getDataProvider(dpInfo.getMeteorInstitutionIdentifier()));
-					} catch (RegistryException e) {
-						LOG.debug("Could not get info from registry for data provider " + dpInfo.getMeteorInstitutionIdentifier(), e);
-						continue;
-					}
+					dpInfo.setRegistryInfo(registryDataProvidersMap.get(dpInfo.getMeteorInstitutionIdentifier()));
 					dataProviders.add(dpInfo);
 				}
 			}
@@ -117,6 +123,19 @@ public class IndexQueryService implements ApplicationContextAware {
 		}
 
 		return dataProviders;
+	}
+
+	private Map<String, DataProvider> getAllDataProvidersMap() throws RegistryException {
+		List<DataProvider> dataProviders = registryManager.getAllDataProviders();
+
+		Map<String, DataProvider> map = new HashMap<String, DataProvider>();
+		if (dataProviders != null) {
+			for (DataProvider dp : dataProviders) {
+				map.put(dp.getInstitutionIdentifier(), dp);
+			}
+		}
+
+		return map;
 	}
 
 	private MeteorIndexRequest createRequest(String ssn) {

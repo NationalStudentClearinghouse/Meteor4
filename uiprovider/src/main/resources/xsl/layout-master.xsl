@@ -68,10 +68,10 @@
 										<div class="studentInfo">
 										<xsl:choose>
 											<xsl:when test="($person='student')">
-												<p>Student Name: <strong><xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/FirstName"/>&#32;  <xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/MiddleInitial"/>&#32;  <xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/LastName"/>&#32;(<xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/SSNum"/>)</strong></p>
+												<p>Student Name: <strong><xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/FirstName"/><span style="padding: 0 3px">&#32;</span><xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/MiddleInitial"/><span style="padding: 0 3px">&#32;</span><xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/LastName"/><span style="padding: 0 3px">&#32;</span>(<xsl:value-of select="//Award[Student/SSNum/@unmasked=$ssn]/Student/SSNum"/>)</strong></p>
 											</xsl:when>
 											<xsl:when test="($person='borrower') and (count(//Borrower) > 0)">
-												<p>Borrower Name: <strong><xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/FirstName"/>&#32;  <xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/MiddleInitial"/>&#32;  <xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/LastName"/>&#32;  (<xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/SSNum"/>)</strong></p>
+												<p>Borrower Name: <strong><xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/FirstName"/><span style="padding: 0 3px">&#32;</span><xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/MiddleInitial"/><span style="padding: 0 3px">&#32;</span><xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/LastName"/><span style="padding: 0 3px">&#32;</span>(<xsl:value-of select="//Award[Borrower/SSNum/@unmasked=$ssn]/Borrower/SSNum"/>)</strong></p>
 											</xsl:when>
 										</xsl:choose>
 										<xsl:if test="$role = 'FAA' or $role = 'APCSR' or $role = 'LENDER'">

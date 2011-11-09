@@ -406,11 +406,6 @@ public class LDAPRegistryManager implements RegistryManager {
 
 		@Override
 		public LdapIndexProvider mapFromContext(Object ctx) {
-			/*
-			 * TODO document how LDAP registry should allow multiple versions
-			 * for Index Providers, indicating that the index provider supports
-			 * each version specified. Allows wild cards
-			 */
 			LdapIndexProvider ip = new LdapIndexProvider();
 
 			DirContextAdapter dirCtx = (DirContextAdapter) ctx;

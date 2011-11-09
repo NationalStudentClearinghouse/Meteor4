@@ -24,8 +24,6 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.ws.security.saml.ext.OpenSAMLUtil;
 import org.apache.ws.security.saml.ext.bean.AttributeBean;
 import org.apache.ws.security.saml.ext.bean.AttributeStatementBean;
@@ -58,8 +56,6 @@ import org.w3c.dom.NodeList;
  */
 public class MeteorSamlSecurityToken extends SecurityTokenImpl implements SecurityToken {
 
-	private static final Logger LOG = LoggerFactory.getLogger(MeteorSamlSecurityToken.class);
-
 	private static Templates SAML1_METEORSAML_TEMPLATE;
 
 	static {
@@ -72,7 +68,6 @@ public class MeteorSamlSecurityToken extends SecurityTokenImpl implements Securi
 			StreamSource streamSource = new StreamSource(samlTemplateInputStream);
 			SAML1_METEORSAML_TEMPLATE = transformFactory.newTemplates(streamSource);
 		} catch (Exception e) {
-			LOG.error("Could not initialize saml1-meteorSaml.xsl template", e);
 			SAML1_METEORSAML_TEMPLATE = null;
 		} finally {
 			try {

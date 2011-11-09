@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 public class MeteorSamlCreationCallbackHandler implements CallbackHandler {
 
-	private static final Logger LOG = LoggerFactory.getLogger(RegistrySamlCreationCallbackHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MeteorSamlCreationCallbackHandler.class);
 
 	private static final String METEORNETWORK_ORG = "meteornetwork.org";
 	private static final Integer SAML_TOKEN_VALIDITY_PERIOD = 60; // seconds

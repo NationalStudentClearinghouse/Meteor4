@@ -9,7 +9,6 @@ import javax.jws.WebService;
 import javax.xml.ws.Holder;
 
 import org.meteornetwork.meteor.business.BestSourceAggregator;
-import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
 import org.meteornetwork.meteor.common.xml.dataresponse.Award;
@@ -32,8 +31,6 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 	private AccessProviderManager accessProviderManager;
 
 	private Properties authenticationProperties;
-
-	private RegistryManager registryManager;
 
 	@Override
 	public String findDataForBorrower(String ssn, TokenAttributes meteorAttributes) {
@@ -121,15 +118,6 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 	public RequestInfo getRequestInfo() {
 		// overridden by spring method injection
 		return null;
-	}
-
-	public RegistryManager getRegistryManager() {
-		return registryManager;
-	}
-
-	@Autowired
-	public void setRegistryManager(RegistryManager registryManager) {
-		this.registryManager = registryManager;
 	}
 
 	public Properties getAuthenticationProperties() {

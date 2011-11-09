@@ -16,9 +16,6 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 import javax.xml.ws.soap.SOAPFaultException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.common.util.message.Messages;
@@ -29,6 +26,8 @@ import org.meteornetwork.meteor.common.xml.indexresponse.types.RsMsgLevelEnum;
 import org.meteornetwork.meteor.provider.access.DataProviderInfo;
 import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
 import org.meteornetwork.meteor.provider.access.service.adapter.DataQueryAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,8 +46,6 @@ public class DataQueryService implements ApplicationContextAware {
 	private Properties accessProviderProperties;
 	private Properties authenticationProperties;
 	private Properties meteorProperties;
-
-	private RegistryManager registryManager;
 
 	private ApplicationContext applicationContext;
 
@@ -226,15 +223,6 @@ public class DataQueryService implements ApplicationContextAware {
 	@Qualifier("MeteorProperties")
 	public void setMeteorProperties(Properties meteorProperties) {
 		this.meteorProperties = meteorProperties;
-	}
-
-	public RegistryManager getRegistryManager() {
-		return registryManager;
-	}
-
-	@Autowired
-	public void setRegistryManager(RegistryManager registryManager) {
-		this.registryManager = registryManager;
 	}
 
 	@Override
