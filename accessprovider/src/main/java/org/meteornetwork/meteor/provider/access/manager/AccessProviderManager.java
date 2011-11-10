@@ -9,9 +9,6 @@ import java.util.Set;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.meteornetwork.meteor.business.GrandTotalCalculator;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
@@ -23,6 +20,8 @@ import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
 import org.meteornetwork.meteor.provider.access.service.DataQueryService;
 import org.meteornetwork.meteor.provider.access.service.IndexQueryService;
 import org.meteornetwork.meteor.saml.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -46,9 +45,8 @@ public class AccessProviderManager {
 	 */
 	public ResponseDataWrapper queryMeteor(String ssn) {
 		ResponseDataWrapper responseData = new ResponseDataWrapper();
-		responseData.setGrandTotalCalculator(new GrandTotalCalculator());
-		responseData.getGrandTotalCalculator().setBorrowerSsn(ssn);
-
+		responseData.setBorrowerSsn(ssn);
+		
 		Set<DataProviderInfo> dataProviders = null;
 		try {
 			dataProviders = indexQueryService.getDataProviders(ssn, responseData);

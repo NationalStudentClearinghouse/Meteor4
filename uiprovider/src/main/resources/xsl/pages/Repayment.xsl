@@ -106,7 +106,7 @@
 			<xsl:variable name="atLeast1NonGrantScholarship"><xsl:apply-templates select="key('awards-by-servicer',Servicer/EntityID)[Borrower/SSNum/@unmasked=$ssn]" mode="count"/></xsl:variable>
 			<xsl:if test="string-length($atLeast1NonGrantScholarship) > 0">
 			<tr>
-				<td class="tFooter" colspan="9" style="text-align: right"><a href="#" class="msgtrigger" id="triggerRepay{position()}">Repayment Info <img src="{$docroot}/imgs/repayment-info.gif" border="0" /></a> | <a href="#" class="msgtrigger" id="triggerTotals{position()}">Grand Totals <img src="{$docroot}/imgs/totals.gif" border="0" /></a><xsl:if test="count(MeteorDataProviderMsg/RsMsg) > 0"> | <a href="#" class="msgtrigger" id="triggerMsg{position()}">Messages <img src="{$docroot}/imgs/messages.gif" border="0" /></a></xsl:if></td>
+				<td class="tFooter" colspan="9" style="text-align: right"><a href="#" class="msgtrigger" id="triggerRepay{position()}">Repayment Info <img src="{$docroot}/imgs/repayment-info.gif" border="0" /></a> | <a href="#" class="msgtrigger" id="triggerTotals{position()}">Grand Totals <img src="{$docroot}/imgs/totals.gif" border="0" /></a><xsl:if test="count(key('awards-by-servicer',Servicer/EntityID)[Borrower/SSNum/@unmasked=$ssn]/../../MeteorDataProviderMsg/RsMsg) > 0"> | <a href="#" class="msgtrigger" id="triggerMsg{position()}">Messages <img src="{$docroot}/imgs/messages.gif" border="0" /></a></xsl:if></td>
 			</tr>
 			<tr class="altRow">
 				<td class="triggerRepay{position()} hideShow" colspan="12">
@@ -153,7 +153,7 @@
 								<td>Grand Total Original Account Balance:</td>
 								<td>
 									<xsl:call-template name="format-number-if-exists">
-										<xsl:with-param name="number" select="../../MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OriginalBalanceGrandTotal"/>
+										<xsl:with-param name="number" select="//MeteorDataAggregates/OriginalBalanceGrandTotal[@ServicerID = current()/Servicer/EntityID]"/>
 										<xsl:with-param name="format" select="'$###,##0.00'"/>
 									</xsl:call-template>
 								</td>
@@ -162,7 +162,7 @@
 								<td>Grand Total Outstanding Account Balance:</td>
 								<td>
 									<xsl:call-template name="format-number-if-exists">
-										<xsl:with-param name="number" select="../../MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OutstandingBalanceGrandTotal"/>
+										<xsl:with-param name="number" select="//MeteorDataAggregates/OutstandingBalanceGrandTotal[@ServicerID = current()/Servicer/EntityID]"/>
 										<xsl:with-param name="format" select="'$###,##0.00'"/>
 									</xsl:call-template>
 								</td>
@@ -171,7 +171,7 @@
 								<td>Grand Total Other Fees Currently Outstanding:</td>
 								<td>
 									<xsl:call-template name="format-number-if-exists">
-										<xsl:with-param name="number" select="../../MeteorDataProviderDetailInfo/DataProviderAggregateTotal/OtherFeesOutstandingGrandTotal"/>
+										<xsl:with-param name="number" select="//MeteorDataAggregates/OtherFeesOutstandingGrandTotal[@ServicerID = current()/Servicer/EntityID]"/>
 										<xsl:with-param name="format" select="'$###,##0.00'"/>
 									</xsl:call-template>
 								</td>
@@ -306,7 +306,7 @@
 		<xsl:param name="DUEDATE"/>
 		<xsl:param name="AWARD"/>
 		<xsl:call-template name="format-number-if-exists">
-			<xsl:with-param name="number" select="sum(key('awards-by-servicer',$AWARD/Servicer/EntityID)[Borrower/SSNum/@unmasked = $ssn][Repayment/NextDueDt=$DUEDATE]/Repayment/NextPmtAmt)"/>
+			<xsl:with-param name="number" select="sum(key('awards-by-servicer',$AWARD/Servicer/EntityID)[Borrower/SSNum/@unmasked = $ssn and Repayment/NextDueDt=$DUEDATE]/Repayment/NextPmtAmt)"/>
 			<xsl:with-param name="format" select="'$###,##0.00'"/>
 		</xsl:call-template>
 	</xsl:template>

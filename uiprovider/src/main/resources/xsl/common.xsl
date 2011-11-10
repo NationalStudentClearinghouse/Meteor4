@@ -336,6 +336,17 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template match="Award/LoanStat" mode="is-paid">
+		<xsl:choose>
+			<xsl:when test=".='PC'">true</xsl:when>
+			<xsl:when test=".='PN'">true</xsl:when>
+			<xsl:when test=".='DP'">true</xsl:when>
+			<xsl:when test=".='PF'">true</xsl:when>
+			<xsl:when test=".='DN'">true</xsl:when>
+			<xsl:otherwise>false</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
 	<!-- Disbursement codes -->
 	<xsl:template match="DisbStatCd">
 		<xsl:choose>

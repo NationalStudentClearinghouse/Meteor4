@@ -34,10 +34,11 @@ public class ResponseDataWrapper {
 	// interpreted as loan locator messages
 	private static final String UNK = "UNK";
 
+	private String borrowerSsn;
+
 	private transient MeteorRsMsg responseData;
 	private transient MeteorDataProviderInfo indexMessageMdpi;
 	private transient BestSourceAggregator bestSourceAggregator;
-	private GrandTotalCalculator grandTotalCalculator;
 
 	private transient Integer nextAwardId = 0;
 
@@ -182,9 +183,9 @@ public class ResponseDataWrapper {
 		if (dataProviderInfo.getIndexProviderInfo() == null) {
 			if (dataProviderInfo.getRegistryInfo() != null) {
 				dpInfo = new MeteorDataProviderInfo();
-				
+
 				dpInfo.setLoanLocatorActivationIndicator(true);
-				
+
 				dpInfo.setMeteorDataProviderDetailInfo(new MeteorDataProviderDetailInfo());
 				dpInfo.getMeteorDataProviderDetailInfo().setDataProviderType(UNK);
 				dpInfo.getMeteorDataProviderDetailInfo().setDataProviderAggregateTotal(new DataProviderAggregateTotal());
@@ -325,14 +326,8 @@ public class ResponseDataWrapper {
 			}
 		}
 
-		grandTotalCalculator.setConsolidationLoanDates(withBestSource);
-		for (MeteorDataProviderInfo info : withBestSource.getMeteorDataProviderInfo()) {
-			grandTotalCalculator.setDataProviderInfo(info);
-			grandTotalCalculator.calculateOriginalBalance();
-			grandTotalCalculator.calculateOutstandingBalance();
-			grandTotalCalculator.calculateOtherFees();
-		}
-
+		GrandTotalCalculator grandTotalCalc = new GrandTotalCalculator(withBestSource, getBorrowerSsn());
+		grandTotalCalc.calculate();
 		return withBestSource;
 	}
 
@@ -347,11 +342,11 @@ public class ResponseDataWrapper {
 		return bestSourceAggregator;
 	}
 
-	public GrandTotalCalculator getGrandTotalCalculator() {
-		return grandTotalCalculator;
+	public String getBorrowerSsn() {
+		return borrowerSsn;
 	}
 
-	public void setGrandTotalCalculator(GrandTotalCalculator grandTotalCalculator) {
-		this.grandTotalCalculator = grandTotalCalculator;
+	public void setBorrowerSsn(String borrowerSsn) {
+		this.borrowerSsn = borrowerSsn;
 	}
 }

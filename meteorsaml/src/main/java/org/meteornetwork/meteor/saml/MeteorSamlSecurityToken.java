@@ -176,17 +176,29 @@ public class MeteorSamlSecurityToken extends SecurityTokenImpl implements Securi
 
 				String friendlyNameStr = friendlyName.getValue();
 				if (friendlyNameStr.equalsIgnoreCase("OrganizationID")) {
-					token.setOrganizationId(node.getFirstChild().getNodeValue());
+					try {
+						token.setOrganizationId(node.getFirstChild().getNodeValue());
+					} catch (NullPointerException e) {
+						// empty
+					}
 					continue;
 				}
 
 				if (friendlyNameStr.equalsIgnoreCase("OrganizationIDType")) {
-					token.setOrganizationIdType(node.getFirstChild().getNodeValue());
+					try {
+						token.setOrganizationIdType(node.getFirstChild().getNodeValue());
+					} catch (NullPointerException e) {
+						// empty
+					}
 					continue;
 				}
 
 				if (friendlyNameStr.equalsIgnoreCase("OrganizationType")) {
-					token.setOrganizationType(node.getFirstChild().getNodeValue());
+					try {
+						token.setOrganizationType(node.getFirstChild().getNodeValue());
+					} catch (NullPointerException e) {
+						// empty
+					}
 					continue;
 				}
 
@@ -211,12 +223,20 @@ public class MeteorSamlSecurityToken extends SecurityTokenImpl implements Securi
 				}
 
 				if (friendlyNameStr.equalsIgnoreCase("SSN")) {
-					token.setSsn(node.getFirstChild().getNodeValue());
+					try {
+						token.setSsn(node.getFirstChild().getNodeValue());
+					} catch (NullPointerException e) {
+						// empty
+					}
 					continue;
 				}
 
 				if (friendlyNameStr.equalsIgnoreCase("LENDER")) {
-					token.setLender(node.getFirstChild().getNodeValue());
+					try {
+						token.setLender(node.getFirstChild().getNodeValue());
+					} catch (NullPointerException e) {
+						// empty
+					}
 					continue;
 				}
 			}

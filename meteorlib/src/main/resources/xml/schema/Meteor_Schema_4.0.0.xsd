@@ -28,19 +28,17 @@
 			<xsd:documentation xml:lang="en">                        </xsd:documentation>
 		</xsd:annotation>
 		<xsd:sequence>
-			<xsd:element name="TotalAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="FFELSubAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="FFELUnSubAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="DLSubAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="DLUnSubAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="FFELConsolAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="DLConsolAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="ConsolAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="PerkinsAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="TotalGuarAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="TotalRepaidPrincipalAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="TotalCapitalizedIntAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
+			<xsd:element name="OriginalBalanceGrandTotal" type="TotalByServicerType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="OutstandingBalanceGrandTotal" type="TotalByServicerType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="OtherFeesOutstandingGrandTotal" type="TotalByServicerType" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TotalByServicerType">
+		<xsd:simpleContent>
+	        <xsd:extension base="PosFifteenDigitTwoDecimalType">
+	            <xsd:attribute name="ServicerID" type="xsd:string"/>
+	        </xsd:extension>
+	    </xsd:simpleContent>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->
 	<xsd:complexType name="MeteorDataProviderInfoType">
@@ -159,9 +157,6 @@
 				<xsd:documentation xml:lang="en">These fields are derived in the Access Provider Software.</xsd:documentation>
 			</xsd:annotation>
 			<xsd:element name="SvcrTotalAmt" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="OriginalBalanceGrandTotal" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="OutstandingBalanceGrandTotal" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
-			<xsd:element name="OtherFeesOutstandingGrandTotal" type="PosFifteenDigitTwoDecimalType" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- ******************************************************************************* -->

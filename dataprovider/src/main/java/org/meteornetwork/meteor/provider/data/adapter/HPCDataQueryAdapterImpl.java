@@ -36,7 +36,9 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	private String rawHPCMessage;
 	private String responseHPCMessage;
 
-	private transient String meteorVersion;
+	private static final String METEOR_DEFAULT_VERSION = "3.3.4";
+	private transient String meteorVersion = METEOR_DEFAULT_VERSION;
+	
 	private transient String requesterId;
 
 	private TemplateVersionMapper requestTemplateVersionMapper;
