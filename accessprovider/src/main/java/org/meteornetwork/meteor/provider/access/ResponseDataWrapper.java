@@ -150,6 +150,9 @@ public class ResponseDataWrapper {
 		}
 
 		for (Award award : awardDetails.getAward()) {
+			if (award.getAwardType() != null) {
+				award.setAwardType(award.getAwardType().toUpperCase());
+			}
 			award.setAPSUniqueAwardID(nextAwardId++);
 		}
 	}

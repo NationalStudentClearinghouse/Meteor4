@@ -216,50 +216,49 @@
 	<!-- Award type descriptions -->
 	<xsl:template match="Award/AwardType">
 		<xsl:choose>
-			<xsl:when test=". = 'FFELConsl'">FFEL Consolidation</xsl:when>
-			<xsl:when test=". = 'FFELCSub'">FFEL Consolidation Stafford Subsidized</xsl:when>
-			<xsl:when test=". = 'FFELCUsub'">FFEL Consolidation Stafford Unsubsidized</xsl:when>
-			<xsl:when test=". = 'FFELCHeal'">FFEL Consolidation HEAL</xsl:when>
-			<xsl:when test=". = 'FFELCOthr'">FFEL Consolidation Other</xsl:when>
+			<xsl:when test=". = 'FFELCONSL'">FFEL Consolidation</xsl:when>
+			<xsl:when test=". = 'FFELCSUB'">FFEL Consolidation Stafford Subsidized</xsl:when>
+			<xsl:when test=". = 'FFELCUSUB'">FFEL Consolidation Stafford Unsubsidized</xsl:when>
+			<xsl:when test=". = 'FFELCHEAL'">FFEL Consolidation HEAL</xsl:when>
+			<xsl:when test=". = 'FFELCOTHR'">FFEL Consolidation Other</xsl:when>
 			<xsl:when test=". = 'FFELPLUS'">FFELP PLUS</xsl:when>
-			<xsl:when test=". = 'FFELSub'">FFELP Subsidized</xsl:when>
-			<xsl:when test=". = 'FFELUnSub'">FFELP Unsubsidized</xsl:when>
-			<xsl:when test=". = 'FFELUnsub'">FFELP Unsubsidized</xsl:when>
+			<xsl:when test=". = 'FFELSUB'">FFELP Subsidized</xsl:when>
+			<xsl:when test=". = 'FFELUNSUB'">FFELP Unsubsidized</xsl:when>
 			<xsl:when test=". = 'FFELGB'">FFELP GradPLUS</xsl:when>
-			<xsl:when test=". = 'AltLoan'">Alternative Loan</xsl:when>
+			<xsl:when test=". = 'ALTLOAN'">Alternative Loan</xsl:when>
 			<xsl:when test=". = 'HEAL'">Health Education Assistance Loan</xsl:when>
-			<xsl:when test=". = 'DLConsl'">DL Consolidation</xsl:when>
-			<xsl:when test=". = 'DLCSub'">DL Consolidation Stafford Subsidized</xsl:when>
-			<xsl:when test=". = 'DLCUsub'">DL Consolidation Stafford Unsubsidized</xsl:when>
-			<xsl:when test=". = 'DLCHeal'">DL Consolidation HEAL</xsl:when>
-			<xsl:when test=". = 'DLCOthr'">DL Consolidation Other</xsl:when>
-			<xsl:when test=". = 'DLSub'">Subsidized Direct Loan</xsl:when>
-			<xsl:when test=". = 'DLUnSub'">Unsubsidized Direct Loan</xsl:when>
-			<xsl:when test=". = 'DLUnsub'">Unsubsidized Direct Loan</xsl:when>
+			<xsl:when test=". = 'DLCONSL'">DL Consolidation</xsl:when>
+			<xsl:when test=". = 'DLCSUB'">DL Consolidation Stafford Subsidized</xsl:when>
+			<xsl:when test=". = 'DLCUSUB'">DL Consolidation Stafford Unsubsidized</xsl:when>
+			<xsl:when test=". = 'DLCHEAL'">DL Consolidation HEAL</xsl:when>
+			<xsl:when test=". = 'DLCOTHR'">DL Consolidation Other</xsl:when>
+			<xsl:when test=". = 'DLSUB'">Subsidized Direct Loan</xsl:when>
+			<xsl:when test=". = 'DLUNSUB'">Unsubsidized Direct Loan</xsl:when>
+			<xsl:when test=". = 'DLUNSUB'">Unsubsidized Direct Loan</xsl:when>
 			<xsl:when test=". = 'DLPLUS'">DL PLUS</xsl:when>
 			<xsl:when test=". = 'DLGB'">DL GradPLUS</xsl:when>
 			<xsl:when test=". = 'FWSP'">Federal Work Study Program</xsl:when>
 			<xsl:when test=". = 'SEOG'">Supplemental Educational Opportunity Grant</xsl:when>
-			<xsl:when test=". = 'Perkins'">Perkins Loan</xsl:when>
-			<xsl:when test=". = 'Pell'">Pell Grant</xsl:when>
-			<xsl:when test=". = 'StateGrnt'">State Grant</xsl:when>
-			<xsl:when test=". = 'StateSchl'">State Scholarship</xsl:when>
+			<xsl:when test=". = 'PERKINS'">Perkins Loan</xsl:when>
+			<xsl:when test=". = 'PELL'">Pell Grant</xsl:when>
+			<xsl:when test=". = 'STATEGRNT'">State Grant</xsl:when>
+			<xsl:when test=". = 'STATESCHL'">State Scholarship</xsl:when>
 			<xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="Award/AwardType" mode="is-consolidation">
 		<xsl:choose>
-			<xsl:when test=". = 'FFELConsl'">true</xsl:when>
-			<xsl:when test=". = 'FFELCSub'">true</xsl:when>
-			<xsl:when test=". = 'FFELCUsub'">true</xsl:when>
-			<xsl:when test=". = 'FFELCHeal'">true</xsl:when>
-			<xsl:when test=". = 'FFELCOthr'">true</xsl:when>
-			<xsl:when test=". = 'DLConsl'">true</xsl:when>
-			<xsl:when test=". = 'DLCSub'">true</xsl:when>
-			<xsl:when test=". = 'DLCUsub'">true</xsl:when>
-			<xsl:when test=". = 'DLCHeal'">true</xsl:when>
-			<xsl:when test=". = 'DLCOthr'">true</xsl:when>
+			<xsl:when test=". = 'FFELCONSL'">true</xsl:when>
+			<xsl:when test=". = 'FFELCSUB'">true</xsl:when>
+			<xsl:when test=". = 'FFELCUSUB'">true</xsl:when>
+			<xsl:when test=". = 'FFELCHEAL'">true</xsl:when>
+			<xsl:when test=". = 'FFELCOTHR'">true</xsl:when>
+			<xsl:when test=". = 'DLCONSL'">true</xsl:when>
+			<xsl:when test=". = 'DLCSUB'">true</xsl:when>
+			<xsl:when test=". = 'DLCUSUB'">true</xsl:when>
+			<xsl:when test=". = 'DLCHEAL'">true</xsl:when>
+			<xsl:when test=". = 'DLCOTHR'">true</xsl:when>
 			<xsl:otherwise>false</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -269,9 +268,9 @@
 			<xsl:when test=". = 'FWSP'">true</xsl:when>
 			<xsl:when test=". = 'SEOG'">true</xsl:when>
 			<xsl:when test=". = 'CWC'">true</xsl:when>
-			<xsl:when test=". = 'Pell'">true</xsl:when>
-			<xsl:when test=". = 'StateGrnt'">true</xsl:when>
-			<xsl:when test=". = 'StateSchl'">true</xsl:when>
+			<xsl:when test=". = 'PELL'">true</xsl:when>
+			<xsl:when test=". = 'STATEGRNT'">true</xsl:when>
+			<xsl:when test=". = 'STATESCHL'">true</xsl:when>
 			<xsl:otherwise>false</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
