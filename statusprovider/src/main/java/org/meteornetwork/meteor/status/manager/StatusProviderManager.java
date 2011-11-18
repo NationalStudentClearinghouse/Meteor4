@@ -100,6 +100,10 @@ public class StatusProviderManager implements ApplicationContextAware {
 		List<DataProvider> dataProvidersToCall = new ArrayList<DataProvider>();
 		Map<String, DataProviderStatus> dpStatusesMap = new HashMap<String, DataProviderStatus>();
 
+		if (dataProviders.size() == 0) {
+			return dpStatuses;
+		}
+		
 		for (DataProvider dp : dataProviders) {
 			if (isVersionTooOld(dp.getMeteorVersion())) {
 				DataProviderStatus dpStatus = new DataProviderStatus(dp);
