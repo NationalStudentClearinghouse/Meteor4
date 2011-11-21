@@ -53,17 +53,17 @@ public class ShibbolethTokenProviderTest {
 	@Test
 	public void testGetSecurityToken() throws SecurityTokenException {
 		TestRequest request = new TestRequest();
-		request.setHeader("AJP_Shib-Session-ID", "shib-sess-id");
-		request.setHeader("AJP_Shib-Identity-Provider", "shib-identity-provider");
-		request.setHeader("AJP_UserHandle", "theuser");
-		request.setHeader("AJP_OrganizationId", "12345");
-		request.setHeader("AJP_OrganizationIdType", "OPEID");
-		request.setHeader("AJP_OrganizationType", "School");
-		request.setHeader("AJP_AuthenticationProcessId", "1");
-		request.setHeader("AJP_Level", "3");
-		request.setHeader("AJP_Role", "FAA");
-		request.setHeader("AJP_SSN", "110101010");
-		request.setHeader("AJP_Lender", "54321");
+		request.setAttribute("Shib-Session-ID", "shib-sess-id");
+		request.setAttribute("Shib-Identity-Provider", "shib-identity-provider");
+		request.setAttribute("UserHandle", "theuser");
+		request.setAttribute("OrganizationId", "12345");
+		request.setAttribute("OrganizationIdType", "OPEID");
+		request.setAttribute("OrganizationType", "School");
+		request.setAttribute("AuthenticationProcessId", "1");
+		request.setAttribute("Level", "3");
+		request.setAttribute("Role", "FAA");
+		request.setAttribute("SSN", "110101010");
+		request.setAttribute("Lender", "54321");
 
 		SecurityToken token = tokenProvider.getSecurityToken(request);
 		Assert.assertEquals(token.getAssertionId(), "shib-sess-id");
@@ -82,20 +82,19 @@ public class ShibbolethTokenProviderTest {
 	@SuppressWarnings("rawtypes")
 	private class TestRequest implements HttpServletRequest {
 
-		private Map<String, String> headers;
+		private Map<String, String> attributes;
 
 		public TestRequest() {
-			headers = new HashMap<String, String>();
+			attributes = new HashMap<String, String>();
 		}
 
-		public void setHeader(String key, String value) {
-			headers.put(key, value);
+		public void setAttribute(String key, String value) {
+			attributes.put(key, value);
 		}
 
 		@Override
 		public Object getAttribute(String arg0) {
-
-			return null;
+			return attributes.get(arg0);
 		}
 
 		@Override
@@ -289,7 +288,7 @@ public class ShibbolethTokenProviderTest {
 
 		@Override
 		public String getHeader(String arg0) {
-			return headers.get(arg0);
+			return null;
 		}
 
 		@Override
