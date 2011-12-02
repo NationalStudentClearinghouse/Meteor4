@@ -18,29 +18,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ******************************************************************************/
-package org.meteornetwork.meteor.provider.data;
+package org.meteornetwork.meteor.common.abstraction.index;
 
 /**
- * All modules that implement this interface are excluded from the license that
- * Meteor is distributed under.
+ * Interface to integrate with your existing backend systems.
  * 
- * To be a Data Provider, create a class that implements this interface. The
- * implementations of this class will tie to the back end systems to retrieve
- * data
- * 
- * @since Meteor 1.0
  */
-public interface DataServerAbstraction {
+public interface IndexServerAbstraction {
 
 	/**
-	 * Implement this method to provide data for Meteor.
+	 * Find all data providers that have data for the given SSN and return them
+	 * in the meteor index response. Append any messages to the response.
 	 * 
 	 * @param context
-	 *            MeteorContext object containing all of the information about
-	 *            the request
+	 *            information about the request, including the requesting access
+	 *            provider and security token
 	 * @param ssn
-	 *            SSN to query
-	 * @return the meteor data response embedded in a convenience wrapper
+	 *            the SSN returned data providers will have information for
+	 * @return the meteor index response embedded in a convenience wrapper
 	 */
-	MeteorDataResponseWrapper getData(MeteorContext context, String ssn);
+	MeteorIndexResponseWrapper getDataProviders(MeteorContext context, String ssn);
 }

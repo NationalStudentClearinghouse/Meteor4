@@ -26,6 +26,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.meteornetwork.meteor.common.abstraction.data.MeteorDataResponseWrapper;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
 import org.meteornetwork.meteor.common.hpc.HPCSecurityManager;
@@ -35,7 +36,6 @@ import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.util.exception.MeteorSecurityException;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
-import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;

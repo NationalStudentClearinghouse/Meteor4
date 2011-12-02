@@ -18,7 +18,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ******************************************************************************/
-package org.meteornetwork.meteor.provider.ui.token;
+package org.meteornetwork.meteor.common.abstraction.token;
 
 import javax.servlet.http.HttpServletRequest;
 

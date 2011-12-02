@@ -18,24 +18,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ******************************************************************************/
-package org.meteornetwork.meteor.provider.index;
+package org.meteornetwork.meteor.common.abstraction.data;
 
-/**
- * Interface to integrate with your existing backend systems.
- * 
- */
-public interface IndexServerAbstraction {
+import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
+import org.meteornetwork.meteor.saml.SecurityToken;
 
-	/**
-	 * Find all data providers that have data for the given SSN and return them
-	 * in the meteor index response. Append any messages to the response.
-	 * 
-	 * @param context
-	 *            information about the request, including the requesting access
-	 *            provider and security token
-	 * @param ssn
-	 *            the SSN returned data providers will have information for
-	 * @return the meteor index response embedded in a convenience wrapper
-	 */
-	MeteorIndexResponseWrapper getDataProviders(MeteorContext context, String ssn);
+public class MeteorContext {
+
+	private AccessProvider accessProvider;
+	private SecurityToken securityToken;
+
+	public AccessProvider getAccessProvider() {
+		return accessProvider;
+	}
+
+	public void setAccessProvider(AccessProvider accessProvider) {
+		this.accessProvider = accessProvider;
+	}
+
+	public SecurityToken getSecurityToken() {
+		return securityToken;
+	}
+
+	public void setSecurityToken(SecurityToken securityToken) {
+		this.securityToken = securityToken;
+	}
 }

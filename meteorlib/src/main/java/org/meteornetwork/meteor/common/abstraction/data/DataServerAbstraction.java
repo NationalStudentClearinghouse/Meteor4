@@ -18,29 +18,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ******************************************************************************/
-package org.meteornetwork.meteor.provider.data;
+package org.meteornetwork.meteor.common.abstraction.data;
 
-import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
-import org.meteornetwork.meteor.saml.SecurityToken;
+/**
+ * All modules that implement this interface are excluded from the license that
+ * Meteor is distributed under.
+ * 
+ * To be a Data Provider, create a class that implements this interface. The
+ * implementations of this class will tie to the back end systems to retrieve
+ * data
+ * 
+ * @since Meteor 1.0
+ */
+public interface DataServerAbstraction {
 
-public class MeteorContext {
-
-	private AccessProvider accessProvider;
-	private SecurityToken securityToken;
-
-	public AccessProvider getAccessProvider() {
-		return accessProvider;
-	}
-
-	public void setAccessProvider(AccessProvider accessProvider) {
-		this.accessProvider = accessProvider;
-	}
-
-	public SecurityToken getSecurityToken() {
-		return securityToken;
-	}
-
-	public void setSecurityToken(SecurityToken securityToken) {
-		this.securityToken = securityToken;
-	}
+	/**
+	 * Implement this method to provide data for Meteor.
+	 * 
+	 * @param context
+	 *            MeteorContext object containing all of the information about
+	 *            the request
+	 * @param ssn
+	 *            SSN to query
+	 * @return the meteor data response embedded in a convenience wrapper
+	 */
+	MeteorDataResponseWrapper getData(MeteorContext context, String ssn);
 }

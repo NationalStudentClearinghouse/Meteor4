@@ -22,6 +22,7 @@ package org.meteornetwork.meteor.provider.ui.token;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.meteornetwork.meteor.common.abstraction.token.TokenProvider;
 import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
