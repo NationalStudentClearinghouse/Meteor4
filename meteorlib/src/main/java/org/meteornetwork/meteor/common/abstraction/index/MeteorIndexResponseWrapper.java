@@ -36,7 +36,17 @@ public class MeteorIndexResponseWrapper {
 		response = new MeteorIndexResponse();
 		response.setDataProviders(new DataProviders());
 	}
-	
+
+	/**
+	 * Add index provider information to the response.
+	 * 
+	 * @param id
+	 *            the ID of this index provider
+	 * @param name
+	 *            the name of this index provider
+	 * @param url
+	 *            the contact URL of this index provider
+	 */
 	public void setIndexProviderData(String id, String name, String url) {
 		IndexProviderData data = new IndexProviderData();
 		data.setEntityID(id);
@@ -44,7 +54,15 @@ public class MeteorIndexResponseWrapper {
 		data.setEntityURL(url);
 		response.setIndexProviderData(data);
 	}
-	
+
+	/**
+	 * Add a message to this response
+	 * 
+	 * @param messageText
+	 *            the text of the message
+	 * @param level
+	 *            the severity level of the message
+	 */
 	public void addMessage(String messageText, RsMsgLevelEnum level) {
 		Message message = new Message();
 		message.setRsMsg(messageText);
@@ -57,18 +75,36 @@ public class MeteorIndexResponseWrapper {
 		response.getIndexProviderMessages().addMessage(message);
 	}
 
+	/**
+	 * Add one or more Data Provider objects to the response
+	 * 
+	 * @param dataProviders
+	 *            the data providers to add to the response
+	 */
 	public void addDataProviders(DataProvider... dataProviders) {
 		for (DataProvider dataProvider : dataProviders) {
 			response.getDataProviders().addDataProvider(dataProvider);
 		}
 	}
 
+	/**
+	 * Add Data Provider objects to the response
+	 * 
+	 * @param dataProviders
+	 *            an iterable collection of Data Providers to add to the
+	 *            response
+	 */
 	public void addDataProviders(Iterable<DataProvider> dataProviders) {
 		for (DataProvider dataProvider : dataProviders) {
 			response.getDataProviders().addDataProvider(dataProvider);
 		}
 	}
 
+	/**
+	 * Access a mutable version of the response.
+	 * 
+	 * @return A mutable version of the internal MeteorIndexResponse object
+	 */
 	public MeteorIndexResponse getResponse() {
 		return response;
 	}
