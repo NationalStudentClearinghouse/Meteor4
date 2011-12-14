@@ -133,9 +133,12 @@ public class DataProviderManager {
 
 		/* *****************************************
 		 * verify info on security token
+		 * 
+		 * If meteor version is 3.2, then the check should be skipped because
+		 * the SAML token does not have valid conditions
 		 */
 		SecurityToken token = getRequestInfo().getSecurityToken();
-		if (!token.validateConditions()) {
+		if (!token.validateConditions() && !request.getMeteorVersion().matches("3.2")) {
 			LOG.debug("SAML conditions are not valid or expired");
 			MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.SECURITY_TOKEN_EXPIRED, RsMsgLevelEnum.E);
 			setDataProviderData(response);
@@ -204,8 +207,7 @@ public class DataProviderManager {
 		/* ******************************************
 		 * Query data
 		 */
-		LOG.debug("Request received for data on SSN: " + request.getSsn() + " from Access Provider " + request.getAccessProvider().getMeteorInstitutionIdentifier());
-
+		LOG.info("Received request from Access Provider: " + request.getAccessProvider().getMeteorInstitutionIdentifier() + " with the user handle: " + token.getUserHandle() + " and role: " + token.getRole() + " for the SSN: " + request.getSsn());
 		MeteorContext context = new MeteorContext();
 		context.setAccessProvider(request.getAccessProvider());
 		context.setSecurityToken(token);

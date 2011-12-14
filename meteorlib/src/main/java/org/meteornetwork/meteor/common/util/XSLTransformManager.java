@@ -23,6 +23,10 @@ package org.meteornetwork.meteor.common.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -45,6 +49,7 @@ public class XSLTransformManager {
 	private static final Logger LOG = LoggerFactory.getLogger(XSLTransformManager.class);
 
 	private static final String METEOR_DEFAULT_VERSION = "3.3.4";
+	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 	/**
 	 * @param source
@@ -62,7 +67,7 @@ public class XSLTransformManager {
 			return version == null || "".equals(version) ? METEOR_DEFAULT_VERSION : version;
 		} catch (XPathExpressionException e) {
 			LOG.error("Could not evaluate XPath expression", e);
-			return null;
+			return METEOR_DEFAULT_VERSION;
 		}
 	}
 
@@ -80,6 +85,10 @@ public class XSLTransformManager {
 	public String transformXML(String source, Templates xslTemplate) throws TransformerException, IOException {
 		Transformer transformer = xslTemplate.newTransformer();
 
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+		Date currentDate = Calendar.getInstance().getTime();
+		transformer.setParameter("curdate", dateFormatter.format(currentDate));
+		
 		StreamSource streamSource = new StreamSource(new ByteArrayInputStream(source.getBytes()));
 
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();

@@ -38,6 +38,28 @@
 		</constructor-arg>
 	</bean>
 	
+		<!-- 
+		Convert AP 3.2.0 HPC request to DP 4.0.0 request
+	 -->
+	<bean id="AP320toDP400RequestTemplateFile" class="org.springframework.core.io.ClassPathResource">
+		<constructor-arg value="xml/AP3.2.0-DP4.0.0-request.xsl"/>
+	</bean>
+	
+	<bean id="AP320toDP400RequestTemplate" 
+		factory-bean="transformerFactory"
+		factory-method="newTemplates">
+		
+		<constructor-arg>
+			<bean class="javax.xml.transform.stream.StreamSource">
+				<constructor-arg>
+					<bean class="java.io.File"
+						factory-bean="AP320toDP400RequestTemplateFile"
+						factory-method="getFile" />
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+	</bean>
+	
 	<!-- 
 		Convert DP 4.0.0 response to AP 3.3.4 HPC response
 	 -->
@@ -65,9 +87,14 @@
 		<property name="templateVersionPairs">
 			<list>
 				<bean class="org.meteornetwork.meteor.common.util.TemplateVersionPair">
-					<property name="versionFrom" value="3.x.x"/>
+					<property name="versionFrom" value="3.3.x"/>
 					<property name="versionTo" value="4.x.x"/>
 					<property name="template"><ref bean="AP334toDP400RequestTemplate"/></property>
+				</bean>
+				<bean class="org.meteornetwork.meteor.common.util.TemplateVersionPair">
+					<property name="versionFrom" value="3.2.x"/>
+					<property name="versionTo" value="4.x.x"/>
+					<property name="template"><ref bean="AP320toDP400RequestTemplate"/></property>
 				</bean>
 			</list>
 		</property>

@@ -28,19 +28,12 @@
 		
 	<xsl:template match="MeteorDataRequest/@meteorVersion" />
 
-	<xsl:template match="MeteorDataRequest/AccessProvider/MeteorInstitutionIdentifier">
-		<xsl:element name="MeteorInstitutionIdentifier"><xsl:value-of select="."/></xsl:element>
-		<xsl:element name="ID"><xsl:value-of select="."/></xsl:element>
-	</xsl:template>
+	<xsl:template match="MeteorDataRequest/AccessProvider/IssueInstant"/>
 	
-	<xsl:template match="MeteorDataRequest/AccessProvider/IssueInstant">
-		<xsl:variable name="timezone">
-			<xsl:choose>
-			<xsl:when test="contains(.,'Z')">+0000</xsl:when>
-			<xsl:otherwise><xsl:value-of select="concat(substring( ., string-length(.) - 5, 3), substring( ., string-length(.) - 1))"/></xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:element name="IssueInstant"><xsl:value-of select="concat(substring( ., 1, 19), $timezone)"/></xsl:element>
+	<xsl:template match="MeteorDataRequest/AccessProvider/MeteorInstitutionIdentifier">
+		<xsl:element name="ID" namespace="">
+			<xsl:value-of select="."/>
+		</xsl:element>
 	</xsl:template>
 	
     <xsl:template match="@* | node()">

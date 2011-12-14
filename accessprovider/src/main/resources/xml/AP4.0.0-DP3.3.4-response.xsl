@@ -49,19 +49,23 @@
 	<xsl:template match="//ServicingFees/ServicingFeesDate[. = '0000-00-00']"/>
 	 
 	<xsl:template match="//Award/GuarDt"><xsl:if test=". != '0000-00-00'">
-		<LoanDt><xsl:value-of select="."/></LoanDt>
+		<xsl:element name="LoanDt"><xsl:value-of select="."/></xsl:element>
 	</xsl:if></xsl:template>
 	
 	<xsl:template match="//Contacts/Email">
-		<xsl:copy><EmailAddress><xsl:value-of select="."/></EmailAddress></xsl:copy>
+		<xsl:copy>
+			<xsl:element name="EmailAddress">
+				<xsl:value-of select="."/>
+			</xsl:element>
+		</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="//Award[Student/SSNum = Borrower/SSNum]/AwardType[. = 'FFELPLUS']">
-		<AwardType>FFELGB</AwardType>
+		<xsl:copy>FFELGB</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="//Award[Student/SSNum = Borrower/SSNum]/AwardType[. = 'DLPLUS']">
-		<AwardType>DLGB</AwardType>
+		<xsl:copy>DLGB</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="//DataProviderType[. = 'SBS']">

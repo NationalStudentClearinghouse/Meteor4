@@ -142,6 +142,21 @@ public class RegistryWebServiceClient implements RegistryManager {
 		}
 	}
 
+	@Override
+	public String getVersion(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
+		try {
+			return getRegistryService().getVersion(meteorInstitutionId, providerType);
+		} catch (Exception e) {
+			LOG.debug("Exception occurred when trying to contact web service registry. Trying failover registry", e);
+			try {
+				return getFailoverRegistryService().getVersion(meteorInstitutionId, providerType);
+			} catch (Exception e1) {
+				LOG.debug("Exception occurred when trying to contact failover web service registry.", e1);
+				throw new RegistryException(e1);
+			}
+		}
+	}
+
 	public RegistryService getRegistryService() {
 		// overridden by spring method-injection
 		return null;

@@ -2,6 +2,7 @@
 <MeteorDataRequest>
    <AccessProvider>
       <MeteorInstitutionIdentifier>LTI_AP40</MeteorInstitutionIdentifier>
+      <ID>LTI_AP40</ID>
       <UserHandle>User</UserHandle>
       <IssueInstant>2011-09-20T14:34:02-0400</IssueInstant>
    </AccessProvider>

@@ -73,9 +73,52 @@ public class HPCSecurityManager {
 	private static final String SAML_10_NS = "http://www.oasis-open.org/committees/security/docs/draft-sstc-schema-assertion-27.xsd";
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+	private static final String METEOR_32_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssz";
+	private static final Integer SAML_ISSUE_INSTANT_VALIDITY_PERIOD_SECONDS = 14400;
 
 	private RegistryManager registryManager;
 	private DigitalSignatureManager digitalSignatureManager;
+
+	public String getMeteorInstitutionIdentifier(String requestXml) throws MeteorSecurityException {
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(requestXml.getBytes(IOUtils.UTF8_CHARSET));
+		Document requestDom;
+		try {
+			DocumentBuilder docBuilder = createDocumentBuilder();
+			requestDom = docBuilder.parse(inputStream);
+		} catch (Exception e) {
+			throw new MeteorSecurityException("Could not get meteor institution identifier", e);
+		} finally {
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				throw new MeteorSecurityException("Could not get meteor institution identifier", e);
+			}
+		}
+		return getMeteorInstitutionIdentifier(requestDom);
+	}
+
+	public String getMeteorInstitutionIdentifier(Document requestDom) throws MeteorSecurityException {
+		Element institutionElem;
+		try {
+			institutionElem = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AccessProvider/MeteorInstitutionIdentifier");
+			if (institutionElem == null) {
+				// compatibility with Meteor 3.2
+				institutionElem = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AccessProvider/ID");
+			}
+		} catch (Exception e) {
+			throw new MeteorSecurityException("Could not get meteor institution identifier", e);
+		}
+
+		if (institutionElem == null) {
+			throw new MeteorSecurityException("Request body missing meteor institution identifier");
+		}
+
+		try {
+			return institutionElem.getFirstChild().getNodeValue();
+		} catch (Exception e) {
+			throw new MeteorSecurityException("Could not get meteor institution identifier", e);
+		}
+	}
 
 	/**
 	 * Creates a SAML 1 assertion and inserts it into the request XML (for HPC)
@@ -196,8 +239,7 @@ public class HPCSecurityManager {
 			Element samlNSContext = XMLUtils.createDSctx(requestDom, "saml", SAML_10_NS);
 
 			verifyAssertionSignature(requestDom, sigNSContext, samlNSContext);
-			verifyBodySignature(requestDom, sigNSContext);
-			verifyAssertionExpiry(requestDom, samlNSContext);
+			verifyBodySignature(requestDom, sigNSContext, samlNSContext);
 		} catch (Exception e) {
 			throw new MeteorSecurityException("Cannot validate HPC request", e);
 		} finally {
@@ -229,17 +271,20 @@ public class HPCSecurityManager {
 		verifySignature(signature, cert);
 	}
 
-	private void verifyBodySignature(Document requestDom, Element sigNSContext) throws TransformerException, MeteorSecurityException, RegistryException, XMLSignatureException, XMLSecurityException {
+	private void verifyBodySignature(Document requestDom, Element sigNSContext, Element samlNSContext) throws TransformerException, MeteorSecurityException, RegistryException, XMLSignatureException, XMLSecurityException {
 		Element signature = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/ds:Signature", sigNSContext);
 		if (signature == null) {
+			// If Meteor 3.2, body is not signed.
+			// Meteor 3.2 assertion does not contain condition element.
+			Element condition = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier/saml:Assertion/saml:Condition", samlNSContext);
+			if (condition == null) {
+				return;
+			}
+
 			throw new MeteorSecurityException("Request body missing digital signature");
 		}
 
-		Element institutionElem = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AccessProvider/MeteorInstitutionIdentifier");
-		if (institutionElem == null) {
-			throw new MeteorSecurityException("Request body missing meteor institution identifier");
-		}
-		String institutionId = institutionElem.getFirstChild().getNodeValue();
+		String institutionId = getMeteorInstitutionIdentifier(requestDom);
 
 		X509Certificate cert = registryManager.getCertificate(institutionId, ProviderType.ACCESS);
 		verifySignature(signature, cert);
@@ -253,8 +298,34 @@ public class HPCSecurityManager {
 		}
 	}
 
+	public void verifyAssertionExpiry(String requestXml) throws MeteorSecurityException {
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(requestXml.getBytes(IOUtils.UTF8_CHARSET));
+		try {
+			DocumentBuilder docBuilder = createDocumentBuilder();
+			Document requestDom = docBuilder.parse(inputStream);
+
+			Element samlNSContext = XMLUtils.createDSctx(requestDom, "saml", SAML_10_NS);
+
+			verifyAssertionExpiry(requestDom, samlNSContext);
+		} catch (Exception e) {
+			throw new MeteorSecurityException("Cannot validate assertion expiry", e);
+		} finally {
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				throw new MeteorSecurityException("Cannot validate assertion expiry", e);
+			}
+		}
+	}
+
 	private void verifyAssertionExpiry(Document requestDom, Element samlNSContext) throws TransformerException, ParseException, MeteorSecurityException {
 		Element condition = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier/saml:Assertion/saml:Condition", samlNSContext);
+
+		if (condition == null) {
+			// Meteor 3.2 compatibility
+			verifyAssertionExpiryIssueInstant(requestDom, samlNSContext);
+			return;
+		}
 
 		SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT, Locale.US);
 		String notBeforeStr = condition.getAttribute("NotBefore");
@@ -268,6 +339,41 @@ public class HPCSecurityManager {
 		}
 		if (!currentTime.before(notOnOrAfter)) {
 			throw new MeteorSecurityException("Current time " + dateFormatter.format(currentTime) + " is equal to or after Assertion Condition@NotOnOrAfter " + notAfterStr);
+		}
+	}
+
+	private void verifyAssertionExpiryIssueInstant(Document requestDom, Element samlNSContext) throws TransformerException, ParseException, MeteorSecurityException {
+		Element assertion = (Element) XPathAPI.selectSingleNode(requestDom, "MeteorDataRequest/AssertionSpecifier/saml:Assertion", samlNSContext);
+
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(METEOR_32_DATE_FORMAT, Locale.US);
+		String issueInstantStr = assertion.getAttribute("IssueInstant");
+		Date issueInstant = dateFormatter.parse(issueInstantStr);
+
+		Calendar currentTimeCal = Calendar.getInstance();
+
+		Calendar issueInstantCal = Calendar.getInstance();
+		issueInstantCal.setTime(issueInstant);
+
+		// Meteor 3.2 issue instant does not distinguish between AM or PM. This
+		// means in the afternoon, a Meteor 3.2. assertion will never be valid.
+		// So to allow validation to be successful in the afternoon, arbitrarily
+		// add 12 hours to issue instant. This creates a minor flaw in assertion
+		// expiration checking such that in a given day, an assertion will be
+		// valid for two periods -- one before noon and one after noon. But, it
+		// allows assertions to be valid during the afternoon.
+
+		if (currentTimeCal.get(Calendar.HOUR_OF_DAY) > 12) {
+			issueInstantCal.add(Calendar.HOUR_OF_DAY, 12);
+			issueInstant = issueInstantCal.getTime();
+		}
+		issueInstantCal.add(Calendar.SECOND, SAML_ISSUE_INSTANT_VALIDITY_PERIOD_SECONDS);
+		Date expiryTime = issueInstantCal.getTime();
+
+		if (currentTimeCal.getTime().before(issueInstant)) {
+			throw new MeteorSecurityException("Current time " + dateFormatter.format(currentTimeCal.getTime()) + " is before Assertion@IssueInstant " + dateFormatter.format(issueInstant));
+		}
+		if (!currentTimeCal.getTime().before(expiryTime)) {
+			throw new MeteorSecurityException("Current time " + dateFormatter.format(currentTimeCal.getTime()) + " is not within the assertion validity period, which ended " + dateFormatter.format(expiryTime));
 		}
 	}
 
@@ -294,7 +400,7 @@ public class HPCSecurityManager {
 	private DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
 		return createDocumentBuilder(true);
 	}
-	
+
 	private DocumentBuilder createDocumentBuilder(boolean namespaceAware) throws ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(namespaceAware);

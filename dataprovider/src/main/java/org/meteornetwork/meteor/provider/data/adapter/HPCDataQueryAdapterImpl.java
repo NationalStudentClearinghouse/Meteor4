@@ -24,18 +24,21 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.abstraction.data.MeteorDataResponseWrapper;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
 import org.meteornetwork.meteor.common.hpc.HPCSecurityManager;
+import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.util.TemplateVersionMapper;
+import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.common.util.XSLTransformManager;
 import org.meteornetwork.meteor.common.util.exception.MeteorSecurityException;
 import org.meteornetwork.meteor.common.util.message.MeteorMessage;
 import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
+import org.meteornetwork.meteor.saml.ProviderType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -58,7 +61,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 
 	private static final String METEOR_DEFAULT_VERSION = "3.3.4";
 	private transient String meteorVersion = METEOR_DEFAULT_VERSION;
-	
+
 	private transient String requesterId;
 
 	private TemplateVersionMapper requestTemplateVersionMapper;
@@ -67,6 +70,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	private HPCManager hpcManager;
 	private HPCSecurityManager hpcSecurityManager;
 	private XSLTransformManager xslTransformManager;
+	private RegistryManager registryManager;
 
 	private Properties meteorProps;
 
@@ -91,6 +95,13 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 		}
 
 		try {
+			hpcSecurityManager.verifyAssertionExpiry(contentXml);
+		} catch (MeteorSecurityException e1) {
+			LOG.debug("Could not validate HPC request", e1);
+			throw new DataQueryAdapterException(MeteorMessage.SECURITY_TOKEN_EXPIRED);
+		}
+		
+		try {
 			requestInfo.setSecurityToken(hpcSecurityManager.getSecurityToken(contentXml));
 		} catch (MeteorSecurityException e) {
 			LOG.debug("Could not parse SecurityToken from HPC request", e);
@@ -99,7 +110,12 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 
 		String transformedContentXml;
 		try {
-			meteorVersion = xslTransformManager.getMeteorVersion(contentXml);
+			String meteorInstitutionId = hpcSecurityManager.getMeteorInstitutionIdentifier(contentXml);
+			meteorVersion = registryManager.getVersion(meteorInstitutionId, ProviderType.ACCESS);
+			if (meteorVersion == null) {
+				meteorVersion = METEOR_DEFAULT_VERSION;
+			}
+
 			LOG.debug("Transforming request XML from meteor version " + meteorVersion + " to " + meteorProps.getProperty("meteor.version"));
 			transformedContentXml = xslTransformManager.transformXML(contentXml, requestTemplateVersionMapper.getTemplateForVersions(meteorVersion, meteorProps.getProperty("meteor.version")));
 			LOG.debug("Transformed request XML:\n" + transformedContentXml);
@@ -109,6 +125,8 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 		}
 
 		RequestWrapper request = new RequestWrapper();
+		request.setMeteorVersion(new Version(meteorVersion));
+		
 		MeteorDataRequest meteorDataRequest;
 		try {
 			meteorDataRequest = MeteorDataRequest.unmarshal(new StringReader(transformedContentXml));
@@ -212,6 +230,15 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	@Autowired
 	public void setXslTransformManager(XSLTransformManager xslTransformManager) {
 		this.xslTransformManager = xslTransformManager;
+	}
+
+	public RegistryManager getRegistryManager() {
+		return registryManager;
+	}
+
+	@Autowired
+	public void setRegistryManager(RegistryManager registryManager) {
+		this.registryManager = registryManager;
 	}
 
 	public TemplateVersionMapper getRequestTemplateVersionMapper() {

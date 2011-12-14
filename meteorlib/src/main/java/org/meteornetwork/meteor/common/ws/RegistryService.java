@@ -64,4 +64,8 @@ public interface RegistryService {
 	@WebMethod(operationName = "GetRoles")
 	@WebResult(name = "GetRolesResponse")
 	ArrayList<Role> getRoles(@WebParam(name = "MeteorInstitutionId") String meteorInstitutionId, @WebParam(name = "AuthenticationProcessId") String authProcId, @WebParam(name = "ProviderType") ProviderType providerType) throws RegistryException;
+
+	@WebMethod(operationName = "GetVersion")
+	@WebResult(name = "GetVersionResponse")
+	String getVersion(@WebParam(name = "MeteorInstitutionId") String meteorInstitutionId, @WebParam(name = "ProviderType") ProviderType providerType) throws RegistryException;
 }

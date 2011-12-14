@@ -43,7 +43,7 @@
 	</xsl:template>
 	
 	<xsl:template match="MeteorDataRequest/AccessProvider/IssueInstant">
-		<IssueInstant><xsl:value-of select="substring( ., 1, string-length(.) - 2)"/>:<xsl:value-of select="substring( ., string-length(.) - 1)"/></IssueInstant>
+		<xsl:copy><xsl:value-of select="substring( ., 1, string-length(.) - 2)"/>:<xsl:value-of select="substring( ., string-length(.) - 1)"/></xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="MeteorDataRequest/AccessProvider/*[name() != 'ID' and name() != 'IssueInstant']">

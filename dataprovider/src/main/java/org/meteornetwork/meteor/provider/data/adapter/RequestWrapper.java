@@ -20,12 +20,14 @@
  ******************************************************************************/
 package org.meteornetwork.meteor.provider.data.adapter;
 
+import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.common.xml.datarequest.AccessProvider;
 
 public class RequestWrapper {
 
 	private AccessProvider accessProvider;
 	private String ssn;
+	private Version meteorVersion;
 
 	public AccessProvider getAccessProvider() {
 		return accessProvider;
@@ -41,6 +43,14 @@ public class RequestWrapper {
 
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
+	}
+
+	public Version getMeteorVersion() {
+		return meteorVersion;
+	}
+
+	public void setMeteorVersion(Version meteorVersion) {
+		this.meteorVersion = meteorVersion;
 	}
 
 }

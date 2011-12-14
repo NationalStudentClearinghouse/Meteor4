@@ -3,8 +3,7 @@
 
 <xsd:annotation>
    <xsd:documentation xml:lang="en">
-      First Draft High Performance Channel schema.
-      Dated 09/14/2001.
+      
    </xsd:documentation>
 </xsd:annotation> 
 
@@ -21,7 +20,7 @@
 </xsd:complexType>
 
 <xsd:complexType name="HPCMessageType">
-   <xsd:attribute name="ID" type="xsd:string" use="required"/>
+   <xsd:attribute name="ID" type="xsd:string"/>
    <xsd:attribute name="Timestamp" type="xsd:string" use="required"/>
 </xsd:complexType>
 
