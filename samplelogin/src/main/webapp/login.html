@@ -1,7 +1,46 @@
 <html>
 <head>
   <title>Meteor Example Login Code</title>
-  <link type="text/css" href="css/meteorlogin.css" rel="stylesheet"/>
+  
+  <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
+  
+  <link rel="stylesheet" type="text/css" href="css/meteorlogin.css" rel="stylesheet"/>
+  <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.16.custom.css"/>
+  
+  <script type="text/javascript">
+  	$(document).ready( function(){
+  		$('#ssn').autocomplete( {
+  			source:[
+  					'101011001',
+  					'104041004', 
+  					'104441004',
+  					'104541004',
+  					'104561004',
+  					'210010010',
+  					'210110010',
+  					'303030303',
+  					'303660303',
+  					'303770303',
+  					'333330303',
+  					'402342345',
+  					'402342346',
+  					'402345678',
+  					'402348765',
+  					'402452345',
+  					'417123456',
+  					'555555555',
+  					'555665555'
+  				],
+  			minLength:0,
+  			delay:0
+  		});
+  		
+  		$('#ssn').focus( function() {
+  			$(this).autocomplete('search');
+  		});
+  	});
+  </script>
 </head>
 
 <body bgcolor="#FFFFFF" topmargin="0" leftmargin="0">
@@ -71,7 +110,7 @@
 	<tr>
 		<td class="text" align="right"><b> Borrower SSN:</b></td>
 		<td>
-	   		<input type="text" name="SSN"/>
+	   		<input id="ssn" type="text" name="SSN"/>
 			<span class="text">(Borrower Role Access Only)</span>
 		</td>
 	</tr>
