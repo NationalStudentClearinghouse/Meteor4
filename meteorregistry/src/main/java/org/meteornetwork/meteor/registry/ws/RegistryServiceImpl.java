@@ -20,6 +20,7 @@
  ******************************************************************************/
 package org.meteornetwork.meteor.registry.ws;
 
+import java.security.cert.CertificateEncodingException;
 import java.util.ArrayList;
 
 import javax.jws.WebService;
@@ -43,6 +44,15 @@ public class RegistryServiceImpl implements RegistryService {
 	@Override
 	public byte[] getCertificate(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
 		return SerializationUtils.serialize(registryManager.getCertificate(meteorInstitutionId, providerType));
+	}
+
+	@Override
+	public byte[] getCertificateEncoded(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
+		try {
+			return registryManager.getCertificate(meteorInstitutionId, providerType).getEncoded();
+		} catch (CertificateEncodingException e) {
+			throw new RegistryException(e);
+		}
 	}
 
 	@Override

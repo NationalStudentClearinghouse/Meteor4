@@ -41,6 +41,19 @@ public interface RegistryService {
 	@WebResult(name = "GetCertificateResponse")
 	byte[] getCertificate(@WebParam(name = "MeteorInstitutionId") String meteorInstitutionId, @WebParam(name = "ProviderType") ProviderType providerType) throws RegistryException;
 
+	/**
+	 * Use this method instead of getCertificate when invoking from a platform
+	 * besides Java
+	 * 
+	 * @param meteorInstitutionId
+	 * @param providerType
+	 * @return The encoded X509 Certificate (ASN 1 DER)
+	 * @throws RegistryException
+	 */
+	@WebMethod(operationName = "GetCertificateDEREncoding")
+	@WebResult(name = "GetCertificateDEREncodingResponse")
+	byte[] getCertificateEncoded(@WebParam(name = "MeteorInstitutionId") String meteorInstitutionId, @WebParam(name = "ProviderType") ProviderType providerType) throws RegistryException;
+
 	@WebMethod(operationName = "GetIndexProviders")
 	@WebResult(name = "GetIndexProvidersResponse")
 	ArrayList<IndexProvider> getIndexProviders(@WebParam(name = "MeteorVersion") Version meteorVersion) throws RegistryException;
