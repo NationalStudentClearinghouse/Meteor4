@@ -24,4 +24,8 @@
 		<name>org.meteornetwork.meteor.common.xml.hpc</name>
 		<schemaLocation>HPCMessage.xsd</schemaLocation>
 	</package>
+	<package>
+	   <name>org.meteornetwork.meteor.common.xml.accessresponse.duplicateawards</name>
+	   <schemaLocation>duplicateAwardsMap.xsd</schemaLocation>
+	</package>
 </binding>

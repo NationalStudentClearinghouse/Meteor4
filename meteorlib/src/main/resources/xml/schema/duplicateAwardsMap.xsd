@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.meteornetwork.org/schemas/duplicateAwardIds"
+	xmlns="http://www.meteornetwork.org/schemas/duplicateAwardIds"
+    elementFormDefault="qualified">
+
+    <!-- Used by Access Provider web service to send duplicate award details to the UI provider -->
+	<xsd:element name="DuplicateAwards">
+		<xsd:complexType>
+			<xsd:all>
+				<xsd:element name="BestSourceAward" type="BestSourceAwardType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:all>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:complexType name="BestSourceAwardType">
+        <xsd:complexContent>
+            <xsd:extension base="AwardType">
+                <xsd:all>
+                    <xsd:element name="DuplicateAward" type="AwardType" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:all>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="AwardType">
+        <xsd:attribute name="APSUniqueAwardID">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:int">
+                    <xsd:minInclusive value="00000"/>
+                    <xsd:maxInclusive value="99999"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+</xsd:schema>

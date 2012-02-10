@@ -39,6 +39,8 @@ public interface AccessProviderService {
 	 * Returns all meteor data, best source meteor data, and a map of best
 	 * source awards to duplicates. Used for the consolidated view.
 	 * 
+	 * Call from Java clients only. For non-Java clients, see findDataForBorrowerWithConsolidatedGeneric
+	 * 
 	 * @param ssn
 	 *            the ssn to query the meteor network with
 	 * @param meteorAttributes
@@ -55,4 +57,8 @@ public interface AccessProviderService {
 	 */
 	@WebMethod(operationName = "findDataForBorrowerWithConsolidated")
 	void findDataForBorrowerWithConsolidated(@WebParam(name = "ssn") String ssn, @WebParam(name = "tokenAttrs") TokenAttributes meteorAttributes, @WebParam(name = "resultBestSource", mode = WebParam.Mode.OUT) Holder<String> resultBestSource, @WebParam(name = "resultAll", mode = WebParam.Mode.OUT) Holder<String> resultAll, @WebParam(name = "duplicateAwardsMap", mode = WebParam.Mode.OUT) Holder<byte[]> duplicateAwardsMap);
+	
+	@WebMethod(operationName = "findDataForBorrowerWithConsolidatedPlatformIndependent")
+	void findDataForBorrowerWithConsolidatedPlatformIndependent(@WebParam(name = "ssn") String ssn, @WebParam(name = "tokenAttrs") TokenAttributes meteorAttributes, @WebParam(name = "resultBestSource", mode = WebParam.Mode.OUT) Holder<String> resultBestSource, @WebParam(name = "resultAll", mode = WebParam.Mode.OUT) Holder<String> resultAll, @WebParam(name = "duplicateAwards", mode = WebParam.Mode.OUT) Holder<String> duplicateAwards);
+	
 }

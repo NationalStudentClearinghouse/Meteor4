@@ -22,6 +22,7 @@ package org.meteornetwork.meteor.provider.access.ws;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
@@ -31,6 +32,9 @@ import javax.xml.ws.Holder;
 import org.meteornetwork.meteor.business.BestSourceAggregator;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.ws.AccessProviderService;
+import org.meteornetwork.meteor.common.xml.accessresponse.duplicateawards.BestSourceAward;
+import org.meteornetwork.meteor.common.xml.accessresponse.duplicateawards.DuplicateAward;
+import org.meteornetwork.meteor.common.xml.accessresponse.duplicateawards.DuplicateAwards;
 import org.meteornetwork.meteor.common.xml.dataresponse.Award;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
 import org.meteornetwork.meteor.provider.access.ResponseDataWrapper;
@@ -112,6 +116,48 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 		duplicateAwardsMap.value = duplicateAwardsMapObj == null || duplicateAwardsMapObj.isEmpty() ? null : SerializationUtils.serialize(duplicateAwardsMapObj);
 
 		LOG.debug("Returning data for ssn: " + ssn);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void findDataForBorrowerWithConsolidatedPlatformIndependent(String ssn, TokenAttributes meteorAttributes, Holder<String> resultBestSource, Holder<String> resultAll, Holder<String> duplicateAwards) {
+		LOG.debug("Converting to platform independent response");
+		
+		Holder<byte[]> duplicateAwardsMapInternal = new Holder<byte[]>();
+
+		this.findDataForBorrowerWithConsolidated(ssn, meteorAttributes, resultBestSource, resultAll, duplicateAwardsMapInternal);
+
+		if (duplicateAwardsMapInternal.value == null) {
+			return;
+		}
+
+		TreeMap<Integer, ArrayList<Integer>> duplicateAwardsMapObj = (TreeMap<Integer, ArrayList<Integer>>) SerializationUtils.deserialize(duplicateAwardsMapInternal.value);
+		DuplicateAwards duplicateAwardsXml = new DuplicateAwards();
+		for (Map.Entry<Integer, ArrayList<Integer>> dupeAwardsEntry : duplicateAwardsMapObj.entrySet()) {
+			BestSourceAward bestSourceAward = new BestSourceAward();
+			bestSourceAward.setAPSUniqueAwardID(dupeAwardsEntry.getKey());
+
+			if (dupeAwardsEntry.getValue() != null) {
+				for (Integer dupeAwardId : dupeAwardsEntry.getValue()) {
+					DuplicateAward dupeAward = new DuplicateAward();
+					dupeAward.setAPSUniqueAwardID(dupeAwardId);
+					bestSourceAward.addDuplicateAward(dupeAward);
+				}
+			}
+			
+			duplicateAwardsXml.addBestSourceAward(bestSourceAward);
+		}
+		
+		StringWriter marshalledDuplicateAwardsXml = new StringWriter();
+		try {
+			duplicateAwardsXml.marshal(marshalledDuplicateAwardsXml);
+			duplicateAwards.value = marshalledDuplicateAwardsXml == null ? null : marshalledDuplicateAwardsXml.toString();
+		} catch (Exception e) {
+			LOG.error("Could not marshal duplicate award data", e);
+			return;
+		}
+		
+		LOG.debug("Conversion to platform independent response complete");
 	}
 
 	private String marshalResponseData(MeteorRsMsg responseData) {

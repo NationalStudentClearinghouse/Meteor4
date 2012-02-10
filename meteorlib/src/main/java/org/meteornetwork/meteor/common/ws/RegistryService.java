@@ -50,8 +50,8 @@ public interface RegistryService {
 	 * @return The encoded X509 Certificate (ASN 1 DER)
 	 * @throws RegistryException
 	 */
-	@WebMethod(operationName = "GetCertificateDEREncoding")
-	@WebResult(name = "GetCertificateDEREncodingResponse")
+	@WebMethod(operationName = "GetCertificateEncoded")
+	@WebResult(name = "GetCertificateEncodedResponse")
 	byte[] getCertificateEncoded(@WebParam(name = "MeteorInstitutionId") String meteorInstitutionId, @WebParam(name = "ProviderType") ProviderType providerType) throws RegistryException;
 
 	@WebMethod(operationName = "GetIndexProviders")
