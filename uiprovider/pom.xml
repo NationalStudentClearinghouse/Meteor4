@@ -20,6 +20,7 @@
 		<cglib.version>2.2.2</cglib.version>
 		<org.springframework.version>3.0.6.RELEASE</org.springframework.version>
 		<javax.servlet-api.version>2.5</javax.servlet-api.version>
+		<jstl.version>1.2</jstl.version>
 		<cxf.version>2.4.3</cxf.version>
 		<cxf.wss4j.version>1.6.4</cxf.wss4j.version>
 		<wss4j.version>1.6.4</wss4j.version>
@@ -116,6 +117,15 @@
 			<version>${javax.servlet-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- 
+		    JSTL
+		 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
 		
 		<!-- 
 			Apache CXF
