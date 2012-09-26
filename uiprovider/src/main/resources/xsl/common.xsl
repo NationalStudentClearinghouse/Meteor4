@@ -79,6 +79,32 @@
 		</p>
 	</xsl:template>
 
+    <!-- Aggregate loan type totals -->
+    <xsl:template name="loan-type-totals">
+        <xsl:param name="awards"/>
+        <h3>Loan Type Totals</h3>
+        <table cellpadding="0" cellspacing="0" class="simple" width="400px">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <xsl:apply-templates select="$awards/AwardType[not(. = ../preceding-sibling::Award/AwardType)]" mode="loan-type-totals">
+                    <xsl:sort select="." order="ascending" data-type="text"/>
+                </xsl:apply-templates>
+            </tbody>
+        </table>
+    </xsl:template>
+    
+    <xsl:template match="AwardType" mode="loan-type-totals">
+        <tr>
+            <td><xsl:apply-templates select="."/></td>
+            <td><xsl:value-of select="format-number(sum(../../Award[AwardType = current() and string(number(GrossLoanAmount)) != 'NaN']/GrossLoanAmount) + sum(../../Award[AwardType = current() and string(number(GrossLoanAmount)) = 'NaN']/AwardAmt), '$###,##0.00')"/></td>
+        </tr>
+    </xsl:template>
+    
 	<!-- Select award data provider name -->
 	<xsl:template match="Award" mode="dataprovidername">
 		<xsl:choose>

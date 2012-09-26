@@ -1,15 +1,13 @@
-<%@ page %><% 
-response.setHeader("Content-Type", "multipart/mixed; boundary=education_mydata");
+<%@ page isELIgnored="false" %><%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %><% 
+response.setHeader("Content-Type", "multipart/mixed; boundary=education_mydataUniq1232");
 response.setHeader("Content-Disposition", "attachment; filename=MeteorData.dat");
-%>--education_mydata
-Content-type: text/plain; charset=us-ascii
-NAME: Jane Doe
-STREET1: 123 Main Street
-CITY: Anywhere
-STATE: CA
-COLLEGE: California State University
-START_YEAR: 2002
-END_YEAR: 2006
-DEGREE_LEVEL: Master, Arts
-DEGREE: Education
-GPA: 3.85
+%>
+Content-Type: multipart/mixed; boundary=education_mydataUniq1232
+
+--education_mydataUniq1232
+Content-Type: text/xml
+
+<c:out value="${meteorDataDownload}" escapeXml="false"/>
+
+--education_mydataUniq1232--

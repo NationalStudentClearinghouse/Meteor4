@@ -168,10 +168,7 @@
 							</xsl:choose></td>
 							<td class="tdBorrower3">Current Interest Rate:</td>
 							<td class="tdBorrower4">
-								<xsl:call-template name="format-number-if-exists">
-									<xsl:with-param name="number" select="CurrIntRate"/>
-									<xsl:with-param name="format" select="'$###,##0.00'"/>
-								</xsl:call-template>
+								<xsl:value-of select="CurrIntRate"/>%
 							</td>
 						</tr>
 						<tr>

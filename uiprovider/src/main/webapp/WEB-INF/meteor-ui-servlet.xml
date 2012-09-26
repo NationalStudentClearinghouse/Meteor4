@@ -149,7 +149,7 @@
 		</property>
 	</bean>
 	
-	<bean name="/meteor/mydata.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
+	<bean name="/meteor/mydata.do" class="org.meteornetwork.meteor.provider.ui.controller.MyDataDownloadController" autowire="byType">
         <property name="viewName" value="myDataDownload"/>
         <lookup-method name="getSession" bean="meteorSession"/>
         <lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
@@ -162,7 +162,8 @@
 	</bean>
 	
 	<!-- Use this page to see the raw xml returned by the meteor network. Comment out in production -->
-	<!-- bean name="/meteor/rawxml.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
+	<!-- 
+	<bean name="/meteor/rawxml.do" class="org.meteornetwork.meteor.provider.ui.controller.MeteorQueryController" autowire="byType">
 		<property name="viewName" value="rawxml"/>
 		<lookup-method name="getSession" bean="meteorSession"/>
 		<lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
@@ -174,5 +175,6 @@
 				<value>BORROWER</value>
 			</list>
 		</property>
-	</bean-->
+	</bean>
+	 -->
 </beans> 

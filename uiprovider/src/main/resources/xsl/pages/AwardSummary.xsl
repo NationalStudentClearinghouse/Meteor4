@@ -61,6 +61,16 @@
 			<p class="intro">Only awards where the student&#39;s SSN matches the SSN entered on the Meteor Query screen are displayed. For example, PLUS loans where the SSN entered is the borrower&#39;s SSN are not included in this display, but will appear on the Repayment Summary screen.</p>
 		</xsl:if>
 		
+		<div class="actionButtons">
+            <div class="button-group">
+                <a href="#" class="button primary"><xsl:attribute name="onclick">javascript:showModal('showLoanTypeTotals', { minHeight: 170 })</xsl:attribute>Loan Type Totals</a>
+                <xsl:if test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
+                <!-- <a href="#" class="button">Import MyData</a> -->
+                <a href="{$docroot}/meteor/mydata.do" class="button">Save MyData</a>
+                </xsl:if>
+            </div>
+        </div>
+        
 		<p class="tableTitle">Award Information</p>
 		<table cellpadding="0" cellspacing="0" class="tblAwardInfo">
 			<thead>
@@ -125,6 +135,11 @@
 		<div id="modal_showHelp" class="showOptions" style="width:800px;">
 			<xsl:call-template name="award-summary-help"/>
 		</div>	
+		<div id="modal_showLoanTypeTotals" class="showOptions" style="width:500px;">
+            <xsl:call-template name="loan-type-totals">
+                <xsl:with-param name="awards" select="//Award"/>
+            </xsl:call-template>
+        </div>
 	</xsl:template>
 	
 	<xsl:template match="Award">

@@ -206,7 +206,7 @@
 				<tr><td class="tdBorrower1">&#32;</td></tr>
 				<tr>
 					<td class="tdBorrower1">Current Interest Rate</td>
-					<td class="tdBorrower2" colspan="3"><xsl:value-of select="Repayment/CurrIntRate"/></td>
+					<td class="tdBorrower2" colspan="3"><xsl:value-of select="Repayment/CurrIntRate"/>%</td>
 				</tr>
 				<tr>
 					<td class="tdBorrower1">

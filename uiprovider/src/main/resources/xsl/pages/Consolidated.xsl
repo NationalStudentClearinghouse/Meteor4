@@ -405,10 +405,7 @@
 					<td class="rowHead">Current Interest Rate</td>
 					<xsl:for-each select="$borrower-awards">
 					<td>
-						<xsl:call-template name="format-number-if-exists">
-							<xsl:with-param name="number" select="Repayment/CurrIntRate"/>
-							<xsl:with-param name="format" select="'$###,##0.00'"/>
-						</xsl:call-template>
+						<xsl:value-of select="Repayment/CurrIntRate"/>%
 					</td>
 					</xsl:for-each>
 				</tr> 

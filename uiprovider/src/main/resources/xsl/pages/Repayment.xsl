@@ -33,6 +33,7 @@
 	</xsl:choose></xsl:variable>
 	
 	<xsl:key name="awards-by-servicer" match="//Award" use="Servicer/EntityID"/>
+	<xsl:key name="awards-by-type" match="//Award" use="AwardType"/>
 	
 	<xsl:template name="htmlhead">
 		<title>Repayment Summary</title>
@@ -72,20 +73,33 @@
 		<xsl:if test="$role != 'BORROWER' and $inquiryRole != 'BORROWER'">
 		<p class="intro">Only awards where the borrower's SSN matches the SSN entered on the Meteor Query screen are displayed. For example, PLUS loans where the SSN entered is the student's SSN are not included in this display, but will appear on the Award Summary screen.</p>
 		</xsl:if>
-		
+
+	    <div class="actionButtons">
+		    <div class="button-group">
+		        <a href="#" class="button primary"><xsl:attribute name="onclick">javascript:showModal('showLoanTypeTotals', { minHeight: 170 })</xsl:attribute>Loan Type Totals</a>
+                <xsl:if test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
+                <!-- <a href="#" class="button">Import MyData</a> -->
+		        <a href="{$docroot}/meteor/mydata.do" class="button">Save MyData</a>
+		        </xsl:if>
+		    </div>
+		</div>
+	    
 		<p class="tableTitle">Award Information</p>
 		<table cellpadding="0" cellspacing="0" class="tblPayment">
 			<thead>
 				<tr>
-					<th class="thPayment1" nowrap="nowrap">View Details</th>
-					<th class="thPayment2" nowrap="nowrap">Borrower's Name</th>
-					<th class="thPayment3" nowrap="nowrap">Award Type</th>
-					<th class="thPayment4" nowrap="nowrap">Loan Status</th>
-					<th class="thPayment5" nowrap="nowrap">Award Amount</th>
-					<th class="thPayment6" nowrap="nowrap">Begin Date</th>
-					<th class="thPayment7" nowrap="nowrap">End Date</th>
-					<th class="thPayment8" nowrap="nowrap">Data Provider</th>
-					<th class="thPayment9" nowrap="nowrap">Data Provider Type</th>
+					<th class="thPaymentNew1" nowrap="nowrap">View Details</th>
+					<th class="thPaymentNew2" nowrap="nowrap">Borrower's Name</th>
+					<th class="thPaymentNew3" nowrap="nowrap">Award Type</th>
+					<th class="thPaymentNew4" nowrap="nowrap">Loan Status</th>
+					<th class="thPaymentNew5" nowrap="nowrap">Interest<br/>Rate</th>
+					<th class="thPaymentNew6" nowrap="nowrap">Award Amount</th>
+					<th class="thPaymentNew7" nowrap="nowrap">Outstanding<br/>Balance</th>
+					<th class="thPaymentNew8" nowrap="nowrap">Outstanding<br/>Balance Date</th>
+					<th class="thPaymentNew9" nowrap="nowrap">Begin Date</th>
+					<th class="thPaymentNew10" nowrap="nowrap">End Date</th>
+					<th class="thPaymentNew11" nowrap="nowrap">Data Provider</th>
+					<th class="thPaymentNew12" nowrap="nowrap">Data Provider Type</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -94,8 +108,14 @@
 			</xsl:apply-templates>
 			</tbody>
 		</table>
+		
 		<div id="modal_showHelp" class="showOptions" style="width:800px;">
 			<xsl:call-template name="repayment-help"/>
+		</div>
+		<div id="modal_showLoanTypeTotals" class="showOptions" style="width:500px;">
+		    <xsl:call-template name="loan-type-totals">
+		        <xsl:with-param name="awards" select="//Award"/>
+		    </xsl:call-template>
 		</div>
 		
 		<xsl:if test="$role != 'APCSR'">
@@ -126,7 +146,7 @@
 			<xsl:variable name="atLeast1NonGrantScholarship"><xsl:apply-templates select="key('awards-by-servicer',Servicer/EntityID)[Borrower/SSNum/@unmasked=$ssn]" mode="count"/></xsl:variable>
 			<xsl:if test="string-length($atLeast1NonGrantScholarship) > 0">
 			<tr>
-				<td class="tFooter" colspan="9" style="text-align: right"><a href="#" class="msgtrigger" id="triggerRepay{position()}">Repayment Info <img src="{$docroot}/imgs/repayment-info.gif" border="0" /></a> | <a href="#" class="msgtrigger" id="triggerTotals{position()}">Grand Totals <img src="{$docroot}/imgs/totals.gif" border="0" /></a><xsl:if test="count(key('awards-by-servicer',Servicer/EntityID)[Borrower/SSNum/@unmasked=$ssn]/../../MeteorDataProviderMsg/RsMsg) > 0"> | <a href="#" class="msgtrigger" id="triggerMsg{position()}">Messages <img src="{$docroot}/imgs/messages.gif" border="0" /></a></xsl:if></td>
+				<td class="tFooter" colspan="12" style="text-align: right"><a href="#" class="msgtrigger" id="triggerRepay{position()}">Repayment Info <img src="{$docroot}/imgs/repayment-info.gif" border="0" /></a> | <a href="#" class="msgtrigger" id="triggerTotals{position()}">Grand Totals <img src="{$docroot}/imgs/totals.gif" border="0" /></a><xsl:if test="count(key('awards-by-servicer',Servicer/EntityID)[Borrower/SSNum/@unmasked=$ssn]/../../MeteorDataProviderMsg/RsMsg) > 0"> | <a href="#" class="msgtrigger" id="triggerMsg{position()}">Messages <img src="{$docroot}/imgs/messages.gif" border="0" /></a></xsl:if></td>
 			</tr>
 			<tr class="altRow">
 				<td class="triggerRepay{position()} hideShow" colspan="12">
@@ -232,8 +252,8 @@
 					<xsl:when test="position() mod 2 = 1">defRow</xsl:when>
 					<xsl:otherwise>altRow</xsl:otherwise>
 				</xsl:choose></xsl:attribute>
-				<td class="tdPayment1" nowrap="nowrap" valign="middle"><a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={APSUniqueAwardID}"><img src="{$docroot}/imgs/view-details.jpg" border="0" /></a></td>
-				<td class="tdPayment2" nowrap="nowrap">
+				<td class="tdPaymentNew1" nowrap="nowrap" valign="middle"><a href="{$docroot}/meteor/repaymentDetail.do?apsUniqAwardId={APSUniqueAwardID}"><img src="{$docroot}/imgs/view-details.jpg" border="0" /></a></td>
+				<td class="tdPaymentNew2" nowrap="nowrap">
 					<xsl:choose>
 					<xsl:when test="$role = 'BORROWER' or $inquiryRole = 'BORROWER'">
 						<xsl:variable name="isConsolidation"><xsl:apply-templates select="AwardType" mode="is-consolidation"/></xsl:variable>
@@ -246,13 +266,16 @@
 					</xsl:otherwise>
 					</xsl:choose>
 				</td>
-				<td class="tdPayment3" nowrap="nowrap">
+				<td class="tdPaymentNew3" nowrap="nowrap">
 					<xsl:apply-templates select="AwardType"/>
 				</td>
-				<td class="tdPayment4" nowrap="nowrap">
+				<td class="tdPaymentNew4" nowrap="nowrap">
 					<xsl:apply-templates select="LoanStat"/>
 				</td>
-				<td class="tdPayment5" nowrap="nowrap">
+				<td class="tdPaymentNew5" nowrap="nowrap">
+				    <xsl:apply-templates select="Repayment/CurrIntRate"/>%
+				</td>
+				<td class="tdPaymentNew6" nowrap="nowrap">
 					<xsl:choose>
 						<xsl:when test="string(number(GrossLoanAmount)) != 'NaN'">
 							<xsl:value-of select="format-number(GrossLoanAmount, '$###,##0.00')"/>
@@ -265,24 +288,41 @@
 						</xsl:otherwise>
 					</xsl:choose>
 				</td>
-				<td class="tdPayment6" nowrap="nowrap">
+				<td class="tdPaymentNew7" nowrap="nowrap">
+				    <xsl:choose>
+                        <xsl:when test="../../MeteorDataProviderDetailInfo/DataProviderType != 'GSP'">
+						    <xsl:call-template name="format-number-if-exists">
+						        <xsl:with-param name="number" select="Repayment/AcctBal"/>
+						        <xsl:with-param name="format" select="'$###,##0.00'"/>
+						    </xsl:call-template>
+					    </xsl:when>
+				    </xsl:choose>
+				</td>
+				<td class="tdPaymentNew8" nowrap="nowrap">
+				    <xsl:choose>
+                        <xsl:when test="../../MeteorDataProviderDetailInfo/DataProviderType != 'GSP'">
+				            <xsl:value-of select="Repayment/AcctBalDt"/>
+				        </xsl:when>
+				    </xsl:choose>
+				</td>
+				<td class="tdPaymentNew9" nowrap="nowrap">
 					<xsl:choose>
 						<xsl:when test="AwardBeginDt">
 							<xsl:value-of select="AwardBeginDt"/>
 						</xsl:when>
 					</xsl:choose>
 				</td>
-				<td class="tdPayment7" nowrap="nowrap">
+				<td class="tdPaymentNew10" nowrap="nowrap">
 					<xsl:choose>
 						<xsl:when test="AwardEndDt">
 							<xsl:value-of select="AwardEndDt"/>
 						</xsl:when>
 					</xsl:choose>
 				</td>
-				<td class="tdPayment8" nowrap="nowrap">
+				<td class="tdPaymentNew11" nowrap="nowrap">
 					<xsl:apply-templates select="." mode="select-best-source"/>
 				</td>
-				<td class="tdPayment9" nowrap="nowrap">
+				<td class="tdPaymentNew12" nowrap="nowrap">
 					<xsl:apply-templates select="DataProviderType" />
 				</td>
 			</tr>
@@ -292,7 +332,7 @@
 					<xsl:when test="position() mod 2 = 1">defRow</xsl:when>
 					<xsl:otherwise>altRow</xsl:otherwise>
 				</xsl:choose></xsl:attribute>
-				<td colspan="9" style="text-align: right">
+				<td colspan="12" style="text-align: right">
 					<xsl:if test="OnlinePaymentProcessURL"><xsl:choose>
 						<xsl:when test="$role = 'APCSR'"><a href="#">Make a Payment</a></xsl:when>
 						<xsl:otherwise><a href="{OnlinePaymentProcessURL}">Make a Payment</a></xsl:otherwise>
@@ -409,4 +449,5 @@
 			</tr>
 		</xsl:for-each>
 	</xsl:template>
+
 </xsl:stylesheet>
