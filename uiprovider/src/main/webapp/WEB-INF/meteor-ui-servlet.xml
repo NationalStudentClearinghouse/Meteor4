@@ -150,6 +150,19 @@
 	</bean>
 	
 	<bean name="/meteor/mydata.do" class="org.meteornetwork.meteor.provider.ui.controller.MyDataDownloadController" autowire="byType">
+        <property name="viewName" value="myDataDownloadXml"/>
+        <lookup-method name="getSession" bean="meteorSession"/>
+        <lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
+        <property name="allowedRoles">
+            <list>
+                <value>BORROWER</value>
+                <value>APCSR</value>
+            </list>
+        </property>
+    </bean>
+    
+	<!-- 
+	<bean name="/meteor/mydata.do" class="org.meteornetwork.meteor.provider.ui.controller.MyDataDownloadController" autowire="byType">
         <property name="viewName" value="myDataDownload"/>
         <lookup-method name="getSession" bean="meteorSession"/>
         <lookup-method name="getAccessClientProxy" bean="accessClientProxyFactory"/>
@@ -160,6 +173,7 @@
             </list>
 	    </property>
 	</bean>
+	 -->
 	
 	<!-- Use this page to see the raw xml returned by the meteor network. Comment out in production -->
 	<!-- 
