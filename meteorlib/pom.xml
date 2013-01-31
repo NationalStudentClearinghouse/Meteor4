@@ -39,8 +39,6 @@
 		<junit.version>4.8.2</junit.version>
 		<xmlunit.version>1.3</xmlunit.version>
 		<org.easymock.version>3.0</org.easymock.version>
-		
-		<javax.servlet-api.version>2.5</javax.servlet-api.version>
 	</properties>
 	
 	<build>
@@ -236,16 +234,6 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- 
-			Javax Servlet API 
-		-->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>${javax.servlet-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		

@@ -22,13 +22,14 @@ package org.meteornetwork.meteor.provider.ui.token;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.meteornetwork.meteor.common.abstraction.token.TokenProvider;
 import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 
 public class ShibbolethTokenProvider implements TokenProvider {
+
+	private static final String PREFIX = "AJP_";
 
 	@Override
 	public SecurityToken getSecurityToken(HttpServletRequest request) throws SecurityTokenException {
@@ -54,13 +55,14 @@ public class ShibbolethTokenProvider implements TokenProvider {
 	}
 
 	private String getAttribute(HttpServletRequest request, String attributeName) {
-		return (String) request.getAttribute(attributeName);
+		// TODO: get value from environment attribute
+		return request.getHeader(PREFIX.concat(attributeName));
 	}
 
 	private String getRequiredAttribute(HttpServletRequest request, String attributeName) throws SecurityTokenException {
 		String attrValue = getAttribute(request, attributeName);
 		if (attrValue == null) {
-			throw new SecurityTokenException("Could not create SecurityToken from Shibboleth attributes. " + attributeName + " is required.");
+			throw new SecurityTokenException("Could not create SecurityToken from Shibboleth attributes. " + PREFIX.concat(attributeName) + " is required.");
 		}
 		return attrValue;
 	}

@@ -28,9 +28,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.meteornetwork.meteor.common.abstraction.token.TokenProvider;
 import org.meteornetwork.meteor.provider.ui.exception.MeteorAccessException;
 import org.meteornetwork.meteor.provider.ui.exception.MeteorSessionExpiredException;
+import org.meteornetwork.meteor.provider.ui.token.TokenProvider;
 import org.meteornetwork.meteor.saml.Role;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;

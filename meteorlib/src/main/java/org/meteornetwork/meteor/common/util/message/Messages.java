@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * Messages.java
  * 
  * @author timb
- * @version $Revision: 1.8 $ $Date: 2008/05/09 02:14:19 $
+ * @version $Revision$ $Date$
  * @since Apr 29, 2003
  */
 @SuppressWarnings("rawtypes")

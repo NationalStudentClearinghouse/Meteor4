@@ -24,12 +24,12 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.meteornetwork.meteor.common.abstraction.index.IndexServerAbstraction;
-import org.meteornetwork.meteor.common.abstraction.index.MeteorContext;
-import org.meteornetwork.meteor.common.abstraction.index.MeteorIndexResponseWrapper;
 import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.common.xml.indexrequest.AccessProvider;
 import org.meteornetwork.meteor.common.xml.indexresponse.MeteorIndexResponse;
+import org.meteornetwork.meteor.provider.index.IndexServerAbstraction;
+import org.meteornetwork.meteor.provider.index.MeteorContext;
+import org.meteornetwork.meteor.provider.index.MeteorIndexResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

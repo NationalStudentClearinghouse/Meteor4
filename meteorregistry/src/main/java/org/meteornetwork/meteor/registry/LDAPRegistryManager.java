@@ -403,30 +403,6 @@ public class LDAPRegistryManager implements RegistryManager {
 		return roles;
 	}
 
-	@Override
-	public String getVersion(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
-		try {
-			return getVersion(ldapTemplate, meteorInstitutionId, providerType);
-		} catch (Exception e) {
-			LOG.debug("Exception occurred while contacting LDAP Registry. Trying failover registry", e);
-			try {
-				return getVersion(ldapFailoverTemplate, meteorInstitutionId, providerType);
-			} catch (Exception e1) {
-				LOG.debug("Exception occurred while contacting LDAP failover registry", e1);
-				throw new RegistryException(e1);
-			}
-		}
-	}
-	
-	private String getVersion(LdapTemplate ldapTemplate, String meteorInstitutionId, ProviderType providerType) throws RegistryException {
-		return (String) ldapTemplate.lookup("File=" + providerType.getType() + ",FileTypeFamily=Meteor,Institution=" + meteorInstitutionId, new AttributesMapper() {
-			public Object mapFromAttributes(Attributes attrs) throws NamingException {
-				Attribute ver = attrs.get("Ver");
-				return ver == null ? null : ver.get();
-			}
-		});
-	}
-
 	private String stripBaseDn(String ldapName) throws InvalidNameException {
 		LdapName name = new LdapName(ldapName);
 		name.remove(0);

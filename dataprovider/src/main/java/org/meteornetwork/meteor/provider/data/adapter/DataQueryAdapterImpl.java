@@ -23,13 +23,12 @@ package org.meteornetwork.meteor.provider.data.adapter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.meteornetwork.meteor.common.abstraction.data.MeteorDataResponseWrapper;
-import org.meteornetwork.meteor.common.security.RequestInfo;
-import org.meteornetwork.meteor.common.util.Version;
-import org.meteornetwork.meteor.common.util.message.MeteorMessage;
-import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.meteornetwork.meteor.common.security.RequestInfo;
+import org.meteornetwork.meteor.common.util.message.MeteorMessage;
+import org.meteornetwork.meteor.common.xml.datarequest.MeteorDataRequest;
+import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -61,7 +60,6 @@ public class DataQueryAdapterImpl implements DataQueryAdapter {
 		}
 
 		RequestWrapper request = new RequestWrapper();
-		request.setMeteorVersion(new Version(meteorDataRequest.getMeteorVersion()));
 		request.setAccessProvider(meteorDataRequest.getAccessProvider());
 		request.setSsn(meteorDataRequest.getSSN());
 		return request;

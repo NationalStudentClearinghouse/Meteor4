@@ -83,11 +83,6 @@ public class RegistryServiceImpl implements RegistryService {
 		return returnList;
 	}
 
-	@Override
-	public String getVersion(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
-		return registryManager.getVersion(meteorInstitutionId, providerType);
-	}
-
 	public RegistryManager getRegistryManager() {
 		return registryManager;
 	}

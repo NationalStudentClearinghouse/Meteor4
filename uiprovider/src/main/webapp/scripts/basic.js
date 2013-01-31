@@ -8,7 +8,7 @@
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Revision: $Id: basic.js 254 2010-07-23 05:14:44Z emartin24 $
+ * Revision: $Id$
  */
 jQuery(function ($) {
 	$('.cityLender').click(function (e) {

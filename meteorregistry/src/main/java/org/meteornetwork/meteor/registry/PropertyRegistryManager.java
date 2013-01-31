@@ -86,7 +86,7 @@ public class PropertyRegistryManager implements RegistryManager {
 
 			Set<String> indexProviderIds = new HashSet<String>();
 			for (String propertyName : directoryDataProperties.keySet()) {
-				if (propertyName.contains(ProviderType.INDEX.getType())) {
+				if (ProviderType.INDEX.getType().equals(directoryDataProperties.getString(propertyName))) {
 					StringTokenizer tokenizer = new StringTokenizer(propertyName, ".");
 					indexProviderIds.add(tokenizer.nextToken());
 				}
@@ -135,7 +135,7 @@ public class PropertyRegistryManager implements RegistryManager {
 	public List<DataProvider> getAllDataProviders() throws RegistryException {
 		Set<String> dataProviderIds = new HashSet<String>();
 		for (String propertyName : directoryDataProperties.keySet()) {
-			if (propertyName.contains(ProviderType.DATA.getType())) {
+			if (ProviderType.DATA.getType().equals(directoryDataProperties.getString(propertyName))) {
 				StringTokenizer tokenizer = new StringTokenizer(propertyName, ".");
 				dataProviderIds.add(tokenizer.nextToken());
 			}
@@ -153,7 +153,7 @@ public class PropertyRegistryManager implements RegistryManager {
 		String thisKey = id + "." + providerType.getType() + ".URL";
 		return directoryDataProperties.containsKey(thisKey) ? directoryDataProperties.getString(thisKey) : null;
 	}
-
+	
 	private String getDescription(String id) {
 		String thisKey = id + ".Description";
 		return directoryDataProperties.containsKey(thisKey) ? directoryDataProperties.getString(thisKey) : null;
@@ -221,12 +221,6 @@ public class PropertyRegistryManager implements RegistryManager {
 		}
 
 		return roles;
-	}
-
-	@Override
-	public String getVersion(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
-		String propertyKey = meteorInstitutionId + ".Version";
-		return directoryDataProperties.getString(propertyKey);
 	}
 
 	public Properties getDirectoryProperties() {

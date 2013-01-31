@@ -20,7 +20,7 @@
  ******************************************************************************/
 package org.meteornetwork.meteor.provider.data.adapter;
 
-import org.meteornetwork.meteor.common.abstraction.data.MeteorDataResponseWrapper;
+import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
 
 /**
  * Interface for the data provider translation layer when querying for borrower

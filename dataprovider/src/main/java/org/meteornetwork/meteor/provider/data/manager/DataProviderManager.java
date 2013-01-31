@@ -26,10 +26,6 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.meteornetwork.meteor.common.abstraction.data.DataServerAbstraction;
-import org.meteornetwork.meteor.common.abstraction.data.MeteorContext;
-import org.meteornetwork.meteor.common.abstraction.data.MeteorDataResponseWrapper;
-import org.meteornetwork.meteor.common.abstraction.data.MeteorDataResponseWrapper.DataProviderDataParams;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
 import org.meteornetwork.meteor.common.security.RequestInfo;
@@ -40,6 +36,10 @@ import org.meteornetwork.meteor.common.xml.dataresponse.MeteorDataProviderInfo;
 import org.meteornetwork.meteor.common.xml.dataresponse.MeteorRsMsg;
 import org.meteornetwork.meteor.common.xml.dataresponse.types.PhoneNumTypeEnum;
 import org.meteornetwork.meteor.common.xml.dataresponse.types.RsMsgLevelEnum;
+import org.meteornetwork.meteor.provider.data.DataServerAbstraction;
+import org.meteornetwork.meteor.provider.data.MeteorContext;
+import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper;
+import org.meteornetwork.meteor.provider.data.MeteorDataResponseWrapper.DataProviderDataParams;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapter;
 import org.meteornetwork.meteor.provider.data.adapter.DataQueryAdapterException;
 import org.meteornetwork.meteor.provider.data.adapter.RequestWrapper;
@@ -133,12 +133,9 @@ public class DataProviderManager {
 
 		/* *****************************************
 		 * verify info on security token
-		 * 
-		 * If meteor version is 3.2, then the check should be skipped because
-		 * the SAML token does not have valid conditions
 		 */
 		SecurityToken token = getRequestInfo().getSecurityToken();
-		if (!token.validateConditions() && !request.getMeteorVersion().matches("3.2")) {
+		if (!token.validateConditions()) {
 			LOG.debug("SAML conditions are not valid or expired");
 			MeteorDataResponseWrapper response = createResponseWithMessage(MeteorMessage.SECURITY_TOKEN_EXPIRED, RsMsgLevelEnum.E);
 			setDataProviderData(response);
@@ -207,7 +204,8 @@ public class DataProviderManager {
 		/* ******************************************
 		 * Query data
 		 */
-		LOG.info("Received request from Access Provider: " + request.getAccessProvider().getMeteorInstitutionIdentifier() + " with the user handle: " + token.getUserHandle() + " and role: " + token.getRole() + " for the SSN: " + request.getSsn());
+		LOG.debug("Request received for data on SSN: " + request.getSsn() + " from Access Provider " + request.getAccessProvider().getMeteorInstitutionIdentifier());
+
 		MeteorContext context = new MeteorContext();
 		context.setAccessProvider(request.getAccessProvider());
 		context.setSecurityToken(token);

@@ -128,16 +128,4 @@ public interface RegistryManager {
 	 * @throws RegistryException
 	 */
 	List<Role> getRoles(String meteorInstitutionId, String authProcId, ProviderType providerType) throws RegistryException;
-
-	/**
-	 * Gets the Meteor version of the specified provider
-	 * 
-	 * @param meteorInstitutionId
-	 *            id of the provider
-	 * @param providerType
-	 *            the provider type of the provider
-	 * @return the version of Meteor the provider is running
-	 * @throws RegistryException
-	 */
-	String getVersion(String meteorInstitutionId, ProviderType providerType) throws RegistryException;
 }

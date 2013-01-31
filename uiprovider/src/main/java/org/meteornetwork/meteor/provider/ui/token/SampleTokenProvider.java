@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.cxf.helpers.IOUtils;
-import org.meteornetwork.meteor.common.abstraction.token.TokenProvider;
 import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.SecurityTokenImpl;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;

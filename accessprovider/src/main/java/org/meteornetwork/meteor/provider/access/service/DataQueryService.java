@@ -170,7 +170,6 @@ public class DataQueryService implements ApplicationContextAware {
 			}
 		}
 
-		// TODO: if no mapping exists, return current version implementation by default
 		return null;
 	}
 

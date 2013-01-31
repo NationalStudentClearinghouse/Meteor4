@@ -72,28 +72,6 @@
 	</bean>
 	
 	<!-- 
-		Convert AP 4.0.0 request to 3.2.0
-	 -->
-	<bean id="AP400toDP320RequestTemplateFile" class="org.springframework.core.io.ClassPathResource">
-		<constructor-arg value="xml/AP4.0.0-DP3.2.0-request.xsl"/>
-	</bean>
-	
-	<bean id="AP400toDP320RequestTemplate" 
-		factory-bean="transformerFactory"
-		factory-method="newTemplates">
-		
-		<constructor-arg>
-			<bean class="javax.xml.transform.stream.StreamSource">
-				<constructor-arg>
-					<bean class="java.io.File"
-						factory-bean="AP400toDP320RequestTemplateFile"
-						factory-method="getFile" />
-				</constructor-arg>
-			</bean>
-		</constructor-arg>
-	</bean>
-	
-	<!-- 
 		Convert AP 4.0.0 response to 3.3.4
 	 -->
 	<bean id="AP400toDP334ResponseTemplateFile" class="org.springframework.core.io.ClassPathResource">
@@ -119,17 +97,10 @@
 	<bean id="requestTemplateVersionMapper" class="org.meteornetwork.meteor.common.util.TemplateVersionMapper">
 		<property name="templateVersionPairs">
 			<list>
-				<!-- Meteor 3.3.4 compatibility -->
 				<bean class="org.meteornetwork.meteor.common.util.TemplateVersionPair">
 					<property name="versionFrom" value="4.x.x"/>
-					<property name="versionTo" value="3.3.x"/>
+					<property name="versionTo" value="3.x.x"/>
 					<property name="template"><ref bean="AP400toDP334RequestTemplate"/></property>
-				</bean>
-				<!-- Meteor 3.2.0 compatibility -->
-				<bean class="org.meteornetwork.meteor.common.util.TemplateVersionPair">
-					<property name="versionFrom" value="4.x.x"/>
-					<property name="versionTo" value="3.2.x"/>
-					<property name="template"><ref bean="AP400toDP320RequestTemplate"/></property>
 				</bean>
 			</list>
 		</property>
