@@ -21,6 +21,7 @@
 package org.meteornetwork.meteor.common.hpc;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import junit.framework.Assert;
 
@@ -29,6 +30,9 @@ import org.custommonkey.xmlunit.Diff;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 import org.junit.Test;
+import org.meteornetwork.meteor.common.xml.hpc.types.HPCCompressionType;
+import org.meteornetwork.meteor.common.xml.hpc.types.HPCEncodingType;
+import org.meteornetwork.meteor.common.xml.hpc.types.HPCMode;
 import org.xml.sax.SAXException;
 
 import util.TestUtils;
@@ -68,5 +72,26 @@ public class HPCManagerTest {
 		}
 		Assert.assertTrue(hpcDiff.identical());
 	}
+	
+//	Utility method to generate HPC messages for testing
+//
+//	@Test
+//	public void testGenerateHPCMessage() throws Exception {
+//		
+//		String content = TestUtils.getFileString(this.getClass(), "hpcResponse.xml");
+//		
+//		HPCMessageParams params = new HPCMessageParams();
+//		params.setCompression(HPCCompressionType.ZLIB);
+//		params.setEncoding(HPCEncodingType.BASE64);
+//		params.setContentType("METEORDATA");
+//		params.setRecipientId("ap33");
+//		params.setMessageId(UUID.fromString("d3e3a870-a3dc-4968-a078-2c55e037a18c"));
+//		params.setTimestamp("Tue May 27 09:12:20 EDT 2014");
+//		params.setTransactionMode(HPCMode.SYNC);
+//		params.setTransactionType("METEORDATA");
+//		
+//		String generatedHPCMessage = hpcManager.generateHPCMessage(content, params);
+//		System.out.println(generatedHPCMessage);
+//	}
 
 }
