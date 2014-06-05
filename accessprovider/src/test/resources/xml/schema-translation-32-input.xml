@@ -30,6 +30,10 @@
          </DataProviderAggregateTotal>
       </MeteorDataProviderDetailInfo>
       <MeteorDataProviderAwardDetails>
+      	 <MeteorDataProviderMessage>
+      	 	<RsMsgLevel>W</RsMsgLevel>
+      	 	<RsMsg>a</RsMsg>
+      	 </MeteorDataProviderMessage>
          <Award>
             <DataProviderType>SBS</DataProviderType>
             <AwardType>FFELSub</AwardType>
