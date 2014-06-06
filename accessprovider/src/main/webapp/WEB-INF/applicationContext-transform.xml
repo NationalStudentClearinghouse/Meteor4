@@ -72,7 +72,7 @@
 	</bean>
 	
 	<!-- 
-		Convert AP 4.0.0 response to 3.3.4
+		Convert DP 3.3.4 response to AP 4.0.0
 	 -->
 	<bean id="AP400toDP334ResponseTemplateFile" class="org.springframework.core.io.ClassPathResource">
 		<constructor-arg value="xml/AP4.0.0-DP3.3.4-response.xsl"/>
@@ -87,6 +87,28 @@
 				<constructor-arg>
 					<bean class="java.io.File"
 						factory-bean="AP400toDP334ResponseTemplateFile"
+						factory-method="getFile" />
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 
+		Convert DP 3.2.0 response to AP 4.0.0
+	 -->
+	<bean id="AP400toDP320ResponseTemplateFile" class="org.springframework.core.io.ClassPathResource">
+		<constructor-arg value="xml/AP4.0.0-DP3.2.0-response.xsl"/>
+	</bean>
+	
+	<bean id="AP400toDP320ResponseTemplate" 
+		factory-bean="transformerFactory"
+		factory-method="newTemplates">
+		
+		<constructor-arg>
+			<bean class="javax.xml.transform.stream.StreamSource">
+				<constructor-arg>
+					<bean class="java.io.File"
+						factory-bean="AP400toDP320ResponseTemplateFile"
 						factory-method="getFile" />
 				</constructor-arg>
 			</bean>
@@ -111,9 +133,14 @@
 		<property name="templateVersionPairs">
 			<list>
 				<bean class="org.meteornetwork.meteor.common.util.TemplateVersionPair">
-					<property name="versionFrom" value="3.x.x"/>
+					<property name="versionFrom" value="3.3.x"/>
 					<property name="versionTo" value="4.x.x"/>
 					<property name="template"><ref bean="AP400toDP334ResponseTemplate"/></property>
+				</bean>
+				<bean class="org.meteornetwork.meteor.common.util.TemplateVersionPair">
+					<property name="versionFrom" value="3.2.x"/>
+					<property name="versionTo" value="4.x.x"/>
+					<property name="template"><ref bean="AP400toDP320ResponseTemplate"/></property>
 				</bean>
 			</list>
 		</property>

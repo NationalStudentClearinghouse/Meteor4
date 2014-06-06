@@ -170,7 +170,8 @@ public class DataQueryService implements ApplicationContextAware {
 			}
 		}
 
-		return null;
+		// default: current version 
+		return (DataQueryAdapter) applicationContext.getBean("currentVersionDataQueryAdapterImpl");
 	}
 
 	private AccessProvider createAccessProvider(String ssn) {

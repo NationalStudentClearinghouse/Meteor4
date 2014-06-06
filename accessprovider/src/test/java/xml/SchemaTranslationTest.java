@@ -66,7 +66,7 @@ public class SchemaTranslationTest {
 	
 	@Test
 	public void testMeteor32ModifiedResponseTranslation() throws IOException, TransformerException, ParserConfigurationException, SAXException {
-		File xslFile = getFile("AP4.0.0-DP3.3.4-response.xsl");
+		File xslFile = getFile("AP4.0.0-DP3.2.0-response.xsl");
 		String source = getXmlFromFile("schema-translation-32-input.xml");
 
 		Transform transform = new Transform(source, xslFile);
