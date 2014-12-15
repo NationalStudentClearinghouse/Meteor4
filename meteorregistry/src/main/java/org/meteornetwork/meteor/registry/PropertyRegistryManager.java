@@ -234,7 +234,7 @@ public class PropertyRegistryManager implements RegistryManager {
 	}
 
 	@Autowired
-	@Qualifier("DirectoryProperties")
+	@Qualifier("directoryProperties")
 	public void setDirectoryProperties(Properties directoryProperties) {
 		this.directoryProperties = directoryProperties;
 		directoryDataProperties = ResourceBundle.getBundle(this.directoryProperties.getProperty("directory.properties.directorydata"));

@@ -17,8 +17,8 @@
 	    </property>
 	</bean>
 	
-	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
-	<util:properties id="UiProviderProperties" location="WEB-INF/classes/uiprovider.properties"/>
+	<util:properties id="authenticationProperties" location="WEB-INF/classes/authentication.properties"/>
+	<util:properties id="uiProviderProperties" location="WEB-INF/classes/uiprovider.properties"/>
 	
 	<!-- 
 		Meteor Session bean

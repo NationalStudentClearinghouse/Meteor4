@@ -18,7 +18,7 @@
 		<http-conf:client ConnectionTimeout="${accessprovider.connection.timeout}" ReceiveTimeout="${accessprovider.receive.timeout}"/>
 	</http-conf:conduit>
 	
-	<bean id="passwordCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
+	<bean id="passwordCallbackHandler" autowire="byName" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
 	
 	<bean id="accessClientProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.AccessProviderService"/>

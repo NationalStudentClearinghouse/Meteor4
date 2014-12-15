@@ -9,7 +9,9 @@
 		http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
-    xmlns:util="http://www.springframework.org/schema/util"> 
+    xmlns:util="http://www.springframework.org/schema/util"
+    
+    default-autowire="byName" default-autowire-candidates="*" > 
  	
  	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	    <property name="locations">
@@ -21,12 +23,12 @@
 	</bean>
  	
  	<!-- properties -->
- 	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
- 	<util:properties id="AccessProviderProperties" location="WEB-INF/classes/accessprovider.properties"/>
- 	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
+ 	<util:properties id="authenticationProperties" location="WEB-INF/classes/authentication.properties"/>
+ 	<util:properties id="accessProviderProperties" location="WEB-INF/classes/accessprovider.properties"/>
+ 	<util:properties id="directoryProperties" location="WEB-INF/classes/directory.properties"/>
  	
  	<!-- meteor common properties -->
- 	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>
+ 	<util:properties id="meteorProperties" location="WEB-INF/classes/meteor.properties"/>
  	
  	<!-- 
  		If you are using RegistryWebServiceClient, uncomment REGISTRY BEAN DEFINITON 2. 
@@ -34,7 +36,7 @@
  	-->
  	<!-- 
  		REGISTRY BEAN DEFINITION 1:
- 	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/> 
+ 	<bean id="RegistryManager" class="${directory.class}" autowire="byName"/> 
  	-->
  	<!-- 
  		REGISTRY BEAN DEFINITION 2:
@@ -48,11 +50,11 @@
  	<!-- END REGISTRY BEAN DEFINITION 2 -->
  	
  	
- 	<bean id="accessProviderManager" class="org.meteornetwork.meteor.provider.access.manager.AccessProviderManager" autowire="byType">
+ 	<bean id="accessProviderManager" class="org.meteornetwork.meteor.provider.access.manager.AccessProviderManager" autowire="byName">
  		<lookup-method name="getRequestInfo" bean="requestInfo"/>
  	</bean>
  	
- 	<bean id="indexQueryService" class="org.meteornetwork.meteor.provider.access.service.IndexQueryService" autowire="byType">
+ 	<bean id="indexQueryService" class="org.meteornetwork.meteor.provider.access.service.IndexQueryService" autowire="byName">
  		<lookup-method name="getRequestInfo" bean="requestInfo"/>
  	</bean>
  	

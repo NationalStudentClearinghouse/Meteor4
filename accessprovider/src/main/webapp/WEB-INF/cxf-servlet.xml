@@ -2,6 +2,7 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:cxf="http://cxf.apache.org/core"
 	xmlns:jaxws="http://cxf.apache.org/jaxws"
 	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
 	xmlns:aop="http://www.springframework.org/schema/aop"
@@ -9,7 +10,8 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-		http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+		http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+		http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
 	
 	<import resource="classpath:META-INF/cxf/cxf.xml"/>
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
@@ -18,17 +20,25 @@
 		<http-conf:client ConnectionTimeout="30000" ReceiveTimeout="180000"/>
 	</http-conf:conduit>
 	
-	<bean id="accessProviderServiceImpl" autowire="byType" class="org.meteornetwork.meteor.provider.access.ws.AccessProviderServiceImpl">
+	<bean id="accessProviderServiceImpl" autowire="byName" class="org.meteornetwork.meteor.provider.access.ws.AccessProviderServiceImpl">
 		<lookup-method name="getRequestInfo" bean="requestInfo"/>
 	</bean>
  	
- 	<bean id="samlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.MeteorSamlCreationCallbackHandler">
+ 	<bean id="samlCreationCallbackHandler" autowire="byName" class="org.meteornetwork.meteor.common.ws.security.MeteorSamlCreationCallbackHandler">
 		<lookup-method name="getRequestInfo" bean="requestInfo"/>
 	</bean>
 	
-	<bean id="registrySamlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.RegistrySamlCreationCallbackHandler"/>
+	<bean id="registrySamlCreationCallbackHandler" autowire="byName" class="org.meteornetwork.meteor.common.ws.security.RegistrySamlCreationCallbackHandler"/>
 	
-	<bean id="passwordCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
+	<bean id="passwordCallbackHandler" autowire="byName" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
+	
+	<bean id="submitHPCReturnAdapterInterceptor" class="org.meteornetwork.meteor.common.hpc.SubmitHPCReturnAdapterInterceptor"  />
+    <cxf:bus>
+       <cxf:inInterceptors>
+        <ref bean="submitHPCReturnAdapterInterceptor" />
+       </cxf:inInterceptors>
+    </cxf:bus>
+  
 	
  	<jaxws:endpoint 
 		id="accessProviderService"

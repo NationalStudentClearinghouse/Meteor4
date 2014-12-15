@@ -27,6 +27,7 @@ import java.util.TreeMap;
 
 import javax.jws.WebService;
 import javax.xml.ws.Holder;
+import javax.annotation.Resource;
 
 import org.meteornetwork.meteor.business.BestSourceAggregator;
 import org.meteornetwork.meteor.common.security.RequestInfo;
@@ -144,9 +145,10 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 		return authenticationProperties;
 	}
 
-	@Autowired
-	@Qualifier("AuthenticationProperties")
+	@Autowired()
+	@Qualifier("authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
+		
 		this.authenticationProperties = authenticationProperties;
 	}
 

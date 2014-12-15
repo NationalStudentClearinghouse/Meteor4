@@ -62,7 +62,7 @@ public class PasswordCallbackHandler implements CallbackHandler {
 	}
 
 	@Autowired
-	@Qualifier("AuthenticationProperties")
+	@Qualifier("authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}

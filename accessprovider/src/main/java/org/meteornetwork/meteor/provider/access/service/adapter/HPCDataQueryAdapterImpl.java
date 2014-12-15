@@ -155,7 +155,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter, ApplicationCon
 	}
 
 	@Autowired
-	@Qualifier("AuthenticationProperties")
+	@Qualifier("authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}

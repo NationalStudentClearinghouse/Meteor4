@@ -120,7 +120,7 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 	}
 
 	@Autowired
-	@Qualifier("UiProviderProperties")
+	@Qualifier("uiProviderProperties")
 	public void setUiProviderProperties(Properties uiProviderProperties) {
 		this.uiProviderProperties = uiProviderProperties;
 	}

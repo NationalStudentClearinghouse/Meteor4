@@ -170,8 +170,8 @@ public class DataQueryService implements ApplicationContextAware {
 			}
 		}
 
-		// TODO: if no mapping exists, return current version implementation by default
-		return null;
+		// default: current version 
+		return (DataQueryAdapter) applicationContext.getBean("currentVersionDataQueryAdapterImpl");
 	}
 
 	private AccessProvider createAccessProvider(String ssn) {
@@ -221,7 +221,7 @@ public class DataQueryService implements ApplicationContextAware {
 	}
 
 	@Autowired
-	@Qualifier("AccessProviderProperties")
+	@Qualifier("accessProviderProperties")
 	public void setAccessProviderProperties(Properties accessProviderProperties) {
 		this.accessProviderProperties = accessProviderProperties;
 	}
@@ -231,7 +231,7 @@ public class DataQueryService implements ApplicationContextAware {
 	}
 
 	@Autowired
-	@Qualifier("AuthenticationProperties")
+	@Qualifier("authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}
@@ -241,7 +241,7 @@ public class DataQueryService implements ApplicationContextAware {
 	}
 
 	@Autowired
-	@Qualifier("MeteorProperties")
+	@Qualifier("meteorProperties")
 	public void setMeteorProperties(Properties meteorProperties) {
 		this.meteorProperties = meteorProperties;
 	}

@@ -219,7 +219,7 @@ public class IndexQueryService implements ApplicationContextAware {
 	}
 
 	@Autowired
-	@Qualifier("AuthenticationProperties")
+	@Qualifier("authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}
@@ -229,7 +229,7 @@ public class IndexQueryService implements ApplicationContextAware {
 	}
 
 	@Autowired
-	@Qualifier("MeteorProperties")
+	@Qualifier("meteorProperties")
 	public void setMeteorProperties(Properties meteorProperties) {
 		this.meteorProperties = meteorProperties;
 	}
