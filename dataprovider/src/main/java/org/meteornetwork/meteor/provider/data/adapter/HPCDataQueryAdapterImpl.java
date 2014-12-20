@@ -266,7 +266,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 	}
 
 	@Autowired
-	@Qualifier("MeteorProperties")
+	@Qualifier("meteorProperties")
 	public void setMeteorProps(Properties meteorProps) {
 		this.meteorProps = meteorProps;
 	}
