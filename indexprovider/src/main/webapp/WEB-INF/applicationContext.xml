@@ -20,9 +20,9 @@
 	    </property>
 	</bean>
 	
-	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
-	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
-	<util:properties id="IndexProviderProperties" location="WEB-INF/classes/indexprovider.properties"/>
+	<util:properties id="authenticationProperties" location="WEB-INF/classes/authentication.properties"/>
+	<util:properties id="directoryProperties" location="WEB-INF/classes/directory.properties"/>
+	<util:properties id="indexProviderProperties" location="WEB-INF/classes/indexprovider.properties"/>
 	
 	<!-- Index Server Abstraction -->
 	<bean id="IndexServerAbstractionImpl" class="${default.index.server}" autowire="byType"/>
