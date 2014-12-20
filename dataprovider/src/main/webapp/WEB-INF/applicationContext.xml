@@ -21,11 +21,11 @@
 	</bean>
 
  	<!-- meteor common properties -->
- 	<util:properties id="MeteorProperties" location="WEB-INF/classes/meteor.properties"/>
+ 	<util:properties id="meteorProperties" location="WEB-INF/classes/meteor.properties"/>
  	
- 	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
- 	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
- 	<util:properties id="DataProviderProperties" location="WEB-INF/classes/dataprovider.properties"/>
+ 	<util:properties id="authenticationProperties" location="WEB-INF/classes/authentication.properties"/>
+ 	<util:properties id="directoryProperties" location="WEB-INF/classes/directory.properties"/>
+ 	<util:properties id="dataProviderProperties" location="WEB-INF/classes/dataprovider.properties"/>
  	
  	<!-- Data Server Abstraction -->
 	<bean id="DataServerAbstractionImpl" class="${default.data.server}" autowire="byType"/>
