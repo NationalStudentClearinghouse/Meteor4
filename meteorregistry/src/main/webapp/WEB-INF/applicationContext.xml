@@ -12,7 +12,7 @@
     xmlns:util="http://www.springframework.org/schema/util"> 
 	
  	<!-- meteor common properties -->
- 	<util:properties id="DirectoryProperties" location="WEB-INF/classes/directory.properties"/>
+ 	<util:properties id="directoryProperties" location="WEB-INF/classes/directory.properties"/>
  	
 	<!-- Registry Manager -->
  	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/>
