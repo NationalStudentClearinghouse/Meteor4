@@ -370,7 +370,7 @@ public class DataProviderManager {
 	}
 
 	@Autowired
-	@Qualifier("DataProviderProperties")
+	@Qualifier("dataProviderProperties")
 	public void setDataProviderProperties(Properties dataProviderProperties) {
 		this.dataProviderProperties = dataProviderProperties;
 	}
@@ -380,7 +380,7 @@ public class DataProviderManager {
 	}
 
 	@Autowired
-	@Qualifier("MeteorProperties")
+	@Qualifier("meteorProperties")
 	public void setMeteorProperties(Properties meteorProperties) {
 		this.meteorProperties = meteorProperties;
 	}
@@ -390,7 +390,7 @@ public class DataProviderManager {
 	}
 
 	@Autowired
-	@Qualifier("AuthenticationProperties")
+	@Qualifier("authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}
