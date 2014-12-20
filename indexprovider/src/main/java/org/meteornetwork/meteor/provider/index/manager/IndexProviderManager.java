@@ -78,7 +78,7 @@ public class IndexProviderManager {
 	}
 
 	@Autowired
-	@Qualifier("IndexProviderProperties")
+	@Qualifier("indexProviderProperties")
 	public void setIndexProviderProperties(Properties indexProviderProperties) {
 		this.indexProviderProperties = indexProviderProperties;
 	}
