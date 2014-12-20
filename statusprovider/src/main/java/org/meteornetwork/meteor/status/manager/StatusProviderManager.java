@@ -267,7 +267,7 @@ public class StatusProviderManager implements ApplicationContextAware {
 	}
 
 	@Autowired
-	@Qualifier("AuthenticationProperties")
+	@Qualifier("authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}
@@ -277,7 +277,7 @@ public class StatusProviderManager implements ApplicationContextAware {
 	}
 
 	@Autowired
-	@Qualifier("StatusProviderProperties")
+	@Qualifier("statusProviderProperties")
 	public void setStatusProviderProperties(Properties statusProviderProperties) {
 		this.statusProviderProperties = statusProviderProperties;
 	}
