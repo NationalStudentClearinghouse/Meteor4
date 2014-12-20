@@ -39,8 +39,8 @@
  	</bean>
  	<!-- END REGISTRY BEAN DEFINITION 2 -->
  	
-	<util:properties id="AuthenticationProperties" location="WEB-INF/classes/authentication.properties"/>
-	<util:properties id="StatusProviderProperties" location="WEB-INF/classes/statusprovider.properties"/>
+	<util:properties id="authenticationProperties" location="WEB-INF/classes/authentication.properties"/>
+	<util:properties id="statusProviderProperties" location="WEB-INF/classes/statusprovider.properties"/>
 	
 	<bean id="statusProviderManager" class="org.meteornetwork.meteor.status.manager.StatusProviderManager" autowire="byType">
 		<lookup-method name="getRequestInfo" bean="requestInfo"/>
