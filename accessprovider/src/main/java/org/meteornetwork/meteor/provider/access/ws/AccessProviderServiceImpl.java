@@ -27,7 +27,6 @@ import java.util.TreeMap;
 
 import javax.jws.WebService;
 import javax.xml.ws.Holder;
-import javax.annotation.Resource;
 
 import org.meteornetwork.meteor.business.BestSourceAggregator;
 import org.meteornetwork.meteor.common.security.RequestInfo;
