@@ -22,6 +22,7 @@ package org.meteornetwork.meteor.saml;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -59,7 +60,9 @@ import org.w3c.dom.NodeList;
  * @author jlazos
  * 
  */
-public class SecurityTokenImpl implements SecurityToken {
+public class SecurityTokenImpl implements SecurityToken, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	static {
 		OpenSAMLUtil.initSamlEngine();

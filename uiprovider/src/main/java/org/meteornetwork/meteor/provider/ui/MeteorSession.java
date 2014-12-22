@@ -20,13 +20,15 @@
  ******************************************************************************/
 package org.meteornetwork.meteor.provider.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import org.meteornetwork.meteor.saml.SecurityToken;
 
-public class MeteorSession {
+public class MeteorSession implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private SecurityToken token;
 	private String ssn;
 	private String inquiryRole;

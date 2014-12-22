@@ -20,8 +20,11 @@
  ******************************************************************************/
 package org.meteornetwork.meteor.saml;
 
-public class TokenAttributes {
+import java.io.Serializable;
 
+public class TokenAttributes implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private ProviderType providerType;
 	private String organizationId;
 	private String organizationIdType;
