@@ -15,7 +15,7 @@
  	<util:properties id="directoryProperties" location="WEB-INF/classes/directory.properties"/>
  	
 	<!-- Registry Manager -->
- 	<bean id="RegistryManager" class="${directory.class}" autowire="byType"/>
+ 	<bean id="RegistryManager" class="${directory.class}" autowire="byName"/>
 	
 	<context:component-scan base-package="org.meteornetwork.meteor"/>
 </beans> 
