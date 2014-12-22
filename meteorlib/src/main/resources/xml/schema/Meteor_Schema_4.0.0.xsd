@@ -226,6 +226,14 @@
 			<xsd:element name="EntityName" type="EntityNameType" minOccurs="0"/>
 			<xsd:element name="EntityID" type="EntityIDType" minOccurs="0"/>
 			<xsd:element name="EntityURL" type="URLType" minOccurs="0"/>
+			<xsd:element name="Email" minOccurs="0" maxOccurs="1">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="0"/>
+						<xsd:maxLength value="256"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
 			<xsd:element name="Contacts" type="ContactType"/>
 		</xsd:sequence>
 	</xsd:complexType>

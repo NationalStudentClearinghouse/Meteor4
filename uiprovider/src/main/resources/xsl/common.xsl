@@ -72,6 +72,7 @@
 	<xsl:template match="School | Lender | Servicer | Guarantor | GrantScholarshipProvider | FinAidTranscript" mode="contact">
 		<p>
 			<xsl:value-of select="EntityName"/> (ID: <xsl:value-of select="EntityID"/>)<br/> 
+			<xsl:if test="string-length(Email) > 0">Email: <xsl:value-of select="Email"/><br/></xsl:if>
 			<xsl:if test="string-length(Contacts/Phone) > 0"><xsl:apply-templates select="Contacts/Phone"/><br/></xsl:if>
 			<xsl:apply-templates select="Contacts/AddressInfo"/>
 			<xsl:if test="string-length(Contacts/Email/EmailAddress) > 0"><xsl:apply-templates select="Contacts/Email"/><br/></xsl:if>
