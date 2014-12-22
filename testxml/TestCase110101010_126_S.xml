@@ -421,13 +421,13 @@
 					<CapitalizedIntAmt>2745.91</CapitalizedIntAmt>
 					<Deferment>
 						<!-- I forgot to make these "DefermentForbearanceTypeCode", "DefermentForbearanceTimeUsed". Shall I still do it? -->
-						<TypeCode>Armed Services</TypeCode>
-						<TimeUsed>123</TimeUsed>
+						<DefermentForbearanceTypeCode>Armed Services</DefermentForbearanceTypeCode>
+						<DefermentForbearanceTimeUsed>123</DefermentForbearanceTimeUsed>
 					</Deferment>
 					<Forbearance>
 						<!-- I forgot to make these "DefermentForbearanceTypeCode", "DefermentForbearanceTimeUsed". Shall I still do it? -->
-						<TypeCode>Administrative</TypeCode>
-						<TimeUsed>99</TimeUsed>
+						<DefermentForbearanceTypeCode>Administrative</DefermentForbearanceTypeCode>
+						<DefermentForbearanceTimeUsed>99</DefermentForbearanceTimeUsed>
 					</Forbearance>
 					<RepaymentTermRemaining>99</RepaymentTermRemaining>
 					<DaysPastDue>20</DaysPastDue>
