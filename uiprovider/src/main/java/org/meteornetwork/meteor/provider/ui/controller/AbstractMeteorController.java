@@ -23,6 +23,7 @@ package org.meteornetwork.meteor.provider.ui.controller;
 import java.util.List;
 import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,7 +37,6 @@ import org.meteornetwork.meteor.saml.SecurityToken;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException.CauseCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -119,8 +119,7 @@ public abstract class AbstractMeteorController extends ParameterizableViewContro
 		return uiProviderProperties;
 	}
 
-	@Autowired
-	@Qualifier("uiProviderProperties")
+	@Resource(name="uiProviderProperties")
 	public void setUiProviderProperties(Properties uiProviderProperties) {
 		this.uiProviderProperties = uiProviderProperties;
 	}

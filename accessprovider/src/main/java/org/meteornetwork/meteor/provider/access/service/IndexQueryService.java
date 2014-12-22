@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.meteornetwork.meteor.common.registry.RegistryException;
 import org.meteornetwork.meteor.common.registry.RegistryManager;
@@ -52,7 +54,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -218,8 +219,7 @@ public class IndexQueryService implements ApplicationContextAware {
 		return authenticationProperties;
 	}
 
-	@Autowired
-	@Qualifier("authenticationProperties")
+	@Resource(name="authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}
@@ -228,8 +228,7 @@ public class IndexQueryService implements ApplicationContextAware {
 		return meteorProperties;
 	}
 
-	@Autowired
-	@Qualifier("meteorProperties")
+	@Resource(name="meteorProperties")
 	public void setMeteorProperties(Properties meteorProperties) {
 		this.meteorProperties = meteorProperties;
 	}

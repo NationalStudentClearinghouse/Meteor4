@@ -19,9 +19,6 @@
 		
 		<cglib.version>2.2.2</cglib.version>
 
-		<!-- 
-		<org.springframework.version>3.0.6.RELEASE</org.springframework.version>
-		-->
 		<org.springframework.version>4.0.4.RELEASE</org.springframework.version>
 
 		<javax.servlet-api.version>2.5</javax.servlet-api.version>
@@ -109,6 +106,12 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
 		

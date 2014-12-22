@@ -22,6 +22,8 @@ package org.meteornetwork.meteor.provider.index.manager;
 
 import java.util.Properties;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.abstraction.index.IndexServerAbstraction;
@@ -77,8 +79,7 @@ public class IndexProviderManager {
 		return indexProviderProperties;
 	}
 
-	@Autowired
-	@Qualifier("indexProviderProperties")
+	@Resource(name="indexProviderProperties")
 	public void setIndexProviderProperties(Properties indexProviderProperties) {
 		this.indexProviderProperties = indexProviderProperties;
 	}

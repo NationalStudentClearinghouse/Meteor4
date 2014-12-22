@@ -26,6 +26,7 @@ import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
@@ -43,8 +44,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.meteornetwork.meteor.saml.ProviderType;
 import org.opensaml.common.SAMLVersion;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 public class RegistrySamlCreationCallbackHandler implements CallbackHandler {
 
@@ -54,7 +53,7 @@ public class RegistrySamlCreationCallbackHandler implements CallbackHandler {
 	private static final Integer VALIDITY_PERIOD_DEFAULT = 120; // seconds
 
 	private Properties authenticationProperties;
-
+	
 	@Override
 	public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
 		for (Callback callback : callbacks) {
@@ -130,8 +129,7 @@ public class RegistrySamlCreationCallbackHandler implements CallbackHandler {
 		return authenticationProperties;
 	}
 
-	@Autowired
-	@Qualifier("authenticationProperties")
+	@Resource(name="authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}

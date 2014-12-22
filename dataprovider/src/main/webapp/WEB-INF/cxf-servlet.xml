@@ -85,8 +85,8 @@
 	</jaxws:endpoint>
 
 	<!-- Registry web service connection -->
-	<bean id="registrySamlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.RegistrySamlCreationCallbackHandler"/>
-	<bean id="passwordCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
+	<bean id="registrySamlCreationCallbackHandler" autowire="byName" class="org.meteornetwork.meteor.common.ws.security.RegistrySamlCreationCallbackHandler"/>
+	<bean id="passwordCallbackHandler" autowire="byName" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
 	
 	<bean id="registryProxyFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="org.meteornetwork.meteor.common.ws.RegistryService"/>

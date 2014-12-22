@@ -18,7 +18,7 @@
 		
 		<meteor.version>4.0.0</meteor.version>
 
-		<org.springframework.version>3.0.6.RELEASE</org.springframework.version>
+		<org.springframework.version>4.0.4.RELEASE</org.springframework.version>
 		<cxf.version>2.4.3</cxf.version>
 		<cxf.wss4j.version>1.6.4</cxf.wss4j.version>
 		<wss4j.version>1.6.4</wss4j.version>
@@ -73,7 +73,18 @@
 			<artifactId>spring-oxm</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
 		<!-- 
 			Apache CXF
 		 -->

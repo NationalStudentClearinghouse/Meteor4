@@ -22,7 +22,7 @@
 		<lookup-method name="getRequestInfo" bean="requestInfo"/>
 	</bean>
 	
-	<bean id="registrySamlCreationCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.RegistrySamlCreationCallbackHandler"/>
+	<bean id="registrySamlCreationCallbackHandler" autowire="byName" class="org.meteornetwork.meteor.common.ws.security.RegistrySamlCreationCallbackHandler"/>
 	
 	<bean id="passwordCallbackHandler" autowire="byType" class="org.meteornetwork.meteor.common.ws.security.PasswordCallbackHandler"/>
 	

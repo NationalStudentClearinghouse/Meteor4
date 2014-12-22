@@ -49,8 +49,6 @@ import org.meteornetwork.meteor.provider.access.service.adapter.DataQueryAdapter
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
@@ -220,8 +218,7 @@ public class DataQueryService implements ApplicationContextAware {
 		return accessProviderProperties;
 	}
 
-	@Autowired
-	@Qualifier("accessProviderProperties")
+	@Resource(name="accessProviderProperties")
 	public void setAccessProviderProperties(Properties accessProviderProperties) {
 		this.accessProviderProperties = accessProviderProperties;
 	}
@@ -230,8 +227,7 @@ public class DataQueryService implements ApplicationContextAware {
 		return authenticationProperties;
 	}
 
-	@Autowired
-	@Qualifier("authenticationProperties")
+	@Resource(name="authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}
@@ -240,8 +236,7 @@ public class DataQueryService implements ApplicationContextAware {
 		return meteorProperties;
 	}
 
-	@Autowired
-	@Qualifier("meteorProperties")
+	@Resource(name="meteorProperties")
 	public void setMeteorProperties(Properties meteorProperties) {
 		this.meteorProperties = meteorProperties;
 	}

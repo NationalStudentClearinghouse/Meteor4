@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
@@ -40,8 +41,6 @@ import org.meteornetwork.meteor.common.security.RequestInfo;
 import org.meteornetwork.meteor.saml.ProviderType;
 import org.meteornetwork.meteor.saml.exception.SecurityTokenException;
 import org.opensaml.common.SAMLVersion;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 public class MeteorSamlCreationCallbackHandler implements CallbackHandler {
 
@@ -114,8 +113,7 @@ public class MeteorSamlCreationCallbackHandler implements CallbackHandler {
 		return authenticationProperties;
 	}
 
-	@Autowired
-	@Qualifier("authenticationProperties")
+	@Resource(name="authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}

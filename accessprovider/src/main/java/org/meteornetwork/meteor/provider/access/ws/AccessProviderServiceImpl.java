@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.TreeMap;
 
+import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.xml.ws.Holder;
 
@@ -40,7 +41,6 @@ import org.meteornetwork.meteor.saml.TokenAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.SerializationUtils;
 
 @WebService(endpointInterface = "org.meteornetwork.meteor.common.ws.AccessProviderService", serviceName = "AccessProviderService")
@@ -144,8 +144,7 @@ public class AccessProviderServiceImpl implements AccessProviderService {
 		return authenticationProperties;
 	}
 
-	@Autowired()
-	@Qualifier("authenticationProperties")
+	@Resource(name="authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		
 		this.authenticationProperties = authenticationProperties;

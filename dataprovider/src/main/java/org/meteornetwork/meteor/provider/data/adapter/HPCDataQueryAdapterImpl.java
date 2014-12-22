@@ -24,6 +24,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Properties;
 
+import javax.annotation.Resource;
+
 import org.meteornetwork.meteor.common.abstraction.data.MeteorDataResponseWrapper;
 import org.meteornetwork.meteor.common.hpc.HPCManager;
 import org.meteornetwork.meteor.common.hpc.HPCMessageParams;
@@ -265,8 +267,7 @@ public class HPCDataQueryAdapterImpl implements DataQueryAdapter {
 		return meteorProps;
 	}
 
-	@Autowired
-	@Qualifier("meteorProperties")
+	@Resource(name="meteorProperties")
 	public void setMeteorProps(Properties meteorProps) {
 		this.meteorProps = meteorProps;
 	}

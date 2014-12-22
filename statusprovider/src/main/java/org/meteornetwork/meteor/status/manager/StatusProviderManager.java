@@ -33,6 +33,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resource;
 import javax.xml.ws.soap.SOAPFaultException;
 
 import org.meteornetwork.meteor.common.registry.RegistryException;
@@ -50,7 +51,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -266,8 +266,7 @@ public class StatusProviderManager implements ApplicationContextAware {
 		return authenticationProperties;
 	}
 
-	@Autowired
-	@Qualifier("authenticationProperties")
+	@Resource(name="authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}
@@ -276,8 +275,7 @@ public class StatusProviderManager implements ApplicationContextAware {
 		return statusProviderProperties;
 	}
 
-	@Autowired
-	@Qualifier("statusProviderProperties")
+	@Resource(name="statusProviderProperties")
 	public void setStatusProviderProperties(Properties statusProviderProperties) {
 		this.statusProviderProperties = statusProviderProperties;
 	}

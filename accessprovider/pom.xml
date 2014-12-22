@@ -5,7 +5,7 @@
 	
 	<groupId>org.meteornetwork.meteor</groupId>
 	<artifactId>accessprovider</artifactId>
-	<version>4.0.0</version>
+	<version>4.0.1</version>
 	
 	<packaging>war</packaging>
 		
@@ -19,9 +19,6 @@
 		<meteor.business.version>4.0.0</meteor.business.version>
 		
 		<cglib.version>2.2.2</cglib.version>
-		<!-- 
-		<org.springframework.version>3.0.6.RELEASE</org.springframework.version>
-		-->
 		<org.springframework.version>4.0.4.RELEASE</org.springframework.version>
 
 		<cxf.version>2.4.3</cxf.version>
@@ -97,6 +94,18 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
 		

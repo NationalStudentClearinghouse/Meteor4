@@ -33,6 +33,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.registry.RegistryException;
@@ -42,8 +44,6 @@ import org.meteornetwork.meteor.common.registry.data.IndexProvider;
 import org.meteornetwork.meteor.common.util.Version;
 import org.meteornetwork.meteor.saml.ProviderType;
 import org.meteornetwork.meteor.saml.Role;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 public class PropertyRegistryManager implements RegistryManager {
 
@@ -51,7 +51,7 @@ public class PropertyRegistryManager implements RegistryManager {
 
 	private Properties directoryProperties;
 	private ResourceBundle directoryDataProperties;
-
+	
 	@Override
 	public X509Certificate getCertificate(String meteorInstitutionId, ProviderType providerType) throws RegistryException {
 
@@ -233,8 +233,7 @@ public class PropertyRegistryManager implements RegistryManager {
 		return directoryProperties;
 	}
 
-	@Autowired
-	@Qualifier("directoryProperties")
+	@Resource(name="directoryProperties")
 	public void setDirectoryProperties(Properties directoryProperties) {
 		this.directoryProperties = directoryProperties;
 		directoryDataProperties = ResourceBundle.getBundle(this.directoryProperties.getProperty("directory.properties.directorydata"));

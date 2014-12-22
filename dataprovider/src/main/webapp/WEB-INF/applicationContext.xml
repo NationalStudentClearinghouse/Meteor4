@@ -30,7 +30,7 @@
  	<!-- Data Server Abstraction -->
 	<bean id="DataServerAbstractionImpl" class="${default.data.server}" autowire="byType"/>
 	
-	<bean id="DataProviderManager" class="org.meteornetwork.meteor.provider.data.manager.DataProviderManager" autowire="byType">
+	<bean id="DataProviderManager" class="org.meteornetwork.meteor.provider.data.manager.DataProviderManager" autowire="byName">
 		<lookup-method name="getRequestInfo" bean="requestInfo"/>
 	</bean>
 	

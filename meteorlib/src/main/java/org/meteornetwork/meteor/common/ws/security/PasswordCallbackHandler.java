@@ -23,14 +23,13 @@ package org.meteornetwork.meteor.common.ws.security;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
 import org.apache.ws.security.WSPasswordCallback;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 public class PasswordCallbackHandler implements CallbackHandler {
 
@@ -61,8 +60,7 @@ public class PasswordCallbackHandler implements CallbackHandler {
 		return authenticationProperties;
 	}
 
-	@Autowired
-	@Qualifier("authenticationProperties")
+	@Resource(name="authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}

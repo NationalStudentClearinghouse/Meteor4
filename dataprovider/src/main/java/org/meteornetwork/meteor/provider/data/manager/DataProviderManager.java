@@ -24,6 +24,8 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.Properties;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.meteornetwork.meteor.common.abstraction.data.DataServerAbstraction;
@@ -369,8 +371,7 @@ public class DataProviderManager {
 		return dataProviderProperties;
 	}
 
-	@Autowired
-	@Qualifier("dataProviderProperties")
+	@Resource(name="dataProviderProperties")
 	public void setDataProviderProperties(Properties dataProviderProperties) {
 		this.dataProviderProperties = dataProviderProperties;
 	}
@@ -379,8 +380,7 @@ public class DataProviderManager {
 		return meteorProperties;
 	}
 
-	@Autowired
-	@Qualifier("meteorProperties")
+	@Resource(name="meteorProperties")
 	public void setMeteorProperties(Properties meteorProperties) {
 		this.meteorProperties = meteorProperties;
 	}
@@ -389,8 +389,7 @@ public class DataProviderManager {
 		return authenticationProperties;
 	}
 
-	@Autowired
-	@Qualifier("authenticationProperties")
+	@Resource(name="authenticationProperties")
 	public void setAuthenticationProperties(Properties authenticationProperties) {
 		this.authenticationProperties = authenticationProperties;
 	}
