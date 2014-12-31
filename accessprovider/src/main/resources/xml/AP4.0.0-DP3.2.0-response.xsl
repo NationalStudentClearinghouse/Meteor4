@@ -109,6 +109,19 @@
 	<xsl:template match="//Contacts/Email">
 		<xsl:copy><EmailAddress><xsl:value-of select="."/></EmailAddress></xsl:copy>
 	</xsl:template>
+
+	<xsl:template match="//DataProviderData/Contacts/AddressInfo[last()]">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()" />
+        </xsl:copy>
+        <xsl:if test="//DataProviderData/Email != ''">
+        <Email>
+            <EmailAddress><xsl:value-of select="//DataProviderData/Email" /></EmailAddress>
+        </Email>
+        </xsl:if>
+    </xsl:template>
+	
+	<xsl:template match="//DataProviderData/Email"/>
 	
 	<xsl:template match="//Award[Student/SSNum = Borrower/SSNum]/AwardType[. = 'FFELPLUS']">
 		<AwardType>FFELGB</AwardType>
