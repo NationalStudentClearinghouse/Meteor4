@@ -97,12 +97,14 @@ public class DataQueryService implements ApplicationContextAware {
 
 		for (DataProviderInfo dataProviderInfo : dataProviders) {
 			if (dataProviderInfo.getRegistryInfo() == null) {
+				addDataProviderToLoanLocator(responseData, dataProviderInfo.getIndexProviderInfo());
 				LOG.debug("Data provider (ID: " + dataProviderInfo.getMeteorInstitutionIdentifier() + ") is not configured correctly in the Meteor Registry");
 				continue;
 			}
 
 			DataQueryAdapter adapter = getAdapter(dataProviderInfo.getRegistryInfo().getMeteorVersion());
 			if (adapter == null) {
+				addDataProviderToLoanLocator(responseData, dataProviderInfo.getIndexProviderInfo());
 				LOG.error("Data provider (ID: " + dataProviderInfo.getMeteorInstitutionIdentifier() + ") has no version");
 			} else {
 				adapter.setDataProviderInfo(dataProviderInfo);
