@@ -23,12 +23,15 @@ package org.meteornetwork.meteor.common.hpc;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.io.CachedOutputStream;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -38,6 +41,9 @@ import org.apache.cxf.phase.Phase;
  *  Author: Yu Yu
  */
 public class SubmitHPCReturnAdapterInterceptor extends AbstractPhaseInterceptor<Message> {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(SubmitHPCReturnAdapterInterceptor.class);
+	
     public SubmitHPCReturnAdapterInterceptor() {
         super(Phase.RECEIVE); 
         //addBefore(ServiceInvokerInterceptor.class.getName());
@@ -46,7 +52,7 @@ public class SubmitHPCReturnAdapterInterceptor extends AbstractPhaseInterceptor<
     @Override
     public void handleMessage(Message message) throws Fault  {
         
-        System.out.println("message "+message);
+        LOG.debug("message: "+message);
         message.put(Message.ENCODING, "UTF-8");
         InputStream is = message.getContent(InputStream.class);
        
@@ -55,9 +61,8 @@ public class SubmitHPCReturnAdapterInterceptor extends AbstractPhaseInterceptor<
           try{
             IOUtils.copy(is,bos);
             String soapMessage = new String(bos.getBytes());
-            System.out.println("------------------incoming-------------------------");
-            System.out.println("incoming message is " + soapMessage);
-            System.out.println("-------------------------------------------");
+        	LOG.debug("incoming message is " + soapMessage);
+
             bos.flush();
             message.setContent(InputStream.class, is);
            
@@ -73,7 +78,7 @@ public class SubmitHPCReturnAdapterInterceptor extends AbstractPhaseInterceptor<
       }
 
       private String formatMsgFromSalliMae(String soapMessage) {
-        System.out.println("------------------changed -------------------------");
+    	  LOG.debug("------------------formatMsgFromSalliMae -------------------------");
         if (soapMessage.indexOf("SubmitHPCReturn") > 0)
         {
             soapMessage = soapMessage.replaceAll("SubmitHPCReturn", "return");
@@ -86,8 +91,8 @@ public class SubmitHPCReturnAdapterInterceptor extends AbstractPhaseInterceptor<
             //soapMessage = soapMessage.replaceAll(" TimeStamp", "/&gt;&lt;Message Timestamp");
         }
        
-        System.out.println("After change message is " + soapMessage);
-        System.out.println("------------------changed -------------------------");
+        LOG.debug("After formatMsgFromSalliMae: " + soapMessage);
+       
         return soapMessage;
       }
 }
