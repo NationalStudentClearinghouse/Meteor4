@@ -108,6 +108,9 @@ public class Messages {
 	@SuppressWarnings("unchecked")
 	public static String getMessage(String key, String defaultVal, Map parameters) {
 		init();
+		if(key == null){
+			return "";
+		}
 		String value = props.getProperty(key, defaultVal);
 		if (value == null) {
 			value = key;
