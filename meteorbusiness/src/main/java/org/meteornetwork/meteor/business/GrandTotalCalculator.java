@@ -242,25 +242,33 @@ public class GrandTotalCalculator {
 
 			if (award.getRepayment().getLateFeesCount() > 0) {
 				for (LateFees fees : award.getRepayment().getLateFees()) {
-					total.setContent(total.getContent().add(fees.getLateFeesAmount()));
+					if(null != fees.getLateFeesAmount()) {
+						total.setContent(total.getContent().add(fees.getLateFeesAmount()));
+					}
 				}
 			}
 
 			if (award.getRepayment().getCollectionCostsCount() > 0) {
 				for (CollectionCosts fees : award.getRepayment().getCollectionCosts()) {
-					total.setContent(total.getContent().add(fees.getCollectionCostsAmount()));
+					if(null != fees.getCollectionCostsAmount()) {
+						total.setContent(total.getContent().add(fees.getCollectionCostsAmount()));
+					}
 				}
 			}
 
 			if (award.getRepayment().getServicingFeesCount() > 0) {
 				for (ServicingFees fees : award.getRepayment().getServicingFees()) {
-					total.setContent(total.getContent().add(fees.getServicingFeesAmount()));
+					if(null != fees.getServicingFeesAmount()) {
+						total.setContent(total.getContent().add(fees.getServicingFeesAmount()));
+					}
 				}
 			}
 
 			if (award.getRepayment().getOtherFeesCount() > 0) {
 				for (OtherFees fees : award.getRepayment().getOtherFees()) {
-					total.setContent(total.getContent().add(fees.getOtherFeesAmount()));
+					if(null != fees.getOtherFeesAmount()) {
+						total.setContent(total.getContent().add(fees.getOtherFeesAmount()));
+					}
 				}
 			}
 		}

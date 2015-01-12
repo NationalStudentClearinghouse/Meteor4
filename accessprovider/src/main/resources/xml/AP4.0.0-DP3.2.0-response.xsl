@@ -241,10 +241,21 @@
 		<xsl:copy>S</xsl:copy>
 	</xsl:template>
 	
+	<!-- 
+	- Convert Sallie Mae flags to 1 and 0
+	-->
+	<xsl:template match="//AddrValidInd[. = 'Y' or . = 'true']">
+		<xsl:copy>1</xsl:copy>
+	</xsl:template>
+	
+	<xsl:template match="//AddrValidInd[. = 'N' or . = 'false']">
+		<xsl:copy>0</xsl:copy>
+	</xsl:template>
+	
 	<xsl:template match="@* | node()">
         <xsl:copy>
             <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
-    
+	
 </xsl:stylesheet>
