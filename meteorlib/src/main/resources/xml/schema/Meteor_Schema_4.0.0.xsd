@@ -258,8 +258,8 @@
 	<!-- ******************************************************************************* -->
 	<xsd:complexType name="PhoneType">
 		<xsd:sequence>
-			<xsd:element name="PhoneNumType" type="PhoneNumTypeType" minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="PhoneNum" type="PhoneNumType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="PhoneNumType" type="PhoneNumTypeType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="PhoneNum" type="PhoneNumType" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="PhoneValidInd" type="xsd:boolean" minOccurs="0"/>
 			<xsd:element name="PhoneValidDt" type="xsd:date" minOccurs="0"/>
 		</xsd:sequence>
