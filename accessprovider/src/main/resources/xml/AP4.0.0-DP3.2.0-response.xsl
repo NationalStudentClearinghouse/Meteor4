@@ -62,6 +62,15 @@
 	</xsl:template>
 	
 	<!-- 
+	- Format dates from MM/DD/YYYY to YYYY-MM-DD 
+	-->
+	<xsl:template match="//AddrValidDt[contains(.,'/')]">
+		<xsl:copy>
+			<xsl:value-of select="concat(substring(.,7,4),'-',substring(.,1,2),'-',substring(.,4,2))"/>
+		</xsl:copy>
+	</xsl:template>
+	
+	<!-- 
 	- Ensure MeteorDataProviderMsgs are located after MeteorDataProviderAwardDetails and are not named "MeteorDataProviderMessage"
 	-->
 	<xsl:template match="//MeteorDataProviderInfo[MeteorDataProviderAwardDetails/MeteorDataProviderMsg] | //MeteorDataProviderInfo[MeteorDataProviderAwardDetails/MeteorDataProviderMessage]">
