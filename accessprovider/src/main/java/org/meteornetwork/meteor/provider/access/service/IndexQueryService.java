@@ -126,11 +126,19 @@ public class IndexQueryService implements ApplicationContextAware {
 				}
 
 				for (org.meteornetwork.meteor.common.xml.indexresponse.DataProvider dataProvider : response.getDataProviders().getDataProvider()) {
-					LOG.debug("Adding data provider with ID '" + dataProvider.getEntityID() + "'");
+					LOG.debug("Checking data provider with ID '" + dataProvider.getEntityID() + "' for duplicate");
 					DataProviderInfo dpInfo = new DataProviderInfo(dataProvider.getEntityID());
 					dpInfo.setIndexProviderInfo(dataProvider);
 					dpInfo.setRegistryInfo(registryDataProvidersMap.get(dpInfo.getMeteorInstitutionIdentifier()));
-					dataProviders.add(dpInfo);
+									
+					if (isDuplicated(dpInfo, dataProviders))
+					{
+						LOG.debug("Discard duplicate data provider " + dpInfo.getMeteorInstitutionIdentifier() + " with URL: " + dpInfo.getRegistryInfo().getUrl());
+					}
+					else{
+						LOG.debug("Adding data provider with ID '" + dataProvider.getEntityID() + "'");
+						dataProviders.add(dpInfo);
+					}
 				}
 			}
 
@@ -251,4 +259,33 @@ public class IndexQueryService implements ApplicationContextAware {
 		// method injection implemented by spring
 		return null;
 	}
+	
+	/**
+	* Check to see if the url of dpInfo is duplicated with one of the data provider in
+	* dataProviders
+	*/
+	private boolean isDuplicated(DataProviderInfo dpInfo, Set<DataProviderInfo> dataProviders) 
+	{		
+		if(dataProviders.isEmpty() || dpInfo==null || dpInfo.getRegistryInfo()==null || dpInfo.getRegistryInfo().getUrl()==null)
+		{
+			return false;
+		}
+		
+		String currDpUrl = dpInfo.getRegistryInfo().getUrl().trim();
+		
+		
+		for (DataProviderInfo dp : dataProviders)
+		{
+			DataProvider dpRegInfo = dp.getRegistryInfo();
+			
+			if(dpRegInfo!=null && dpRegInfo.getUrl()!=null && dpRegInfo.getUrl().trim().equalsIgnoreCase(currDpUrl))
+			{
+				return true;
+			}
+					
+		}
+		
+		return false;
+	}
+		
 }
