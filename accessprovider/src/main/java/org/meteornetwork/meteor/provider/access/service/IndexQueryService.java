@@ -214,12 +214,22 @@ public class IndexQueryService implements ApplicationContextAware {
 
 		Set<DataProviderInfo> dataProviders = new HashSet<DataProviderInfo>();
 		for (org.meteornetwork.meteor.common.registry.data.DataProvider dataProvider : registryDataProviders) {
-			LOG.debug("Adding data provider with ID '" + dataProvider.getInstitutionIdentifier() + "'");
+			LOG.debug("Checking data provider with ID '" + dataProvider.getInstitutionIdentifier() + "' for duplicate");
+						
 			DataProviderInfo dpInfo = new DataProviderInfo(dataProvider.getInstitutionIdentifier());
 			dpInfo.setRegistryInfo(dataProvider);
-			dataProviders.add(dpInfo);
+			
+			if (isDuplicated(dpInfo, dataProviders))
+			{
+				LOG.debug("Discard duplicate data provider " + dpInfo.getMeteorInstitutionIdentifier() + " with URL: " + dpInfo.getRegistryInfo().getUrl());
+			}
+			else{
+				LOG.debug("Adding data provider with ID '" + dataProvider.getInstitutionIdentifier() + "'");
+				dataProviders.add(dpInfo);
+			}
+			
 		}
-
+						
 		return dataProviders;
 	}
 
